@@ -1,0 +1,10 @@
+const LOCAL_PATH = "../../../assets/image/"
+
+export const ICON_HEAD = LOCAL_PATH + "icon_head.png"
+export const ICON_MENU = LOCAL_PATH + "icon_menu.png"
+export const ICON_TILE = LOCAL_PATH + "icon_tile.png"
+export const MENU_MIUSI = LOCAL_PATH + "menu_μ's.jpeg"
+export const MENU_AQOURS = LOCAL_PATH + "menu_aqours.jpeg"
+export const MENU_NIJI = LOCAL_PATH + "menu_nijigasaki.jpeg"
+export const MENU_LIELLA = LOCAL_PATH + "menu_liella.jpeg"
+export const LOADING = LOCAL_PATH + "loading.gif"

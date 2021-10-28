@@ -1,0 +1,2 @@
+export const CHOOSE_GROUP = "CHOOSE_GROUP"
+export const OPEN_HTTP_PORT_INPUT = "OPEN_HTTP_PORT_INPUT"

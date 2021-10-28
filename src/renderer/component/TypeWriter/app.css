@@ -1,0 +1,41 @@
+.react-typewriter-text-wrap {
+    -webkit-app-region: drag;
+    width: 100%;
+    justify-content: center;
+    display: flex;
+}
+
+.react-typewriter-text {
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    background: linear-gradient(to right, #ff8c00, #40e0d0, #ff0080);
+    background-size: cover;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+}
+
+.react-typewriter-pointer {
+    background-color: black;
+    display: inline;
+    padding: 0 1px;
+}
+
+.add-cursor-animate {
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
+.hide-typing-cursor {
+    padding: 0;
+}
