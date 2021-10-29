@@ -140,7 +140,7 @@ const createWindow = async () => {
         height: 728,
         titleBarStyle: 'customButtonsOnHover',
         frame: false,
-        minWidth: 1025,
+        minWidth: 1024,
         minHeight: 728,
         icon: getAssetPath('icon.png'),
         webPreferences: {
