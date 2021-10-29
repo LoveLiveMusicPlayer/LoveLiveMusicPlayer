@@ -18,13 +18,19 @@ if (process.env.NODE_ENV === 'development') {
   };
 }
 
+/**
+ * 递归检测端口是否被占用，占用则检测下一个端口
+ * @param port
+ */
 export function portIsOccupied(port: number) {
-
+    // 模拟打开端口查看是否被占用
     const server = net.createServer().listen(port)
 
     return new Promise((resolve, reject) => {
+        // 正常打开端口
         server.on('listening', () => {
             console.log(`port is available`)
+            // 关闭端口服务
             server.close()
             // 使用注入进程环境变量的方式进行状态共享
             process.env.DEV_PORT = String(port)
@@ -33,6 +39,7 @@ export function portIsOccupied(port: number) {
             resolve(port)
         })
 
+        // 打开端口异常
         server.on('error', (err: any) => {
             if (err.code === 'EADDRINUSE') {
                 //注意这句，如占用端口号+1

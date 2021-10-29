@@ -19,7 +19,9 @@ import {portIsOccupied, resolveHtmlPath} from './util';
 
 const httpserver = require('http-server');
 
+// 当前HTTP服务是否开启
 let isHttpServerOpen = false
+// http-server实例
 let mServer: any
 
 export default class AppUpdater {
@@ -32,19 +34,17 @@ export default class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 
-ipcMain.on('ipc-example', async (event, arg) => {
-    const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-    console.log(msgTemplate(arg));
-    event.reply('ipc-example', msgTemplate('pong'));
-});
-
+// 开启HTTP服务 或 切换端口重启服务
 ipcMain.handle('openHttp', async (event, arg) => {
     const [rootDir, port] = arg
+    // 获取可用端口号
     portIsOccupied(port).then(port => {
+        // 服务已被打开的话要先释放再开启
         if (isHttpServerOpen) {
             mServer.close()
         }
         console.log("start http-server")
+        // 创建HTTP服务(禁用缓存)
         mServer = httpserver.createServer({root: rootDir, cache: -1})
         mServer.listen(port)
         isHttpServerOpen = true
@@ -53,6 +53,7 @@ ipcMain.handle('openHttp', async (event, arg) => {
 })
 
 /**
+ * 创建多态弹窗
  * @param args[0] "none", "info", "error", "question", "warning"
  * @param args[1] message
  */
@@ -87,6 +88,7 @@ ipcMain.on('msgDialog', (event, args) => {
     })
 })
 
+// 打开一个获取文件的窗口
 ipcMain.handle("fileDialog", (_event, _args) => {
     dialog.showOpenDialogSync({properties: ['openFile', 'multiSelections']})
 })
@@ -145,7 +147,6 @@ const createWindow = async () => {
             // preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: true,
             nodeIntegrationInWorker: false,
-            // enableRemoteModule: true,
             contextIsolation: false,
         },
     });

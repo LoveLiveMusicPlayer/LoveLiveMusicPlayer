@@ -84,7 +84,7 @@ const Home = ({dispatch, chooseGroup}) => {
         // 设置http服务回调
         ipcRenderer.on("openHttpReply", (event, args) => {
             const rootDir = `http://localhost:${args}/`
-            console.log(rootDir)
+            setPort(args)
             DBHelper.insertOrUpdateHttpServer(rootDir).then(_ => setURL(rootDir))
         })
 
@@ -138,8 +138,6 @@ const Home = ({dispatch, chooseGroup}) => {
                 top: topList,
                 bottom: bottomList
             })
-        }).catch(err => {
-            console.log(err)
         })
     }, [group, refresh])
 

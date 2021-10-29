@@ -1,283 +1,286 @@
 {
-  "name": "lovelive-music-player",
-  "productName": "LoveLive音乐播放器",
-  "description": "A LoveLive music player",
-  "scripts": {
-    "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
-    "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts",
-    "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.prod.ts",
-    "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir src",
-    "lint": "cross-env NODE_ENV=development eslint . --cache --ext .js,.jsx,.ts,.tsx",
-    "package": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never",
-    "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts && opencollective-postinstall",
-    "start": "ts-node ./.erb/scripts/check-port-in-use.js && npm run start:renderer",
-    "start:main": "cross-env NODE_ENV=development electron -r ts-node/register/transpile-only ./src/main/main.ts",
-    "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
-    "test": "jest"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "cross-env NODE_ENV=development eslint --cache"
-    ],
-    "*.json,.{eslintrc,prettierrc}": [
-      "prettier --ignore-path .eslintignore --parser json --write"
-    ],
-    "*.{css,scss}": [
-      "prettier --ignore-path .eslintignore --single-quote --write"
-    ],
-    "*.{html,md,yml}": [
-      "prettier --ignore-path .eslintignore --single-quote --write"
-    ]
-  },
-  "build": {
+    "name": "lovelive-music-player",
     "productName": "LoveLive音乐播放器",
-    "appId": "com.zhushenwudi.LoveLiveMusicPlayer",
-    "asar": true,
-    "asarUnpack": "**\\*.{node,dll}",
-    "files": [
-      "dist",
-      "node_modules",
-      "package.json"
-    ],
-    "afterSign": ".erb/scripts/notarize.js",
-    "mac": {
-      "target": {
-        "target": "default",
-        "arch": [
-          "arm64",
-          "x64"
-        ]
-      },
-      "type": "distribution",
-      "hardenedRuntime": true,
-      "entitlements": "assets/entitlements.mac.plist",
-      "entitlementsInherit": "assets/entitlements.mac.plist",
-      "gatekeeperAssess": false
+    "description": "A LoveLive music player",
+    "scripts": {
+        "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
+        "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts",
+        "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.prod.ts",
+        "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir src",
+        "lint": "cross-env NODE_ENV=development eslint . --cache --ext .js,.jsx,.ts,.tsx",
+        "package": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never",
+        "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts && opencollective-postinstall",
+        "start": "ts-node ./.erb/scripts/check-port-in-use.js && npm run start:renderer",
+        "start:main": "cross-env NODE_ENV=development electron -r ts-node/register/transpile-only ./src/main/main.ts",
+        "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
+        "test": "jest",
+        "windows": "yarn package -w",
+        "mac": "yarn package -m",
+        "linux": "yarn package -l"
     },
-    "dmg": {
-      "contents": [
-        {
-          "x": 130,
-          "y": 220
-        },
-        {
-          "x": 410,
-          "y": 220,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ]
-    },
-    "win": {
-      "target": [
-        "nsis"
-      ]
-    },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": false,
-      "allowElevation": false,
-      "createDesktopShortcut": true,
-      "allowToChangeInstallationDirectory": true,
-      "runAfterFinish": false,
-      "installerIcon": "assets/icon.ico",
-      "uninstallerIcon": "assets/icon.ico"
-    },
-    "linux": {
-      "target": [
-        "AppImage"
-      ],
-      "category": "Development"
-    },
-    "directories": {
-      "app": "release/app",
-      "buildResources": "assets",
-      "output": "release/build"
-    },
-    "extraResources": [
-      "./assets/**"
-    ],
-    "publish": {
-      "provider": "github",
-      "owner": "lovelive-music-player",
-      "repo": "lovelive-music-player"
-    }
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/zhushenwudi/LoveLiveMusicPlayer.git"
-  },
-  "author": {
-    "name": "zhushenwudi",
-    "email": "55681140@163.com",
-    "url": "https://github.com/zhushenwudi/LoveLiveMusicPlayer"
-  },
-  "contributors": [],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/zhushenwudi/LoveLiveMusicPlayer/issues"
-  },
-  "keywords": [
-    "electron",
-    "boilerplate",
-    "react",
-    "typescript",
-    "ts",
-    "sass",
-    "webpack",
-    "hot",
-    "reload"
-  ],
-  "homepage": "https://github.com/zhushenwudi/LoveLiveMusicPlayer",
-  "jest": {
-    "testURL": "http://localhost/",
-    "testEnvironment": "jsdom",
-    "transform": {
-      "\\.(ts|tsx|js|jsx)$": "ts-jest"
-    },
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/.erb/mocks/fileMock.js",
-      "\\.(css|less|sass|scss)$": "identity-obj-proxy"
-    },
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "ts",
-      "tsx",
-      "json"
-    ],
-    "moduleDirectories": [
-      "node_modules",
-      "release/app/node_modules"
-    ],
-    "testPathIgnorePatterns": [
-      "release/app/dist"
-    ],
-    "setupFiles": [
-      "./.erb/scripts/check-build-exists.ts"
-    ]
-  },
-  "devDependencies": {
-    "@pmmmwh/react-refresh-webpack-plugin": "0.5.1",
-    "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^12.1.2",
-    "@types/enzyme": "^3.10.10",
-    "@types/enzyme-adapter-react-16": "^1.0.6",
-    "@types/history": "4.7.9",
-    "@types/jest": "^27.0.2",
-    "@types/node": "^16.11.2",
-    "@types/react": "^15.7.6",
-    "@types/react-dom": "^17.0.10",
-    "@types/react-router": "^5.1.17",
-    "@types/react-router-dom": "^5.3.1",
-    "@types/react-test-renderer": "^17.0.1",
-    "@types/styled-components": "^5.1.15",
-    "@types/webpack-env": "^1.16.3",
-    "@typescript-eslint/eslint-plugin": "^5.2.0",
-    "browserslist-config-erb": "^0.0.3",
-    "chalk": "^4.1.2",
-    "concurrently": "^6.3.0",
-    "core-js": "^3.18.3",
-    "cross-env": "^7.0.3",
-    "css-loader": "^6.4.0",
-    "css-minimizer-webpack-plugin": "^3.1.1",
-    "detect-port": "^1.3.0",
-    "electron": "^15.3.0",
-    "electron-builder": "^22.13.1",
-    "electron-devtools-installer": "^3.2.0",
-    "electron-notarize": "^1.1.1",
-    "electron-rebuild": "^3.2.3",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.6",
-    "enzyme-to-json": "^3.6.2",
-    "eslint": "^7.32.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-config-erb": "^4.0.3",
-    "eslint-plugin-compat": "^3.13.0",
-    "eslint-plugin-import": "^2.25.2",
-    "eslint-plugin-jest": "^25.2.2",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-promise": "^5.1.1",
-    "eslint-plugin-react": "^7.26.1",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "file-loader": "^6.2.0",
-    "html-webpack-plugin": "^5.4.0",
-    "husky": "7.0.4",
-    "identity-obj-proxy": "^3.0.0",
-    "jest": "^27.3.1",
-    "lint-staged": "^11.2.4",
-    "mini-css-extract-plugin": "^2.4.3",
-    "opencollective-postinstall": "^2.0.3",
-    "prettier": "^2.4.1",
-    "react-refresh": "^0.10.0",
-    "react-refresh-typescript": "^2.0.2",
-    "react-test-renderer": "^17.0.2",
-    "rimraf": "^3.0.2",
-    "sass": "^1.43.3",
-    "sass-loader": "^12.2.0",
-    "style-loader": "^3.3.1",
-    "terser-webpack-plugin": "^5.2.4",
-    "ts-jest": "^27.0.7",
-    "ts-loader": "^9.2.6",
-    "ts-node": "^10.4.0",
-    "typescript": "^4.4.4",
-    "url-loader": "^4.1.1",
-    "webpack": "^5.59.1",
-    "webpack-bundle-analyzer": "^4.5.0",
-    "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^4.3.1",
-    "webpack-merge": "^5.8.0"
-  },
-  "dependencies": {
-    "@ant-design/pro-layout": "^6.25.1",
-    "animate.css": "^4.1.1",
-    "antd": "^4.16.13",
-    "buffer": "^6.0.3",
-    "electron-debug": "^3.2.0",
-    "electron-log": "^4.4.1",
-    "electron-updater": "^4.3.9",
-    "http-server": "^13.0.1",
-    "js-export-xlsx": "^1.0.9",
-    "music-metadata": "^7.11.4",
-    "nedb": "^1.8.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-jinke-music-player": "^4.24.2",
-    "react-modal": "^3.14.3",
-    "react-redux": "^7.2.5",
-    "react-router-dom": "^5.3.0",
-    "react-tiny-virtual-list": "^2.2.0",
-    "react-typewriter-effect": "^1.1.0",
-    "redux": "^4.1.1",
-    "redux-persist": "^6.0.0",
-    "redux-thunk": "^2.3.0",
-    "regenerator-runtime": "^0.13.9",
-    "styled-components": "^5.3.1"
-  },
-  "devEngines": {
-    "node": ">=14.x",
-    "npm": ">=7.x"
-  },
-  "browserslist": [],
-  "prettier": {
-    "overrides": [
-      {
-        "files": [
-          ".prettierrc",
-          ".babelrc",
-          ".eslintrc"
+    "lint-staged": {
+        "*.{js,jsx,ts,tsx}": [
+            "cross-env NODE_ENV=development eslint --cache"
         ],
-        "options": {
-          "parser": "json"
+        "*.json,.{eslintrc,prettierrc}": [
+            "prettier --ignore-path .eslintignore --parser json --write"
+        ],
+        "*.{css,scss}": [
+            "prettier --ignore-path .eslintignore --single-quote --write"
+        ],
+        "*.{html,md,yml}": [
+            "prettier --ignore-path .eslintignore --single-quote --write"
+        ]
+    },
+    "build": {
+        "productName": "LoveLive音乐播放器",
+        "appId": "com.zhushenwudi.LoveLiveMusicPlayer",
+        "asar": true,
+        "asarUnpack": "**\\*.{node,dll}",
+        "files": [
+            "dist",
+            "node_modules",
+            "package.json"
+        ],
+        "afterSign": ".erb/scripts/notarize.js",
+        "mac": {
+            "target": {
+                "target": "default",
+                "arch": [
+                    "arm64",
+                    "x64"
+                ]
+            },
+            "type": "distribution",
+            "hardenedRuntime": true,
+            "entitlements": "assets/entitlements.mac.plist",
+            "entitlementsInherit": "assets/entitlements.mac.plist",
+            "gatekeeperAssess": false
+        },
+        "dmg": {
+            "contents": [
+                {
+                    "x": 130,
+                    "y": 220
+                },
+                {
+                    "x": 410,
+                    "y": 220,
+                    "type": "link",
+                    "path": "/Applications"
+                }
+            ]
+        },
+        "win": {
+            "target": [
+                "nsis"
+            ]
+        },
+        "nsis": {
+            "oneClick": false,
+            "perMachine": false,
+            "allowElevation": false,
+            "createDesktopShortcut": true,
+            "allowToChangeInstallationDirectory": true,
+            "runAfterFinish": false,
+            "installerIcon": "assets/icon.ico",
+            "uninstallerIcon": "assets/icon.ico"
+        },
+        "linux": {
+            "target": [
+                "AppImage"
+            ],
+            "category": "Development"
+        },
+        "directories": {
+            "app": "release/app",
+            "buildResources": "assets",
+            "output": "release/build"
+        },
+        "extraResources": [
+            "./assets/**"
+        ],
+        "publish": {
+            "provider": "github",
+            "owner": "lovelive-music-player",
+            "repo": "lovelive-music-player"
         }
-      }
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/zhushenwudi/LoveLiveMusicPlayer.git"
+    },
+    "author": {
+        "name": "zhushenwudi",
+        "email": "55681140@163.com",
+        "url": "https://github.com/zhushenwudi/LoveLiveMusicPlayer"
+    },
+    "contributors": [],
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/zhushenwudi/LoveLiveMusicPlayer/issues"
+    },
+    "keywords": [
+        "electron",
+        "boilerplate",
+        "react",
+        "typescript",
+        "ts",
+        "sass",
+        "webpack",
+        "hot",
+        "reload"
     ],
-    "singleQuote": true
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
+    "homepage": "https://github.com/zhushenwudi/LoveLiveMusicPlayer",
+    "jest": {
+        "testURL": "http://localhost/",
+        "testEnvironment": "jsdom",
+        "transform": {
+            "\\.(ts|tsx|js|jsx)$": "ts-jest"
+        },
+        "moduleNameMapper": {
+            "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/.erb/mocks/fileMock.js",
+            "\\.(css|less|sass|scss)$": "identity-obj-proxy"
+        },
+        "moduleFileExtensions": [
+            "js",
+            "jsx",
+            "ts",
+            "tsx",
+            "json"
+        ],
+        "moduleDirectories": [
+            "node_modules",
+            "release/app/node_modules"
+        ],
+        "testPathIgnorePatterns": [
+            "release/app/dist"
+        ],
+        "setupFiles": [
+            "./.erb/scripts/check-build-exists.ts"
+        ]
+    },
+    "devDependencies": {
+        "@pmmmwh/react-refresh-webpack-plugin": "0.5.1",
+        "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
+        "@testing-library/jest-dom": "^5.14.1",
+        "@testing-library/react": "^12.1.2",
+        "@types/enzyme": "^3.10.10",
+        "@types/enzyme-adapter-react-16": "^1.0.6",
+        "@types/history": "4.7.9",
+        "@types/jest": "^27.0.2",
+        "@types/node": "^16.11.2",
+        "@types/react": "^15.7.6",
+        "@types/react-dom": "^17.0.10",
+        "@types/react-router": "^5.1.17",
+        "@types/react-router-dom": "^5.3.1",
+        "@types/react-test-renderer": "^17.0.1",
+        "@types/styled-components": "^5.1.15",
+        "@types/webpack-env": "^1.16.3",
+        "@typescript-eslint/eslint-plugin": "^5.2.0",
+        "browserslist-config-erb": "^0.0.3",
+        "chalk": "^4.1.2",
+        "concurrently": "^6.3.0",
+        "core-js": "^3.18.3",
+        "cross-env": "^7.0.3",
+        "css-loader": "^6.4.0",
+        "css-minimizer-webpack-plugin": "^3.1.1",
+        "detect-port": "^1.3.0",
+        "electron": "^15.3.0",
+        "electron-builder": "^22.13.1",
+        "electron-devtools-installer": "^3.2.0",
+        "electron-notarize": "^1.1.1",
+        "electron-rebuild": "^3.2.3",
+        "enzyme": "^3.11.0",
+        "enzyme-adapter-react-16": "^1.15.6",
+        "enzyme-to-json": "^3.6.2",
+        "eslint": "^7.32.0",
+        "eslint-config-airbnb-base": "^14.2.1",
+        "eslint-config-erb": "^4.0.3",
+        "eslint-plugin-compat": "^3.13.0",
+        "eslint-plugin-import": "^2.25.2",
+        "eslint-plugin-jest": "^25.2.2",
+        "eslint-plugin-jsx-a11y": "^6.4.1",
+        "eslint-plugin-promise": "^5.1.1",
+        "eslint-plugin-react": "^7.26.1",
+        "eslint-plugin-react-hooks": "^4.2.0",
+        "file-loader": "^6.2.0",
+        "html-webpack-plugin": "^5.4.0",
+        "husky": "7.0.4",
+        "identity-obj-proxy": "^3.0.0",
+        "jest": "^27.3.1",
+        "lint-staged": "^11.2.4",
+        "mini-css-extract-plugin": "^2.4.3",
+        "opencollective-postinstall": "^2.0.3",
+        "prettier": "^2.4.1",
+        "react-refresh": "^0.10.0",
+        "react-refresh-typescript": "^2.0.2",
+        "react-test-renderer": "^17.0.2",
+        "rimraf": "^3.0.2",
+        "sass": "^1.43.3",
+        "sass-loader": "^12.2.0",
+        "style-loader": "^3.3.1",
+        "terser-webpack-plugin": "^5.2.4",
+        "ts-jest": "^27.0.7",
+        "ts-loader": "^9.2.6",
+        "ts-node": "^10.4.0",
+        "typescript": "^4.4.4",
+        "url-loader": "^4.1.1",
+        "webpack": "^5.59.1",
+        "webpack-bundle-analyzer": "^4.5.0",
+        "webpack-cli": "^4.9.1",
+        "webpack-dev-server": "^4.3.1",
+        "webpack-merge": "^5.8.0"
+    },
+    "dependencies": {
+        "@ant-design/pro-layout": "^6.25.1",
+        "animate.css": "^4.1.1",
+        "antd": "^4.16.13",
+        "buffer": "^6.0.3",
+        "electron-debug": "^3.2.0",
+        "electron-log": "^4.4.1",
+        "electron-updater": "^4.3.9",
+        "http-server": "^13.0.1",
+        "js-export-xlsx": "^1.0.9",
+        "music-metadata": "^7.11.4",
+        "nedb": "^1.8.0",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
+        "react-jinke-music-player": "^4.24.2",
+        "react-modal": "^3.14.3",
+        "react-redux": "^7.2.5",
+        "react-router-dom": "^5.3.0",
+        "react-tiny-virtual-list": "^2.2.0",
+        "react-typewriter-effect": "^1.1.0",
+        "redux": "^4.1.1",
+        "redux-persist": "^6.0.0",
+        "redux-thunk": "^2.3.0",
+        "regenerator-runtime": "^0.13.9",
+        "styled-components": "^5.3.1"
+    },
+    "devEngines": {
+        "node": ">=14.x",
+        "npm": ">=7.x"
+    },
+    "browserslist": [],
+    "prettier": {
+        "overrides": [
+            {
+                "files": [
+                    ".prettierrc",
+                    ".babelrc",
+                    ".eslintrc"
+                ],
+                "options": {
+                    "parser": "json"
+                }
+            }
+        ],
+        "singleQuote": true
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
     }
-  }
 }
