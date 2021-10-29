@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import * as mm from "music-metadata";
+const {ipcRenderer} = require("electron")
 
 const coverArr = []
 let lastDir = ""
@@ -138,6 +139,15 @@ export const AppUtils = {
             .replaceAll("'", "%27")
             .replaceAll('(', "%28")
             .replaceAll(')', "%29")
+    },
+
+    /**
+     * 弹出提示窗
+     * @param type 弹窗类型 "none", "info", "error", "question", "warning"
+     * @param message 消息
+     */
+    openMsgDialog(type, message) {
+        ipcRenderer.send('msgDialog', {type: type, message: message})
     }
 }
 

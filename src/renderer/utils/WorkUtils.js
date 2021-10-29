@@ -5,6 +5,10 @@ import fs from "fs";
 const path = require('path');
 
 export const WorkUtils = {
+    /**
+     * 导出对象列表为文本
+     * @param arr
+     */
     exportToTxt(arr) {
         let dataTable = []
         if (arr) {
@@ -26,6 +30,16 @@ export const WorkUtils = {
         AppUtils.downloadTxtFile(json, "music")
     },
 
+    /**
+     * 递归导出目录中全部歌曲的音乐信息为Excel
+     * @param path 音乐文件夹根目录
+     * @param rootDir 要去掉的目录前面的字符串
+     * @returns {Promise<void>}
+     *
+     * 比如：path: /Users/xxx/Desktop/LoveLive/...
+     *      rootDir: /Users/xxx/Desktop/
+     *      fileList[0]: LoveLive/...
+     */
     async exportToExcel(path, rootDir) {
         const filesList = [];
         await AppUtils.readFileList(path, filesList, rootDir)
@@ -46,8 +60,11 @@ export const WorkUtils = {
         }
     },
 
-    readMusicInfo() {
-        let filePath = ""
+    /**
+     * 读取音乐ID3信息
+     * @param filePath 音乐文件路径
+     */
+    readMusicInfo(filePath) {
         mm.parseFile(filePath).then(res => {
             const dir = filePath.substring(0, filePath.lastIndexOf(path.sep) + 1)
             const des = dir + `Cover_1.jpg`

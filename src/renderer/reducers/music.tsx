@@ -2,7 +2,6 @@ import * as TYPES from './types';
 
 const initialState = {
     chooseGroup: "μ's",
-    openSetHttpInput: 0,
 }
 
 export default function reducer(state = initialState, action: any) {
@@ -12,11 +11,6 @@ export default function reducer(state = initialState, action: any) {
             return {
                 ...state,
                 chooseGroup: action.group
-            }
-        case TYPES.OPEN_HTTP_PORT_INPUT:
-            return {
-                ...state,
-                openSetHttpInput: action.time
             }
         default:
             return state;

@@ -100,6 +100,12 @@ DB.prototype.update = function (query, values, options) {
     });
 }
 
+/**
+ * 查询并(有->更新;无->新增)
+ * @param query object 查询的数据
+ * @param value 更新的数据
+ * @returns {Promise<unknown>}
+ */
 DB.prototype.insertOrUpdate = function (query, value) {
     let that = this
     return new Promise((resolve, reject) => {

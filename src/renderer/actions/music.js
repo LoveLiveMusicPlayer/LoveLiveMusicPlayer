@@ -9,13 +9,4 @@ export const musicAction = {
             })
         }
     },
-
-    openSetHttpInput(time) {
-        return (dispatch) => {
-            dispatch({
-                type: TYPES.OPEN_HTTP_PORT_INPUT,
-                time
-            })
-        }
-    },
 }

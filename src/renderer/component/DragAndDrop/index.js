@@ -1,6 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
 import PropTypes from 'prop-types';
-import classList from './index.scss';
 
 const FilesDragAndDrop = (props) => {
     const [dragging, setDragging] = useState(false);

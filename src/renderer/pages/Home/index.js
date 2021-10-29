@@ -10,18 +10,16 @@ import {musicAction} from "../../actions/music";
 import {HorizontalList} from "../../component/HorizontalList";
 import {PrevNext, PrevNextHidden} from "./style";
 import {MusicHelper} from "../../dao/MusicHelper";
-import emitter from "../../utils/Event"
+import Bus from "../../utils/Event"
 import {Loading} from "../../component/Loading";
-import {WorkUtils} from "../../utils/WorkUtils";
 import {DBHelper} from "../../dao/DBHelper";
-import * as Images from "../../public/Images";
 import Modal from "react-modal";
 
 const {ipcRenderer} = require("electron")
 const {connect} = require('react-redux');
 const {Content} = Layout;
 
-const Home = ({dispatch, chooseGroup, openSetHttpInput}) => {
+const Home = ({dispatch, chooseGroup}) => {
     // 第一行专辑列表引用
     let topRef = useRef()
     // 第二行专辑列表引用
@@ -45,10 +43,10 @@ const Home = ({dispatch, chooseGroup, openSetHttpInput}) => {
     const [URL, setURL] = useState("http://localhost:10000/")
     // 显示HTTP端口输入框
     const [portInputVisible, setPortInputVisible] = useState(false)
+    // HTTP服务的端口号
     const [port, setPort] = useState(10000)
+    // HTTP服务要加载的目录
     const [rootDir, setRootDir] = useState()
-    // 判断是否选中了Logo的时间戳
-    const [httpInputTime, setHttpInputTime] = useState(new Date().getTime())
     // 设置http端口等待两秒时的按钮状态
     const [wait, setWait] = useState(false)
 
@@ -67,12 +65,16 @@ const Home = ({dispatch, chooseGroup, openSetHttpInput}) => {
             let width = window.innerWidth
             const height = window.innerHeight
             const radio = 1025 / 648
+            // 防止在横向变宽时，图片变大
             if (width / height > radio) {
                 width = height * radio
             }
             setWidth(width)
         }
-        window.addEventListener("resize", listener)
+
+        const onTapLogoListener = function () {
+            setPortInputVisible(true)
+        }
 
         // 接收提示窗口关闭的回调
         ipcRenderer.on('msgDialogCallback', (event, arg) => {
@@ -81,13 +83,20 @@ const Home = ({dispatch, chooseGroup, openSetHttpInput}) => {
 
         // 设置http服务回调
         ipcRenderer.on("openHttpReply", (event, args) => {
-            console.log(args)
-            setURL(`http://localhost:${args}/`)
+            const rootDir = `http://localhost:${args}/`
+            console.log(rootDir)
+            DBHelper.insertOrUpdateHttpServer(rootDir).then(_ => setURL(rootDir))
         })
+
+        // 添加窗口大小变化监听器
+        window.addEventListener("resize", listener)
+        // 添加触摸Logo监听器
+        Bus.addListener("onTapLogo", onTapLogoListener)
 
         return () => {
             // 生命周期结束后将监听器移除
             window.removeEventListener("resize", listener)
+            removeEventListener("onTapLogo", onTapLogoListener)
         }
     }, [])
 
@@ -152,7 +161,7 @@ const Home = ({dispatch, chooseGroup, openSetHttpInput}) => {
             const rootDir = AppUtils.delLastSameString(path, name)
             setHttpServer(rootDir)
             await DBHelper.insertOrUpdateHttpServer(rootDir)
-            alert("导入歌曲库成功")
+            AppUtils.openMsgDialog("info", "导入歌曲库成功")
             // await WorkUtils.exportToExcel(path, rootDir)
         } else if (name === "albumList.json") {
             // 传入了专辑 json
@@ -169,7 +178,7 @@ const Home = ({dispatch, chooseGroup, openSetHttpInput}) => {
                 })
             } catch (e) {
                 loadingRef.current?.hide()
-                alert("导入专辑列表失败")
+                AppUtils.openMsgDialog("error", "导入专辑列表失败")
             }
         } else if (name === "musicList.json") {
             // 传入了歌曲 json
@@ -185,10 +194,10 @@ const Home = ({dispatch, chooseGroup, openSetHttpInput}) => {
                 })
             } catch (e) {
                 loadingRef.current?.hide()
-                alert("导入音乐列表失败")
+                AppUtils.openMsgDialog("error", "导入音乐列表失败")
             }
         } else {
-            alert("拖入的文件异常，请检查")
+            AppUtils.openMsgDialog("error", "拖入的文件异常，请检查")
         }
     }
 
@@ -217,7 +226,6 @@ const Home = ({dispatch, chooseGroup, openSetHttpInput}) => {
      */
     const chooseItem = async (e) => {
         AlbumHelper.findOneAlbumById(e).then(res => {
-            // ipcRenderer.send('msgDialog', "选择了: " + res.name)
             const promiseArr = []
             res.music.map(id => {
                 promiseArr.push(MusicHelper.findOneMusic(id, res.group))
@@ -238,9 +246,9 @@ const Home = ({dispatch, chooseGroup, openSetHttpInput}) => {
                     }
                 })
                 if (isLoaded) {
-                    emitter.emit("onChangeAudioList", audioList)
+                    Bus.emit("onChangeAudioList", audioList)
                 } else {
-                    alert("存在损坏的数据，请重新导入")
+                    AppUtils.openMsgDialog("error", "存在损坏的数据，请重新导入")
                 }
             })
         })
@@ -261,15 +269,6 @@ const Home = ({dispatch, chooseGroup, openSetHttpInput}) => {
         if (gp !== group) {
             setGroup(gp)
             dispatch(musicAction.chooseGroup(gp))
-        }
-    }
-
-    const refreshHttpPortInput = (time) => {
-        if (time !== httpInputTime) {
-            setHttpInputTime(time)
-            if (time > new Date().getTime()) {
-                setPortInputVisible(true)
-            }
         }
     }
 
@@ -359,9 +358,7 @@ const Home = ({dispatch, chooseGroup, openSetHttpInput}) => {
             <Modal
                 isOpen={portInputVisible}
                 onAfterOpen={null}
-                onRequestClose={() => {
-                    setPortInputVisible(false)
-                }}
+                onRequestClose={() => setPortInputVisible(false)}
                 style={customStyles}>
                 <p style={{fontWeight: 'bold'}}>请输入端口号</p>
                 <Space>
@@ -406,12 +403,11 @@ const Home = ({dispatch, chooseGroup, openSetHttpInput}) => {
             formats={['']}
         >
             {chooseGroup != null && refreshAlbum(chooseGroup)}
-            {openSetHttpInput != null && refreshHttpPortInput(openSetHttpInput)}
             <Content className="container">
                 {renderMusicGallery()}
                 <Loading ref={loadingRef}/>
             </Content>
-            { portInputVisible ? renderHttpPortInput() : null }
+            {portInputVisible ? renderHttpPortInput() : null}
         </FileDrop>
     );
 }
@@ -419,7 +415,6 @@ const Home = ({dispatch, chooseGroup, openSetHttpInput}) => {
 function select(store) {
     return {
         chooseGroup: store.music.chooseGroup,
-        openSetHttpInput: store.music.openSetHttpInput,
     };
 }
 

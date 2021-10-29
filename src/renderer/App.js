@@ -3,7 +3,7 @@ import {MemoryRouter as Router, Route, Switch} from 'react-router-dom';
 import './App.global.css';
 import Home from './pages/Home/index'
 import AudioPlayer from "./utils/AudioPlayer";
-import emitter from "./utils/Event"
+import Bus from "./utils/Event"
 import * as Images from './public/Images'
 import TypeWriterEffect from '../renderer/component/TypeWriter';
 import {connect} from 'react-redux';
@@ -24,15 +24,18 @@ function App({dispatch}) {
             userAgent: navigator.userAgent,
         });
 
-        emitter.addListener("onChangeAudioList", (msg) => {
+        // 添加切换专辑的监听器
+        Bus.addListener("onChangeAudioList", (msg) => {
             r.current?.onChangeAudioList(msg)
         })
 
         return () => {
-            emitter.removeAllListeners()
+            // 生命周期结束时移除全部监听器
+            Bus.removeAllListeners()
         }
     }, [])
 
+    // 点击企划图片
     function onBabyClick() {
         setShowMenu(!showMenu)
         // 清除定时器
@@ -54,7 +57,7 @@ function App({dispatch}) {
     }
 
     function clickLogo() {
-        dispatch(musicAction.openSetHttpInput(new Date().getTime() + 1500))
+        Bus.emit("onTapLogo")
     }
 
     const options = {
@@ -228,8 +231,7 @@ function App({dispatch}) {
 
 function select(store) {
     return {
-        chooseGroup: store.music.chooseGroup,
-        openSetHttpInput: store.music.openSetHttpInput,
+        chooseGroup: store.music.chooseGroup
     };
 }
 
