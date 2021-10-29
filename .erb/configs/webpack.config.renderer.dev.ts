@@ -4,9 +4,9 @@ import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import chalk from 'chalk';
 import {merge} from 'webpack-merge';
-import {execSync, spawn} from 'child_process';
+import {spawn, execSync} from 'child_process';
 import baseConfig from './webpack.config.base';
-import webpackPaths from './webpack.paths.js';
+import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 
@@ -17,9 +17,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const port = process.env.PORT || 1212;
-const publicPath = webpackPaths.distRendererPath;
 const manifest = path.resolve(webpackPaths.dllPath, 'renderer.json');
-const requiredByDLLConfig = module.parent.filename.includes(
+const requiredByDLLConfig = module.parent?.filename.includes(
     'webpack.config.renderer.dev.dll'
 );
 
@@ -32,10 +31,10 @@ if (
 ) {
     console.log(
         chalk.black.bgYellow.bold(
-            'The DLL files are missing. Sit back while we build them for you with "yarn build-dll"'
+            'The DLL files are missing. Sit back while we build them for you with "npm run build-dll"'
         )
     );
-    execSync('yarn postinstall');
+    execSync('npm run postinstall');
 }
 
 export default merge(baseConfig, {
@@ -47,7 +46,7 @@ export default merge(baseConfig, {
     target: 'electron-renderer',
 
     entry: [
-        'webpack-dev-server/client?http://localhost:3000/dist',
+        `webpack-dev-server/client?http://localhost:${port}/dist`,
         'webpack/hot/only-dev-server',
         'core-js',
         'regenerator-runtime/runtime',
@@ -56,6 +55,7 @@ export default merge(baseConfig, {
 
     output: {
         path: webpackPaths.distRendererPath,
+        // @ts-ignore
         publicPath: '/',
         filename: 'renderer.dev.js',
         // library: {
@@ -66,71 +66,40 @@ export default merge(baseConfig, {
     module: {
         rules: [
             {
-                test: /\.[jt]sx?$/,
-                exclude: /node_modules/,
+                test: /\.s?css$/,
+                // @ts-ignore
                 use: [
+                    'style-loader',
                     {
-                        loader: require.resolve('babel-loader'),
+                        loader: 'css-loader',
                         options: {
-                            plugins: [require.resolve('react-refresh/babel')].filter(Boolean),
+                            modules: true,
+                            sourceMap: true,
+                            importLoaders: 1,
                         },
                     },
+                    'sass-loader',
                 ],
+                include: /\.module\.s?(c|a)ss$/,
             },
-            // WOFF Font
             {
-                test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-                use: {
-                    loader: 'url-loader',
-                    options: {
-                        limit: 10000,
-                        mimetype: 'application/font-woff',
-                    },
-                },
+                test: /\.s?css$/,
+                // @ts-ignore
+                use: ['style-loader', 'css-loader', 'sass-loader'],
+                exclude: /\.module\.s?(c|a)ss$/,
             },
-            // WOFF2 Font
+            //Font Loader
             {
-                test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-                use: {
-                    loader: 'url-loader',
-                    options: {
-                        limit: 10000,
-                        mimetype: 'application/font-woff',
-                    },
-                },
-            },
-            // OTF Font
-            {
-                test: /\.otf(\?v=\d+\.\d+\.\d+)?$/,
-                use: {
-                    loader: 'url-loader',
-                    options: {
-                        limit: 10000,
-                        mimetype: 'font/otf',
-                    },
-                },
-            },
-            // TTF Font
-            {
-                test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                use: {
-                    loader: 'url-loader',
-                    options: {
-                        limit: 10000,
-                        mimetype: 'application/octet-stream',
-                    },
-                },
-            },
-            // EOT Font
-            {
-                test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-                use: 'file-loader',
+                test: /\.(woff|woff2|eot|ttf|otf)$/i,
+                // @ts-ignore
+                type: 'asset/resource',
             },
             // SVG Font
             {
                 test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
                 use: {
                     loader: 'url-loader',
+                    // @ts-ignore
                     options: {
                         limit: 10000,
                         mimetype: 'image/svg+xml',
@@ -142,14 +111,16 @@ export default merge(baseConfig, {
                 test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
                 use: {
                     loader: 'url-loader',
+                    // @ts-ignore
                     options: {
-                        limit: 10000
-                    }
-                }
+                        limit: 10000,
+                    },
+                },
             },
         ],
     },
     plugins: [
+        // @ts-ignore
         requiredByDLLConfig
             ? null
             : new webpack.DllReferencePlugin({
@@ -158,6 +129,7 @@ export default merge(baseConfig, {
                 sourceType: 'var',
             }),
 
+        // @ts-ignore
         new webpack.NoEmitOnErrorsPlugin(),
 
         /**
@@ -176,12 +148,15 @@ export default merge(baseConfig, {
             NODE_ENV: 'development',
         }),
 
+        // @ts-ignore
         new webpack.LoaderOptionsPlugin({
             debug: true,
         }),
 
+        // @ts-ignore
         new ReactRefreshWebpackPlugin(),
 
+        // @ts-ignore
         new HtmlWebpackPlugin({
             filename: path.join('index.html'),
             template: path.join(webpackPaths.srcRendererPath, 'index.ejs'),
@@ -204,31 +179,24 @@ export default merge(baseConfig, {
 
     devServer: {
         port,
-        publicPath: '/',
         compress: true,
-        noInfo: false,
-        stats: 'errors-only',
-        inline: true,
-        lazy: false,
         hot: true,
         headers: {'Access-Control-Allow-Origin': '*'},
-        watchOptions: {
-            aggregateTimeout: 300,
-            ignored: /node_modules/,
-            poll: 100,
+        static: {
+            publicPath: '/',
         },
         historyApiFallback: {
             verbose: true,
             disableDotRule: false,
         },
-        before() {
+        onBeforeSetupMiddleware() {
             console.log('Starting Main Process...');
             spawn('npm', ['run', 'start:main'], {
                 shell: true,
                 env: process.env,
                 stdio: 'inherit',
             })
-                .on('close', (code) => process.exit(code))
+                .on('close', (code: number) => process.exit(code))
                 .on('error', (spawnError) => console.error(spawnError));
         },
     },

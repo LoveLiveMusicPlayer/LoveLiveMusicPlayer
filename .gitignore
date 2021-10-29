@@ -27,8 +27,13 @@ npm-debug.log.*
 *.css.d.ts
 *.sass.d.ts
 *.scss.d.ts
+*.d.ts
+*.d.ts.map
 /build/app/package-lock.json
 /package-lock.json
-/build/app/yarn.lock
+yarn.lock
 /build/app/dist/
 /assets/image/loading.gif
+/release/build/
+/release/app/dist/
+/release/app/yarn.lock

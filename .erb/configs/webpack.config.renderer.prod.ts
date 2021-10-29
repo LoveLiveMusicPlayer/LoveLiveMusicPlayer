@@ -1,17 +1,19 @@
 /**
  * Build config for electron renderer process
  */
-
 import path from 'path';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+// @ts-ignore
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import {BundleAnalyzerPlugin} from 'webpack-bundle-analyzer';
+// @ts-ignore
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+// @ts-ignore
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
-import {merge} from 'webpack-merge';
+import { merge } from 'webpack-merge';
 import TerserPlugin from 'terser-webpack-plugin';
 import baseConfig from './webpack.config.base';
-import webpackPaths from './webpack.paths.js';
+import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
 import deleteSourceMaps from '../scripts/delete-source-maps';
 
@@ -41,6 +43,7 @@ export default merge(baseConfig, {
 
   output: {
     path: webpackPaths.distRendererPath,
+    // @ts-ignore
     publicPath: './',
     filename: 'renderer.js',
     // library: {
@@ -51,74 +54,41 @@ export default merge(baseConfig, {
   module: {
     rules: [
       {
-        // CSS/SCSS
-        test: /\.s?css$/,
+        test: /\.s?(a|c)ss$/,
+        // @ts-ignore
         use: [
+          MiniCssExtractPlugin.loader,
           {
-            loader: MiniCssExtractPlugin.loader,
+            loader: 'css-loader',
             options: {
-              // `./dist` can't be inerhited for publicPath for styles. Otherwise generated paths will be ./dist/dist
-              publicPath: './',
+              modules: true,
+              sourceMap: true,
+              importLoaders: 1,
             },
           },
           'css-loader',
           'sass-loader',
         ],
+        include: /\.module\.s?(c|a)ss$/,
       },
-      // WOFF Font
       {
-        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            limit: 10000,
-            mimetype: 'application/font-woff',
-          },
-        },
+        test: /\.s?(a|c)ss$/,
+          // @ts-ignore
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+        exclude: /\.module\.s?(c|a)ss$/,
       },
-      // WOFF2 Font
+      //Font Loader
       {
-        test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            limit: 10000,
-            mimetype: 'application/font-woff',
-          },
-        },
-      },
-      // OTF Font
-      {
-        test: /\.otf(\?v=\d+\.\d+\.\d+)?$/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            limit: 10000,
-            mimetype: 'font/otf',
-          },
-        },
-      },
-      // TTF Font
-      {
-        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            limit: 10000,
-            mimetype: 'application/octet-stream',
-          },
-        },
-      },
-      // EOT Font
-      {
-        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        use: 'file-loader',
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        // @ts-ignore
+        type: 'asset/resource',
       },
       // SVG Font
       {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
         use: {
           loader: 'url-loader',
+          // @ts-ignore
           options: {
             limit: 10000,
             mimetype: 'image/svg+xml',
@@ -128,6 +98,7 @@ export default merge(baseConfig, {
       // Common Image Formats
       {
         test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
+        // @ts-ignore
         use: 'url-loader',
       },
     ],

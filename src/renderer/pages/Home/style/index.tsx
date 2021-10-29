@@ -1,3 +1,4 @@
+// @ts-ignore
 import styled, {css} from "styled-components";
 
 export const PrevNext = styled.a`

@@ -70,7 +70,7 @@ const FilesDragAndDrop = (props) => {
         <div
             ref={drop}
             style={{width: "100%", height: "100%"}}
-            className={classList['FilesDragAndDrop']}
+            className={'FilesDragAndDrop'}
         >
             {/*{message.show && (*/}
             {/*    <div*/}

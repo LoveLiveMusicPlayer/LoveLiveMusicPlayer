@@ -1,5 +1,5 @@
 const rimraf = require('rimraf');
-const webpackPaths = require('../configs/webpack.paths.js');
+const webpackPaths = require('../configs/webpack.paths');
 const process = require('process');
 
 const args = process.argv.slice(2);

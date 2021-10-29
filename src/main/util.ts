@@ -27,8 +27,8 @@ export function portIsOccupied(port: number) {
             console.log(`port is available`)
             server.close()
             // 使用注入进程环境变量的方式进行状态共享
-            process.env.DEV_PORT = port
-            process.env.PROD_PORT = port
+            process.env.DEV_PORT = String(port)
+            process.env.PROD_PORT = String(port)
             // 返回可用端口
             resolve(port)
         })

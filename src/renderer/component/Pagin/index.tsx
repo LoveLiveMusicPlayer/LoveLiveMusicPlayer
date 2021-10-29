@@ -1,3 +1,4 @@
+// @ts-ignore
 import React, {useCallback, useEffect, useState} from 'react';
 import {Container, Dot, DotContainer, Img, Page, PrevNext, Text, WhiteCover} from './styled-components'
 
@@ -18,28 +19,29 @@ const Index = (
     const [activeIndex, setActiveIndex] = useState(0);
     const [activeButton, setActiveButton] = useState(false);
 
-    const onClick = useCallback((e: React.MouseEvent) => {
+    const onClick = useCallback((e: React.MouseEvent<any>) => {
         e.preventDefault();
+        // @ts-ignore
         const {type} = e.target as HTMLAnchorElement;
         if (type === 'prev') {
             if (activeIndex == 0) {
                 setActiveIndex(pages.length - 1);
             } else {
-                setActiveIndex(activeIndex => activeIndex - 1);
+                setActiveIndex((activeIndex: number) => activeIndex - 1);
             }
         } else if (type === 'next') {
             if (activeIndex === pages.length - 1) {
                 setActiveIndex(0);
             } else {
-                setActiveIndex(activeIndex => activeIndex + 1);
+                setActiveIndex((activeIndex: number) => activeIndex + 1);
             }
         }
     }, [pages, activeIndex, setActiveIndex]);
-    const onMouseEnter = useCallback((e: React.MouseEvent) => {
+    const onMouseEnter = useCallback((e: React.MouseEvent<any>) => {
         e.preventDefault();
         setActiveButton(true);
     }, [activeButton, setActiveButton]);
-    const onMouseLeave = useCallback((e: React.MouseEvent) => {
+    const onMouseLeave = useCallback((e: React.MouseEvent<any>) => {
         e.preventDefault();
         setActiveButton(false);
     }, [activeButton, setActiveButton]);
@@ -52,7 +54,7 @@ const Index = (
                 if (activeIndex === (pages.length - 1)) {
                     setActiveIndex(0);
                 } else {
-                    setActiveIndex(activeIndex => activeIndex + 1);
+                    setActiveIndex((activeIndex: number) => activeIndex + 1);
                 }
             }, 5000);
         }
@@ -74,7 +76,7 @@ const Index = (
                             <Page
                                 key={`${img.src}_${idx}`}
                                 active={activeIndex === idx}
-                                onClick={event => event && onItemClick(img.id)}
+                                onClick={(event: any) => event && onItemClick(img.id)}
                             >
                                 <WhiteCover/>
                                 <Img src={decodeURI(img.src)} style={{width: imgSide, height: imgSide}}/>
@@ -94,7 +96,7 @@ const Index = (
                     dotDisplay && pages && pages.length > 1 && <DotContainer>
                         {pages.map((img, idx) => (
                             <Dot key={`${img.src}_${idx}`} active={activeIndex === idx}
-                                 onClick={event => event && setActiveIndex(idx)}/>
+                                 onClick={(event: any) => event && setActiveIndex(idx)}/>
                         ))}
                     </DotContainer>
                 }

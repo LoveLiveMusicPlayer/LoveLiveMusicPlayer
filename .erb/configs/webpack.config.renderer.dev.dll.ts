@@ -6,7 +6,7 @@ import webpack from 'webpack';
 import path from 'path';
 import { merge } from 'webpack-merge';
 import baseConfig from './webpack.config.base';
-import webpackPaths from './webpack.paths.js';
+import webpackPaths from './webpack.paths';
 import { dependencies } from '../../package.json';
 import checkNodeEnv from '../scripts/check-node-env';
 
@@ -28,7 +28,7 @@ export default merge(baseConfig, {
   /**
    * Use `module` from `webpack.config.renderer.dev.js`
    */
-  module: require('./webpack.config.renderer.dev.babel').default.module,
+  module: require('./webpack.config.renderer.dev').default.module,
 
   entry: {
     renderer: Object.keys(dependencies || {}),
@@ -38,14 +38,14 @@ export default merge(baseConfig, {
     path: dist,
     filename: '[name].dev.dll.js',
     library: {
+      // @ts-ignore
       name: 'renderer',
       type: 'var',
     },
   },
 
-  stats: 'errors-only',
-
   plugins: [
+    // @ts-ignore
     new webpack.DllPlugin({
       path: path.join(dist, '[name].json'),
       name: '[name]',
@@ -64,6 +64,7 @@ export default merge(baseConfig, {
       NODE_ENV: 'development',
     }),
 
+    // @ts-ignore
     new webpack.LoaderOptionsPlugin({
       debug: true,
       options: {

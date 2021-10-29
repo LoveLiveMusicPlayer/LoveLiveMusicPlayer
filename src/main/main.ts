@@ -66,7 +66,7 @@ ipcMain.on('msgDialog', (event, args) => {
     })
 })
 
-ipcMain.handle("fileDialog", (event, args) => {
+ipcMain.handle("fileDialog", (_event, _args) => {
     dialog.showOpenDialogSync({properties: ['openFile', 'multiSelections']})
 })
 
@@ -124,7 +124,7 @@ const createWindow = async () => {
             // preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: true,
             nodeIntegrationInWorker: false,
-            enableRemoteModule: true,
+            // enableRemoteModule: true,
             contextIsolation: false,
         },
     });

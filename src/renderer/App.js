@@ -4,10 +4,12 @@ import './App.global.css';
 import Home from './pages/Home/index'
 import AudioPlayer from "./utils/AudioPlayer";
 import emitter from "./utils/Event"
-import * as Images from '../renderer/public/Images'
+import * as Images from './public/Images'
 import TypeWriterEffect from '../renderer/component/TypeWriter';
 import {connect} from 'react-redux';
 import {musicAction} from './actions/music';
+import catImage from '../../assets/image/icon_head.png'
+import {sources} from "webpack";
 
 const {ipcRenderer} = require('electron');
 
