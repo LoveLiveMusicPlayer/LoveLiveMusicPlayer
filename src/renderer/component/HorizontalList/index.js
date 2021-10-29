@@ -107,8 +107,8 @@ export const HorizontalList = forwardRef((props, ref) => {
                     <VirtualList
                         ref={node => listRef.current = node}
                         width={clientWidth * 0.8}
-                        height={rectSize * 1.5}
-                        style={{overflow: 'hidden', paddingTop: rectSize * 0.2}}
+                        height={rectSize * 1.6}
+                        style={{overflow: 'hidden'}}
                         overscanCount={5}
                         itemCount={album.length}
                         scrollDirection={"horizontal"}

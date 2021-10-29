@@ -405,8 +405,8 @@ const Home = ({dispatch, chooseGroup, openSetHttpInput}) => {
             count={1}
             formats={['']}
         >
-            {chooseGroup && refreshAlbum(chooseGroup)}
-            {openSetHttpInput && refreshHttpPortInput(openSetHttpInput)}
+            {chooseGroup != null && refreshAlbum(chooseGroup)}
+            {openSetHttpInput != null && refreshHttpPortInput(openSetHttpInput)}
             <Content className="container">
                 {renderMusicGallery()}
                 <Loading ref={loadingRef}/>

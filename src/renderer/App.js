@@ -8,8 +8,6 @@ import * as Images from './public/Images'
 import TypeWriterEffect from '../renderer/component/TypeWriter';
 import {connect} from 'react-redux';
 import {musicAction} from './actions/music';
-import catImage from '../../assets/image/icon_head.png'
-import {sources} from "webpack";
 
 const {ipcRenderer} = require('electron');
 

@@ -131,9 +131,10 @@ export const PrevNext = styled.a`
 
 export const Text = styled.div`
   color: #f2f2f2;
-  font-size: 15px;
+  font-size: 13px;
   width: 100%;
   height: 40px;
+  margin-bottom: 5px;
   text-align: center;
   position: absolute;
   justify-content: center;
