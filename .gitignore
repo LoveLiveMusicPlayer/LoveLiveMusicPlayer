@@ -37,3 +37,4 @@ yarn.lock
 /release/build/
 /release/app/dist/
 /release/app/yarn.lock
+/release/app/package-lock.json
