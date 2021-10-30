@@ -11,7 +11,7 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import {app, BrowserWindow, ipcMain, shell, dialog} from 'electron';
+import {app, BrowserWindow, dialog, ipcMain, shell} from 'electron';
 import {autoUpdater} from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -35,20 +35,19 @@ export default class AppUpdater {
 let mainWindow: BrowserWindow | null = null;
 
 // 开启HTTP服务 或 切换端口重启服务
-ipcMain.handle('openHttp', async (event, arg) => {
-    const [rootDir, port] = arg
+ipcMain.handle('openHttp', async (event, path, port) => {
     // 获取可用端口号
     portIsOccupied(port).then(port => {
         // 服务已被打开的话要先释放再开启
         if (isHttpServerOpen) {
             mServer.close()
         }
-        console.log("start http-server")
+        console.log(`start http-server at ${port}`)
         // 创建HTTP服务(禁用缓存)
-        mServer = httpserver.createServer({root: rootDir, cache: -1})
+        mServer = httpserver.createServer({root: path, cache: -1})
         mServer.listen(port)
         isHttpServerOpen = true
-        event.sender.send("openHttpReply", port)
+        event.sender.send("openHttpReply", path, port)
     })
 })
 

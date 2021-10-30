@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import * as mm from "music-metadata";
+
 const {ipcRenderer} = require("electron")
 
 const coverArr = []
@@ -48,8 +49,6 @@ export const AppUtils = {
                 obj.artist = res.common.artist
                 obj.date = filePath.match(/\[(\S*)]/)[1]
                 obj.path = filePath.replace(splitPath, '').replaceAll(path.sep, '/')
-            }).catch(err => {
-                console.log(err)
             })
             infoList.push(obj)
         }

@@ -1,21 +1,20 @@
 const db = require('../utils/Database')("database")
 
 export const DBHelper = {
-    // 设置 http 地址
-    async insertOrUpdateHttpServer(rootDir) {
-        await db.remove({rootDir: rootDir})
-        return db.insertOrUpdate({rootDir: rootDir}, {rootDir: rootDir})
+    // 设置 http-server 信息
+    async insertOrUpdateHttpServer(info) {
+        return db.insertOrUpdate({serverPath: info.path}, {serverPath: info.path, serverPort: info.port})
     },
 
-    // 获取 http 地址
+    // 获取 http-server 信息
     async findHttpServer() {
-        let http = null
+        let info = null
         const dbList = await db.findAll()
         dbList.map(item => {
-            if (item.hasOwnProperty("rootDir")) {
-                http = item["rootDir"]
+            if (item.hasOwnProperty("serverPath")) {
+                info = item
             }
         })
-        return http
-    }
+        return info
+    },
 }

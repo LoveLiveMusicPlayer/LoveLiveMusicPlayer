@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import './index.css'
 import "animate.css"
-import {Layout, InputNumber, Button, Space} from 'antd';
+import {Button, InputNumber, Layout, Space} from 'antd';
 import {AppUtils} from "../../utils/AppUtils";
 import fs from "fs";
 import FileDrop from '../../component/DragAndDrop'
@@ -55,9 +55,9 @@ const Home = ({dispatch, chooseGroup}) => {
      */
     useEffect(() => {
         // 如果之前有保存http服务地址，直接载入
-        DBHelper.findHttpServer().then(rootDir => {
-            if (rootDir) {
-                setHttpServer(rootDir)
+        DBHelper.findHttpServer().then(info => {
+            if (info) {
+                setHttpServer({path: info.serverPath, port: info.serverPort})
             }
         })
         // 监听窗口改变大小
@@ -82,10 +82,13 @@ const Home = ({dispatch, chooseGroup}) => {
         })
 
         // 设置http服务回调
-        ipcRenderer.on("openHttpReply", (event, args) => {
-            const rootDir = `http://localhost:${args}/`
-            setPort(args)
-            DBHelper.insertOrUpdateHttpServer(rootDir).then(_ => setURL(rootDir))
+        ipcRenderer.on("openHttpReply", (event, path, port) => {
+            DBHelper.insertOrUpdateHttpServer({path: path, port: port}).then(_ => {
+                setRootDir(path)
+                setPort(port)
+                setURL(`http://localhost:${port}/`)
+                setRefresh(new Date().getTime())
+            })
         })
 
         // 添加窗口大小变化监听器
@@ -142,9 +145,8 @@ const Home = ({dispatch, chooseGroup}) => {
     }, [group, refresh])
 
     // 打开HTTP文件服务
-    const setHttpServer = (rootDir) => {
-        setRootDir(rootDir)
-        ipcRenderer.invoke('openHttp', [rootDir, port])
+    const setHttpServer = (info) => {
+        ipcRenderer.invoke('openHttp', info.path, info.port)
     }
 
     /**
@@ -157,8 +159,7 @@ const Home = ({dispatch, chooseGroup}) => {
         const path = file[0].path
         if (name === "LoveLive" && fs.lstatSync(path).isDirectory()) {
             const rootDir = AppUtils.delLastSameString(path, name)
-            setHttpServer(rootDir)
-            await DBHelper.insertOrUpdateHttpServer(rootDir)
+            setHttpServer({path: rootDir, port: port})
             AppUtils.openMsgDialog("info", "导入歌曲库成功")
             // await WorkUtils.exportToExcel(path, rootDir)
         } else if (name === "albumList.json") {
@@ -378,10 +379,9 @@ const Home = ({dispatch, chooseGroup}) => {
                             } else {
                                 // 只有在 10000-65535 区间内的端口才允许设置
                                 setWait(true)
-                                setHttpServer(rootDir)
+                                setHttpServer({path: rootDir, port: port})
                                 setTimeout(() => {
                                     setWait(false)
-                                    setRefresh(new Date().getTime())
                                     setPortInputVisible(false)
                                 }, 2000)
                             }

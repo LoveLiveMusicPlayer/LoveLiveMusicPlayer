@@ -2,6 +2,7 @@ import {AppUtils} from "./AppUtils";
 import EXCEL from "js-export-xlsx";
 import * as mm from "music-metadata";
 import fs from "fs";
+
 const path = require('path');
 
 export const WorkUtils = {
@@ -69,8 +70,6 @@ export const WorkUtils = {
             const dir = filePath.substring(0, filePath.lastIndexOf(path.sep) + 1)
             const des = dir + `Cover_1.jpg`
             fs.writeFileSync(des, res.common.picture[0].data)
-        }).catch(err => {
-            console.log(err)
         })
     }
 }
