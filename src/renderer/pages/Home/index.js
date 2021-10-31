@@ -54,7 +54,9 @@ const Home = ({dispatch, chooseGroup}) => {
      * 生命周期以及定时器的声明与销毁
      */
     useEffect(() => {
-        Bus.emit("onShowInfoNotification", '这是一个开源项目，完全免费！')
+        setTimeout(() => {
+            Bus.emit("onShowInfoNotification", '这是一个开源项目，完全免费！')
+        }, 1000)
 
         // 如果之前有保存http服务地址，直接载入
         DBHelper.findHttpServer().then(info => {
