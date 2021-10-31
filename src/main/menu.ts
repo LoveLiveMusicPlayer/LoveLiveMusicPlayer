@@ -105,7 +105,7 @@ export default class MenuBuilder {
                     },
                 },
                 {
-                    label: '开启调试工具',
+                    label: '调试工具',
                     accelerator: 'Alt+Command+I',
                     click: () => {
                         this.mainWindow.webContents.toggleDevTools();
@@ -159,98 +159,73 @@ export default class MenuBuilder {
     }
 
     buildDefaultTemplate() {
-        const templateDefault = [
+        return [
             {
-                label: '&File',
+                label: '&LoveLive音乐播放器',
                 submenu: [
                     {
-                        label: '&Open',
-                        accelerator: 'Ctrl+O',
-                    },
-                    {
-                        label: '&Close',
+                        label: '&退出',
                         accelerator: 'Ctrl+W',
                         click: () => {
-                            this.mainWindow.close();
+                            this.mainWindow?.close();
                         },
                     },
                 ],
             },
             {
-                label: '&View',
+                label: '&开发工具',
                 submenu:
                     process.env.NODE_ENV === 'development' ||
                     process.env.DEBUG_PROD === 'true'
                         ? [
                             {
-                                label: '&Reload',
+                                label: '&热更新',
                                 accelerator: 'Ctrl+R',
                                 click: () => {
                                     this.mainWindow.webContents.reload();
                                 },
                             },
                             {
-                                label: 'Toggle &Full Screen',
-                                accelerator: 'F11',
-                                click: () => {
-                                    this.mainWindow.setFullScreen(
-                                        !this.mainWindow.isFullScreen()
-                                    );
-                                },
-                            },
-                            {
-                                label: 'Toggle &Developer Tools',
+                                label: '调试工具',
                                 accelerator: 'Alt+Ctrl+I',
                                 click: () => {
                                     this.mainWindow.webContents.toggleDevTools();
                                 },
                             },
                         ]
-                        : [
-                            {
-                                label: 'Toggle &Full Screen',
-                                accelerator: 'F11',
-                                click: () => {
-                                    this.mainWindow.setFullScreen(
-                                        !this.mainWindow.isFullScreen()
-                                    );
-                                },
-                            },
-                        ],
+                        : [],
             },
             {
-                label: 'Help',
+                label: '视图',
                 submenu: [
                     {
-                        label: 'Learn More',
-                        click() {
-                            shell.openExternal('https://electronjs.org');
+                        label: this.mainWindow.isFullScreen() ? '&窗口化' : '&全屏',
+                        accelerator: 'F11',
+                        click: () => {
+                            this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
                         },
-                    },
+                    }
+                ]
+            },
+            {
+                label: '开源',
+                submenu: [
                     {
-                        label: 'Documentation',
+                        label: 'Github',
                         click() {
                             shell.openExternal(
-                                'https://github.com/electron/electron/tree/main/docs#readme'
+                                'https://github.com/zhushenwudi/LoveLiveMusicPlayer'
                             );
                         },
                     },
                     {
-                        label: 'Community Discussions',
+                        label: '提Bug',
                         click() {
-                            shell.openExternal('https://www.electronjs.org/community');
-                        },
-                    },
-                    {
-                        label: 'Search Issues',
-                        click() {
-                            shell.openExternal('https://github.com/electron/electron/issues');
+                            shell.openExternal('https://github.com/zhushenwudi/LoveLiveMusicPlayer/issues');
                         },
                     },
                 ],
             },
         ];
-
-        return templateDefault;
     }
 }
