@@ -22,7 +22,7 @@ PS：由于无损音频涉及版权无法开源，请加入QQ群获取音频文�
 计划目录 ：（√代表已完成，x代表正在施工...）
 
 - [HTTP端口设置] √
-- [播放器组件] (https://github.com/lijinke666/react-music-player) √
+- [播放器组件] √
 - [专辑、歌曲数据库建立] √
 - [企划选择] √
 - [整张专辑播放与切换] √
@@ -45,8 +45,9 @@ B站空间：<https://space.bilibili.com/4367965>
 欢迎来py，大家的支持就是我继续开发的动力！
 
 ~~请可爱的wudi喝杯奶茶~~
-<img src="assets/up_wx.jpg" width="300" height="400">
-<img src="assets/up_zfb.jpg" width="300" height="400">
+
+<img src="assets/up_wx.png" width="300" height="400">
+<img src="assets/up_zfb.png" width="300" height="400">
 
 ## 感谢
 
