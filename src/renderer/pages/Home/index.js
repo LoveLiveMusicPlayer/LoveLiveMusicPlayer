@@ -54,12 +54,15 @@ const Home = ({dispatch, chooseGroup}) => {
      * 生命周期以及定时器的声明与销毁
      */
     useEffect(() => {
+        Bus.emit("onShowInfoNotification", '这是一个开源项目，完全免费！')
+
         // 如果之前有保存http服务地址，直接载入
         DBHelper.findHttpServer().then(info => {
             if (info) {
                 setHttpServer({path: info.serverPath, port: info.serverPort})
             }
         })
+
         // 监听窗口改变大小
         const listener = function () {
             let width = window.innerWidth
@@ -93,6 +96,7 @@ const Home = ({dispatch, chooseGroup}) => {
 
         // 添加窗口大小变化监听器
         window.addEventListener("resize", listener)
+
         // 添加触摸Logo监听器
         Bus.addListener("onTapLogo", onTapLogoListener)
 
@@ -110,6 +114,7 @@ const Home = ({dispatch, chooseGroup}) => {
         topRef.current?.toFirst()
         bottomRef.current?.toFirst()
         setActiveLeftButton(false)
+
         // 切换企划时从数据库加载对应的全部专辑
         AlbumHelper.findAllAlbumsByGroup(group).then(res => {
             const topList = []

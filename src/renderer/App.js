@@ -8,8 +8,21 @@ import * as Images from './public/Images'
 import TypeWriterEffect from '../renderer/component/TypeWriter';
 import {connect} from 'react-redux';
 import {musicAction} from './actions/music';
+import {notification} from "antd";
+import {SmileOutlined} from '@ant-design/icons';
 
 const {ipcRenderer} = require('electron');
+
+const openNotification = (message) => {
+    notification.info({
+        message: '请注意️',
+        description: message,
+        placement: "topRight",
+        icon: <SmileOutlined style={{color: '#108ee9'}}/>,
+        className: 'custom-class',
+        style: {marginTop: 60},
+    });
+};
 
 function App({dispatch}) {
     let r = useRef()
@@ -27,6 +40,10 @@ function App({dispatch}) {
         // 添加切换专辑的监听器
         Bus.addListener("onChangeAudioList", (msg) => {
             r.current?.onChangeAudioList(msg)
+        })
+
+        Bus.addListener("onShowInfoNotification", (msg) => {
+            openNotification(msg)
         })
 
         return () => {

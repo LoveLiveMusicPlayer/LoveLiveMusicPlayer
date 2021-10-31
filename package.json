@@ -161,6 +161,7 @@
         ]
     },
     "devDependencies": {
+        "@ant-design/icons": "^4.7.0",
         "@pmmmwh/react-refresh-webpack-plugin": "0.5.1",
         "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
         "@testing-library/jest-dom": "^5.14.1",
