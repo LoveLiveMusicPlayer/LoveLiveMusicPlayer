@@ -235,6 +235,7 @@
     },
     "dependencies": {
         "@ant-design/pro-layout": "^6.25.1",
+        "@super-effective/react-color-picker": "^2.1.2",
         "animate.css": "^4.1.1",
         "antd": "^4.16.13",
         "buffer": "^6.0.3",
