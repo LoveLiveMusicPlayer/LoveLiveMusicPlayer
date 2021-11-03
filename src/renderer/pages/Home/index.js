@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import './index.css'
 import "animate.css"
-import {Button, InputNumber, Layout, Space} from 'antd';
+import {Button, Dropdown, Empty, InputNumber, Layout, Menu, Space} from 'antd';
 import {AppUtils} from "../../utils/AppUtils";
 import fs from "fs";
 import FileDrop from '../../component/DragAndDrop'
@@ -14,6 +14,7 @@ import Bus from "../../utils/Event"
 import {Loading} from "../../component/Loading";
 import {DBHelper} from "../../dao/DBHelper";
 import Modal from "react-modal";
+import * as Images from "../../public/Images";
 
 const {ipcRenderer} = require("electron")
 const {connect} = require('react-redux');
@@ -325,7 +326,7 @@ const Home = ({dispatch, chooseGroup}) => {
                                     />
                                 </div>
                                 {renderRightArrow(margin)}
-                            </> : null
+                            </> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/>
                     }
                 </>
             </div>
@@ -401,6 +402,22 @@ const Home = ({dispatch, chooseGroup}) => {
         )
     }
 
+    const menu = (
+        <Menu>
+            <Menu.Item>
+                <a onClick={() => Bus.emit("onTapLogo")}>设置端口</a>
+            </Menu.Item>
+            <Menu.Divider/>
+            <Menu.Item>
+                <a onClick={() => alert("222")}>设置主题</a>
+            </Menu.Item>
+            <Menu.Divider/>
+            <Menu.Item>
+                <a onClick={() => alert("333")}>退出程序</a>
+            </Menu.Item>
+        </Menu>
+    )
+
     return (
         <FileDrop
             onUpload={onUpload}
@@ -413,6 +430,21 @@ const Home = ({dispatch, chooseGroup}) => {
                 <Loading ref={loadingRef}/>
             </Content>
             {portInputVisible ? renderHttpPortInput() : null}
+
+            <div className={"star_container"}>
+                <div className={"shooting_star"}/>
+            </div>
+
+            <div className={"star_container"}>
+                <Dropdown overlay={menu} placement="bottomCenter">
+                    <img
+                        className={"tiny_star"}
+                        src={Images.ICON_SETTING}
+                        width={"30rem"}
+                        height={"30rem"}
+                    />
+                </Dropdown>
+            </div>
         </FileDrop>
     );
 }

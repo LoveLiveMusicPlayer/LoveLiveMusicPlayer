@@ -23,3 +23,60 @@
     display: flex;
     flex-direction: column;
 }
+
+.star_container {
+    position: absolute;
+    left: -8vh;
+    bottom: 50vh;
+    width: 100vh;
+    height: 1px;
+    -webkit-transform: rotate(135deg);
+    transform: rotate(135deg);
+}
+
+.tiny_star {
+    position: absolute;
+    left: -15px;
+    top: -15px;
+    -webkit-animation: star_shooting 4s ease-in-out forwards;
+}
+
+
+.shooting_star {
+    width: 200px;
+    height: 2px;
+    background: linear-gradient(-45deg, #fff, rgba(0, 0, 0, 0));
+    border-radius: 20px;
+    -webkit-filter: drop-shadow(0 0 6px #fff);
+    filter: drop-shadow(0 0 6px #fff);
+    -webkit-animation: tail 4s ease-in-out, tail_shooting 4s ease-in-out forwards;
+
+}
+
+@-webkit-keyframes tail {
+    from {
+        width: 0
+    }
+    to {
+        width: 200px
+    }
+}
+
+@-webkit-keyframes tail_shooting {
+    0% {
+        -webkit-transform: translateX(0);
+    }
+    100% {
+        -webkit-transform: translateX(75vh);
+        opacity: 0;
+    }
+}
+
+@-webkit-keyframes star_shooting {
+    0% {
+        -webkit-transform: translateX(0);
+    }
+    100% {
+        -webkit-transform: translateX(100vh)
+    }
+}

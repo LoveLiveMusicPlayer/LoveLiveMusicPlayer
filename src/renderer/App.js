@@ -26,6 +26,7 @@ const openNotification = (message) => {
 
 function App({dispatch}) {
     let r = useRef()
+    let starRef = useRef()
 
     let timer = null
 
@@ -71,10 +72,6 @@ function App({dispatch}) {
         setShowMenu(false)
         setShowCategory(false)
         dispatch(musicAction.chooseGroup(gp))
-    }
-
-    function clickLogo() {
-        Bus.emit("onTapLogo")
     }
 
     const options = {
@@ -169,10 +166,11 @@ function App({dispatch}) {
         }
     }
 
+
     return (
         <div className={"outer_container"}>
             <div className="header">
-                <img src={Images.ICON_HEAD} style={{paddingLeft: "20px"}} onClick={clickLogo}/>
+                <img src={Images.ICON_HEAD} style={{paddingLeft: "20px"}}/>
                 <TypeWriterEffect
                     textStyle={{
                         fontFamily: 'serif',
@@ -194,6 +192,15 @@ function App({dispatch}) {
                 />
 
                 <div className={"header_baby"}>
+                    {/*<Dropdown overlay={menu} placement="bottomCenter">*/}
+                    {/*    <img*/}
+                    {/*        className={"tiny_star"}*/}
+                    {/*        src={Images.ICON_SETTING}*/}
+                    {/*        width={"30rem"}*/}
+                    {/*        height={"30rem"}*/}
+                    {/*    />*/}
+                    {/*</Dropdown>*/}
+
                     <img className={"anima_tada"}
                          src={Images.ICON_MENU}
                          width={"60rem"}
@@ -233,7 +240,7 @@ function App({dispatch}) {
                         <div className={["hvr-grow", "menu_category"].join(' ')}>
                             <img src={Images.MENU_NIJI} width={'250px'} height={'250px'}
                                  onClick={() => chooseGroup("Nijigasaki")}/>
-                            <span className={"menu_category_span"}>虹咲学园偶像同好会</span>
+                            <span className={"menu_category_span"}>虹咲学园学园偶像同好会</span>
                         </div>
                         <div className={["hvr-grow", "menu_category"].join(' ')}>
                             <img src={Images.MENU_LIELLA} width={'250px'} height={'250px'}
