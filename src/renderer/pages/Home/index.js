@@ -229,6 +229,30 @@ const Home = ({dispatch, chooseGroup}) => {
         }
     }, []);
 
+    const putArrToPlayer = (promiseArr) => {
+        let isLoaded = true
+        Promise.allSettled(promiseArr).then(res => {
+            const audioList = []
+            res.map(item => {
+                if (item.value != null) {
+                    audioList.push({
+                        name: item.value.name,
+                        singer: item.value.artist,
+                        cover: AppUtils.encodeURL(URL + item.value["cover_path"]),
+                        musicSrc: AppUtils.encodeURL(URL + item.value["music_path"])
+                    })
+                } else {
+                    isLoaded = false
+                }
+            })
+            if (isLoaded) {
+                Bus.emit("onChangeAudioList", audioList)
+            } else {
+                AppUtils.openMsgDialog("error", "存在损坏的数据，请重新导入")
+            }
+        })
+    }
+
     /**
      * 当选择了一个专辑，需要获取对应的歌曲列表并设置在播放器上
      * @param e
@@ -240,27 +264,19 @@ const Home = ({dispatch, chooseGroup}) => {
             res.music.map(id => {
                 promiseArr.push(MusicHelper.findOneMusic(id, res.group))
             })
-            let isLoaded = true
-            Promise.allSettled(promiseArr).then(res => {
-                const audioList = []
-                res.map(item => {
-                    if (item.value != null) {
-                        audioList.push({
-                            name: item.value.name,
-                            singer: item.value.artist,
-                            cover: AppUtils.encodeURL(URL + item.value["cover_path"]),
-                            musicSrc: AppUtils.encodeURL(URL + item.value["music_path"])
-                        })
-                    } else {
-                        isLoaded = false
-                    }
+            putArrToPlayer(promiseArr)
+        })
+    }
+
+    const randomPlay = () => {
+        AlbumHelper.findAllAlbumsByGroup(group).then(albumList => {
+            const promiseArr = []
+            albumList.map(item => {
+                item.music.map(id => {
+                    promiseArr.push(MusicHelper.findOneMusic(id, item.group))
                 })
-                if (isLoaded) {
-                    Bus.emit("onChangeAudioList", audioList)
-                } else {
-                    AppUtils.openMsgDialog("error", "存在损坏的数据，请重新导入")
-                }
             })
+            putArrToPlayer(promiseArr)
         })
     }
 
@@ -416,8 +432,8 @@ const Home = ({dispatch, chooseGroup}) => {
                 <a onClick={() => colorPickerRef.current?.open()}>设置主题</a>
             </Menu.Item>
             <Menu.Divider/>
-            <Menu.Item key={"unsortPlay"}>
-                <a onClick={() => alert("333")}>随机播放</a>
+            <Menu.Item key={"randomPlay"}>
+                <a onClick={randomPlay}>随机播放</a>
             </Menu.Item>
         </Menu>
     )
