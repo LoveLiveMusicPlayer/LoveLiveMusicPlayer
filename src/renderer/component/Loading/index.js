@@ -49,6 +49,7 @@ export const Loading = forwardRef((props, ref) => {
 
     return (
         <Modal
+            appElement={document.body}
             isOpen={visible}
             onAfterOpen={null}
             onRequestClose={null}

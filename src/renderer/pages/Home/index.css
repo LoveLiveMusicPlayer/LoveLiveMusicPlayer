@@ -26,12 +26,11 @@
 
 .star_container {
     position: absolute;
-    left: -8vh;
     bottom: 50vh;
-    width: 100vh;
+    width: 140vh;
     height: 1px;
-    -webkit-transform: rotate(135deg);
-    transform: rotate(135deg);
+    -webkit-transform: rotate(153deg);
+    transform: rotate(153deg);
 }
 
 .tiny_star {
@@ -41,7 +40,6 @@
     -webkit-animation: star_shooting 4s ease-in-out forwards;
 }
 
-
 .shooting_star {
     width: 200px;
     height: 2px;
@@ -50,7 +48,6 @@
     -webkit-filter: drop-shadow(0 0 6px #fff);
     filter: drop-shadow(0 0 6px #fff);
     -webkit-animation: tail 4s ease-in-out, tail_shooting 4s ease-in-out forwards;
-
 }
 
 @-webkit-keyframes tail {
@@ -67,7 +64,7 @@
         -webkit-transform: translateX(0);
     }
     100% {
-        -webkit-transform: translateX(75vh);
+        -webkit-transform: translateX(113vh);
         opacity: 0;
     }
 }
@@ -77,6 +74,6 @@
         -webkit-transform: translateX(0);
     }
     100% {
-        -webkit-transform: translateX(100vh)
+        -webkit-transform: translateX(140vh)
     }
 }

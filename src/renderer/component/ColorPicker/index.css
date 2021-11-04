@@ -1,0 +1,7 @@
+.color_picker {
+    width: 80%;
+    height: 80%;
+    padding: 15px 5px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}

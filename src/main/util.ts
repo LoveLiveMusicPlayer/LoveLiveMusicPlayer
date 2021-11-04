@@ -1,6 +1,7 @@
 /* eslint import/prefer-default-export: off, import/no-mutable-exports: off */
 import {URL} from 'url';
 import path from 'path';
+
 const net = require('net')
 
 export let resolveHtmlPath: (htmlFileName: string) => string;
@@ -42,8 +43,13 @@ export function portIsOccupied(port: number) {
         // 打开端口异常
         server.on('error', (err: any) => {
             if (err.code === 'EADDRINUSE') {
-                //注意这句，如占用端口号+1
-                resolve(portIsOccupied(port + 1))
+                // 注意这句，如占用端口号+1，当为65535时回到10000端口
+                if (port >= 65535) {
+                    port = 10000
+                } else {
+                    port++
+                }
+                resolve(portIsOccupied(port))
                 console.log(`port is unavailable`)
             } else {
                 reject(err)

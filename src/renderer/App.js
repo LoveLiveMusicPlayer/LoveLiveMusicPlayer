@@ -10,6 +10,7 @@ import {connect} from 'react-redux';
 import {musicAction} from './actions/music';
 import {notification} from "antd";
 import {SmileOutlined} from '@ant-design/icons';
+import {DBHelper} from "./dao/DBHelper";
 
 const {ipcRenderer} = require('electron');
 
@@ -26,14 +27,17 @@ const openNotification = (message) => {
 
 function App({dispatch}) {
     let r = useRef()
-    let starRef = useRef()
-
     let timer = null
 
     const [showMenu, setShowMenu] = useState(false)
     const [showCategory, setShowCategory] = useState(false)
 
     useEffect(() => {
+        // 设置背景色
+        DBHelper.getBGColor().then(res => {
+            setBodyColor(res)
+        })
+
         ipcRenderer.send('window-inited', {
             userAgent: navigator.userAgent,
         });
@@ -47,11 +51,57 @@ function App({dispatch}) {
             openNotification(msg)
         })
 
+        Bus.addListener("onBodyChangeColor", (colors) => {
+            DBHelper.setBGColor(JSON.stringify(colors)).then(_ => {
+                setBodyColor(colors)
+            })
+        })
+
         return () => {
             // 生命周期结束时移除全部监听器
             Bus.removeAllListeners()
         }
     }, [])
+
+    function setBodyColor(colors) {
+        const parseColor = function (hexStr) {
+            return hexStr.length === 4 ? hexStr.substr(1).split('').map(function (s) {
+                return 0x11 * parseInt(s, 16);
+            }) : [hexStr.substr(1, 2), hexStr.substr(3, 2), hexStr.substr(5, 2)].map(function (s) {
+                return parseInt(s, 16);
+            })
+        };
+
+        const pad = function (s) {
+            return (s.length === 1) ? '0' + s : s;
+        };
+
+        const gradientColors = function (start, end, steps, gamma) {
+            let i, j, ms, me, output = [], so = [];
+            gamma = gamma || 1;
+            const normalize = function (channel) {
+                return Math.pow(channel / 255, gamma);
+            };
+            start = parseColor(start).map(normalize);
+            end = parseColor(end).map(normalize);
+            for (i = 0; i < steps; i++) {
+                ms = i / (steps - 1);
+                me = 1 - ms;
+                for (j = 0; j < 3; j++) {
+                    so[j] = pad(Math.round(Math.pow(start[j] * me + end[j] * ms, 1 / gamma) * 255).toString(16));
+                }
+                output.push('#' + so.join(''));
+            }
+            return output;
+        };
+
+        document.body.style.background = 'linear-gradient(\n' +
+            '                200.96deg,\n' +
+            `                ${colors.color1} -49.09%,\n` +
+            `                ${gradientColors(colors.color1, colors.color2, 2)[0]} 10.77%,\n` +
+            `                ${colors.color2} 129.35%\n` +
+            `            )`
+    }
 
     // 点击企划图片
     function onBabyClick() {
@@ -166,7 +216,6 @@ function App({dispatch}) {
         }
     }
 
-
     return (
         <div className={"outer_container"}>
             <div className="header">
@@ -192,15 +241,6 @@ function App({dispatch}) {
                 />
 
                 <div className={"header_baby"}>
-                    {/*<Dropdown overlay={menu} placement="bottomCenter">*/}
-                    {/*    <img*/}
-                    {/*        className={"tiny_star"}*/}
-                    {/*        src={Images.ICON_SETTING}*/}
-                    {/*        width={"30rem"}*/}
-                    {/*        height={"30rem"}*/}
-                    {/*    />*/}
-                    {/*</Dropdown>*/}
-
                     <img className={"anima_tada"}
                          src={Images.ICON_MENU}
                          width={"60rem"}

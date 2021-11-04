@@ -15,6 +15,7 @@ import {Loading} from "../../component/Loading";
 import {DBHelper} from "../../dao/DBHelper";
 import Modal from "react-modal";
 import * as Images from "../../public/Images";
+import {ColorPicker} from "../../component/ColorPicker";
 
 const {ipcRenderer} = require("electron")
 const {connect} = require('react-redux');
@@ -27,6 +28,8 @@ const Home = ({dispatch, chooseGroup}) => {
     let bottomRef = useRef()
     // Loading 窗口引用
     let loadingRef = useRef()
+
+    let colorPickerRef = useRef()
 
     // 屏幕宽度
     const [width, setWidth] = useState(window.innerWidth)
@@ -60,7 +63,7 @@ const Home = ({dispatch, chooseGroup}) => {
         }, 1000)
 
         // 如果之前有保存http服务地址，直接载入
-        DBHelper.findHttpServer().then(info => {
+        DBHelper.getHttpServer().then(info => {
             if (info) {
                 setHttpServer({path: info.serverPath, port: info.serverPort})
             }
@@ -89,7 +92,7 @@ const Home = ({dispatch, chooseGroup}) => {
 
         // 设置http服务回调
         ipcRenderer.on("openHttpReply", (event, path, port) => {
-            DBHelper.insertOrUpdateHttpServer({path: path, port: port}).then(_ => {
+            DBHelper.setHttpServer({path: path, port: port}).then(_ => {
                 setRootDir(path)
                 setPort(port)
                 setURL(`http://localhost:${port}/`)
@@ -204,7 +207,7 @@ const Home = ({dispatch, chooseGroup}) => {
                 AppUtils.openMsgDialog("error", "导入音乐列表失败")
             }
         } else {
-            AppUtils.openMsgDialog("error", "拖入的文件异常，请检查")
+            AppUtils.openMsgDialog("error", "请拖入以下文件或文件夹\nLoveLive文件夹\nmusicList.json\nalbumList.json")
         }
     }
 
@@ -363,6 +366,7 @@ const Home = ({dispatch, chooseGroup}) => {
     const renderHttpPortInput = () => {
         return (
             <Modal
+                appElement={document.body}
                 isOpen={portInputVisible}
                 onAfterOpen={null}
                 onRequestClose={() => setPortInputVisible(false)}
@@ -404,19 +408,23 @@ const Home = ({dispatch, chooseGroup}) => {
 
     const menu = (
         <Menu>
-            <Menu.Item>
+            <Menu.Item key={"port"}>
                 <a onClick={() => Bus.emit("onTapLogo")}>设置端口</a>
             </Menu.Item>
             <Menu.Divider/>
-            <Menu.Item>
-                <a onClick={() => alert("222")}>设置主题</a>
+            <Menu.Item key={"theme"}>
+                <a onClick={() => colorPickerRef.current?.open()}>设置主题</a>
             </Menu.Item>
             <Menu.Divider/>
-            <Menu.Item>
-                <a onClick={() => alert("333")}>退出程序</a>
+            <Menu.Item key={"unsortPlay"}>
+                <a onClick={() => alert("333")}>随机播放</a>
             </Menu.Item>
         </Menu>
     )
+
+    const onColorPickerChange = (color1, color2) => {
+        Bus.emit("onBodyChangeColor", {color1: color1, color2: color2})
+    }
 
     return (
         <FileDrop
@@ -435,6 +443,7 @@ const Home = ({dispatch, chooseGroup}) => {
                 <div className={"shooting_star"}/>
             </div>
 
+            <ColorPicker ref={colorPickerRef} onChangeColor={onColorPickerChange}/>
             <div className={"star_container"}>
                 <Dropdown overlay={menu} placement="bottomCenter">
                     <img
@@ -444,7 +453,9 @@ const Home = ({dispatch, chooseGroup}) => {
                         height={"30rem"}
                     />
                 </Dropdown>
+
             </div>
+
         </FileDrop>
     );
 }
