@@ -7,10 +7,10 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 // @ts-ignore
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 // @ts-ignore
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import {BundleAnalyzerPlugin} from 'webpack-bundle-analyzer';
 // @ts-ignore
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
-import { merge } from 'webpack-merge';
+import {merge} from 'webpack-merge';
 import TerserPlugin from 'terser-webpack-plugin';
 import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
@@ -61,26 +61,42 @@ export default merge(baseConfig, {
           {
             loader: 'css-loader',
             options: {
-              modules: true,
-              sourceMap: true,
-              importLoaders: 1,
+                modules: true,
+                sourceMap: true,
+                importLoaders: 1,
             },
           },
-          'css-loader',
-          'sass-loader',
+            'css-loader',
+            'sass-loader',
         ],
-        include: /\.module\.s?(c|a)ss$/,
+          include: /\.module\.s?(c|a)ss$/,
       },
-      {
-        test: /\.s?(a|c)ss$/,
-          // @ts-ignore
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
-        exclude: /\.module\.s?(c|a)ss$/,
-      },
-      //Font Loader
-      {
-        test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        // @ts-ignore
+        {
+            test: /\.less$/,
+            // @ts-ignore
+            use: [{
+                loader: "style-loader" // creates style nodes from JS strings
+            }, {
+                loader: "css-loader" // translates CSS into CommonJS
+            }, {
+                loader: "less-loader", // compiles Less to CSS
+                options: {
+                    lessOptions: {
+                        javascriptEnabled: true,
+                    }
+                }
+            }]
+        },
+        {
+            test: /\.s?(a|c)ss$/,
+            // @ts-ignore
+            use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+            exclude: /\.module\.s?(c|a)ss$/,
+        },
+        //Font Loader
+        {
+            test: /\.(woff|woff2|eot|ttf|otf)$/i,
+            // @ts-ignore
         type: 'asset/resource',
       },
       // SVG Font

@@ -4,7 +4,7 @@ import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import chalk from 'chalk';
 import {merge} from 'webpack-merge';
-import {spawn, execSync} from 'child_process';
+import {execSync, spawn} from 'child_process';
 import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
@@ -37,6 +37,7 @@ if (
     execSync('npm run postinstall');
 }
 
+// @ts-ignore
 export default merge(baseConfig, {
     devtool: 'inline-source-map',
 
@@ -81,6 +82,22 @@ export default merge(baseConfig, {
                     'sass-loader',
                 ],
                 include: /\.module\.s?(c|a)ss$/,
+            },
+            {
+                test: /\.less$/,
+                // @ts-ignore
+                use: [{
+                    loader: "style-loader" // creates style nodes from JS strings
+                }, {
+                    loader: "css-loader" // translates CSS into CommonJS
+                }, {
+                    loader: "less-loader", // compiles Less to CSS
+                    options: {
+                        lessOptions: {
+                            javascriptEnabled: true,
+                        }
+                    }
+                }]
             },
             {
                 test: /\.s?css$/,
