@@ -1,6 +1,6 @@
 {
     "name": "lovelive-music-player",
-    "productName": "LoveLive音乐播放器",
+    "productName": "LoveLiveMusicPlayer",
     "description": "A LoveLive music player",
     "scripts": {
         "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
@@ -101,9 +101,8 @@
             "./assets/**"
         ],
         "publish": {
-            "provider": "github",
-            "owner": "lovelive-music-player",
-            "repo": "lovelive-music-player"
+            "provider": "generic",
+            "url": "http://localhost:8080/update"
         }
     },
     "repository": {
