@@ -7,6 +7,8 @@ import icon_niji from '../../../assets/image/menu_nijigasaki.jpg'
 import icon_liella from '../../../assets/image/menu_liella.jpg'
 import icon_loading from '../../../assets/image/loading.gif'
 import icon_setting from '../../../assets/image/icon_setting.png'
+import icon_empty from '../../../assets/image/icon_empty.png'
+import icon_logo from '../../../assets/icons/128x128.png'
 
 export const ICON_HEAD = icon_head
 export const ICON_MENU = icon_menu
@@ -17,3 +19,5 @@ export const MENU_AQOURS = icon_aqours
 export const MENU_NIJI = icon_niji
 export const MENU_LIELLA = icon_liella
 export const LOADING = icon_loading
+export const ICON_EMPTY = icon_empty
+export const ICON_LOGO = icon_logo

@@ -79,7 +79,7 @@ a:hover {
 
 .anima_tada {
     -webkit-animation: anima_tada 2s infinite;
-    padding-right: 1rem;
+    padding-right: 20px;
     -webkit-app-region: no-drag;
 }
 

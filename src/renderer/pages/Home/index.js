@@ -433,7 +433,7 @@ const Home = ({dispatch, chooseGroup}) => {
             </Menu.Item>
             <Menu.Divider/>
             <Menu.Item key={"randomPlay"}>
-                <a onClick={randomPlay}>随机播放</a>
+                <a onClick={randomPlay}>全部播放</a>
             </Menu.Item>
         </Menu>
     )
