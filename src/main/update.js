@@ -8,8 +8,7 @@ autoUpdater.on('update-downloaded', info => {
     if (process.env.NODE_ENV === 'production') {
         // https://electronjs.org/docs/api/auto-updater#autoupdaterquitandinstall
         // 这里先拉取更新信息，在对话框中显示版本的更新内容
-        const req = http.request('http://localhost:8080/info.txt', req => {
-            alert("111")
+        const req = http.request('http://192.168.100.194:8080/info.txt', req => {
             let detail = ''
             req.setEncoding('utf-8')
             req.on('data', chunk => {
