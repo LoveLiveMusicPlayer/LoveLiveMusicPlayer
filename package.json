@@ -102,7 +102,7 @@
         ],
         "publish": {
             "provider": "generic",
-            "url": "http://192.168.100.194:8080/update"
+            "url": ""
         }
     },
     "repository": {

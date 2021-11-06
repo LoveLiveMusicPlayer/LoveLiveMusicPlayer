@@ -1,36 +1,18 @@
-/* eslint global-require: off, no-console: off */
-
-/**
- * This module executes inside of electron's main process. You can start
- * electron renderer process from here and communicate with the other processes
- * through IPC.
- *
- * When running `yarn build` or `yarn build:main`, this file is compiled to
- * `./src/main.js` using webpack. This gives us some performance wins.
- */
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
 import {app, BrowserWindow, dialog, ipcMain, shell} from 'electron';
-import autoUpdater from './update';
-// import log from 'electron-log';
 import MenuBuilder from './menu';
 import {portIsOccupied, resolveHtmlPath} from './util';
+import update from "./update";
 
 const httpserver = require('http-server');
+const autoUpdater = new update()
 
 // 当前HTTP服务是否开启
 let isHttpServerOpen = false
 // http-server实例
 let mServer: any
-
-// export default class AppUpdater {
-//     constructor() {
-//         log.transports.file.level = 'info';
-//         autoUpdater.logger = log;
-//         autoUpdater.checkForUpdates();
-//     }
-// }
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -82,8 +64,8 @@ ipcMain.on('msgDialog', (event, args) => {
         noLink: true, // win下的样式
         // icon:nativeImage.createFromPath("./icon/png.png"),// 图标
         // cancelId: 1// 点击x号关闭返回值
-    }).then(index => {
-        event.sender.send("msgDialogCallback", index)
+    }).then(returnValue => {
+        event.sender.send("msgDialogCallback", returnValue.response)
     })
 })
 
@@ -93,7 +75,7 @@ ipcMain.handle("fileDialog", (_event, _args) => {
 })
 
 ipcMain.handle("checkUpdate", (_event, _args) => {
-    autoUpdater.checkForUpdates()
+    autoUpdater.checkUpdate()
 })
 
 if (process.env.NODE_ENV === 'production') {

@@ -400,10 +400,8 @@ const Home = ({dispatch, chooseGroup}) => {
                         type="primary"
                         loading={wait}
                         onClick={() => {
-                            if (port < 10000) {
+                            if (port < 10000 || port > 65535) {
                                 setPort(10000)
-                            } else if (port > 65535) {
-                                setPort(65535)
                             } else {
                                 // 只有在 10000-65535 区间内的端口才允许设置
                                 setWait(true)
@@ -434,6 +432,10 @@ const Home = ({dispatch, chooseGroup}) => {
             <Menu.Divider/>
             <Menu.Item key={"randomPlay"}>
                 <a onClick={randomPlay}>全部播放</a>
+            </Menu.Item>
+            <Menu.Divider/>
+            <Menu.Item key={"checkUpdate"}>
+                <a onClick={() => ipcRenderer.invoke('checkUpdate')}>检查更新</a>
             </Menu.Item>
         </Menu>
     )

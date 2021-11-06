@@ -16,7 +16,7 @@ const {ipcRenderer} = require('electron');
 
 const openNotification = (message) => {
     notification.info({
-        message: '请注意️',
+        message: '请注意',
         description: message,
         placement: "topRight",
         icon: <SmileOutlined style={{color: '#108ee9'}}/>,
