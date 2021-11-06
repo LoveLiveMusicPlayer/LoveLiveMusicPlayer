@@ -92,6 +92,10 @@ ipcMain.handle("fileDialog", (_event, _args) => {
     dialog.showOpenDialogSync({properties: ['openFile', 'multiSelections']})
 })
 
+ipcMain.handle("checkUpdate", (_event, _args) => {
+    autoUpdater.checkForUpdates()
+})
+
 if (process.env.NODE_ENV === 'production') {
     const sourceMapSupport = require('source-map-support');
     sourceMapSupport.install();
@@ -178,11 +182,6 @@ const createWindow = async () => {
         event.preventDefault();
         shell.openExternal(url);
     });
-
-    // Remove this if your app does not use auto updates
-    // eslint-disable-next-line
-    // new AppUpdater();
-    await autoUpdater.checkForUpdates()
 };
 
 /**
