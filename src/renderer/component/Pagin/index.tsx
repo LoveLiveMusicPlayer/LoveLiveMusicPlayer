@@ -1,6 +1,7 @@
 // @ts-ignore
 import React, {useCallback, useEffect, useState} from 'react';
 import {Container, Dot, DotContainer, Img, Page, PrevNext, Text, WhiteCover} from './styled-components'
+import * as Images from '../../public/Images'
 
 interface ImagePaginationProps {
     pages: {
@@ -79,7 +80,20 @@ const Index = (
                                 onClick={(event: any) => event && onItemClick(img.id)}
                             >
                                 <WhiteCover/>
-                                <Img src={decodeURI(img.src)} style={{width: imgSide, height: imgSide}}/>
+                                <Img
+                                    src={decodeURI(img.src)}
+                                    style={{
+                                        width: imgSide,
+                                        height: imgSide,
+                                        borderRadius: 5,
+                                        borderWidth: 10,
+                                        borderColor: 'black'
+                                    }}
+                                    onError={(e: { target: { onerror: null; src: string; }; }) => {
+                                        e.target.onerror = null
+                                        e.target.src = Images.ICON_EMPTY
+                                    }}
+                                />
                             </Page>
                         ))
                     }
