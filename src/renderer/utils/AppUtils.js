@@ -6,7 +6,6 @@ const {ipcRenderer} = require("electron")
 
 const coverArr = []
 let lastDir = ""
-const encArr = [{'!': "%21"}, {'"': "%22"}, {'#': "%23"}, {'$': "%24"}]
 
 export const AppUtils = {
     /**
