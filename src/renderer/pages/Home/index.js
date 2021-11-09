@@ -16,6 +16,7 @@ import {DBHelper} from "../../dao/DBHelper";
 import Modal from "react-modal";
 import * as Images from "../../public/Images";
 import {ColorPicker} from "../../component/ColorPicker";
+import {JsonImport} from "../../utils/JsonImport";
 
 const {ipcRenderer} = require("electron")
 const {connect} = require('react-redux');
@@ -280,6 +281,10 @@ const Home = ({dispatch, chooseGroup}) => {
         })
     }
 
+    const refreshData = () => {
+        JsonImport.requestUrl()
+    }
+
     // 滚动到专辑列表首页
     const onScrollFirst = () => {
         setActiveLeftButton(false)
@@ -433,6 +438,10 @@ const Home = ({dispatch, chooseGroup}) => {
             <Menu.Item key={"randomPlay"}>
                 <a onClick={randomPlay}>全部播放</a>
             </Menu.Item>
+            {/*<Menu.Divider/>*/}
+            {/*<Menu.Item key={"refreshData"}>*/}
+            {/*    <a onClick={refreshData}>更新数据</a>*/}
+            {/*</Menu.Item>*/}
             <Menu.Divider/>
             <Menu.Item key={"checkUpdate"}>
                 <a onClick={() => ipcRenderer.invoke('checkUpdate')}>检查更新</a>
