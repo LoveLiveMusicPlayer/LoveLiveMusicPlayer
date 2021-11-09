@@ -7,6 +7,9 @@ import {portIsOccupied, resolveHtmlPath} from './util';
 import update from "./update";
 
 const httpserver = require('http-server');
+const Store = require('electron-store');
+
+Store.initRenderer();
 const autoUpdater = new update()
 
 // 当前HTTP服务是否开启
@@ -142,6 +145,7 @@ const createWindow = async () => {
             nodeIntegration: true,
             nodeIntegrationInWorker: false,
             contextIsolation: false,
+            webSecurity: false
         },
     });
 

@@ -1,4 +1,5 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
+import Store from "../../utils/Store"
 import './index.css'
 import "animate.css"
 import {Button, Dropdown, Empty, InputNumber, Layout, Menu, Space} from 'antd';
@@ -16,7 +17,7 @@ import {DBHelper} from "../../dao/DBHelper";
 import Modal from "react-modal";
 import * as Images from "../../public/Images";
 import {ColorPicker} from "../../component/ColorPicker";
-import {JsonImport} from "../../utils/JsonImport";
+import {WorkUtils} from "../../utils/WorkUtils";
 
 const {ipcRenderer} = require("electron")
 const {connect} = require('react-redux');
@@ -162,7 +163,7 @@ const Home = ({dispatch, chooseGroup}) => {
     }
 
     /**
-     * 导入LoveLive文件夹、albumList.json专辑、musicList.json音乐
+     * 导入LoveLive文件夹
      * @param file
      * @returns {Promise<void>}
      */
@@ -174,41 +175,8 @@ const Home = ({dispatch, chooseGroup}) => {
             setHttpServer({path: rootDir, port: port})
             AppUtils.openMsgDialog("info", "导入歌曲库成功")
             // await WorkUtils.exportToExcel(path, rootDir)
-        } else if (name === "albumList.json") {
-            // 传入了专辑 json
-            try {
-                loadingRef.current?.show()
-                const json = fs.readFileSync(path, {encoding: "utf-8"})
-                AlbumHelper.insertOrUpdateAlbum(json, function (progress) {
-                    loadingRef.current?.setProgress(progress)
-                }).then(_ => {
-                    setRefresh(new Date().getTime())
-                    setTimeout(() => {
-                        loadingRef.current?.hide()
-                    }, 1000)
-                })
-            } catch (e) {
-                loadingRef.current?.hide()
-                AppUtils.openMsgDialog("error", "导入专辑列表失败")
-            }
-        } else if (name === "musicList.json") {
-            // 传入了歌曲 json
-            try {
-                loadingRef.current?.show()
-                const json = fs.readFileSync(path, {encoding: "utf-8"})
-                MusicHelper.insertOrUpdateMusic(json, function (progress) {
-                    loadingRef.current?.setProgress(progress)
-                }).then(_ => {
-                    setTimeout(() => {
-                        loadingRef.current?.hide()
-                    }, 1000)
-                })
-            } catch (e) {
-                loadingRef.current?.hide()
-                AppUtils.openMsgDialog("error", "导入音乐列表失败")
-            }
         } else {
-            AppUtils.openMsgDialog("error", "请拖入以下文件或文件夹\nLoveLive文件夹\nmusicList.json\nalbumList.json")
+            AppUtils.openMsgDialog("error", "请拖入名为LoveLive的文件夹")
         }
     }
 
@@ -249,7 +217,7 @@ const Home = ({dispatch, chooseGroup}) => {
             if (isLoaded) {
                 Bus.emit("onChangeAudioList", audioList)
             } else {
-                AppUtils.openMsgDialog("error", "存在损坏的数据，请重新导入")
+                AppUtils.openMsgDialog("error", "存在损坏的数据，请重新更新数据")
             }
         })
     }
@@ -281,8 +249,38 @@ const Home = ({dispatch, chooseGroup}) => {
         })
     }
 
-    const refreshData = () => {
-        JsonImport.requestUrl()
+    const refreshData = async () => {
+        const dataUrl = await WorkUtils.requestUrl()
+        if (dataUrl == null) {
+            AppUtils.openMsgDialog("error", "服务繁忙，请稍候再试")
+            return
+        }
+        const data = await WorkUtils.requestData(dataUrl)
+        if (data == null) {
+            AppUtils.openMsgDialog("error", "服务繁忙，请稍候再试")
+            return
+        }
+        const version = Store.get("dataVersion")
+        if (version && version >= data.version) {
+            AppUtils.openMsgDialog("info", "已是最新数据，无需更新")
+            return
+        }
+        loadingRef.current?.show()
+        loadingRef.current?.setTitle("导入专辑中..")
+        AlbumHelper.insertOrUpdateAlbum(JSON.stringify(data.album), function (progress) {
+            loadingRef.current?.setProgress(progress)
+        }).then(_ => {
+            loadingRef.current?.setTitle("导入歌曲中..")
+            MusicHelper.insertOrUpdateMusic(JSON.stringify(data.music), function (progress) {
+                loadingRef.current?.setProgress(progress)
+            }).then(_ => {
+                Store.set("dataVersion", data.version)
+                setRefresh(new Date().getTime())
+                setTimeout(() => {
+                    loadingRef.current?.hide()
+                }, 1000)
+            })
+        })
     }
 
     // 滚动到专辑列表首页
@@ -438,10 +436,10 @@ const Home = ({dispatch, chooseGroup}) => {
             <Menu.Item key={"randomPlay"}>
                 <a onClick={randomPlay}>全部播放</a>
             </Menu.Item>
-            {/*<Menu.Divider/>*/}
-            {/*<Menu.Item key={"refreshData"}>*/}
-            {/*    <a onClick={refreshData}>更新数据</a>*/}
-            {/*</Menu.Item>*/}
+            <Menu.Divider/>
+            <Menu.Item key={"refreshData"}>
+                <a onClick={refreshData}>更新数据</a>
+            </Menu.Item>
             <Menu.Divider/>
             <Menu.Item key={"checkUpdate"}>
                 <a onClick={() => ipcRenderer.invoke('checkUpdate')}>检查更新</a>

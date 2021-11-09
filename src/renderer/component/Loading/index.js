@@ -6,6 +6,7 @@ export const Loading = forwardRef((props, ref) => {
 
     const [visible, setVisible] = useState(false)
     const [progress, setProgress] = useState(0)
+    const [title, setTitle] = useState("加载中..")
 
     const customStyles = {
         overlay: {
@@ -34,6 +35,10 @@ export const Loading = forwardRef((props, ref) => {
     };
 
     useImperativeHandle(ref, () => ({
+        setTitle: (title) => {
+            setTitle(title)
+        },
+
         setProgress: (progress) => {
             setProgress(progress)
         },
@@ -55,6 +60,7 @@ export const Loading = forwardRef((props, ref) => {
             onRequestClose={null}
             style={customStyles}>
             <img src={Images.LOADING} style={{width: 150, height: 150}}/>
+            <p style={{color: 'black'}}>{title}</p>
             <p style={{color: 'black'}}>进度：{progress}%</p>
         </Modal>
     )

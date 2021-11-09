@@ -2,6 +2,7 @@ import {AppUtils} from "./AppUtils";
 import EXCEL from "js-export-xlsx";
 import * as mm from "music-metadata";
 import fs from "fs";
+import Network from "./Network";
 
 const path = require('path');
 
@@ -71,5 +72,27 @@ export const WorkUtils = {
             const des = dir + `Cover_1.jpg`
             fs.writeFileSync(des, res.common.picture[0].data)
         })
+    },
+
+    async requestUrl() {
+        let result = null
+        try {
+            const response = await Network.get('https://zhushenwudi1.oss-cn-hangzhou.aliyuncs.com/info.json')
+            result = response.data.data
+        } catch (error) {
+            console.error(error);
+        }
+        return result
+    },
+
+    async requestData(url) {
+        let result = null
+        try {
+            const response = await Network.get(url)
+            result = response.data
+        } catch (error) {
+            console.error(error);
+        }
+        return result
     }
 }
