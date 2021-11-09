@@ -1,9 +1,10 @@
-import {dialog} from 'electron'
+import {app, dialog} from 'electron'
 import {autoUpdater} from 'electron-updater'
 import https from 'https'
-import path from "path";
 
 export default class update {
+    private callback: Function | undefined;
+    private isSuccess = false
 
     constructor() {
         autoUpdater.autoDownload = false
@@ -14,24 +15,25 @@ export default class update {
         // https://www.electron.build/auto-update#events
         // https://electronjs.org/docs/api/auto-updater#autoupdaterquitandinstall
         autoUpdater.on('update-downloaded', _info => {
-            if (process.env.NODE_ENV === 'production') {
-                path.join(process.resourcesPath, 'assets');
-                this.showDialog("已更新完成，请重启应用", ["确定"]).then(_ => {
-                    autoUpdater.quitAndInstall(true, true)
-                })
-            }
+            this.showDialog("已更新完成，请重启应用", ["确定"]).then(_ => {
+                this.isSuccess = true
+                autoUpdater.quitAndInstall(true, true)
+            })
         })
 
         autoUpdater.on('error', _info => {
-            this.showDialog("更新失败，请稍后重试", ["知道了"])
+            if (!this.isSuccess) {
+                this.showDialog("更新失败，请稍后重试", ["知道了"])
+            }
         })
 
-        autoUpdater.on('download-progress', _info => {
-            console.log("download")
+        autoUpdater.on('download-progress', progressObj => {
+            this.callback?.call(this, JSON.stringify(progressObj))
         })
     }
 
-    checkUpdate() {
+    checkUpdate(callback: Function) {
+        this.callback = callback
         const url = 'https://zhushenwudi1.oss-cn-hangzhou.aliyuncs.com/info.json'
         // 这里先拉取更新信息，在对话框中显示版本的更新内容
         const req = https.request(url, req => {
@@ -42,7 +44,7 @@ export default class update {
             })
             req.on('end', () => {
                 const json = JSON.parse(message)
-                if (process.version === json.version) {
+                if (app.getVersion() === json.version) {
                     this.showDialog('已经是最新版本了', ["知道了"])
                 } else {
                     this.showDialog(`检测到新版本（${json.version}）是否更新`, ["取消", "确定"], json.message).then(rtn => {

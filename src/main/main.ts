@@ -16,6 +16,15 @@ let mServer: any
 
 let mainWindow: BrowserWindow | null = null;
 
+let updateCallback = (progressObj: string) => {
+    if (mainWindow) {
+        const obj = JSON.parse(progressObj)
+        if (obj.percent > 0) {
+            mainWindow.setProgressBar(obj.percent)
+        }
+    }
+}
+
 // 开启HTTP服务 或 切换端口重启服务
 ipcMain.handle('openHttp', async (event, path, port) => {
     // 获取可用端口号
@@ -75,7 +84,7 @@ ipcMain.handle("fileDialog", (_event, _args) => {
 })
 
 ipcMain.handle("checkUpdate", (_event, _args) => {
-    autoUpdater.checkUpdate()
+    autoUpdater.checkUpdate(updateCallback)
 })
 
 if (process.env.NODE_ENV === 'production') {

@@ -34,7 +34,7 @@ npm-debug.log.*
 yarn.lock
 /build/app/dist/
 /assets/image/loading.gif
-/release/build/
+/release/build-win-1.0.1/
 /release/app/dist/
 /release/app/yarn.lock
 /release/app/package-lock.json
