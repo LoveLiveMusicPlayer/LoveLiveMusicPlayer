@@ -1,0 +1,22 @@
+.lrcContainer {
+    width: 30vw;
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
+.lrc {
+    /* webkit */
+    &::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+    }
+
+    /* firefox */
+    scrollbar-width: none;
+
+    /* ie */
+    -ms-overflow-style: none;
+}

@@ -18,6 +18,7 @@ import Modal from "react-modal";
 import * as Images from "../../public/Images";
 import {ColorPicker} from "../../component/ColorPicker";
 import {WorkUtils} from "../../utils/WorkUtils";
+import {MusicDetail} from "../../component/MusicDetail";
 
 const {ipcRenderer} = require("electron")
 const {connect} = require('react-redux');
@@ -30,8 +31,9 @@ const Home = ({dispatch, chooseGroup}) => {
     let bottomRef = useRef()
     // Loading 窗口引用
     let loadingRef = useRef()
-
+    // 选择主题色引用
     let colorPickerRef = useRef()
+    let musicDetailRef = useRef()
 
     // 屏幕宽度
     const [width, setWidth] = useState(window.innerWidth)
@@ -56,9 +58,34 @@ const Home = ({dispatch, chooseGroup}) => {
     // 设置http端口等待两秒时的按钮状态
     const [wait, setWait] = useState(false)
 
+    // 显示歌曲详情界面
+    const [musicDetailVisible, setMusicDetailVisible] = useState(false)
+
     /**
      * 生命周期以及定时器的声明与销毁
      */
+
+        // 监听窗口改变大小
+    const listener = function () {
+            let width = window.innerWidth
+            const height = window.innerHeight
+            const radio = 1025 / 648
+            // 防止在横向变宽时，图片变大
+            if (width / height > radio) {
+                width = height * radio
+            }
+            setWidth(width)
+        }
+
+    const onTapLogoListener = function () {
+        setPortInputVisible(true)
+    }
+
+    const onAudioTimeChange = function (info) {
+        musicDetailRef.current?.setMusicDetail(info)
+    }
+
+
     useEffect(() => {
         setTimeout(() => {
             Bus.emit("onShowInfoNotification", '这是一个开源项目，完全免费！')
@@ -70,22 +97,6 @@ const Home = ({dispatch, chooseGroup}) => {
                 setHttpServer({path: info.serverPath, port: info.serverPort})
             }
         })
-
-        // 监听窗口改变大小
-        const listener = function () {
-            let width = window.innerWidth
-            const height = window.innerHeight
-            const radio = 1025 / 648
-            // 防止在横向变宽时，图片变大
-            if (width / height > radio) {
-                width = height * radio
-            }
-            setWidth(width)
-        }
-
-        const onTapLogoListener = function () {
-            setPortInputVisible(true)
-        }
 
         // 接收提示窗口关闭的回调
         ipcRenderer.on('msgDialogCallback', (event, arg) => {
@@ -108,12 +119,29 @@ const Home = ({dispatch, chooseGroup}) => {
         // 添加触摸Logo监听器
         Bus.addListener("onTapLogo", onTapLogoListener)
 
+        Bus.addListener("onAudioTimeChange", onAudioTimeChange)
+
         return () => {
             // 生命周期结束后将监听器移除
             window.removeEventListener("resize", listener)
             removeEventListener("onTapLogo", onTapLogoListener)
+
+            removeEventListener("onAudioTimeChange", onAudioTimeChange)
         }
     }, [])
+
+    useEffect(() => {
+        const onClickCover = function () {
+            setMusicDetailVisible(!musicDetailVisible)
+        }
+
+        // 添加点击左下角封面监听器
+        Bus.addListener("openMusicDetail", onClickCover)
+
+        return () => {
+            removeEventListener("openMusicDetail", onClickCover)
+        }
+    }, [musicDetailVisible])
 
     /**
      * 企划变更或者导入专辑列表刷新触发
@@ -205,10 +233,11 @@ const Home = ({dispatch, chooseGroup}) => {
             res.map(item => {
                 if (item.value != null) {
                     audioList.push({
+                        _id: item.value._id,
                         name: item.value.name,
                         singer: item.value.artist,
                         cover: AppUtils.encodeURL(URL + item.value["cover_path"]),
-                        musicSrc: AppUtils.encodeURL(URL + item.value["music_path"])
+                        musicSrc: AppUtils.encodeURL(URL + item.value["music_path"]),
                     })
                 } else {
                     isLoaded = false
@@ -355,7 +384,7 @@ const Home = ({dispatch, chooseGroup}) => {
         )
     }
 
-    const customStyles = {
+    const httpPortStyles = {
         overlay: {
             position: 'fixed',
             top: 0,
@@ -389,7 +418,7 @@ const Home = ({dispatch, chooseGroup}) => {
                 isOpen={portInputVisible}
                 onAfterOpen={null}
                 onRequestClose={() => setPortInputVisible(false)}
-                style={customStyles}>
+                style={httpPortStyles}>
                 <p style={{fontWeight: 'bold'}}>请输入端口号</p>
                 <Space>
                     <InputNumber
@@ -419,6 +448,31 @@ const Home = ({dispatch, chooseGroup}) => {
                         确定
                     </Button>
                 </Space>
+            </Modal>
+        )
+    }
+
+    const musicDetailStyles = {
+        content: {
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            borderWidth: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.80)'
+        },
+    };
+
+    // 渲染歌曲详情界面
+    const renderMusicDetail = () => {
+        return (
+            <Modal
+                appElement={document.body}
+                isOpen={musicDetailVisible}
+                onAfterOpen={null}
+                onRequestClose={null}
+                style={musicDetailStyles}>
+                <MusicDetail ref={musicDetailRef}/>
             </Modal>
         )
     }
@@ -463,6 +517,8 @@ const Home = ({dispatch, chooseGroup}) => {
                 <Loading ref={loadingRef}/>
             </Content>
             {portInputVisible ? renderHttpPortInput() : null}
+            {/*{musicDetailVisible ? renderMusicDetail() : null}*/}
+            {renderMusicDetail()}
 
             <div className={"star_container"}>
                 <div className={"shooting_star"}/>

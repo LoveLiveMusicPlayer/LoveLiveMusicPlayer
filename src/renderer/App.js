@@ -192,7 +192,7 @@ function App({dispatch}) {
         showThemeSwitch: false,
 
         // 显示歌词按钮
-        showLyric: false,
+        showLyric: true,
 
         // 默认播放音量 (default 1 range '0-1')
         defaultVolume: 1,
@@ -214,6 +214,14 @@ function App({dispatch}) {
             fadeIn: 1000,
             fadeOut: 1000,
         }
+    }
+
+    const onClickCover = () => {
+        Bus.emit("openMusicDetail")
+    }
+
+    const onAudioTimeChange = (info) => {
+        Bus.emit("onAudioTimeChange", info)
     }
 
     return (
@@ -256,7 +264,8 @@ function App({dispatch}) {
                     </Switch>
                 </Router>
             </div>
-            <AudioPlayer {...options} ref={r}/>
+            <AudioPlayer {...options} ref={r} onClickCover={_ => onClickCover()}
+                         onAudioTimeChange={info => onAudioTimeChange(info)}/>
             {showMenu ? <div className={"model"} onClick={onBabyClick}/> : null}
             {
                 showMenu ?
