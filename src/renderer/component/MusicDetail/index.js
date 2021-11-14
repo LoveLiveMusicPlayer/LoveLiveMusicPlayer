@@ -1,7 +1,10 @@
-import React, {forwardRef, useImperativeHandle, useState} from 'react';
+import React, {forwardRef, useEffect, useImperativeHandle, useState} from 'react';
 import './index.scss'
 import {Lrc} from 'react-lrc';
 import LyricLine from './LyricLine'
+import FileDrop from '../../component/DragAndDrop'
+import {AppUtils} from "../../utils/AppUtils";
+import Store from "../../utils/Store"
 
 export const MusicDetail = forwardRef((props, ref) => {
     const [currentSong, setCurrentSong] = useState()
@@ -10,24 +13,11 @@ export const MusicDetail = forwardRef((props, ref) => {
     const [currentLrcTime, setCurrentLrcTime] = useState()
     const [lrcLanguage, setLrcLanguage] = useState("jp")
 
-    // useEffect(() => {
-    //     if (currentSong) {
-    //         Network.post(`https://music.163.com/api/search/get?s=${currentSong.name}&type=1&limit=10&offset=0`).then(res => {
-    //             if (res.data.result) {
-    //                 const musicId = res.data.result.songs[0].id
-    //                 console.log("歌曲id: " + musicId)
-    //                 Network.post(`https://music.163.com/api/song/lyric?id=${musicId}&lv=-1&kv=-1&tv=-1`).then(res => {
-    //                     if (res.data.lrc) {
-    //                         setJpLrc(res.data.lrc.lyric)
-    //                     }
-    //                     if (res.data.tlyric) {
-    //                         setZhLrc(res.data.tlyric.lyric)
-    //                     }
-    //                 })
-    //             }
-    //         })
-    //     }
-    // }, [currentSong])
+    useEffect(() => {
+        const lrc = Store.get("lrc")
+        setJpLrc(lrc)
+        setZhLrc(lrc)
+    }, [])
 
     useImperativeHandle(ref, () => ({
         setMusicDetail: (info) => {
@@ -37,11 +27,6 @@ export const MusicDetail = forwardRef((props, ref) => {
             } else if (jpLrc) {
                 setCurrentLrcTime(info.currentTime * 1000)
             }
-        },
-
-        setLrc: (lrc) => {
-            setJpLrc(lrc)
-            setZhLrc(lrc)
         }
     }))
 
@@ -49,8 +34,24 @@ export const MusicDetail = forwardRef((props, ref) => {
         return <LyricLine content={line.content} active={active}/>
     }
 
+    const onUpload = (file) => {
+        const name = file[0].name
+        const path = file[0].path
+        if (name.endsWith(".lrc")) {
+            const lrc = AppUtils.readFile(path).split('\n').map(item => {
+                return item.trim()
+            }).join('\n')
+            setJpLrc(lrc)
+            setZhLrc(lrc)
+        }
+    }
+
     return (
-        <div>
+        <FileDrop
+            onUpload={onUpload}
+            count={1}
+            formats={['']}
+        >
             <div className={'lrcContainer'}>
                 <Lrc
                     className="lrc"
@@ -60,6 +61,6 @@ export const MusicDetail = forwardRef((props, ref) => {
                     currentMillisecond={currentLrcTime}
                 />
             </div>
-        </div>
+        </FileDrop>
     )
 })

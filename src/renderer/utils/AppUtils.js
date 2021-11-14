@@ -28,6 +28,10 @@ export const AppUtils = {
         }
     },
 
+    readFile(filePath) {
+        return fs.readFileSync(filePath, 'utf-8')
+    },
+
     /**
      * 解析音乐信息
      * @param filesList
