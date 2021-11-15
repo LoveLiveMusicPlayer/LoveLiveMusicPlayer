@@ -85,7 +85,10 @@ export const WhiteCover = styled.div`
     left: -18%;
     width: 150%;
     height: 150%;
+    background-image: linear-gradient(hsla(0, 0%, 100%, .2), hsla(0, 0%, 100%, .25) 48%, hsla(0, 0%, 100%, 0) 52%);
     transform: rotate(24deg);
+    border-radius: 6px;
+    border-width: 10px;
     transition: transform .2s ease, opacity .2s ease;
     -webkit-animation: ${myWhiteTransform} .2s;
     animation-fill-mode: forwards;

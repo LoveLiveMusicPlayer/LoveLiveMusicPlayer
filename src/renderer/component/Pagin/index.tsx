@@ -86,8 +86,7 @@ const Index = (
                                         width: imgSide,
                                         height: imgSide,
                                         borderRadius: 5,
-                                        borderWidth: 10,
-                                        borderColor: 'black'
+                                        borderWidth: 10
                                     }}
                                     onError={(e: { target: { onerror: null; src: string; }; }) => {
                                         e.target.onerror = null
