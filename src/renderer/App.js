@@ -28,6 +28,7 @@ const openNotification = (message) => {
 function App({dispatch}) {
     let r = useRef()
     let timer = null
+    let isOpenMusicDialog = false
 
     const [showMenu, setShowMenu] = useState(false)
     const [showCategory, setShowCategory] = useState(false)
@@ -217,7 +218,10 @@ function App({dispatch}) {
     }
 
     const onClickCover = () => {
-        Bus.emit("openMusicDetail")
+        Bus.emit("openMusicDetail", !isOpenMusicDialog)
+        options.theme = isOpenMusicDialog ? "light" : "dark"
+        r.current?.updateParams({theme: options.theme})
+        isOpenMusicDialog = !isOpenMusicDialog
     }
 
     const onAudioTimeChange = (info) => {

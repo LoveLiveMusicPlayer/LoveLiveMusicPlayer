@@ -1,10 +1,67 @@
-.lrcContainer {
-    width: 30vw;
-    height: 60vh;
+.musicDetailContainer {
+    width: 100%;
+    height: calc(100% - 80px);
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.lrcLeftContainer {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.cover {
+    width: 300px;
+    height: 300px;
+}
+
+.tools {
+    width: 300px;
+    height: 30px;
+    position: absolute;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    top: 335px;
+}
+
+.lrcRightContainer {
+    width: 40vw;
+    height: 70vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-left: 5vw;
+}
 
+.title {
+    color: #fff;
+    font-size: 22px;
+    margin: 0;
+}
+
+.artist {
+    color: #fff;
+    font-size: 16px;
+    margin: 1vh 0 0;
+}
+
+.lrcContainer {
+    width: 100%;
+    height: 50vh;
+    display: flex;
+    margin-top: 5vh;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
 }
 
 .lrc {
@@ -19,4 +76,10 @@
 
     /* ie */
     -ms-overflow-style: none;
+}
+
+.position {
+    width: 50px;
+    height: 50px;
+    background-color: lightgreen
 }

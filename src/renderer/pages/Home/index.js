@@ -58,10 +58,12 @@ const Home = ({dispatch, chooseGroup}) => {
     // 设置http端口等待两秒时的按钮状态
     const [wait, setWait] = useState(false)
 
-    // 显示歌曲详情界面
+    // 显示歌曲详情界面 + 动效
     const [musicDetailVisible, setMusicDetailVisible] = useState(false)
+    // 显示歌曲详情承载弹窗 + 延时销毁
+    const [isDialogOpen, setIsDialogOpen] = useState(false)
 
-    const [lrc, setLrc] = useState()
+    const [blueCover, setBlurCover] = useState()
 
     /**
      * 生命周期以及定时器的声明与销毁
@@ -84,6 +86,7 @@ const Home = ({dispatch, chooseGroup}) => {
     }
 
     const onAudioTimeChange = function (info) {
+        setBlurCover(info.cover)
         musicDetailRef.current?.setMusicDetail(info)
     }
 
@@ -132,8 +135,15 @@ const Home = ({dispatch, chooseGroup}) => {
     }, [])
 
     useEffect(() => {
-        const onClickCover = function () {
-            setMusicDetailVisible(!musicDetailVisible)
+        const onClickCover = function (isOpen) {
+            setMusicDetailVisible(isOpen)
+            if (isOpen) {
+                setIsDialogOpen(true)
+            } else {
+                setTimeout(() => {
+                    setIsDialogOpen(false)
+                }, 300)
+            }
         }
 
         // 添加点击左下角封面监听器
@@ -237,6 +247,7 @@ const Home = ({dispatch, chooseGroup}) => {
                         _id: item.value._id,
                         name: item.value.name,
                         singer: item.value.artist,
+                        album: item.value.album,
                         cover: AppUtils.encodeURL(URL + item.value["cover_path"]),
                         musicSrc: AppUtils.encodeURL(URL + item.value["music_path"]),
                     })
@@ -454,26 +465,43 @@ const Home = ({dispatch, chooseGroup}) => {
     }
 
     const musicDetailStyles = {
+        overlay: {
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0)'
+        },
         content: {
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
+            height: '100%',
             borderWidth: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.80)'
+            backgroundColor: 'rgba(0, 0, 0, 0.9)'
         },
     };
 
     // 渲染歌曲详情界面
     const renderMusicDetail = () => {
+        const showCover = blueCover && blueCover.indexOf("LoveLive") > 0
+        let cover = Images.MENU_LIELLA
+        if (showCover) {
+            cover = URL + "LoveLive" + blueCover.split('/LoveLive')[1]
+        }
         return (
             <Modal
+                className={musicDetailVisible ? "music_detail_modal_in" : "music_detail_modal_out"}
                 appElement={document.body}
-                isOpen={musicDetailVisible}
+                isOpen={isDialogOpen}
                 onAfterOpen={null}
                 onRequestClose={null}
                 style={musicDetailStyles}>
-                <MusicDetail ref={musicDetailRef}/>
+                <div className={"blackArea"}/>
+                <img className={"gauss"} src={cover}/>
+                <MusicDetail ref={musicDetailRef} cover={cover}/>
             </Modal>
         )
     }
@@ -485,7 +513,7 @@ const Home = ({dispatch, chooseGroup}) => {
             </Menu.Item>
             <Menu.Divider/>
             <Menu.Item key={"theme"}>
-                <a onClick={() => colorPickerRef.current?.open()}>设置主题</a>
+                <a onClick={() => colorPickerRef.current?.open(DBHelper.getBGColor())}>设置主题</a>
             </Menu.Item>
             <Menu.Divider/>
             <Menu.Item key={"randomPlay"}>
@@ -518,7 +546,6 @@ const Home = ({dispatch, chooseGroup}) => {
                 <Loading ref={loadingRef}/>
             </Content>
             {portInputVisible ? renderHttpPortInput() : null}
-            {/*{musicDetailVisible ? renderMusicDetail() : null}*/}
             {renderMusicDetail()}
 
             <div className={"star_container"}>

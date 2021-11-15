@@ -86,3 +86,49 @@
         -webkit-transform: translateX(140vh) rotate(1000deg)
     }
 }
+
+.music_detail_modal_in {
+    -webkit-animation: music_detail_modal_in 0.3s;
+}
+
+.music_detail_modal_out {
+    -webkit-animation: music_detail_modal_out 0.3s forwards;
+}
+
+@-webkit-keyframes music_detail_modal_in {
+    0% {
+        -webkit-transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+@-webkit-keyframes music_detail_modal_out {
+    0% {
+        -webkit-transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        -webkit-transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+.blackArea {
+    background-color: #000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-width: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.gauss {
+    filter: blur(35px);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+}
