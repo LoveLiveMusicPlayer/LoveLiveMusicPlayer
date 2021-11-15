@@ -204,15 +204,6 @@ const Home = ({dispatch, chooseGroup}) => {
             setHttpServer({path: rootDir, port: port})
             AppUtils.openMsgDialog("info", "导入歌曲库成功")
             // await WorkUtils.exportToExcel(path, rootDir)
-        } else if (name.endsWith(".lrc")) {
-            const name = file[0].name
-            const path = file[0].path
-            if (name.endsWith(".lrc")) {
-                const lrc = AppUtils.readFile(path).split('\n').map(item => {
-                    return item.trim()
-                }).join('\n')
-                Store.set("lrc", lrc)
-            }
         } else {
             AppUtils.openMsgDialog("error", "请拖入名为LoveLive的文件夹")
         }

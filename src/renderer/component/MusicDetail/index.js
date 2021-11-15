@@ -4,7 +4,6 @@ import {Lrc} from 'react-lrc';
 import LyricLine from './LyricLine'
 import FileDrop from '../../component/DragAndDrop'
 import {AppUtils} from "../../utils/AppUtils";
-import Store from "../../utils/Store"
 
 export const MusicDetail = forwardRef((props, ref) => {
     const [currentSong, setCurrentSong] = useState()
@@ -14,9 +13,7 @@ export const MusicDetail = forwardRef((props, ref) => {
     const [lrcLanguage, setLrcLanguage] = useState("jp")
 
     useEffect(() => {
-        const lrc = Store.get("lrc")
-        setJpLrc(lrc)
-        setZhLrc(lrc)
+
     }, [])
 
     useImperativeHandle(ref, () => ({
