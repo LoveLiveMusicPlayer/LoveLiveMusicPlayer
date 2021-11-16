@@ -1,7 +1,3 @@
-/*
- * @NOTE: Prepend a `~` to css file paths that are in your node_modules
- *        See https://github.com/webpack-contrib/sass-loader#imports
- */
 body {
     position: relative;
     color: white;
@@ -13,6 +9,7 @@ body {
     justify-content: center;
     align-items: center;
     margin: 0;
+    user-select: none;
 }
 
 button {
@@ -70,41 +67,6 @@ a:hover {
     -webkit-app-region: no-drag;
 }
 
-.header_baby {
-    width: 175px;
-    display: flex;
-    -webkit-app-region: drag;
-    justify-content: flex-end;
-}
-
-.anima_tada {
-    -webkit-animation: anima_tada 2s infinite;
-    padding-right: 20px;
-    -webkit-app-region: no-drag;
-}
-
-.anima_tada::-webkit-scrollbar {
-    display: none;
-}
-
-@-webkit-keyframes anima_tada {
-    0% {
-        -webkit-transform: scale(1);
-    }
-    5%, 10% {
-        -webkit-transform: scale(.8) rotate(-5deg);
-    }
-    15%, 25%, 35%, 45% {
-        -webkit-transform: scale(1.1) rotate(3deg);
-    }
-    20%, 30%, 40% {
-        -webkit-transform: scale(1.1) rotate(-3deg);
-    }
-    50%, 100% {
-        -webkit-transform: scale(1);
-    }
-}
-
 .outer_container {
     width: 100%;
     height: 100vh;
@@ -112,102 +74,14 @@ a:hover {
     flex-direction: column
 }
 
-
-.move_tile {
-    -webkit-animation: move_tile 1.5s;
-    position: absolute;
-    right: 20px;
-    top: 30px;
-}
-
-@-webkit-keyframes move_tile {
-    0% {
-        -webkit-transform: translateY(-200px);
-        opacity: 0;
-    }
-
-    70% {
-        -webkit-transform: translate(.5px, .5px) rotate(-.5deg);
-    }
-    72% {
-        -webkit-transform: translate(-.5px, 1.5px) rotate(1.5deg);
-    }
-    74% {
-        -webkit-transform: translate(-1.5px, 1.5px) rotate(1.5deg);
-    }
-    76% {
-        -webkit-transform: translate(2.5px, -.5px) rotate(.5deg);
-    }
-    78% {
-        -webkit-transform: translate(2.5px, 2.5px) rotate(.5deg);
-    }
-    80% {
-        -webkit-transform: translate(-1.5px, 2.5px) rotate(.5deg);
-    }
-    82% {
-        -webkit-transform: translate(-1.5px, -.5px) rotate(.5deg);
-    }
-    84% {
-        -webkit-transform: translate(.5px, 1.5px) rotate(-.5deg);
-    }
-    86% {
-        -webkit-transform: translate(-.5px, 2.5px) rotate(.5deg);
-    }
-    88% {
-        -webkit-transform: translate(2.5px, 2.5px) rotate(1.5deg);
-    }
-    90% {
-        -webkit-transform: translate(-.5px, -1.5px) rotate(-.5deg);
-    }
-    92% {
-        -webkit-transform: translate(1.5px, .5px) rotate(.5deg);
-    }
-    94% {
-        -webkit-transform: translate(-.5px, -.5px) rotate(.5deg);
-    }
-    96% {
-        -webkit-transform: translate(1.5px, .5px) rotate(1.5deg);
-    }
-    98% {
-        -webkit-transform: translate(.5px, -.5px) rotate(1.5deg);
-    }
-    100% {
-        -webkit-transform: translate(0, 0) rotate(0);
-    }
-}
-
-
-.move_category {
-    -webkit-animation: move_category 1s;
-    position: absolute;
-    width: 600px;
-    right: 200px;
-    top: 30px;
-    display: flex;
-    flex-wrap: wrap;
-}
-
-@-webkit-keyframes move_category {
-    0% {
-        -webkit-transform: translateX(200px);
-        opacity: 0;
-    }
-}
-
-.menu_category {
-    width: 50%;
+.logo {
+    width: 250px;
+    min-width: 250px;
+    height: 100%;
+    padding: 15px;
     display: flex;
     justify-content: center;
-    flex-direction: column;
-    font-size: 20px;
-    font-family: serif;
-}
-
-.menu_category_span {
-    color: white;
-    text-align: center;
-    width: 250px;
-    padding: 10px 10px 20px;
+    border-right: 1px solid #999;
 }
 
 .model {
@@ -217,19 +91,16 @@ a:hover {
     background-color: rgba(0, 0, 0, 0.9);
 }
 
-/* Grow */
-.hvr-grow {
-    vertical-align: middle;
-    -webkit-transform: perspective(1px) translateZ(0);
-    transform: perspective(1px) translateZ(0);
-    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-    -webkit-transition-duration: 0.3s;
-    transition-duration: 0.3s;
-    -webkit-transition-property: transform;
-    transition-property: transform;
+.middleContainer {
+    width: 100%;
+    flex: 1;
+    display: flex
 }
 
-.hvr-grow:hover, .hvr-grow:focus, .hvr-grow:active {
-    -webkit-transform: scale(1.1);
-    transform: scale(1.1);
+.songListContainer {
+    width: 250px;
+    min-width: 250px;
+    display: flex;
+    justify-content: center;
+    border-right: 1px solid #999;
 }

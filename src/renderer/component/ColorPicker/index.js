@@ -11,12 +11,10 @@ export const ColorPicker = forwardRef((props, ref) => {
 
     useImperativeHandle(ref, () => ({
         open: (colors) => {
-            colors.then(res => {
-                if (res) {
-                    setColor1(res.color1)
-                    setColor2(res.color2)
-                }
-            })
+            if (colors) {
+                setColor1(colors.color1)
+                setColor2(colors.color2)
+            }
             setShowColorPicker(true)
         }
     }))

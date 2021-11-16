@@ -1,0 +1,112 @@
+/* Grow */
+.hvr-grow {
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: transform;
+    transition-property: transform;
+}
+
+.hvr-grow:hover, .hvr-grow:focus, .hvr-grow:active {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+.move_category {
+    -webkit-animation: move_category 1s;
+    position: absolute;
+    width: 600px;
+    right: 200px;
+    top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+@-webkit-keyframes move_category {
+    0% {
+        -webkit-transform: translateX(200px);
+        opacity: 0;
+    }
+}
+
+.menu_category {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 20px;
+    font-family: serif;
+}
+
+.menu_category_span {
+    color: white;
+    text-align: center;
+    width: 250px;
+    padding: 10px 10px 20px;
+}
+
+.move_tile {
+    -webkit-animation: move_tile 1.5s;
+    position: absolute;
+    right: 20px;
+    top: 30px;
+}
+
+@-webkit-keyframes move_tile {
+    0% {
+        -webkit-transform: translateY(-200px);
+        opacity: 0;
+    }
+
+    70% {
+        -webkit-transform: translate(.5px, .5px) rotate(-.5deg);
+    }
+    72% {
+        -webkit-transform: translate(-.5px, 1.5px) rotate(1.5deg);
+    }
+    74% {
+        -webkit-transform: translate(-1.5px, 1.5px) rotate(1.5deg);
+    }
+    76% {
+        -webkit-transform: translate(2.5px, -.5px) rotate(.5deg);
+    }
+    78% {
+        -webkit-transform: translate(2.5px, 2.5px) rotate(.5deg);
+    }
+    80% {
+        -webkit-transform: translate(-1.5px, 2.5px) rotate(.5deg);
+    }
+    82% {
+        -webkit-transform: translate(-1.5px, -.5px) rotate(.5deg);
+    }
+    84% {
+        -webkit-transform: translate(.5px, 1.5px) rotate(-.5deg);
+    }
+    86% {
+        -webkit-transform: translate(-.5px, 2.5px) rotate(.5deg);
+    }
+    88% {
+        -webkit-transform: translate(2.5px, 2.5px) rotate(1.5deg);
+    }
+    90% {
+        -webkit-transform: translate(-.5px, -1.5px) rotate(-.5deg);
+    }
+    92% {
+        -webkit-transform: translate(1.5px, .5px) rotate(.5deg);
+    }
+    94% {
+        -webkit-transform: translate(-.5px, -.5px) rotate(.5deg);
+    }
+    96% {
+        -webkit-transform: translate(1.5px, .5px) rotate(1.5deg);
+    }
+    98% {
+        -webkit-transform: translate(.5px, -.5px) rotate(1.5deg);
+    }
+    100% {
+        -webkit-transform: translate(0, 0) rotate(0);
+    }
+}

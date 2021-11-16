@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import Store from "../../utils/Store"
 import './index.css'
 import "animate.css"
-import {Button, Dropdown, Empty, InputNumber, Layout, Menu, Space} from 'antd';
+import {Button, Empty, InputNumber, Layout, Space} from 'antd';
 import {AppUtils} from "../../utils/AppUtils";
 import fs from "fs";
 import FileDrop from '../../component/DragAndDrop'
@@ -19,12 +19,16 @@ import * as Images from "../../public/Images";
 import {ColorPicker} from "../../component/ColorPicker";
 import {WorkUtils} from "../../utils/WorkUtils";
 import {MusicDetail} from "../../component/MusicDetail";
+import {useHistory} from "react-router-dom";
+import {TinyStar} from "../../component/TinyStar";
 
 const {ipcRenderer} = require("electron")
-const {connect} = require('react-redux');
+const {connect} = require('react-redux')
 const {Content} = Layout;
 
 const Home = ({dispatch, chooseGroup}) => {
+    let history = useHistory()
+
     // 第一行专辑列表引用
     let topRef = useRef()
     // 第二行专辑列表引用
@@ -71,9 +75,9 @@ const Home = ({dispatch, chooseGroup}) => {
 
         // 监听窗口改变大小
     const listener = function () {
-            let width = window.innerWidth
+            let width = window.innerWidth - 250
             const height = window.innerHeight
-            const radio = 1025 / 648
+            const radio = 1275 / 648
             // 防止在横向变宽时，图片变大
             if (width / height > radio) {
                 width = height * radio
@@ -91,16 +95,13 @@ const Home = ({dispatch, chooseGroup}) => {
     }
 
     useEffect(() => {
-        setTimeout(() => {
-            Bus.emit("onShowInfoNotification", '这是一个开源项目，完全免费！')
-        }, 1000)
+        listener()
 
         // 如果之前有保存http服务地址，直接载入
-        DBHelper.getHttpServer().then(info => {
-            if (info) {
-                setHttpServer({path: info.serverPath, port: info.serverPort})
-            }
-        })
+        const httpServer = DBHelper.getHttpServer()
+        if (httpServer) {
+            setHttpServer(httpServer)
+        }
 
         // 接收提示窗口关闭的回调
         ipcRenderer.on('msgDialogCallback', (event, arg) => {
@@ -109,12 +110,11 @@ const Home = ({dispatch, chooseGroup}) => {
 
         // 设置http服务回调
         ipcRenderer.on("openHttpReply", (event, path, port) => {
-            DBHelper.setHttpServer({path: path, port: port}).then(_ => {
-                setRootDir(path)
-                setPort(port)
-                setURL(`http://localhost:${port}/`)
-                setRefresh(new Date().getTime())
-            })
+            DBHelper.setHttpServer({path: path, port: port})
+            setRootDir(path)
+            setPort(port)
+            setURL(`http://localhost:${port}/`)
+            setRefresh(new Date().getTime())
         })
 
         // 添加窗口大小变化监听器
@@ -269,6 +269,8 @@ const Home = ({dispatch, chooseGroup}) => {
      * @returns {Promise<void>}
      */
     const chooseItem = async (e) => {
+        // history.push('/album', {id: 1})
+
         AlbumHelper.findOneAlbumById(e).then(res => {
             const promiseArr = []
             res.music.map(id => {
@@ -506,30 +508,6 @@ const Home = ({dispatch, chooseGroup}) => {
         )
     }
 
-    const menu = (
-        <Menu>
-            <Menu.Item key={"port"}>
-                <a onClick={() => Bus.emit("onTapLogo")}>设置端口</a>
-            </Menu.Item>
-            <Menu.Divider/>
-            <Menu.Item key={"theme"}>
-                <a onClick={() => colorPickerRef.current?.open(DBHelper.getBGColor())}>设置主题</a>
-            </Menu.Item>
-            <Menu.Divider/>
-            <Menu.Item key={"randomPlay"}>
-                <a onClick={randomPlay}>全部播放</a>
-            </Menu.Item>
-            <Menu.Divider/>
-            <Menu.Item key={"refreshData"}>
-                <a onClick={refreshData}>更新数据</a>
-            </Menu.Item>
-            <Menu.Divider/>
-            <Menu.Item key={"checkUpdate"}>
-                <a onClick={() => ipcRenderer.invoke('checkUpdate')}>检查更新</a>
-            </Menu.Item>
-        </Menu>
-    )
-
     const onColorPickerChange = (color1, color2) => {
         Bus.emit("onBodyChangeColor", {color1: color1, color2: color2})
     }
@@ -541,30 +519,26 @@ const Home = ({dispatch, chooseGroup}) => {
             formats={['']}
         >
             {chooseGroup != null && refreshAlbum(chooseGroup)}
+
             <Content className="container">
                 {renderMusicGallery()}
                 <Loading ref={loadingRef}/>
             </Content>
+
             {portInputVisible ? renderHttpPortInput() : null}
+
             {renderMusicDetail()}
 
-            <div className={"star_container"}>
-                <div className={"shooting_star"}/>
-            </div>
-
             <ColorPicker ref={colorPickerRef} onChangeColor={onColorPickerChange}/>
-            <div className={"star_container"}>
-                <Dropdown overlay={menu} placement="bottomCenter">
-                    <img
-                        className={"tiny_star"}
-                        src={Images.ICON_SETTING}
-                        width={"30rem"}
-                        height={"30rem"}
-                    />
-                </Dropdown>
 
-            </div>
-
+            <TinyStar
+                randomPlay={randomPlay}
+                changeColor={() => {
+                    colorPickerRef.current?.open(DBHelper.getBGColor())
+                }}
+                checkUpdate={() => ipcRenderer.invoke('checkUpdate')}
+                refreshData={refreshData}
+            />
         </FileDrop>
     );
 }

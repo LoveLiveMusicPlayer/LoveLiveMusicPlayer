@@ -1,16 +1,20 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {MemoryRouter as Router, Route, Switch} from 'react-router-dom';
+import {MemoryRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
 import './App.global.css';
-import Home from './pages/Home/index'
+import Home from './pages/Home'
+import Album from './pages/Album'
 import AudioPlayer from "./utils/AudioPlayer";
 import Bus from "./utils/Event"
 import * as Images from './public/Images'
-import TypeWriterEffect from '../renderer/component/TypeWriter';
 import {connect} from 'react-redux';
 import {musicAction} from './actions/music';
 import {notification} from "antd";
 import {SmileOutlined} from '@ant-design/icons';
 import {DBHelper} from "./dao/DBHelper";
+import {MyTypeWriter} from "./component/TypeWriter/MyTypeWriter";
+import {GroupModal} from "./component/GroupModal";
+import {Honoka} from "./component/Honoka";
+import {AppUtils} from "./utils/AppUtils";
 
 const {ipcRenderer} = require('electron');
 
@@ -34,10 +38,12 @@ function App({dispatch}) {
     const [showCategory, setShowCategory] = useState(false)
 
     useEffect(() => {
+        setTimeout(() => {
+            Bus.emit("onShowInfoNotification", '这是一个开源项目，完全免费！')
+        }, 1000)
+
         // 设置背景色
-        DBHelper.getBGColor().then(res => {
-            setBodyColor(res)
-        })
+        AppUtils.setBodyColor(DBHelper.getBGColor())
 
         ipcRenderer.send('window-inited', {
             userAgent: navigator.userAgent,
@@ -53,9 +59,8 @@ function App({dispatch}) {
         })
 
         Bus.addListener("onBodyChangeColor", (colors) => {
-            DBHelper.setBGColor(JSON.stringify(colors)).then(_ => {
-                setBodyColor(colors)
-            })
+            DBHelper.setBGColor(JSON.stringify(colors))
+            AppUtils.setBodyColor(colors)
         })
 
         return () => {
@@ -63,46 +68,6 @@ function App({dispatch}) {
             Bus.removeAllListeners()
         }
     }, [])
-
-    function setBodyColor(colors) {
-        const parseColor = function (hexStr) {
-            return hexStr.length === 4 ? hexStr.substr(1).split('').map(function (s) {
-                return 0x11 * parseInt(s, 16);
-            }) : [hexStr.substr(1, 2), hexStr.substr(3, 2), hexStr.substr(5, 2)].map(function (s) {
-                return parseInt(s, 16);
-            })
-        };
-
-        const pad = function (s) {
-            return (s.length === 1) ? '0' + s : s;
-        };
-
-        const gradientColors = function (start, end, steps, gamma) {
-            let i, j, ms, me, output = [], so = [];
-            gamma = gamma || 1;
-            const normalize = function (channel) {
-                return Math.pow(channel / 255, gamma);
-            };
-            start = parseColor(start).map(normalize);
-            end = parseColor(end).map(normalize);
-            for (i = 0; i < steps; i++) {
-                ms = i / (steps - 1);
-                me = 1 - ms;
-                for (j = 0; j < 3; j++) {
-                    so[j] = pad(Math.round(Math.pow(start[j] * me + end[j] * ms, 1 / gamma) * 255).toString(16));
-                }
-                output.push('#' + so.join(''));
-            }
-            return output;
-        };
-
-        document.body.style.background = 'linear-gradient(\n' +
-            '                200.96deg,\n' +
-            `                ${colors.color1} -49.09%,\n` +
-            `                ${gradientColors(colors.color1, colors.color2, 2)[0]} 10.77%,\n` +
-            `                ${colors.color2} 129.35%\n` +
-            `            )`
-    }
 
     // 点击企划图片
     function onBabyClick() {
@@ -231,77 +196,37 @@ function App({dispatch}) {
     return (
         <div className={"outer_container"}>
             <div className="header">
-                <img src={Images.ICON_HEAD} style={{paddingLeft: "20px"}}/>
-                <TypeWriterEffect
-                    textStyle={{
-                        fontFamily: 'serif',
-                        color: '#F87911',
-                        fontWeight: 800,
-                        fontSize: '2em',
-                    }}
-                    startDelay={2000}
-                    cursorColor="#F87911"
-                    multiText={[
-                        'み ん な で 叶 え た 物 語',
-                        'LoveLive! μ\'sic forever !!',
-                        'LoveLive Music Player',
-                    ]}
-                    locale={'ja'}
-                    hideCursorAfterText={true}
-                    multiTextDelay={2000}
-                    typeSpeed={100}
-                />
-
-                <div className={"header_baby"}>
-                    <img className={"anima_tada"}
-                         src={Images.ICON_MENU}
-                         width={"60rem"}
-                         height={"70rem"}
-                         onClick={onBabyClick}
-                    />
+                <div className={'logo'}>
+                    <img src={Images.ICON_HEAD}/>
                 </div>
+                <MyTypeWriter/>
+                <Honoka onBabyClick={onBabyClick}/>
             </div>
-            <div style={{width: '100%', flexGrow: 1}}>
+            <div className={'middleContainer'}>
+                <div className={'songListContainer'}>
+
+                </div>
+
                 <Router>
                     <Switch>
-                        <Route path="/" component={Home}/>
+                        <Route path="/home" component={Home}/>
+                        <Route path="/album" component={Album}/>
+                        <Redirect from={'/'} to={'/home'}/>
                     </Switch>
                 </Router>
             </div>
-            <AudioPlayer {...options} ref={r} onClickCover={_ => onClickCover()}
-                         onAudioTimeChange={info => onAudioTimeChange(info)}/>
+            <AudioPlayer
+                {...options}
+                ref={r}
+                onClickCover={_ => onClickCover()}
+                onAudioTimeChange={info => onAudioTimeChange(info)}
+            />
             {showMenu ? <div className={"model"} onClick={onBabyClick}/> : null}
-            {
-                showMenu ?
-                    <div className={["move_tile"].join(' ')}>
-                        <img src={Images.ICON_TILE} height={'550px'}/>
-                    </div> : null
-            }
-            {
-                showCategory ?
-                    <div className={"move_category"}>
-                        <div className={["hvr-grow", "menu_category"].join(' ')}>
-                            <img src={Images.MENU_MIUSI} width={'250px'} height={'250px'}
-                                 onClick={() => chooseGroup("μ's")}/>
-                            <span className={"menu_category_span"}>μ's</span>
-                        </div>
-                        <div className={["hvr-grow", "menu_category"].join(' ')}>
-                            <img src={Images.MENU_AQOURS} width={'250px'} height={'250px'}
-                                 onClick={() => chooseGroup("Aqours")}/>
-                            <span className={"menu_category_span"}>Aqours</span>
-                        </div>
-                        <div className={["hvr-grow", "menu_category"].join(' ')}>
-                            <img src={Images.MENU_NIJI} width={'250px'} height={'250px'}
-                                 onClick={() => chooseGroup("Nijigasaki")}/>
-                            <span className={"menu_category_span"}>虹咲学园学园偶像同好会</span>
-                        </div>
-                        <div className={["hvr-grow", "menu_category"].join(' ')}>
-                            <img src={Images.MENU_LIELLA} width={'250px'} height={'250px'}
-                                 onClick={() => chooseGroup("Liella!")}/>
-                            <span className={"menu_category_span"}>Liella!</span>
-                        </div>
-                    </div> : null
-            }
+            <GroupModal
+                showMenu={showMenu}
+                showCategory={showCategory}
+                chooseGroup={item => chooseGroup(item)}
+            />
         </div>
     );
 }

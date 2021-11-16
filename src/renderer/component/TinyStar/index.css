@@ -1,0 +1,62 @@
+.star_container {
+    position: absolute;
+    bottom: 50vh;
+    width: 140vh;
+    height: 1px;
+    -webkit-transform: rotate(153deg);
+    transform: rotate(153deg);
+}
+
+.shooting_star {
+    width: 300px;
+    height: 5px;
+    background: linear-gradient(-45deg, #fff, rgba(0, 0, 0, 0));
+    border-radius: 20px;
+    -webkit-filter: drop-shadow(0 0 6px #fff);
+    filter: drop-shadow(0 0 6px #fff);
+    -webkit-animation: tail 4s ease-in-out, tail_shooting 4s ease-in-out forwards;
+}
+
+.tiny_star {
+    position: absolute;
+    left: -14px;
+    top: -14px;
+    -webkit-animation: star_shooting 4s ease-in-out forwards;
+}
+
+@-webkit-keyframes tail {
+    from {
+        width: 0
+    }
+    to {
+        width: 300px
+    }
+}
+
+@-webkit-keyframes tail_shooting {
+    0% {
+        opacity: 0
+    }
+    20% {
+        opacity: 0.5
+    }
+    60% {
+        opacity: 1
+    }
+    from {
+        -webkit-transform: translateX(0)
+    }
+    to {
+        -webkit-transform: translateX(100vh);
+        opacity: 0
+    }
+}
+
+@-webkit-keyframes star_shooting {
+    from {
+        -webkit-transform: translateX(0) rotate(0deg)
+    }
+    to {
+        -webkit-transform: translateX(140vh) rotate(1000deg)
+    }
+}

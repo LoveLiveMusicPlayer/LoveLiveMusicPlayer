@@ -8,6 +8,14 @@ const coverArr = []
 let lastDir = ""
 
 export const AppUtils = {
+    isNull(text) {
+        return text === null || text === undefined;
+    },
+
+    isEmpty(text) {
+        return this.isNull(text) || text === ''
+    },
+
     /**
      * 遍历文件路径
      * @param dir
@@ -150,6 +158,46 @@ export const AppUtils = {
      */
     openMsgDialog(type, message) {
         ipcRenderer.send('msgDialog', {type: type, message: message})
+    },
+
+    setBodyColor(colors) {
+        const parseColor = function (hexStr) {
+            return hexStr.length === 4 ? hexStr.substr(1).split('').map(function (s) {
+                return 0x11 * parseInt(s, 16);
+            }) : [hexStr.substr(1, 2), hexStr.substr(3, 2), hexStr.substr(5, 2)].map(function (s) {
+                return parseInt(s, 16);
+            })
+        };
+
+        const pad = function (s) {
+            return (s.length === 1) ? '0' + s : s;
+        };
+
+        const gradientColors = function (start, end, steps, gamma) {
+            let i, j, ms, me, output = [], so = [];
+            gamma = gamma || 1;
+            const normalize = function (channel) {
+                return Math.pow(channel / 255, gamma);
+            };
+            start = parseColor(start).map(normalize);
+            end = parseColor(end).map(normalize);
+            for (i = 0; i < steps; i++) {
+                ms = i / (steps - 1);
+                me = 1 - ms;
+                for (j = 0; j < 3; j++) {
+                    so[j] = pad(Math.round(Math.pow(start[j] * me + end[j] * ms, 1 / gamma) * 255).toString(16));
+                }
+                output.push('#' + so.join(''));
+            }
+            return output;
+        };
+
+        document.body.style.background = 'linear-gradient(\n' +
+            '                200.96deg,\n' +
+            `                ${colors.color1} -49.09%,\n` +
+            `                ${gradientColors(colors.color1, colors.color2, 2)[0]} 10.77%,\n` +
+            `                ${colors.color2} 129.35%\n` +
+            `            )`
     }
 }
 
