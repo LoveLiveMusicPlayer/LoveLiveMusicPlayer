@@ -6,10 +6,12 @@ import FileDrop from '../../component/DragAndDrop'
 import {AppUtils} from "../../utils/AppUtils";
 import * as Images from '../../public/Images'
 import Modal from "react-modal";
+import Store from '../../utils/Store'
 
-export const MusicDetail = forwardRef(({blueCover, musicDetailVisible, isDialogOpen}, ref) => {
+export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen}, ref) => {
 
     const parseCover = (blueCover) => {
+        const URL = Store.get("url")
         const showCover = blueCover && blueCover.indexOf("LoveLive") > 0
         let cover = Images.MENU_LIELLA
         if (showCover) {
@@ -22,13 +24,17 @@ export const MusicDetail = forwardRef(({blueCover, musicDetailVisible, isDialogO
     const [jpLrc, setJpLrc] = useState('')
     const [zhLrc, setZhLrc] = useState('')
     const [currentLrcTime, setCurrentLrcTime] = useState()
-    const [cover, setCover] = useState(parseCover(blueCover))
+    const [cover, setCover] = useState()
     const [musicInfo, setMusicInfo] = useState()
     const [lrcLanguage, setLrcLanguage] = useState("jp")
     const [lrcPosition, setLrcPosition] = useState("center")
 
     useImperativeHandle(ref, () => ({
         setMusicDetail: (info) => {
+            const mCover = parseCover(info.cover)
+            if (mCover !== cover) {
+                setCover(mCover)
+            }
             setMusicInfo(info)
             if (currentSong == null || currentSong._id !== info._id) {
                 setCurrentLrcTime(0)

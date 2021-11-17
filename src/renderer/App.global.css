@@ -84,6 +84,13 @@ a:hover {
     border-right: 1px solid #999;
 }
 
+.imgBack {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    left: 270px
+}
+
 .model {
     width: 100%;
     height: 100%;
@@ -94,5 +101,14 @@ a:hover {
 .middleContainer {
     width: 100%;
     flex: 1;
-    display: flex
+    display: flex;
+    position: relative;
+}
+
+.routerContainer {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: calc(100% - 250px);
+    height: 100%;
 }

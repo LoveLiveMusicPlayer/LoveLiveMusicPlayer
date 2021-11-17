@@ -15,12 +15,13 @@ import {useHistory} from "react-router-dom";
 import {TinyStar} from "../../component/TinyStar";
 import {MusicGallery} from "../../component/MusicGallery";
 import {PortDialog} from "../../component/PortDialog";
+import Store from '../../utils/Store'
 
 const {ipcRenderer} = require("electron")
 const {connect} = require('react-redux')
 const {Content} = Layout;
 
-const Home = ({dispatch, chooseGroup}) => {
+const Home = ({dispatch, chooseGroup, showAlbum, isRoot}) => {
     let history = useHistory()
 
     // 专辑列表引用
@@ -38,8 +39,6 @@ const Home = ({dispatch, chooseGroup}) => {
     const [group, setGroup] = useState(chooseGroup)
     // 导入专辑json时对列表进行刷新
     const [refresh, setRefresh] = useState()
-    // HTTP服务的 IP + 端口 地址
-    const [URL, setURL] = useState("http://localhost:10000/")
     // 显示HTTP端口输入框
     const [portInputVisible, setPortInputVisible] = useState(false)
     // HTTP服务的端口号
@@ -77,7 +76,7 @@ const Home = ({dispatch, chooseGroup}) => {
             DBHelper.setHttpServer({path: path, port: port})
             setRootDir(path)
             setPort(port)
-            setURL(`http://localhost:${port}/`)
+            Store.set('url', `http://localhost:${port}/`)
             setRefresh(new Date().getTime())
         })
 
@@ -101,7 +100,7 @@ const Home = ({dispatch, chooseGroup}) => {
         musicGalleryRef.current?.toFirst()
 
         // 切换企划时从数据库加载对应的全部专辑
-        WorkUtils.changeAlbumByGroup(group, URL).then(res => {
+        WorkUtils.changeAlbumByGroup(group).then(res => {
             musicGalleryRef.current?.showRightButton((res.top.length + res.bottom.length) > 10)
             setAlbumList(res)
         })
@@ -132,13 +131,14 @@ const Home = ({dispatch, chooseGroup}) => {
 
     // 播放选中专辑
     const playOne = (id) => {
-        // history.push('/album', {id: 1})
-        WorkUtils.findOneAlbumById(id, URL)
+        showAlbum()
+        history.push('/album', {id: id})
+        // WorkUtils.findOneAlbumById(id)
     }
 
     // 播放团内全部专辑
     const playAll = () => {
-        WorkUtils.playAlbumsByGroup(group, URL)
+        WorkUtils.playAlbumsByGroup(group)
     }
 
     const refreshData = () => {
@@ -168,43 +168,45 @@ const Home = ({dispatch, chooseGroup}) => {
     }
 
     return (
-        <FileDrop
-            onUpload={onUpload}
-            count={1}
-            formats={['']}
-        >
-            {refreshAlbum(chooseGroup)}
+        <div style={{visibility: isRoot ? 'visible' : 'hidden', width: '100%', height: '100%'}}>
+            <FileDrop
+                onUpload={onUpload}
+                count={1}
+                formats={['']}
+            >
+                {refreshAlbum(chooseGroup)}
 
-            <Content className="container">
-                <MusicGallery
-                    ref={musicGalleryRef}
-                    albumList={albumList}
-                    width={width}
-                    playOne={playOne}
+                <Content className="container">
+                    <MusicGallery
+                        ref={musicGalleryRef}
+                        albumList={albumList}
+                        width={width}
+                        playOne={playOne}
+                    />
+                    <Loading ref={loadingRef}/>
+                </Content>
+
+                <TinyStar
+                    playAll={playAll}
+                    changeColor={() => {
+                        colorPickerRef.current?.open(DBHelper.getBGColor())
+                    }}
+                    checkUpdate={() => ipcRenderer.invoke('checkUpdate')}
+                    refreshData={refreshData}
                 />
-                <Loading ref={loadingRef}/>
-            </Content>
 
-            <TinyStar
-                playAll={playAll}
-                changeColor={() => {
-                    colorPickerRef.current?.open(DBHelper.getBGColor())
-                }}
-                checkUpdate={() => ipcRenderer.invoke('checkUpdate')}
-                refreshData={refreshData}
-            />
+                <ColorPicker ref={colorPickerRef} onChangeColor={onColorPickerChange}/>
 
-            <ColorPicker ref={colorPickerRef} onChangeColor={onColorPickerChange}/>
-
-            <PortDialog
-                isShow={portInputVisible}
-                rootDir={rootDir}
-                port={port}
-                close={() => setPortInputVisible(false)}
-                setHttpServer={() => setHttpServer({path: rootDir, port: port})}
-                setPort={setPort}
-            />
-        </FileDrop>
+                <PortDialog
+                    isShow={portInputVisible}
+                    rootDir={rootDir}
+                    port={port}
+                    close={() => setPortInputVisible(false)}
+                    setHttpServer={() => setHttpServer({path: rootDir, port: port})}
+                    setPort={setPort}
+                />
+            </FileDrop>
+        </div>
     );
 }
 

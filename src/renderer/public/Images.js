@@ -12,6 +12,7 @@ import icon_chinese from '../../../assets/image/icon_chinese.png'
 import icon_japanese from '../../../assets/image/icon_japanese.png'
 import icon_position_left from '../../../assets/image/icon_position_left.png'
 import icon_position_center from '../../../assets/image/icon_position_center.png'
+import icon_back from '../../../assets/image/icon_back.png'
 
 export const ICON_HEAD = icon_head
 export const ICON_MENU = icon_menu
@@ -27,3 +28,4 @@ export const ICON_CHINESE = icon_chinese
 export const ICON_JAPANESE = icon_japanese
 export const ICON_POSITION_LEFT = icon_position_left
 export const ICON_POSITION_CENTER = icon_position_center
+export const ICON_BACK = icon_back

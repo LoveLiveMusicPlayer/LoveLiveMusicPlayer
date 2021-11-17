@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {MemoryRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
+import {Route, Switch, useHistory, useLocation} from 'react-router-dom';
 import './App.global.css';
 import Home from './pages/Home'
 import Album from './pages/Album'
@@ -17,6 +17,7 @@ import {Honoka} from "./component/Honoka";
 import {AppUtils} from "./utils/AppUtils";
 import {SongMenu} from "./component/SongMenu";
 import {MusicDetail} from "./component/MusicDetail";
+import Store from '../../src/renderer/utils/Store'
 
 const {ipcRenderer} = require('electron');
 
@@ -37,71 +38,24 @@ function App({dispatch}) {
 
     let honokaTimer = null
     let isOpenMusicDialog = false
-
+    let history = useHistory()
+    let location = useLocation()
+    // 显示团组的 modal
     const [showMenu, setShowMenu] = useState(false)
+    // 显示团组的图片
     const [showCategory, setShowCategory] = useState(false)
 
     // 显示歌曲详情界面 + 动效
     const [musicDetailVisible, setMusicDetailVisible] = useState(false)
     // 显示歌曲详情承载弹窗 + 延时销毁
     const [isDialogOpen, setIsDialogOpen] = useState(false)
-
-    const [blueCover, setBlurCover] = useState()
-
-    useEffect(() => {
-        setTimeout(() => {
-            Bus.emit("onShowInfoNotification", '这是一个开源项目，完全免费！')
-        }, 1000)
-
-        // 设置背景色
-        AppUtils.setBodyColor(DBHelper.getBGColor())
-
-        ipcRenderer.send('window-inited', {
-            userAgent: navigator.userAgent,
-        });
-
-        // 添加切换专辑的监听器
-        Bus.addListener("onChangeAudioList", (msg) => {
-            playerRef.current?.onChangeAudioList(msg)
-        })
-
-        Bus.addListener("onShowInfoNotification", (msg) => {
-            openNotification(msg)
-        })
-
-        Bus.addListener("onBodyChangeColor", (colors) => {
-            DBHelper.setBGColor(JSON.stringify(colors))
-            AppUtils.setBodyColor(colors)
-        })
-
-        return () => {
-            // 生命周期结束时移除全部监听器
-            Bus.removeAllListeners()
-        }
-    }, [])
-
-    useEffect(() => {
-        const onClickCover = function (isOpen) {
-            setMusicDetailVisible(isOpen)
-            if (isOpen) {
-                setIsDialogOpen(true)
-            } else {
-                setTimeout(() => {
-                    setIsDialogOpen(false)
-                }, 300)
-            }
-        }
-
-        // 添加点击左下角封面监听器
-        Bus.addListener("openMusicDetail", onClickCover)
-
-        return () => {
-            removeEventListener("openMusicDetail", onClickCover)
-        }
-    }, [musicDetailVisible])
+    // 根路由的key
+    const [initHomeKey, setInitHomeKey] = useState("")
+    // 是否显示路由容器
+    const [showRouter, setShowRouter] = useState(false)
 
     // 点击企划图片
-    function onBabyClick() {
+    const onBabyClick = () => {
         setShowMenu(!showMenu)
         // 清除定时器
         honokaTimer && clearTimeout(honokaTimer)
@@ -115,7 +69,7 @@ function App({dispatch}) {
         }
     }
 
-    function chooseGroup(gp) {
+    const chooseGroup = (gp) => {
         setShowMenu(false)
         setShowCategory(false)
         dispatch(musicAction.chooseGroup(gp))
@@ -220,10 +174,81 @@ function App({dispatch}) {
         isOpenMusicDialog = !isOpenMusicDialog
     }
 
+    const onClickCover2 = (isOpen) => {
+        setMusicDetailVisible(isOpen)
+        if (isOpen) {
+            setIsDialogOpen(true)
+        } else {
+            setTimeout(() => {
+                setIsDialogOpen(false)
+            }, 300)
+        }
+    }
+
     const onAudioTimeChange = (info) => {
-        setBlurCover(info.cover)
         musicDetailRef.current?.setMusicDetail(info)
     }
+
+    const renderBtnBack = () => {
+        return initHomeKey === location.key ? null :
+            <img className={'imgBack'} src={Images.ICON_BACK} onClick={() => history.goBack()}/>
+    }
+
+    const renderRouter = () => {
+        if (showRouter) {
+            return (
+                <div className={'routerContainer'}>
+                    <Switch>
+                        <Route path="/album" exact component={Album}/>
+                    </Switch>
+                </div>
+            )
+        } else return null
+    }
+
+    useEffect(() => {
+        setTimeout(() => {
+            openNotification('这是一个开源项目，完全免费！')
+        }, 1000)
+
+        // 设置背景色
+        AppUtils.setBodyColor(DBHelper.getBGColor())
+
+        // 当指定端口不存在时，设置默认值
+        if (AppUtils.isEmpty(Store.get("url"))) {
+            Store.set("url", "http://localhost:10000/")
+        }
+
+        // 添加切换专辑的监听器
+        Bus.addListener("onChangeAudioList", (msg) => {
+            playerRef.current?.onChangeAudioList(msg)
+        })
+
+        // 修改主题
+        Bus.addListener("onBodyChangeColor", (colors) => {
+            DBHelper.setBGColor(JSON.stringify(colors))
+            AppUtils.setBodyColor(colors)
+        })
+
+        return () => Bus.removeAllListeners()
+    }, [])
+
+    useEffect(() => {
+        if (initHomeKey === '' && initHomeKey !== location.key) {
+            // 设置初始化路由 key
+            setInitHomeKey(location.key)
+        }
+        if ((initHomeKey === location.key) && showRouter) {
+            // 当前路由为根路由时隐藏路由容器
+            setShowRouter(false)
+        }
+    }, [location.key])
+
+    useEffect(() => {
+        // 实现点击封面收回时延迟动效的监听器
+        Bus.addListener("openMusicDetail", onClickCover2)
+        return () => removeEventListener("openMusicDetail", onClickCover2)
+    }, [musicDetailVisible])
 
     return (
         <div className={"outer_container"}>
@@ -231,20 +256,15 @@ function App({dispatch}) {
                 <div className={'logo'}>
                     <img src={Images.ICON_HEAD}/>
                 </div>
+                {renderBtnBack()}
                 <MyTypeWriter/>
                 <Honoka onBabyClick={onBabyClick}/>
             </div>
 
             <div className={'middleContainer'}>
                 <SongMenu/>
-
-                <Router>
-                    <Switch>
-                        <Route path="/home" component={Home}/>
-                        <Route path="/album" component={Album}/>
-                        <Redirect from={'/'} to={'/home'}/>
-                    </Switch>
-                </Router>
+                <Home showAlbum={() => setShowRouter(true)} isRoot={!showRouter}/>
+                {renderRouter()}
             </div>
 
             <AudioPlayer
@@ -264,7 +284,6 @@ function App({dispatch}) {
 
             <MusicDetail
                 ref={musicDetailRef}
-                blueCover={blueCover}
                 musicDetailVisible={musicDetailVisible}
                 isDialogOpen={isDialogOpen}
             />

@@ -100,8 +100,9 @@ export const WorkUtils = {
         return result
     },
 
-    async changeAlbumByGroup(group, URL) {
+    async changeAlbumByGroup(group) {
         // 切换企划时从数据库加载对应的全部专辑
+        const URL = Store.get("url")
         const albums = await AlbumHelper.findAllAlbumsByGroup(group)
         const topList = []
         const bottomList = []
@@ -133,8 +134,9 @@ export const WorkUtils = {
         }
     },
 
-    putArrToPlayer(promiseArr, URL) {
+    putArrToPlayer(promiseArr) {
         let isLoaded = true
+        const URL = Store.get("url")
         Promise.allSettled(promiseArr).then(res => {
             const audioList = []
             res.map(item => {
@@ -159,17 +161,17 @@ export const WorkUtils = {
         })
     },
 
-    findOneAlbumById(id, URL) {
+    findOneAlbumById(id) {
         AlbumHelper.findOneAlbumById(id).then(res => {
             const promiseArr = []
             res.music.map(id => {
                 promiseArr.push(MusicHelper.findOneMusic(id, res.group))
             })
-            this.putArrToPlayer(promiseArr, URL)
+            this.putArrToPlayer(promiseArr)
         })
     },
 
-    playAlbumsByGroup(group, URL) {
+    playAlbumsByGroup(group) {
         AlbumHelper.findAllAlbumsByGroup(group).then(albumList => {
             const promiseArr = []
             albumList.map(item => {
@@ -177,7 +179,7 @@ export const WorkUtils = {
                     promiseArr.push(MusicHelper.findOneMusic(id, item.group))
                 })
             })
-            this.putArrToPlayer(promiseArr, URL)
+            this.putArrToPlayer(promiseArr)
         })
     },
 
