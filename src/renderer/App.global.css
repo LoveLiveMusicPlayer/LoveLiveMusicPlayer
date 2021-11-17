@@ -96,11 +96,3 @@ a:hover {
     flex: 1;
     display: flex
 }
-
-.songListContainer {
-    width: 250px;
-    min-width: 250px;
-    display: flex;
-    justify-content: center;
-    border-right: 1px solid #999;
-}

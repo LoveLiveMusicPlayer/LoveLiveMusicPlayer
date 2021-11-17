@@ -1,22 +1,16 @@
 import React, {useEffect, useRef, useState} from 'react';
-import Store from "../../utils/Store"
 import './index.css'
 import "animate.css"
 import {Layout} from 'antd';
 import {AppUtils} from "../../utils/AppUtils";
 import fs from "fs";
 import FileDrop from '../../component/DragAndDrop'
-import {AlbumHelper} from "../../dao/AlbumHelper";
 import {musicAction} from "../../actions/music";
-import {MusicHelper} from "../../dao/MusicHelper";
 import Bus from "../../utils/Event"
 import {Loading} from "../../component/Loading";
 import {DBHelper} from "../../dao/DBHelper";
-import Modal from "react-modal";
-import * as Images from "../../public/Images";
 import {ColorPicker} from "../../component/ColorPicker";
 import {WorkUtils} from "../../utils/WorkUtils";
-import {MusicDetail} from "../../component/MusicDetail";
 import {useHistory} from "react-router-dom";
 import {TinyStar} from "../../component/TinyStar";
 import {MusicGallery} from "../../component/MusicGallery";
@@ -35,7 +29,6 @@ const Home = ({dispatch, chooseGroup}) => {
     let loadingRef = useRef()
     // 选择主题色引用
     let colorPickerRef = useRef()
-    let musicDetailRef = useRef()
 
     // 屏幕宽度
     const [width, setWidth] = useState(window.innerWidth)
@@ -54,13 +47,6 @@ const Home = ({dispatch, chooseGroup}) => {
     // HTTP服务要加载的目录
     const [rootDir, setRootDir] = useState()
 
-    // 显示歌曲详情界面 + 动效
-    const [musicDetailVisible, setMusicDetailVisible] = useState(false)
-    // 显示歌曲详情承载弹窗 + 延时销毁
-    const [isDialogOpen, setIsDialogOpen] = useState(false)
-
-    const [blueCover, setBlurCover] = useState()
-
     // 监听窗口改变大小
     const listener = function () {
         let width = window.innerWidth - 250
@@ -75,11 +61,6 @@ const Home = ({dispatch, chooseGroup}) => {
 
     const onTapLogoListener = function () {
         setPortInputVisible(true)
-    }
-
-    const onAudioTimeChange = function (info) {
-        setBlurCover(info.cover)
-        musicDetailRef.current?.setMusicDetail(info)
     }
 
     useEffect(() => {
@@ -105,35 +86,13 @@ const Home = ({dispatch, chooseGroup}) => {
 
         // 添加触摸Logo监听器
         Bus.addListener("onTapLogo", onTapLogoListener)
-        Bus.addListener("onAudioTimeChange", onAudioTimeChange)
 
         return () => {
             // 生命周期结束后将监听器移除
             window.removeEventListener("resize", listener)
             removeEventListener("onTapLogo", onTapLogoListener)
-            removeEventListener("onAudioTimeChange", onAudioTimeChange)
         }
     }, [])
-
-    useEffect(() => {
-        const onClickCover = function (isOpen) {
-            setMusicDetailVisible(isOpen)
-            if (isOpen) {
-                setIsDialogOpen(true)
-            } else {
-                setTimeout(() => {
-                    setIsDialogOpen(false)
-                }, 300)
-            }
-        }
-
-        // 添加点击左下角封面监听器
-        Bus.addListener("openMusicDetail", onClickCover)
-
-        return () => {
-            removeEventListener("openMusicDetail", onClickCover)
-        }
-    }, [musicDetailVisible])
 
     /**
      * 企划变更或者导入专辑列表刷新触发
@@ -182,36 +141,16 @@ const Home = ({dispatch, chooseGroup}) => {
         WorkUtils.playAlbumsByGroup(group, URL)
     }
 
-    const refreshData = async () => {
-        const dataUrl = await WorkUtils.requestUrl()
-        if (dataUrl == null) {
-            AppUtils.openMsgDialog("error", "服务繁忙，请稍候再试")
-            return
-        }
-        const data = await WorkUtils.requestData(dataUrl)
-        if (data == null) {
-            AppUtils.openMsgDialog("error", "服务繁忙，请稍候再试")
-            return
-        }
-        const version = Store.get("dataVersion")
-        if (version && version >= data.version) {
-            AppUtils.openMsgDialog("info", "已是最新数据，无需更新")
-            return
-        }
-        loadingRef.current?.show("导入专辑中..")
-        AlbumHelper.insertOrUpdateAlbum(JSON.stringify(data.album), function (progress) {
-            loadingRef.current?.setProgress(progress)
-        }).then(_ => {
-            loadingRef.current?.setTitle("导入歌曲中..")
-            MusicHelper.insertOrUpdateMusic(JSON.stringify(data.music), function (progress) {
-                loadingRef.current?.setProgress(progress)
-            }).then(_ => {
-                Store.set("dataVersion", data.version)
-                setRefresh(new Date().getTime())
-                setTimeout(() => {
-                    loadingRef.current?.hide()
-                }, 1000)
-            })
+    const refreshData = () => {
+        WorkUtils.updateJsonData(
+            () => loadingRef.current?.show("导入专辑中.."),
+            (progress) => loadingRef.current?.setProgress(progress),
+            () => loadingRef.current?.setTitle("导入歌曲中.."),
+            () => setRefresh(new Date().getTime())
+        ).then(_ => {
+            setTimeout(() => {
+                loadingRef.current?.hide()
+            }, 1000)
         })
     }
 
@@ -222,48 +161,6 @@ const Home = ({dispatch, chooseGroup}) => {
             dispatch(musicAction.chooseGroup(gp))
         }
         return null
-    }
-
-    const musicDetailStyles = {
-        overlay: {
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0)'
-        },
-        content: {
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            height: '100%',
-            borderWidth: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.9)'
-        },
-    };
-
-    // 渲染歌曲详情界面
-    const renderMusicDetail = () => {
-        const showCover = blueCover && blueCover.indexOf("LoveLive") > 0
-        let cover = Images.MENU_LIELLA
-        if (showCover) {
-            cover = URL + "LoveLive" + blueCover.split('/LoveLive')[1]
-        }
-        return (
-            <Modal
-                className={musicDetailVisible ? "music_detail_modal_in" : "music_detail_modal_out"}
-                appElement={document.body}
-                isOpen={isDialogOpen}
-                onAfterOpen={null}
-                onRequestClose={null}
-                style={musicDetailStyles}>
-                <div className={"blackArea"}/>
-                <img className={"gauss"} src={cover}/>
-                <MusicDetail ref={musicDetailRef} cover={cover}/>
-            </Modal>
-        )
     }
 
     const onColorPickerChange = (color1, color2) => {
@@ -287,8 +184,6 @@ const Home = ({dispatch, chooseGroup}) => {
                 />
                 <Loading ref={loadingRef}/>
             </Content>
-
-            {renderMusicDetail()}
 
             <TinyStar
                 playAll={playAll}

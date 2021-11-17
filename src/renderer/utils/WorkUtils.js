@@ -6,6 +6,7 @@ import Network from "./Network";
 import {AlbumHelper} from "../dao/AlbumHelper";
 import Bus from "./Event";
 import {MusicHelper} from "../dao/MusicHelper";
+import Store from "./Store";
 
 const path = require('path');
 
@@ -178,5 +179,33 @@ export const WorkUtils = {
             })
             this.putArrToPlayer(promiseArr, URL)
         })
+    },
+
+    async updateJsonData(onStart, onProgress, onAlbumEnd, onMusicEnd) {
+        const dataUrl = await this.requestUrl()
+        if (dataUrl == null) {
+            AppUtils.openMsgDialog("error", "服务繁忙，请稍候再试")
+            return
+        }
+        const data = await this.requestData(dataUrl)
+        if (data == null) {
+            AppUtils.openMsgDialog("error", "服务繁忙，请稍候再试")
+            return
+        }
+        const version = Store.get("dataVersion")
+        if (version && version >= data.version) {
+            AppUtils.openMsgDialog("info", "已是最新数据，无需更新")
+            return
+        }
+        onStart()
+        await AlbumHelper.insertOrUpdateAlbum(JSON.stringify(data.album), function (progress) {
+            onProgress(progress)
+        })
+        onAlbumEnd(data)
+        await MusicHelper.insertOrUpdateMusic(JSON.stringify(data.music), function (progress) {
+            onProgress(progress)
+        })
+        Store.set("dataVersion", data.version)
+        onMusicEnd()
     }
 }

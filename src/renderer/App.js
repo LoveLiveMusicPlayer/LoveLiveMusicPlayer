@@ -15,6 +15,8 @@ import {MyTypeWriter} from "./component/TypeWriter/MyTypeWriter";
 import {GroupModal} from "./component/GroupModal";
 import {Honoka} from "./component/Honoka";
 import {AppUtils} from "./utils/AppUtils";
+import {SongMenu} from "./component/SongMenu";
+import {MusicDetail} from "./component/MusicDetail";
 
 const {ipcRenderer} = require('electron');
 
@@ -30,12 +32,21 @@ const openNotification = (message) => {
 };
 
 function App({dispatch}) {
-    let r = useRef()
-    let timer = null
+    let playerRef = useRef()
+    let musicDetailRef = useRef()
+
+    let honokaTimer = null
     let isOpenMusicDialog = false
 
     const [showMenu, setShowMenu] = useState(false)
     const [showCategory, setShowCategory] = useState(false)
+
+    // 显示歌曲详情界面 + 动效
+    const [musicDetailVisible, setMusicDetailVisible] = useState(false)
+    // 显示歌曲详情承载弹窗 + 延时销毁
+    const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+    const [blueCover, setBlurCover] = useState()
 
     useEffect(() => {
         setTimeout(() => {
@@ -51,7 +62,7 @@ function App({dispatch}) {
 
         // 添加切换专辑的监听器
         Bus.addListener("onChangeAudioList", (msg) => {
-            r.current?.onChangeAudioList(msg)
+            playerRef.current?.onChangeAudioList(msg)
         })
 
         Bus.addListener("onShowInfoNotification", (msg) => {
@@ -69,14 +80,34 @@ function App({dispatch}) {
         }
     }, [])
 
+    useEffect(() => {
+        const onClickCover = function (isOpen) {
+            setMusicDetailVisible(isOpen)
+            if (isOpen) {
+                setIsDialogOpen(true)
+            } else {
+                setTimeout(() => {
+                    setIsDialogOpen(false)
+                }, 300)
+            }
+        }
+
+        // 添加点击左下角封面监听器
+        Bus.addListener("openMusicDetail", onClickCover)
+
+        return () => {
+            removeEventListener("openMusicDetail", onClickCover)
+        }
+    }, [musicDetailVisible])
+
     // 点击企划图片
     function onBabyClick() {
         setShowMenu(!showMenu)
         // 清除定时器
-        timer && clearTimeout(timer)
+        honokaTimer && clearTimeout(honokaTimer)
         // 需要打开菜单时开启定时器
         if (!showMenu) {
-            timer = setTimeout(() => {
+            honokaTimer = setTimeout(() => {
                 setShowCategory(true)
             }, 800)
         } else {
@@ -185,12 +216,13 @@ function App({dispatch}) {
     const onClickCover = () => {
         Bus.emit("openMusicDetail", !isOpenMusicDialog)
         options.theme = isOpenMusicDialog ? "light" : "dark"
-        r.current?.updateParams({theme: options.theme})
+        playerRef.current?.updateParams({theme: options.theme})
         isOpenMusicDialog = !isOpenMusicDialog
     }
 
     const onAudioTimeChange = (info) => {
-        Bus.emit("onAudioTimeChange", info)
+        setBlurCover(info.cover)
+        musicDetailRef.current?.setMusicDetail(info)
     }
 
     return (
@@ -202,10 +234,9 @@ function App({dispatch}) {
                 <MyTypeWriter/>
                 <Honoka onBabyClick={onBabyClick}/>
             </div>
-            <div className={'middleContainer'}>
-                <div className={'songListContainer'}>
 
-                </div>
+            <div className={'middleContainer'}>
+                <SongMenu/>
 
                 <Router>
                     <Switch>
@@ -215,17 +246,27 @@ function App({dispatch}) {
                     </Switch>
                 </Router>
             </div>
+
             <AudioPlayer
                 {...options}
-                ref={r}
+                ref={playerRef}
                 onClickCover={_ => onClickCover()}
-                onAudioTimeChange={info => onAudioTimeChange(info)}
+                onAudioTimeChange={onAudioTimeChange}
             />
+
             {showMenu ? <div className={"model"} onClick={onBabyClick}/> : null}
+
             <GroupModal
                 showMenu={showMenu}
                 showCategory={showCategory}
                 chooseGroup={item => chooseGroup(item)}
+            />
+
+            <MusicDetail
+                ref={musicDetailRef}
+                blueCover={blueCover}
+                musicDetailVisible={musicDetailVisible}
+                isDialogOpen={isDialogOpen}
             />
         </div>
     );
