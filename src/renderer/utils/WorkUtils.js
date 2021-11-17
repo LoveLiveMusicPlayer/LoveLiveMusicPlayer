@@ -3,6 +3,9 @@ import EXCEL from "js-export-xlsx";
 import * as mm from "music-metadata";
 import fs from "fs";
 import Network from "./Network";
+import {AlbumHelper} from "../dao/AlbumHelper";
+import Bus from "./Event";
+import {MusicHelper} from "../dao/MusicHelper";
 
 const path = require('path');
 
@@ -94,5 +97,86 @@ export const WorkUtils = {
             console.error(error);
         }
         return result
+    },
+
+    async changeAlbumByGroup(group, URL) {
+        // 切换企划时从数据库加载对应的全部专辑
+        const albums = await AlbumHelper.findAllAlbumsByGroup(group)
+        const topList = []
+        const bottomList = []
+        albums?.map((item, index) => {
+            const album = []
+            if (index % 2 === 0) {
+                item["cover_path"].map(src => {
+                    album.push({
+                        id: item._id,
+                        src: URL + src,
+                        text: item.name
+                    })
+                })
+                topList.push(album)
+            } else {
+                item["cover_path"].map(src => {
+                    album.push({
+                        id: item._id,
+                        src: URL + src,
+                        text: item.name
+                    })
+                })
+                bottomList.push(album)
+            }
+        })
+        return {
+            top: topList,
+            bottom: bottomList
+        }
+    },
+
+    putArrToPlayer(promiseArr, URL) {
+        let isLoaded = true
+        Promise.allSettled(promiseArr).then(res => {
+            const audioList = []
+            res.map(item => {
+                if (item.value != null) {
+                    audioList.push({
+                        _id: item.value._id,
+                        name: item.value.name,
+                        singer: item.value.artist,
+                        album: item.value.album,
+                        cover: AppUtils.encodeURL(URL + item.value["cover_path"]),
+                        musicSrc: AppUtils.encodeURL(URL + item.value["music_path"]),
+                    })
+                } else {
+                    isLoaded = false
+                }
+            })
+            if (isLoaded) {
+                Bus.emit("onChangeAudioList", audioList)
+            } else {
+                AppUtils.openMsgDialog("error", "存在损坏的数据，请重新更新数据")
+            }
+        })
+    },
+
+    findOneAlbumById(id, URL) {
+        AlbumHelper.findOneAlbumById(id).then(res => {
+            const promiseArr = []
+            res.music.map(id => {
+                promiseArr.push(MusicHelper.findOneMusic(id, res.group))
+            })
+            this.putArrToPlayer(promiseArr, URL)
+        })
+    },
+
+    playAlbumsByGroup(group, URL) {
+        AlbumHelper.findAllAlbumsByGroup(group).then(albumList => {
+            const promiseArr = []
+            albumList.map(item => {
+                item.music.map(id => {
+                    promiseArr.push(MusicHelper.findOneMusic(id, item.group))
+                })
+            })
+            this.putArrToPlayer(promiseArr, URL)
+        })
     }
 }

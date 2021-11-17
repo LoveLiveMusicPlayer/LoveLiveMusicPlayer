@@ -10,12 +10,12 @@ interface ImagePaginationProps {
         text: string,
     }[],
     dotDisplay: boolean,
-    onItemClick: any,
+    playOne: any,
     imgSide: any
 }
 
 const Index = (
-    {pages, dotDisplay = true, imgSide, onItemClick}: ImagePaginationProps,
+    {pages, dotDisplay = true, imgSide, playOne}: ImagePaginationProps,
 ) => {
     const [activeIndex, setActiveIndex] = useState(0);
     const [activeButton, setActiveButton] = useState(false);
@@ -77,7 +77,7 @@ const Index = (
                             <Page
                                 key={`${img.src}_${idx}`}
                                 active={activeIndex === idx}
-                                onClick={(event: any) => event && onItemClick(img.id)}
+                                onClick={(event: any) => event && playOne(img.id)}
                             >
                                 <WhiteCover/>
                                 <Img

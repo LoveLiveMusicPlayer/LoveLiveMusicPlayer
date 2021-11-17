@@ -1,15 +1,13 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Store from "../../utils/Store"
 import './index.css'
 import "animate.css"
-import {Button, Empty, InputNumber, Layout, Space} from 'antd';
+import {Layout} from 'antd';
 import {AppUtils} from "../../utils/AppUtils";
 import fs from "fs";
 import FileDrop from '../../component/DragAndDrop'
 import {AlbumHelper} from "../../dao/AlbumHelper";
 import {musicAction} from "../../actions/music";
-import {HorizontalList} from "../../component/HorizontalList";
-import {PrevNext, PrevNextHidden} from "./style";
 import {MusicHelper} from "../../dao/MusicHelper";
 import Bus from "../../utils/Event"
 import {Loading} from "../../component/Loading";
@@ -21,6 +19,8 @@ import {WorkUtils} from "../../utils/WorkUtils";
 import {MusicDetail} from "../../component/MusicDetail";
 import {useHistory} from "react-router-dom";
 import {TinyStar} from "../../component/TinyStar";
+import {MusicGallery} from "../../component/MusicGallery";
+import {PortDialog} from "../../component/PortDialog";
 
 const {ipcRenderer} = require("electron")
 const {connect} = require('react-redux')
@@ -29,10 +29,8 @@ const {Content} = Layout;
 const Home = ({dispatch, chooseGroup}) => {
     let history = useHistory()
 
-    // 第一行专辑列表引用
-    let topRef = useRef()
-    // 第二行专辑列表引用
-    let bottomRef = useRef()
+    // 专辑列表引用
+    let musicGalleryRef = useRef()
     // Loading 窗口引用
     let loadingRef = useRef()
     // 选择主题色引用
@@ -47,10 +45,6 @@ const Home = ({dispatch, chooseGroup}) => {
     const [group, setGroup] = useState(chooseGroup)
     // 导入专辑json时对列表进行刷新
     const [refresh, setRefresh] = useState()
-    // 左侧翻页按钮是否显示
-    const [activeLeftButton, setActiveLeftButton] = useState(false)
-    // 右侧翻页按钮是否显示
-    const [activeRightButton, setActiveRightButton] = useState(true)
     // HTTP服务的 IP + 端口 地址
     const [URL, setURL] = useState("http://localhost:10000/")
     // 显示HTTP端口输入框
@@ -59,8 +53,6 @@ const Home = ({dispatch, chooseGroup}) => {
     const [port, setPort] = useState(10000)
     // HTTP服务要加载的目录
     const [rootDir, setRootDir] = useState()
-    // 设置http端口等待两秒时的按钮状态
-    const [wait, setWait] = useState(false)
 
     // 显示歌曲详情界面 + 动效
     const [musicDetailVisible, setMusicDetailVisible] = useState(false)
@@ -69,21 +61,17 @@ const Home = ({dispatch, chooseGroup}) => {
 
     const [blueCover, setBlurCover] = useState()
 
-    /**
-     * 生命周期以及定时器的声明与销毁
-     */
-
-        // 监听窗口改变大小
+    // 监听窗口改变大小
     const listener = function () {
-            let width = window.innerWidth - 250
-            const height = window.innerHeight
-            const radio = 1275 / 648
-            // 防止在横向变宽时，图片变大
-            if (width / height > radio) {
-                width = height * radio
-            }
-            setWidth(width)
+        let width = window.innerWidth - 250
+        const height = window.innerHeight
+        const radio = 1275 / 648
+        // 防止在横向变宽时，图片变大
+        if (width / height > radio) {
+            width = height * radio
         }
+        setWidth(width)
+    }
 
     const onTapLogoListener = function () {
         setPortInputVisible(true)
@@ -103,11 +91,6 @@ const Home = ({dispatch, chooseGroup}) => {
             setHttpServer(httpServer)
         }
 
-        // 接收提示窗口关闭的回调
-        ipcRenderer.on('msgDialogCallback', (event, arg) => {
-            console.log("弹窗关闭")
-        })
-
         // 设置http服务回调
         ipcRenderer.on("openHttpReply", (event, path, port) => {
             DBHelper.setHttpServer({path: path, port: port})
@@ -122,14 +105,12 @@ const Home = ({dispatch, chooseGroup}) => {
 
         // 添加触摸Logo监听器
         Bus.addListener("onTapLogo", onTapLogoListener)
-
         Bus.addListener("onAudioTimeChange", onAudioTimeChange)
 
         return () => {
             // 生命周期结束后将监听器移除
             window.removeEventListener("resize", listener)
             removeEventListener("onTapLogo", onTapLogoListener)
-
             removeEventListener("onAudioTimeChange", onAudioTimeChange)
         }
     }, [])
@@ -158,41 +139,12 @@ const Home = ({dispatch, chooseGroup}) => {
      * 企划变更或者导入专辑列表刷新触发
      */
     useEffect(() => {
-        topRef.current?.toFirst()
-        bottomRef.current?.toFirst()
-        setActiveLeftButton(false)
+        musicGalleryRef.current?.toFirst()
 
         // 切换企划时从数据库加载对应的全部专辑
-        AlbumHelper.findAllAlbumsByGroup(group).then(res => {
-            const topList = []
-            const bottomList = []
-            res?.map((item, index) => {
-                const album = []
-                if (index % 2 === 0) {
-                    item["cover_path"].map(src => {
-                        album.push({
-                            id: item._id,
-                            src: URL + src,
-                            text: item.name
-                        })
-                    })
-                    topList.push(album)
-                } else {
-                    item["cover_path"].map(src => {
-                        album.push({
-                            id: item._id,
-                            src: URL + src,
-                            text: item.name
-                        })
-                    })
-                    bottomList.push(album)
-                }
-            })
-            setActiveRightButton((topList.length + bottomList.length) > 10)
-            setAlbumList({
-                top: topList,
-                bottom: bottomList
-            })
+        WorkUtils.changeAlbumByGroup(group, URL).then(res => {
+            musicGalleryRef.current?.showRightButton((res.top.length + res.bottom.length) > 10)
+            setAlbumList(res)
         })
     }, [group, refresh])
 
@@ -219,77 +171,15 @@ const Home = ({dispatch, chooseGroup}) => {
         }
     }
 
-    /**
-     * 翻页时触发的回调，用于更新状态
-     * @type {(function(*): void)|*}
-     */
-    const onPageClick = useCallback((e) => {
-        e.preventDefault();
-        const {type} = e.target
-        if (type === 'prev') {
-            topRef.current?.prev()
-            bottomRef.current?.prev()
-            setActiveRightButton(true)
-        } else if (type === 'next') {
-            topRef.current?.next()
-            bottomRef.current?.next()
-            setActiveLeftButton(true)
-        }
-    }, []);
-
-    const putArrToPlayer = (promiseArr) => {
-        let isLoaded = true
-        Promise.allSettled(promiseArr).then(res => {
-            const audioList = []
-            res.map(item => {
-                if (item.value != null) {
-                    audioList.push({
-                        _id: item.value._id,
-                        name: item.value.name,
-                        singer: item.value.artist,
-                        album: item.value.album,
-                        cover: AppUtils.encodeURL(URL + item.value["cover_path"]),
-                        musicSrc: AppUtils.encodeURL(URL + item.value["music_path"]),
-                    })
-                } else {
-                    isLoaded = false
-                }
-            })
-            if (isLoaded) {
-                Bus.emit("onChangeAudioList", audioList)
-            } else {
-                AppUtils.openMsgDialog("error", "存在损坏的数据，请重新更新数据")
-            }
-        })
-    }
-
-    /**
-     * 当选择了一个专辑，需要获取对应的歌曲列表并设置在播放器上
-     * @param e
-     * @returns {Promise<void>}
-     */
-    const chooseItem = async (e) => {
+    // 播放选中专辑
+    const playOne = (id) => {
         // history.push('/album', {id: 1})
-
-        AlbumHelper.findOneAlbumById(e).then(res => {
-            const promiseArr = []
-            res.music.map(id => {
-                promiseArr.push(MusicHelper.findOneMusic(id, res.group))
-            })
-            putArrToPlayer(promiseArr)
-        })
+        WorkUtils.findOneAlbumById(id, URL)
     }
 
-    const randomPlay = () => {
-        AlbumHelper.findAllAlbumsByGroup(group).then(albumList => {
-            const promiseArr = []
-            albumList.map(item => {
-                item.music.map(id => {
-                    promiseArr.push(MusicHelper.findOneMusic(id, item.group))
-                })
-            })
-            putArrToPlayer(promiseArr)
-        })
+    // 播放团内全部专辑
+    const playAll = () => {
+        WorkUtils.playAlbumsByGroup(group, URL)
     }
 
     const refreshData = async () => {
@@ -308,8 +198,7 @@ const Home = ({dispatch, chooseGroup}) => {
             AppUtils.openMsgDialog("info", "已是最新数据，无需更新")
             return
         }
-        loadingRef.current?.show()
-        loadingRef.current?.setTitle("导入专辑中..")
+        loadingRef.current?.show("导入专辑中..")
         AlbumHelper.insertOrUpdateAlbum(JSON.stringify(data.album), function (progress) {
             loadingRef.current?.setProgress(progress)
         }).then(_ => {
@@ -326,144 +215,13 @@ const Home = ({dispatch, chooseGroup}) => {
         })
     }
 
-    // 滚动到专辑列表首页
-    const onScrollFirst = () => {
-        setActiveLeftButton(false)
-    }
-
-    // 滚动到专辑列表尾页
-    const onScrollLast = () => {
-        setActiveRightButton(false)
-    }
-
     // 当选择了企划时将触发redux保存并获取企划数据
     const refreshAlbum = (gp) => {
-        if (gp !== group) {
+        if (gp !== null && gp !== group) {
             setGroup(gp)
             dispatch(musicAction.chooseGroup(gp))
         }
-    }
-
-    // 根据状态渲染左边的箭头
-    const renderLeftArrow = () => {
-        if (activeLeftButton) {
-            return <PrevNext type={'prev'} onClick={onPageClick}>&#10094;</PrevNext>
-        } else {
-            return <PrevNextHidden type={'prev'}>&#10094;</PrevNextHidden>
-        }
-    }
-
-    // 根据状态渲染右边的箭头
-    const renderRightArrow = (margin) => {
-        if (activeRightButton) {
-            return <PrevNext type={'next'} onClick={onPageClick} margin={margin}>&#10095;</PrevNext>
-        } else {
-            return <PrevNextHidden type={'next'}>&#10095;</PrevNextHidden>
-        }
-    }
-
-    // 渲染专辑列表UI
-    const renderMusicGallery = () => {
-        const margin = Number(width / 37.5) / 2 + "px"
-        return (
-            <div className={"musicGalleryContainer"}>
-                <>
-                    {
-                        albumList.top && albumList.top.length > 0 ?
-                            <>
-                                {renderLeftArrow()}
-                                <div className={"musicGalleryList"}>
-                                    <HorizontalList
-                                        ref={topRef}
-                                        width={width}
-                                        album={albumList.top}
-                                        another={albumList.bottom}
-                                        chooseItem={chooseItem}
-                                        onScrollFirst={onScrollFirst}
-                                        onScrollLast={onScrollLast}
-                                    />
-                                    <HorizontalList
-                                        ref={bottomRef}
-                                        width={width}
-                                        album={albumList.bottom}
-                                        another={albumList.top}
-                                        chooseItem={chooseItem}
-                                    />
-                                </div>
-                                {renderRightArrow(margin)}
-                            </> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/>
-                    }
-                </>
-            </div>
-        )
-    }
-
-    const httpPortStyles = {
-        overlay: {
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.60)'
-        },
-        content: {
-            width: 300,
-            height: 150,
-            top: '50%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            marginRight: '-50%',
-            backgroundColor: 'white',
-            display: 'flex',
-            justifyContent: 'space-around',
-            flexDirection: 'column',
-            alignItems: 'center',
-            transform: 'translate(-50%, -50%)',
-        },
-    };
-
-    // 渲染输入HTTP端口的窗口
-    const renderHttpPortInput = () => {
-        return (
-            <Modal
-                appElement={document.body}
-                isOpen={portInputVisible}
-                onAfterOpen={null}
-                onRequestClose={() => setPortInputVisible(false)}
-                style={httpPortStyles}>
-                <p style={{fontWeight: 'bold'}}>请输入端口号</p>
-                <Space>
-                    <InputNumber
-                        min={10000}
-                        max={65535}
-                        value={port}
-                        defaultValue={10000}
-                        onChange={setPort}
-                    />
-                    <Button
-                        type="primary"
-                        loading={wait}
-                        onClick={() => {
-                            if (port < 10000 || port > 65535) {
-                                setPort(10000)
-                            } else {
-                                // 只有在 10000-65535 区间内的端口才允许设置
-                                setWait(true)
-                                setHttpServer({path: rootDir, port: port})
-                                setTimeout(() => {
-                                    setWait(false)
-                                    setPortInputVisible(false)
-                                }, 2000)
-                            }
-                        }}
-                    >
-                        确定
-                    </Button>
-                </Space>
-            </Modal>
-        )
+        return null
     }
 
     const musicDetailStyles = {
@@ -518,26 +276,38 @@ const Home = ({dispatch, chooseGroup}) => {
             count={1}
             formats={['']}
         >
-            {chooseGroup != null && refreshAlbum(chooseGroup)}
+            {refreshAlbum(chooseGroup)}
 
             <Content className="container">
-                {renderMusicGallery()}
+                <MusicGallery
+                    ref={musicGalleryRef}
+                    albumList={albumList}
+                    width={width}
+                    playOne={playOne}
+                />
                 <Loading ref={loadingRef}/>
             </Content>
 
-            {portInputVisible ? renderHttpPortInput() : null}
-
             {renderMusicDetail()}
 
-            <ColorPicker ref={colorPickerRef} onChangeColor={onColorPickerChange}/>
-
             <TinyStar
-                randomPlay={randomPlay}
+                playAll={playAll}
                 changeColor={() => {
                     colorPickerRef.current?.open(DBHelper.getBGColor())
                 }}
                 checkUpdate={() => ipcRenderer.invoke('checkUpdate')}
                 refreshData={refreshData}
+            />
+
+            <ColorPicker ref={colorPickerRef} onChangeColor={onColorPickerChange}/>
+
+            <PortDialog
+                isShow={portInputVisible}
+                rootDir={rootDir}
+                port={port}
+                close={() => setPortInputVisible(false)}
+                setHttpServer={() => setHttpServer({path: rootDir, port: port})}
+                setPort={setPort}
             />
         </FileDrop>
     );

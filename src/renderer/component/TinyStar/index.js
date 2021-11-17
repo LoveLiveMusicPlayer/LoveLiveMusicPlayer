@@ -4,7 +4,7 @@ import * as Images from "../../public/Images";
 import Bus from "../../utils/Event";
 import './index.css'
 
-export const TinyStar = ({randomPlay, refreshData, changeColor, checkUpdate}) => {
+export const TinyStar = ({playAll, refreshData, changeColor, checkUpdate}) => {
 
     const menu = (
         <Menu>
@@ -16,8 +16,8 @@ export const TinyStar = ({randomPlay, refreshData, changeColor, checkUpdate}) =>
                 <a onClick={changeColor}>设置主题</a>
             </Menu.Item>
             <Menu.Divider/>
-            <Menu.Item key={"randomPlay"}>
-                <a onClick={randomPlay}>全部播放</a>
+            <Menu.Item key={"playAll"}>
+                <a onClick={playAll}>全部播放</a>
             </Menu.Item>
             <Menu.Divider/>
             <Menu.Item key={"refreshData"}>

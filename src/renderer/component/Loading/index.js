@@ -1,6 +1,7 @@
 import React, {forwardRef, useImperativeHandle, useState} from "react";
 import * as Images from "../../public/Images";
 import Modal from 'react-modal';
+import {AppUtils} from "../../utils/AppUtils";
 
 export const Loading = forwardRef((props, ref) => {
 
@@ -43,7 +44,10 @@ export const Loading = forwardRef((props, ref) => {
             setProgress(progress)
         },
 
-        show: () => {
+        show: (title) => {
+            if (!AppUtils.isEmpty(title)) {
+                setTitle(title)
+            }
             setVisible(true)
         },
 

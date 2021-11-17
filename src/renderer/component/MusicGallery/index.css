@@ -1,0 +1,15 @@
+.musicGalleryContainer {
+    width: 85%;
+    display: flex;
+    align-items: center;
+    position: relative;
+    flex-direction: row;
+    flex: 1;
+    justify-content: center;
+    padding-bottom: 12vh;
+}
+
+.musicGalleryList {
+    display: flex;
+    flex-direction: column;
+}
