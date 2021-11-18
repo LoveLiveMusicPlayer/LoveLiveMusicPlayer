@@ -134,7 +134,7 @@ export const WorkUtils = {
         }
     },
 
-    putArrToPlayer(promiseArr) {
+    putArrToPlayer(promiseArr, playIndex) {
         let isLoaded = true
         const URL = Store.get("url")
         Promise.allSettled(promiseArr).then(res => {
@@ -146,6 +146,7 @@ export const WorkUtils = {
                         name: item.value.name,
                         singer: item.value.artist,
                         album: item.value.album,
+                        playIndex: playIndex,
                         cover: AppUtils.encodeURL(URL + item.value["cover_path"]),
                         musicSrc: AppUtils.encodeURL(URL + item.value["music_path"]),
                     })
@@ -161,13 +162,23 @@ export const WorkUtils = {
         })
     },
 
-    findOneAlbumById(id) {
-        AlbumHelper.findOneAlbumById(id).then(res => {
+    playAlbumByUniqueId(_id) {
+        AlbumHelper.findOneAlbumByUniqueId(_id).then(res => {
             const promiseArr = []
             res.music.map(id => {
                 promiseArr.push(MusicHelper.findOneMusic(id, res.group))
             })
             this.putArrToPlayer(promiseArr)
+        })
+    },
+
+    playAlbumByAlbumId(group, albumId, playIndex) {
+        AlbumHelper.findOneAlbumByAlbumId(group, albumId).then(res => {
+            const promiseArr = []
+            res.music.map(id => {
+                promiseArr.push(MusicHelper.findOneMusic(id, res.group))
+            })
+            this.putArrToPlayer(promiseArr, playIndex)
         })
     },
 

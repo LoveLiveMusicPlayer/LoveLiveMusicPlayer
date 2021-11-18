@@ -4,24 +4,28 @@ import styled, {css} from 'styled-components';
 const Style = styled.div<{
     active: boolean;
     position: string;
+    lang: string;
 }>`
   padding: 4px 10px;
 
-  ${({active, position}) => css`
+  ${({active, position, lang}) => css`
     color: ${active ? 'lightgreen' : '#999'};
     font-size: ${active ? '20px' : '16px'};
     text-align: ${position == "center" ? 'center' : 'left'};
+    lang: ${lang};
   `}
 `;
 
 const LyricLine = ({
                        active,
                        content,
-                       position
+                       position,
+                       lang
                    }: {
     active: boolean;
     content: string;
     position: string;
-}) => <Style active={active} position={position}>{content}</Style>;
+    lang: string;
+}) => <Style active={active} position={position} lang={lang}>{content}</Style>;
 
 export default LyricLine;

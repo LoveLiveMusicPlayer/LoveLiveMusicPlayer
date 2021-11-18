@@ -35,9 +35,14 @@ export const AlbumHelper = {
         return db.findAll({group: group})
     },
 
-    // 根据id获取专辑信息
-    findOneAlbumById(id) {
+    // 根据唯一id获取专辑信息
+    findOneAlbumByUniqueId(id) {
         return db.findOne({_id: id})
+    },
+
+    // 根据专辑id获取专辑信息
+    findOneAlbumByAlbumId(group, id) {
+        return db.findOne({group: group, id: id})
     },
 
     // 删除全部专辑

@@ -11,11 +11,13 @@ interface ImagePaginationProps {
     }[],
     dotDisplay: boolean,
     playOne: any,
-    imgSide: any
+    imgSide: any,
+    whiteCover: boolean,
+    effect: boolean,
 }
 
 const Index = (
-    {pages, dotDisplay = true, imgSide, playOne}: ImagePaginationProps,
+    {pages, dotDisplay = true, imgSide, whiteCover = true, effect = true, playOne}: ImagePaginationProps,
 ) => {
     const [activeIndex, setActiveIndex] = useState(0);
     const [activeButton, setActiveButton] = useState(false);
@@ -70,6 +72,7 @@ const Index = (
             <Container
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
+                effect={effect}
             >
                 <div>
                     {
@@ -79,7 +82,7 @@ const Index = (
                                 active={activeIndex === idx}
                                 onClick={(event: any) => event && playOne(img.id)}
                             >
-                                <WhiteCover/>
+                                {whiteCover ? <WhiteCover/> : null}
                                 <Img
                                     src={decodeURI(img.src)}
                                     style={{

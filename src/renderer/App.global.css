@@ -81,7 +81,7 @@ a:hover {
     padding: 15px;
     display: flex;
     justify-content: center;
-    border-right: 1px solid #999;
+    background-color: rgba(0, 0, 0, 0.04);
 }
 
 .imgBack {

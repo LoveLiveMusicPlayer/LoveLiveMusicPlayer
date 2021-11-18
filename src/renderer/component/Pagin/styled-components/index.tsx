@@ -33,11 +33,16 @@ export const Container = styled.div`
     position: relative;
     -webkit-animation: ${myScale} .2s;
     animation-fill-mode: forwards;
-    &:hover {
-        -webkit-animation: ${myScaleHover} .2s;
-        animation-fill-mode: forwards;
-        transform-origin: center;
-    }
+    ${(props: { effect: boolean; }) =>
+    props.effect ?
+        css`
+          &:hover {
+            -webkit-animation: ${myScaleHover} .2s;
+            animation-fill-mode: forwards;
+            transform-origin: center;
+            }
+        ` : css``
+}
 `;
 
 export const pageFade = keyframes`

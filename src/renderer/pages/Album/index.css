@@ -1,0 +1,88 @@
+.albumContainer {
+    width: 100%;
+    height: 100%;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 100px;
+    overflow: auto;
+}
+
+.albumContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.albumTopContainer {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    flex-direction: row;
+}
+
+.albumTopRightContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-left: 24px;
+    padding-top: 18px;
+}
+
+.albumName {
+    color: #ffffff;
+    font-size: 25px;
+    font-weight: bold;
+    language: 'jp';
+    line-height: 20px;
+}
+
+.albumText {
+    color: #f3f3f3;
+    font-size: 18px;
+    display: inline;
+    line-height: 13px;
+}
+
+.table-color-dust {
+    background-color: transparent;
+    color: #3ece89;
+}
+
+.ant-table {
+    border-width: 0;
+    background: transparent !important;
+}
+
+.ant-table-cell {
+    background: transparent !important;
+    color: #ffffff;
+}
+
+.ant-table-tbody tr td {
+    border-bottom: 0;
+}
+
+.ant-table-thead tr th {
+    border-bottom: 0;
+    color: #ffffff;
+}
+
+.link {
+    color: #000c17;
+}
+
+.ant-table-tbody tr:hover td {
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.btnFuncContainer {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    right: 0;
+    justify-content: center
+}
+
+.btnFunc {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+}

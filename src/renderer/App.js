@@ -19,8 +19,6 @@ import {SongMenu} from "./component/SongMenu";
 import {MusicDetail} from "./component/MusicDetail";
 import Store from '../../src/renderer/utils/Store'
 
-const {ipcRenderer} = require('electron');
-
 const openNotification = (message) => {
     notification.info({
         message: '请注意',

@@ -38,6 +38,11 @@ export const MusicHelper = {
         return db.findOne({id: id, group: group})
     },
 
+    // 根据 专辑 id 和 group 获取对应专辑的音乐列表
+    findAllMusicByAlbumId(group, albumId) {
+        return db.findAll({group: group, album: albumId})
+    },
+
     // 删除全部音乐
     removeAllMusic() {
         return db.remove(null, {multi: true})

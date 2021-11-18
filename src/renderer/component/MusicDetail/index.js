@@ -46,7 +46,7 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen}, ref) 
     }))
 
     const renderItem = ({active, line}) => {
-        return <LyricLine content={line.content} active={active} position={lrcPosition}/>
+        return <LyricLine content={line.content} active={active} position={lrcPosition} lang={lrcLanguage}/>
     }
 
     const onUpload = (file) => {

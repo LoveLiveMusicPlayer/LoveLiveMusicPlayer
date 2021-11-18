@@ -133,7 +133,6 @@ const Home = ({dispatch, chooseGroup, showAlbum, isRoot}) => {
     const playOne = (id) => {
         showAlbum()
         history.push('/album', {id: id})
-        // WorkUtils.findOneAlbumById(id)
     }
 
     // 播放团内全部专辑
