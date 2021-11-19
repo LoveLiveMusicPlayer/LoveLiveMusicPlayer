@@ -95,7 +95,7 @@ const Index = (
                             <Page
                                 key={`${img.src}_${idx}`}
                                 active={activeIndex === idx}
-                                onClick={(event: any) => event && showAlbumInfo(img.id)}
+                                onClick={(event: any) => event && showAlbumInfo && showAlbumInfo(img.id)}
                             >
                                 {whiteCover ? <WhiteCover/> : null}
                                 <Img

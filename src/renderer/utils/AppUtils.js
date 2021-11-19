@@ -16,6 +16,11 @@ export const AppUtils = {
         return this.isNull(text) || text === ''
     },
 
+    showValue(text) {
+        if (text) return text
+        else return '-'
+    },
+
     /**
      * 遍历文件路径
      * @param dir

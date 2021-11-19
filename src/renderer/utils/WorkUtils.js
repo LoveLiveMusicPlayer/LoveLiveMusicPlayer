@@ -194,6 +194,14 @@ export const WorkUtils = {
         })
     },
 
+    playMenuByMusicIds(jsonArr, playIndex) {
+        const promiseArr = []
+        jsonArr.map(item => {
+            promiseArr.push(MusicHelper.findOneMusic(item.id, item.group))
+        })
+        this.putArrToPlayer(promiseArr, playIndex)
+    },
+
     async updateJsonData(onStart, onProgress, onAlbumEnd, onMusicEnd) {
         const dataUrl = await this.requestUrl()
         if (dataUrl == null) {
@@ -220,5 +228,11 @@ export const WorkUtils = {
         })
         Store.set("dataVersion", data.version)
         onMusicEnd()
+    },
+
+    parseGroupName(name) {
+        if (name === 'Nijigasaki') {
+            return '虹咲学园学园偶像同好会'
+        } else return name
     }
 }

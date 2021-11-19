@@ -18,6 +18,7 @@ import {AppUtils} from "./utils/AppUtils";
 import {SongMenu} from "./component/SongMenu";
 import {MusicDetail} from "./component/MusicDetail";
 import Store from '../../src/renderer/utils/Store'
+import Menu from "./pages/Menu";
 
 const openNotification = (message) => {
     notification.info({
@@ -38,6 +39,9 @@ function App({dispatch}) {
     let isOpenMusicDialog = false
     let history = useHistory()
     let location = useLocation()
+
+    // 音乐馆: -2; 我喜欢: -1; 最近播放: 0; 歌单: 1 ~ n
+    const [chooseItem, setChooseItem] = useState(-2)
     // 显示团组的 modal
     const [showMenu, setShowMenu] = useState(false)
     // 显示团组的图片
@@ -198,10 +202,31 @@ function App({dispatch}) {
                 <div className={'routerContainer'}>
                     <Switch>
                         <Route path="/album" exact component={Album}/>
+                        <Route path="/menu" exact component={Menu}/>
                     </Switch>
                 </div>
             )
         } else return null
+    }
+
+    const onMenuChange = (index) => {
+        setChooseItem(index)
+        switch (index) {
+            case -2:
+                setShowRouter(false)
+                history.push('/home')
+                break
+            case -1:
+
+                break
+            case 0:
+
+                break
+            default:
+                setShowRouter(true)
+                history.push('/menu', {id: index})
+                break
+        }
     }
 
     useEffect(() => {
@@ -217,13 +242,15 @@ function App({dispatch}) {
             Store.set("url", "http://localhost:10000/")
         }
 
+        Bus.addListener("onNotification", msg => openNotification(msg))
+
         // 添加切换专辑的监听器
-        Bus.addListener("onChangeAudioList", (msg) => {
+        Bus.addListener("onChangeAudioList", msg => {
             playerRef.current?.onChangeAudioList(msg)
         })
 
         // 修改主题
-        Bus.addListener("onBodyChangeColor", (colors) => {
+        Bus.addListener("onBodyChangeColor", colors => {
             DBHelper.setBGColor(JSON.stringify(colors))
             AppUtils.setBodyColor(colors)
         })
@@ -254,13 +281,13 @@ function App({dispatch}) {
                 <div className={'logo'}>
                     <img src={Images.ICON_HEAD}/>
                 </div>
-                {renderBtnBack()}
+                {/*{renderBtnBack()}*/}
                 <MyTypeWriter/>
                 <Honoka onBabyClick={onBabyClick}/>
             </div>
 
             <div className={'middleContainer'}>
-                <SongMenu/>
+                <SongMenu chooseItem={chooseItem} onChooseItem={onMenuChange}/>
                 <Home showAlbum={() => setShowRouter(true)} isRoot={!showRouter}/>
                 {renderRouter()}
             </div>

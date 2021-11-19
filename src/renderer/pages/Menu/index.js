@@ -1,21 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {useHistory} from "react-router-dom";
-import {AlbumHelper} from "../../dao/AlbumHelper";
 import './index.css'
-import Store from '../../utils/Store'
-import ImagePagination from "../../component/Pagin/index";
-import {Button, Table} from 'antd'
-import {MusicHelper} from "../../dao/MusicHelper";
-import {WorkUtils} from "../../utils/WorkUtils";
 import * as Images from '../../public/Images'
+import {Button, Table} from "antd";
+import {WorkUtils} from "../../utils/WorkUtils";
+import Store from "../../utils/Store";
+import ImagePagination from "../../component/Pagin/index";
 import {SongMenuHelper} from "../../dao/SongMenuHelper";
-import {SelectDialog} from "../../component/SelectDialog";
-import Bus from "../../utils/Event";
+import {AppUtils} from "../../utils/AppUtils";
 
 const {connect} = require('react-redux');
 
-const Album = ({dispatch, chooseGroup, location}) => {
-    let history = useHistory()
+const Menu = ({dispatch, chooseGroup, location}) => {
 
     const [btnFuncPic1, setBtnFuncPic1] = useState(Images.ICON_DIS_PLAY)
     const [btnFuncPic2, setBtnFuncPic2] = useState(Images.ICON_DIS_COLLECT)
@@ -28,34 +23,13 @@ const Album = ({dispatch, chooseGroup, location}) => {
         pageY: 0,
         music: '',
     })
+
     const [nodeDisplay, setNodeDisplay] = useState(false)
     const [rowHover, setRowHover] = useState()
-    const [addListDisplay, setAddListDisplay] = useState(false)
-    const [willAddListMusic, setWillAddListMusic] = useState()
-    const [menu, setMenu] = useState([])
-
-    useEffect(() => {
-        AlbumHelper.findOneAlbumByUniqueId(location.state.id).then(info => {
-            setInfo(info)
-            MusicHelper.findAllMusicByAlbumId(chooseGroup, info.id).then(musicList => {
-                const tableData = []
-                musicList.map((music, index) => {
-                    tableData.push({
-                        key: index,
-                        song: music.name,
-                        artist: music.artist,
-                        time: '04:00',
-                        music: music
-                    })
-                })
-                setTableData(tableData)
-            })
-        })
-    }, [])
 
     const columns = [
         {
-            title: `歌曲${tableData && tableData ? tableData.length : '1'}`,
+            title: `歌曲${tableData ? tableData.length : ''}`,
             dataIndex: 'song',
             key: 'song',
             render: (text, record, index) => {
@@ -69,21 +43,21 @@ const Album = ({dispatch, chooseGroup, location}) => {
                                 src={btnFuncPic1}
                                 onMouseOver={() => setBtnFuncPic1(Images.ICON_PLAY)}
                                 onMouseOut={() => setBtnFuncPic1(Images.ICON_DIS_PLAY)}
-                                onClick={() => playMusic(record, index)}
+                                onClick={() => playMusic(index)}
                             />
                             <img
                                 className={'btnFunc'}
                                 src={btnFuncPic2}
                                 onMouseOver={() => setBtnFuncPic2(Images.ICON_COLLECT)}
                                 onMouseOut={() => setBtnFuncPic2(Images.ICON_DIS_COLLECT)}
-                                onClick={() => addList(record)}
+                                onClick={() => iLove(record)}
                             />
                             <img
                                 className={'btnFunc'}
                                 src={btnFuncPic3}
                                 onMouseOver={() => setBtnFuncPic3(Images.ICON_LOVE)}
                                 onMouseOut={() => setBtnFuncPic3(Images.ICON_DIS_LOVE)}
-                                onClick={() => iLove(record)}
+                                onClick={() => addList(record)}
                             />
                         </div>
                     </div>
@@ -103,12 +77,12 @@ const Album = ({dispatch, chooseGroup, location}) => {
     ];
 
     const renderCover = () => {
-        if (info) {
+        if (info && info.music.length > 0) {
             const coverList = []
             const url = Store.get('url')
-            info['cover_path'].map((item, index) => {
+            info.music.map((item, index) => {
                 coverList.push({
-                    src: url + item,
+                    src: url + item['cover_path'],
                     id: index
                 })
             })
@@ -128,7 +102,7 @@ const Album = ({dispatch, chooseGroup, location}) => {
     const onRowSelect = (record, index) => {
         return {
             onDoubleClick: () => {
-                playMusic(record, index)
+                playMusic(index)
             },
             onContextMenu: event => {
                 event.preventDefault()
@@ -180,7 +154,7 @@ const Album = ({dispatch, chooseGroup, location}) => {
         }
         const menu = (
             <div style={style}>
-                <a className={'link'} onClick={() => playMusic(music, playIndex)}>播放</a>
+                <a className={'link'} onClick={() => playMusic(playIndex)}>播放</a>
                 <a className={'link'} onClick={() => addList(music)}>添加到</a>
                 <a className={'link'} onClick={() => iLove(music)}>我喜欢</a>
             </div>
@@ -188,8 +162,15 @@ const Album = ({dispatch, chooseGroup, location}) => {
         return nodeTree ? menu : null;
     }
 
-    const playMusic = (music, playIndex) => {
-        WorkUtils.playAlbumByAlbumId(chooseGroup, music.music.album, playIndex)
+    const playMusic = (playIndex) => {
+        const musicList = []
+        info.music.map(item => {
+            musicList.push({
+                id: item.id,
+                group: item.group
+            })
+        })
+        WorkUtils.playMenuByMusicIds(musicList, playIndex)
     }
 
     const iLove = (music) => {
@@ -197,36 +178,41 @@ const Album = ({dispatch, chooseGroup, location}) => {
     }
 
     const addList = (music) => {
-        SongMenuHelper.findAllMenu().then(res => {
-            if (res.length > 0) {
-                setAddListDisplay(true)
-                setWillAddListMusic(music.music)
-                setMenu(res)
-            } else {
-                Bus.emit('onNotification', '请先新增歌单')
-            }
-        })
+        console.log(music)
     }
 
-    const addToList = (id) => {
-        SongMenuHelper.insertSongToMenu(id, willAddListMusic)
-    }
+    useEffect(() => {
+        SongMenuHelper.findMenuById(location.state.id).then(res => {
+            console.log(res)
+            setInfo(res)
+            const music = []
+            res.music.map((item, index) => {
+                music.push({
+                    key: index,
+                    song: item.name,
+                    artist: item.artist,
+                    time: '04:00',
+                    music: item
+                })
+            })
+            setTableData(music)
+        })
+    }, [location.state])
 
     return (
         <div className={'albumContainer'} onClick={() => setNodeDisplay(false)}>
             <div className={'albumTopContainer'}>
                 {renderCover()}
                 <div className={'albumTopRightContainer'}>
-                    <p className={'albumName'}>{info && info.name}</p>
-                    <p className={'albumText'}>{info && "出版日期: " + info.date}</p>
-                    <p className={'albumText'}>{info && "分类: " + info.category}</p>
-                    <p className={'albumText'}>{info && "所属团组: " + WorkUtils.parseGroupName(info.group)}</p>
+                    <p className={'albumName'}>{info && info.name ? info.name : ''}</p>
+                    <p className={'albumText'}>{info && "创建日期: " + AppUtils.showValue(info.date)}</p>
+                    <p className={'albumText'}>{info && info.music.length > 0 && "所属团组: " + WorkUtils.parseGroupName(info.music[0].group)}</p>
                     <Button
                         type="primary"
                         shape="round"
-                        style={{width: '110px'}}
+                        style={{width: '110px', marginTop: '25px'}}
                         icon={<img src={Images.ICON_DIS_PLAY} style={{marginRight: '6px', marginBottom: '3px'}}/>}
-                        onClick={() => WorkUtils.playAlbumByUniqueId(info._id)}
+                        onClick={() => playMusic(0)}
                     >
                         播放全部
                     </Button>
@@ -234,13 +220,6 @@ const Album = ({dispatch, chooseGroup, location}) => {
             </div>
             {renderMusicList()}
             {renderRightClick()}
-            <SelectDialog
-                hint={'请选择要添加的歌单'}
-                isShow={addListDisplay}
-                result={addToList}
-                list={menu}
-                close={() => setAddListDisplay(false)}
-            />
         </div>
     )
 }
@@ -251,4 +230,4 @@ function select(store) {
     };
 }
 
-export default connect(select)(Album);
+export default connect(select)(Menu);

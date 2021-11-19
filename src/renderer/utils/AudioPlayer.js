@@ -101,9 +101,6 @@ export default class AudioPlayer extends React.PureComponent {
                     isHandle = true
                     this.setState({playIndex: truePlayIndex})
                 }}
-                onAudioPlay={audioInfo => {
-                    // console.log(audioInfo)
-                }}
                 onCoverClick={(mode, audioLists, audioInfo) => {
                     this.r.props.onClickCover()
                 }}

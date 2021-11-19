@@ -2,6 +2,61 @@
     width: 250px;
     min-width: 250px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    padding-left: 24px;
+    padding-right: 24px;
     background-color: rgba(0, 0, 0, 0.04);
+}
+
+.customTitleText {
+    color: #E5E5E5;
+    font-weight: 400;
+    margin: 0;
+}
+
+.customPic {
+    width: 18px;
+    height: 18px;
+}
+
+.customText {
+    color: #ffffff;
+}
+
+.selectContainer {
+    height: 36px;
+    display: flex;
+    flex-direction: row;
+    padding-left: 14px;
+    align-items: center;
+    margin-top: 6px;
+    border-radius: 6px;
+    background: #04CE99;
+}
+
+.unselectContainer {
+    height: 36px;
+    display: flex;
+    flex-direction: row;
+    padding-left: 14px;
+    align-items: center;
+    margin-top: 6px;
+    border-radius: 6px;
+}
+
+.unselectContainer:hover {
+    background: rgba(221, 221, 221, 0.2);
+}
+
+.addMenuContainer {
+    height: 36px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.addMenu {
+    width: 14px;
+    height: 14px;
 }

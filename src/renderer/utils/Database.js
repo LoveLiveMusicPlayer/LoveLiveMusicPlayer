@@ -6,31 +6,19 @@ function DB(database) {
         autoload: true,
     };
     this.db = new Datastore(options);
-    // this.db.ensureIndex({ fieldName: 'id', unique: true });
-}
-
-
-DB.prototype.limit = function (offset, limit) {
-    this.offset = offset || 0;
-    this.limit = limit || 15;
-    return this;
-}
-
-
-DB.prototype.sort = function (orderby) {
-    this.orderby = orderby;
-    return this;
 }
 
 /**
  * 查找一条
- * @param query object 查询条件
+ * @param query object 条件
+ * @param select object 过滤结果
+ * @param sort object 排序规则
  **/
-DB.prototype.findOne = function (query, select) {
+DB.prototype.findOne = function (query, select, sort) {
     return new Promise((resolve, reject) => {
         let stmt = this.db.findOne(query || {});
-        if (this.sort !== undefined) {
-            stmt.sort(this.sort);
+        if (sort !== undefined) {
+            stmt.sort(sort || {_id: 1});
         }
         if (select !== undefined) {
             stmt.projection(select || {});
@@ -46,13 +34,15 @@ DB.prototype.findOne = function (query, select) {
 
 /**
  * 查找多条
- * @param query object 查询条件
+ * @param query object 条件
+ * @param select object 过滤结果
+ * @param sort object 排序规则
  **/
-DB.prototype.findAll = function (query, select) {
+DB.prototype.findAll = function (query, select, sort) {
     return new Promise((resolve, reject) => {
         let stmt = this.db.find(query || {});
-        if (this.sort !== undefined) {
-            stmt.sort(this.sort);
+        if (sort !== undefined) {
+            stmt.sort(sort || {_id: 1});
         }
         if (select !== undefined) {
             stmt.projection(select || {});

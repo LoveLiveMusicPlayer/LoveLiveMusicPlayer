@@ -43,6 +43,10 @@ export const MusicHelper = {
         return db.findAll({group: group, album: albumId})
     },
 
+    findAllMusicByIds(group, ids) {
+        return db.findAll({group: group, id: ids})
+    },
+
     // 删除全部音乐
     removeAllMusic() {
         return db.remove(null, {multi: true})
