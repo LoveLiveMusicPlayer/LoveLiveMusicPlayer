@@ -1,6 +1,6 @@
 // @ts-ignore
-import React, {useCallback, useEffect, useState} from 'react';
-import {Container, Dot, DotContainer, Img, Page, PrevNext, Text, WhiteCover} from './styled-components'
+import React, {useEffect, useState} from 'react';
+import {Container, Dot, DotContainer, Img, Page, Play, PrevNext, Text, WhiteCover} from './styled-components'
 import * as Images from '../../public/Images'
 
 interface ImagePaginationProps {
@@ -10,21 +10,33 @@ interface ImagePaginationProps {
         text: string,
     }[],
     dotDisplay: boolean,
-    playOne: any,
     imgSide: any,
     whiteCover: boolean,
     effect: boolean,
+    playButton: boolean,
+    showAlbumInfo: any,
+    playAll: any,
 }
 
 const Index = (
-    {pages, dotDisplay = true, imgSide, whiteCover = true, effect = true, playOne}: ImagePaginationProps,
+    {
+        pages,
+        dotDisplay = true,
+        imgSide,
+        whiteCover = true,
+        effect = true,
+        playButton = true,
+        showAlbumInfo,
+        playAll
+    }: ImagePaginationProps,
 ) => {
     const [activeIndex, setActiveIndex] = useState(0);
     const [activeButton, setActiveButton] = useState(false);
+    const [activePlayButton, setActivePlayButton] = useState(false);
+    const [playButtonPic, setPlayButtonPic] = useState(Images.ICON_PLAY_UNSELECT)
 
-    const onClick = useCallback((e: React.MouseEvent<any>) => {
+    const onClick = (e: React.MouseEvent<any>) => {
         e.preventDefault();
-        // @ts-ignore
         const {type} = e.target as HTMLAnchorElement;
         if (type === 'prev') {
             if (activeIndex == 0) {
@@ -39,15 +51,18 @@ const Index = (
                 setActiveIndex((activeIndex: number) => activeIndex + 1);
             }
         }
-    }, [pages, activeIndex, setActiveIndex]);
-    const onMouseEnter = useCallback((e: React.MouseEvent<any>) => {
+    };
+
+    const onMouseEnter = (e: React.MouseEvent<any>) => {
         e.preventDefault();
         setActiveButton(true);
-    }, [activeButton, setActiveButton]);
-    const onMouseLeave = useCallback((e: React.MouseEvent<any>) => {
+        setActivePlayButton(true);
+    };
+    const onMouseLeave = (e: React.MouseEvent<any>) => {
         e.preventDefault();
         setActiveButton(false);
-    }, [activeButton, setActiveButton]);
+        setActivePlayButton(false);
+    };
 
 
     useEffect(() => {
@@ -80,7 +95,7 @@ const Index = (
                             <Page
                                 key={`${img.src}_${idx}`}
                                 active={activeIndex === idx}
-                                onClick={(event: any) => event && playOne(img.id)}
+                                onClick={(event: any) => event && showAlbumInfo(img.id)}
                             >
                                 {whiteCover ? <WhiteCover/> : null}
                                 <Img
@@ -102,6 +117,15 @@ const Index = (
 
                     {text && <Text>{text}</Text>}
                 </div>
+                {
+                    playButton && activePlayButton && pages &&
+                    <Play
+                        src={playButtonPic}
+                        onMouseOver={() => setPlayButtonPic(Images.ICON_PLAY_SELECT)}
+                        onMouseOut={() => setPlayButtonPic(Images.ICON_PLAY_UNSELECT)}
+                        onClick={() => playAll(pages[0])}
+                    />
+                }
                 {
                     activeButton && pages && pages.length > 1 && <>
                         <PrevNext type={'prev'} onClick={onClick}>&#10094;</PrevNext>

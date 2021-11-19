@@ -14,6 +14,15 @@ import icon_position_left from '../../../assets/image/icon_position_left.png'
 import icon_position_center from '../../../assets/image/icon_position_center.png'
 import icon_back from '../../../assets/image/icon_back.png'
 
+import icon_collect from '../../../assets/image/icon_collect.png'
+import icon_dis_collect from '../../../assets/image/icon_dis_collect.png'
+import icon_love from '../../../assets/image/icon_love.png'
+import icon_dis_love from '../../../assets/image/icon_dis_love.png'
+import icon_play from '../../../assets/image/icon_play.png'
+import icon_dis_play from '../../../assets/image/icon_dis_play.png'
+import icon_play_select from '../../../assets/image/icon_play_select.png'
+import icon_play_unselect from '../../../assets/image/icon_play_unselect.png'
+
 export const ICON_HEAD = icon_head
 export const ICON_MENU = icon_menu
 export const ICON_TILE = icon_tile
@@ -29,3 +38,12 @@ export const ICON_JAPANESE = icon_japanese
 export const ICON_POSITION_LEFT = icon_position_left
 export const ICON_POSITION_CENTER = icon_position_center
 export const ICON_BACK = icon_back
+
+export const ICON_COLLECT = icon_collect
+export const ICON_DIS_COLLECT = icon_dis_collect
+export const ICON_LOVE = icon_love
+export const ICON_DIS_LOVE = icon_dis_love
+export const ICON_PLAY = icon_play
+export const ICON_DIS_PLAY = icon_dis_play
+export const ICON_PLAY_SELECT = icon_play_select
+export const ICON_PLAY_UNSELECT = icon_play_unselect

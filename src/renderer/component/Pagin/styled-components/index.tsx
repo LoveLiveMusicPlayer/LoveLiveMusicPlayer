@@ -109,13 +109,21 @@ export const Img = styled.img`
   vertical-align: middle;
 `;
 
+export const Play = styled.img`
+    position: absolute;
+    width: 30%;
+    height: 30%;
+    top: 50%;
+    margin-top: calc(-15%)
+`
+
 export const PrevNext = styled.a`
   cursor: pointer;
   position: absolute;
   top: 50%;
   width: auto;
-  padding: 8px;
-  margin-top: -22px;
+  padding: 6px;
+  margin-top: -18px;
   color: white;
   font-weight: bold;
   font-size: 18px;
@@ -124,11 +132,11 @@ export const PrevNext = styled.a`
   ${(props: { type: string; }) =>
     props.type === 'next' ?
         css`
-      right: 0;
+      right: -8px;
       border-radius: 0 3px 3px 0;
     ` :
         css`
-      left: 0;
+      left: -8px;
       border-radius: 3px 0 0 3px;
     `}
   &:hover {

@@ -15,6 +15,10 @@ const {connect} = require('react-redux');
 const Album = ({dispatch, chooseGroup, location}) => {
     let history = useHistory()
 
+    const [btnFuncPic1, setBtnFuncPic1] = useState(Images.ICON_DIS_PLAY)
+    const [btnFuncPic2, setBtnFuncPic2] = useState(Images.ICON_DIS_COLLECT)
+    const [btnFuncPic3, setBtnFuncPic3] = useState(Images.ICON_DIS_LOVE)
+
     const [info, setInfo] = useState()
     const [tableData, setTableData] = useState()
     const [nodeTree, setNodeTree] = useState({
@@ -33,7 +37,7 @@ const Album = ({dispatch, chooseGroup, location}) => {
                 musicList.map((music, index) => {
                     tableData.push({
                         key: index,
-                        song: `${index + 1}  ${music.name}`,
+                        song: music.name,
                         artist: music.artist,
                         time: '04:00',
                         music: music
@@ -46,7 +50,7 @@ const Album = ({dispatch, chooseGroup, location}) => {
 
     const columns = [
         {
-            title: '歌曲',
+            title: `歌曲${tableData && tableData.length}`,
             dataIndex: 'song',
             key: 'song',
             render: (text, record, index) => {
@@ -55,10 +59,27 @@ const Album = ({dispatch, chooseGroup, location}) => {
                     <div style={{display: 'flex', flexDirection: 'row'}}>
                         <div>{text}</div>
                         <div className={'btnFuncContainer'} style={{visibility: active ? 'visible' : 'hidden'}}>
-                            <img className={'btnFunc'} src={Images.ICON_CHINESE}
-                                 onClick={() => playMusic(record, index)}/>
-                            <img className={'btnFunc'} src={Images.ICON_CHINESE} onClick={() => iLove(record)}/>
-                            <img className={'btnFunc'} src={Images.ICON_CHINESE} onClick={() => addList(record)}/>
+                            <img
+                                className={'btnFunc'}
+                                src={btnFuncPic1}
+                                onMouseOver={() => setBtnFuncPic1(Images.ICON_PLAY)}
+                                onMouseOut={() => setBtnFuncPic1(Images.ICON_DIS_PLAY)}
+                                onClick={() => playMusic(record, index)}
+                            />
+                            <img
+                                className={'btnFunc'}
+                                src={btnFuncPic2}
+                                onMouseOver={() => setBtnFuncPic2(Images.ICON_COLLECT)}
+                                onMouseOut={() => setBtnFuncPic2(Images.ICON_DIS_COLLECT)}
+                                onClick={() => iLove(record)}
+                            />
+                            <img
+                                className={'btnFunc'}
+                                src={btnFuncPic3}
+                                onMouseOver={() => setBtnFuncPic3(Images.ICON_LOVE)}
+                                onMouseOut={() => setBtnFuncPic3(Images.ICON_DIS_LOVE)}
+                                onClick={() => addList(record)}
+                            />
                         </div>
                     </div>
                 )
@@ -90,8 +111,7 @@ const Album = ({dispatch, chooseGroup, location}) => {
                 <ImagePagination
                     key={info.name}
                     pages={coverList}
-                    playOne={() => {
-                    }}
+                    playButton={false}
                     whiteCover={false}
                     effect={false}
                     imgSide={200}
@@ -156,8 +176,8 @@ const Album = ({dispatch, chooseGroup, location}) => {
         const menu = (
             <div style={style}>
                 <a className={'link'} onClick={() => playMusic(music, playIndex)}>播放</a>
-                <a className={'link'} onClick={() => iLove(music)}>我喜欢</a>
                 <a className={'link'} onClick={() => addList(music)}>添加到</a>
+                <a className={'link'} onClick={() => iLove(music)}>我喜欢</a>
             </div>
         )
         return nodeTree ? menu : null;

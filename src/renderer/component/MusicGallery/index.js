@@ -4,7 +4,7 @@ import {Empty} from "antd";
 import {PrevNext, PrevNextHidden} from "../../pages/Home/style/index";
 import './index.css'
 
-export const MusicGallery = forwardRef(({albumList, width, playOne}, ref) => {
+export const MusicGallery = forwardRef(({albumList, width, showAlbumInfo, playAll}, ref) => {
     // 第一行专辑列表引用
     let topRef = useRef()
     // 第二行专辑列表引用
@@ -63,7 +63,6 @@ export const MusicGallery = forwardRef(({albumList, width, playOne}, ref) => {
         }
     }
 
-
     // 滚动到专辑列表首页
     const onScrollFirst = () => {
         setActiveLeftButton(false)
@@ -90,7 +89,8 @@ export const MusicGallery = forwardRef(({albumList, width, playOne}, ref) => {
                                         width={width}
                                         album={albumList.top}
                                         another={albumList.bottom}
-                                        playOne={playOne}
+                                        showAlbumInfo={showAlbumInfo}
+                                        playAll={playAll}
                                         onScrollFirst={onScrollFirst}
                                         onScrollLast={onScrollLast}
                                     />
@@ -99,7 +99,8 @@ export const MusicGallery = forwardRef(({albumList, width, playOne}, ref) => {
                                         width={width}
                                         album={albumList.bottom}
                                         another={albumList.top}
-                                        playOne={playOne}
+                                        showAlbumInfo={showAlbumInfo}
+                                        playAll={playAll}
                                     />
                                 </div>
                                 {renderRightArrow(margin)}

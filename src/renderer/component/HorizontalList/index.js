@@ -84,8 +84,13 @@ export const HorizontalList = forwardRef((props, ref) => {
                         justifyContent: 'center',
                         marginLeft: margin / 2
                     }}>
-                        <ImagePagination key={album[index][0].text} pages={album[index]} playOne={props?.playOne}
-                                         imgSide={rectSize}/>
+                        <ImagePagination
+                            key={album[index][0].text}
+                            pages={album[index]}
+                            imgSide={rectSize}
+                            showAlbumInfo={props?.showAlbumInfo}
+                            playAll={props?.playAll}
+                        />
                     </div>
                 </div>
             )

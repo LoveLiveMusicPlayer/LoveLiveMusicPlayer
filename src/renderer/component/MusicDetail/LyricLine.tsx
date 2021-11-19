@@ -6,13 +6,12 @@ const Style = styled.div<{
     position: string;
     lang: string;
 }>`
-  padding: 4px 10px;
-
-  ${({active, position, lang}) => css`
-    color: ${active ? 'lightgreen' : '#999'};
-    font-size: ${active ? '20px' : '16px'};
-    text-align: ${position == "center" ? 'center' : 'left'};
-    lang: ${lang};
+    padding: 4px 10px;
+    font-size: 16px;
+    ${({active, position, lang}) => css`
+        color: ${active ? 'lightgreen' : '#999'};
+        text-align: ${position == "center" ? 'center' : 'left'};
+        lang: ${lang};
   `}
 `;
 

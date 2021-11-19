@@ -129,8 +129,8 @@ const Home = ({dispatch, chooseGroup, showAlbum, isRoot}) => {
         }
     }
 
-    // 播放选中专辑
-    const playOne = (id) => {
+    // 显示专辑详情
+    const showAlbumInfo = (id) => {
         showAlbum()
         history.push('/album', {id: id})
     }
@@ -140,6 +140,12 @@ const Home = ({dispatch, chooseGroup, showAlbum, isRoot}) => {
         WorkUtils.playAlbumsByGroup(group)
     }
 
+    // 播放专辑全部歌曲
+    const playAllByAlbum = (album) => {
+        WorkUtils.playAlbumByUniqueId(album.id)
+    }
+
+    // 更新数据
     const refreshData = () => {
         WorkUtils.updateJsonData(
             () => loadingRef.current?.show("导入专辑中.."),
@@ -180,16 +186,15 @@ const Home = ({dispatch, chooseGroup, showAlbum, isRoot}) => {
                         ref={musicGalleryRef}
                         albumList={albumList}
                         width={width}
-                        playOne={playOne}
+                        showAlbumInfo={showAlbumInfo}
+                        playAll={playAllByAlbum}
                     />
                     <Loading ref={loadingRef}/>
                 </Content>
 
                 <TinyStar
                     playAll={playAll}
-                    changeColor={() => {
-                        colorPickerRef.current?.open(DBHelper.getBGColor())
-                    }}
+                    changeColor={() => colorPickerRef.current?.open(DBHelper.getBGColor())}
                     checkUpdate={() => ipcRenderer.invoke('checkUpdate')}
                     refreshData={refreshData}
                 />
