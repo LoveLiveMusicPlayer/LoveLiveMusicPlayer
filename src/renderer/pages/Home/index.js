@@ -16,6 +16,7 @@ import {TinyStar} from "../../component/TinyStar";
 import {MusicGallery} from "../../component/MusicGallery";
 import {PortDialog} from "../../component/PortDialog";
 import Store from '../../utils/Store'
+import * as Images from '../../public/Images'
 
 const {ipcRenderer} = require("electron")
 const {connect} = require('react-redux')
@@ -45,6 +46,8 @@ const Home = ({dispatch, chooseGroup, showAlbum, isRoot}) => {
     const [port, setPort] = useState(10000)
     // HTTP服务要加载的目录
     const [rootDir, setRootDir] = useState()
+
+    const [btnPlay, setBtnPlay] = useState(Images.ICON_PLAY_UNSELECT)
 
     // 监听窗口改变大小
     const listener = function () {
@@ -136,8 +139,12 @@ const Home = ({dispatch, chooseGroup, showAlbum, isRoot}) => {
     }
 
     // 播放团内全部专辑
-    const playAll = () => {
+    const playGroup = () => {
         WorkUtils.playAlbumsByGroup(group)
+    }
+
+    const playAll = () => {
+        WorkUtils.playAllAlbums()
     }
 
     // 播放专辑全部歌曲
@@ -197,6 +204,14 @@ const Home = ({dispatch, chooseGroup, showAlbum, isRoot}) => {
                     changeColor={() => colorPickerRef.current?.open(DBHelper.getBGColor())}
                     checkUpdate={() => ipcRenderer.invoke('checkUpdate')}
                     refreshData={refreshData}
+                />
+
+                <img
+                    className={'btnPlay'}
+                    src={btnPlay}
+                    onClick={playGroup}
+                    onMouseOver={() => setBtnPlay(Images.ICON_PLAY_SELECT)}
+                    onMouseOut={() => setBtnPlay(Images.ICON_PLAY_UNSELECT)}
                 />
 
                 <ColorPicker ref={colorPickerRef} onChangeColor={onColorPickerChange}/>

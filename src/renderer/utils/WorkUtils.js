@@ -194,6 +194,18 @@ export const WorkUtils = {
         })
     },
 
+    playAllAlbums() {
+        AlbumHelper.findAllAlbums().then(albumList => {
+            const promiseArr = []
+            albumList.map(item => {
+                item.music.map(id => {
+                    promiseArr.push(MusicHelper.findOneMusic(id, item.group))
+                })
+            })
+            this.putArrToPlayer(promiseArr)
+        })
+    },
+
     playMenuByMusicIds(jsonArr, playIndex) {
         const promiseArr = []
         jsonArr.map(item => {

@@ -146,7 +146,7 @@ function App({dispatch}) {
         showThemeSwitch: false,
 
         // 显示歌词按钮
-        showLyric: true,
+        showLyric: false,
 
         // 默认播放音量 (default 1 range '0-1')
         defaultVolume: Store.get('volume') || 1,
