@@ -146,7 +146,7 @@ export const WorkUtils = {
                         name: item.value.name,
                         singer: item.value.artist,
                         album: item.value.album,
-                        playIndex: playIndex,
+                        playIndex: playIndex ? playIndex : 0,
                         cover: AppUtils.encodeURL(URL + item.value["cover_path"]),
                         musicSrc: AppUtils.encodeURL(URL + item.value["music_path"]),
                     })
@@ -199,7 +199,9 @@ export const WorkUtils = {
         jsonArr.map(item => {
             promiseArr.push(MusicHelper.findOneMusic(item.id, item.group))
         })
-        this.putArrToPlayer(promiseArr, playIndex)
+        if (promiseArr.length > 0) {
+            this.putArrToPlayer(promiseArr, playIndex)
+        } else return Error('歌单内没有歌曲')
     },
 
     async updateJsonData(onStart, onProgress, onAlbumEnd, onMusicEnd) {

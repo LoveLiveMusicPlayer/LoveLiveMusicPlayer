@@ -1,11 +1,9 @@
 import React, {useState} from 'react';
-import {Button, Input, Space} from "antd";
+import {Button, Space} from "antd";
 import Modal from "react-modal";
-import {AppUtils} from "../../utils/AppUtils";
 
-export const TextDialog = ({isShow, hint, result, close}) => {
+export const CustomDialog = ({isShow, hint, result, close}) => {
 
-    const [text, setText] = useState()
     const [wait, setWait] = useState(false)
 
     const modalStyles = {
@@ -42,18 +40,22 @@ export const TextDialog = ({isShow, hint, result, close}) => {
             onRequestClose={close}
             style={modalStyles}>
             <p style={{fontWeight: 'bold'}}>{hint}</p>
-            <Space>
-                <Input
-                    onChange={event => setText(event.target.value)}
-                    maxLength={15}
-                />
+            <Space size={'large'}>
+                <Button
+                    block
+                    onClick={() => {
+                        result(false)
+                        close()
+                    }}
+                >
+                    取消
+                </Button>
                 <Button
                     type="primary"
                     loading={wait}
-                    disabled={AppUtils.isEmpty(text)}
                     onClick={() => {
                         setWait(true)
-                        result(text)
+                        result(true)
                         setTimeout(() => {
                             setWait(false)
                             close()

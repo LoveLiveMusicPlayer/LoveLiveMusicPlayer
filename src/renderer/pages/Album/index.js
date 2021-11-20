@@ -209,7 +209,9 @@ const Album = ({dispatch, chooseGroup, location}) => {
     }
 
     const addToList = (id) => {
-        SongMenuHelper.insertSongToMenu(id, willAddListMusic)
+        SongMenuHelper.insertSongToMenu(id, willAddListMusic).catch(err => {
+            Bus.emit('onNotification', err)
+        })
     }
 
     return (
@@ -219,7 +221,7 @@ const Album = ({dispatch, chooseGroup, location}) => {
                 <div className={'albumTopRightContainer'}>
                     <p className={'albumName'}>{info && info.name}</p>
                     <p className={'albumText'}>{info && "出版日期: " + info.date}</p>
-                    <p className={'albumText'}>{info && "分类: " + info.category}</p>
+                    <p className={'albumText'}>{info && "歌曲分类: " + info.category}</p>
                     <p className={'albumText'}>{info && "所属团组: " + WorkUtils.parseGroupName(info.group)}</p>
                     <Button
                         type="primary"

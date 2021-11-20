@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import * as mm from "music-metadata";
+import {WorkUtils} from "./WorkUtils";
 
 const {ipcRenderer} = require("electron")
 
@@ -203,6 +204,32 @@ export const AppUtils = {
             `                ${gradientColors(colors.color1, colors.color2, 2)[0]} 10.77%,\n` +
             `                ${colors.color2} 129.35%\n` +
             `            )`
+    },
+
+    // 返回1..100中，数组内不存在的最小值
+    calcSmallAtIntArr(arr) {
+        arr = arr.sort()
+        let result = -1
+        for (let i = 1; i <= 100; i++) {
+            if (arr.indexOf(i) === -1) {
+                result = i
+                break
+            }
+        }
+        return result
+    },
+
+    // 将 set 集合打印成 str
+    arrToString(set) {
+        let str = ''
+        const arr = Array.from(set)
+        arr.map((item, index) => {
+            if (index !== arr.length - 1) {
+                str += WorkUtils.parseGroupName(item)
+                str += '、'
+            } else str += WorkUtils.parseGroupName(item)
+        })
+        return AppUtils.isEmpty(str) ? '-' : str
     }
 }
 

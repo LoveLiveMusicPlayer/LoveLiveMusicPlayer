@@ -115,7 +115,7 @@ function App({dispatch}) {
         },
 
         // 播放模式 (order 顺序播放 | orderLoop 菜单循环 | singleLoop 单曲循环 | shufflePlay 随机播放, default = 'order')
-        defaultPlayMode: 'order',
+        defaultPlayMode: Store.get('playMode') || 'orderLoop',
 
         // 窗口显示模式 (mini | full)
         mode: 'full',
@@ -148,7 +148,7 @@ function App({dispatch}) {
         showLyric: true,
 
         // 默认播放音量 (default 1 range '0-1')
-        defaultVolume: 1,
+        defaultVolume: Store.get('volume'),
 
         // 图片不可用时自动隐藏封面
         autoHiddenCover: false,

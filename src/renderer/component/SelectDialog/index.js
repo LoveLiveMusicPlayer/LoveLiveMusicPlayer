@@ -44,8 +44,8 @@ export const SelectDialog = ({isShow, hint, list, result, close}) => {
 
     const renderSelector = () => {
         const arr = []
-        list.map(item => {
-            arr.push(<Option value={item.id}>{item.name}</Option>)
+        list.map((item, index) => {
+            arr.push(<Option key={index} value={item.id}>{item.name}</Option>)
         })
         return (
             <Select defaultValue={list[0].name} style={{width: 200, marginBottom: 20}}

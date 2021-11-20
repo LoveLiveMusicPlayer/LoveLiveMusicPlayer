@@ -1,10 +1,12 @@
 .songListContainer {
+    height: 100vh;
     width: 250px;
     min-width: 250px;
     display: flex;
     flex-direction: column;
     padding-left: 24px;
     padding-right: 24px;
+    padding-bottom: 165px;
     background-color: rgba(0, 0, 0, 0.04);
 }
 
@@ -21,6 +23,9 @@
 
 .customText {
     color: #ffffff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .selectContainer {
@@ -54,6 +59,15 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+}
+
+.menuContainer {
+    overflow: auto;
+    flex: 1;
+}
+
+.menuContainer::-webkit-scrollbar {
+    display: none;
 }
 
 .addMenu {

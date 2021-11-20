@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactJkMusicPlayer from 'react-jinke-music-player'
 import 'react-jinke-music-player/assets/index.css'
+import Store from '../utils/Store'
 
 // 正在处理删除逻辑
 let isHandle = false
@@ -69,6 +70,7 @@ export default class AudioPlayer extends React.PureComponent {
             ...this.state.params,
             ...params,
         }
+        data.playMode = Store.get('playMode') || 'orderLoop'
         this.setState({
             params: data,
         })
@@ -86,6 +88,7 @@ export default class AudioPlayer extends React.PureComponent {
                     this.updateParams({mode})
                 }}
                 onPlayModeChange={(playMode) => {
+                    Store.set('playMode', playMode)
                     this.updateParams({playMode})
                 }}
                 onPlayIndexChange={(playIndex) => {
@@ -96,6 +99,9 @@ export default class AudioPlayer extends React.PureComponent {
                 }}
                 onAudioListsChange={(playId, audioLists) => {
                     this.updateParams({audioLists})
+                }}
+                onAudioVolumeChange={volume => {
+                    Store.set('volume', volume)
                 }}
                 onDeleteChange={truePlayIndex => {
                     isHandle = true

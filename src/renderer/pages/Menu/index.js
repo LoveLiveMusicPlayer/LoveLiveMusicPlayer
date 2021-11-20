@@ -7,10 +7,14 @@ import Store from "../../utils/Store";
 import ImagePagination from "../../component/Pagin/index";
 import {SongMenuHelper} from "../../dao/SongMenuHelper";
 import {AppUtils} from "../../utils/AppUtils";
+import {AlbumHelper} from "../../dao/AlbumHelper";
+import Bus from "../../utils/Event";
+import {SelectDialog} from "../../component/SelectDialog";
+import {CustomDialog} from "../../component/CustomDialog";
 
 const {connect} = require('react-redux');
 
-const Menu = ({dispatch, chooseGroup, location}) => {
+const Menu = ({location}) => {
 
     const [btnFuncPic1, setBtnFuncPic1] = useState(Images.ICON_DIS_PLAY)
     const [btnFuncPic2, setBtnFuncPic2] = useState(Images.ICON_DIS_COLLECT)
@@ -26,6 +30,17 @@ const Menu = ({dispatch, chooseGroup, location}) => {
 
     const [nodeDisplay, setNodeDisplay] = useState(false)
     const [rowHover, setRowHover] = useState()
+
+    const [group, setGroup] = useState([])
+    const [category, setCategory] = useState([])
+
+    const [addListDisplay, setAddListDisplay] = useState(false)
+    const [willAddListMusic, setWillAddListMusic] = useState()
+    const [menu, setMenu] = useState([])
+    const [refreshMenu, setRefreshMenu] = useState()
+
+    const [confirmDialogShow, setConfirmDialogShow] = useState(false);
+    const [chooseSong, setChooseSong] = useState()
 
     const columns = [
         {
@@ -50,14 +65,14 @@ const Menu = ({dispatch, chooseGroup, location}) => {
                                 src={btnFuncPic2}
                                 onMouseOver={() => setBtnFuncPic2(Images.ICON_COLLECT)}
                                 onMouseOut={() => setBtnFuncPic2(Images.ICON_DIS_COLLECT)}
-                                onClick={() => iLove(record)}
+                                onClick={() => addList(record)}
                             />
                             <img
                                 className={'btnFunc'}
                                 src={btnFuncPic3}
                                 onMouseOver={() => setBtnFuncPic3(Images.ICON_LOVE)}
                                 onMouseOut={() => setBtnFuncPic3(Images.ICON_DIS_LOVE)}
-                                onClick={() => addList(record)}
+                                onClick={() => iLove(record)}
                             />
                         </div>
                     </div>
@@ -81,10 +96,12 @@ const Menu = ({dispatch, chooseGroup, location}) => {
             const coverList = []
             const url = Store.get('url')
             info.music.map((item, index) => {
-                coverList.push({
-                    src: url + item['cover_path'],
-                    id: index
-                })
+                if (coverList.length < 10) {
+                    coverList.push({
+                        src: url + item['cover_path'],
+                        id: index
+                    })
+                }
             })
             return (
                 <ImagePagination
@@ -157,6 +174,10 @@ const Menu = ({dispatch, chooseGroup, location}) => {
                 <a className={'link'} onClick={() => playMusic(playIndex)}>播放</a>
                 <a className={'link'} onClick={() => addList(music)}>添加到</a>
                 <a className={'link'} onClick={() => iLove(music)}>我喜欢</a>
+                <a className={'link'} onClick={() => {
+                    setChooseSong(playIndex)
+                    setConfirmDialogShow(true)
+                }}>删除</a>
             </div>
         )
         return nodeTree ? menu : null;
@@ -178,15 +199,40 @@ const Menu = ({dispatch, chooseGroup, location}) => {
     }
 
     const addList = (music) => {
-        console.log(music)
+        SongMenuHelper.findAllMenu().then(res => {
+            if (res.length > 0) {
+                setAddListDisplay(true)
+                setWillAddListMusic(music.music)
+                setMenu(res)
+            } else {
+                Bus.emit('onNotification', '请先新增歌单')
+            }
+        })
+    }
+
+    const addToList = (id) => {
+        SongMenuHelper.insertSongToMenu(id, willAddListMusic).catch(err => {
+            Bus.emit('onNotification', err)
+        })
+    }
+
+    const onDelSong = (needDel) => {
+        if (needDel) {
+            SongMenuHelper.deleteSong(info.id, chooseSong).then(_ => {
+                setRefreshMenu(new Date().getTime())
+            }).catch(err => {
+                Bus.emit('onNotification', err)
+            })
+        }
     }
 
     useEffect(() => {
         SongMenuHelper.findMenuById(location.state.id).then(res => {
-            console.log(res)
             setInfo(res)
             const music = []
+            const albumList = []
             res.music.map((item, index) => {
+                albumList.push(AlbumHelper.findOneAlbumByAlbumId(item.group, item.album))
                 music.push({
                     key: index,
                     song: item.name,
@@ -196,8 +242,20 @@ const Menu = ({dispatch, chooseGroup, location}) => {
                 })
             })
             setTableData(music)
+            const categoryList = new Set()
+            const groupList = new Set()
+            Promise.allSettled(albumList).then(res => {
+                if (categoryList.size < 4) {
+                    res.map(item => {
+                        groupList.add(item.value.group)
+                        categoryList.add(item.value.category)
+                    })
+                }
+                setGroup(groupList)
+                setCategory(categoryList)
+            })
         })
-    }, [location.state])
+    }, [location.state, refreshMenu])
 
     return (
         <div className={'albumContainer'} onClick={() => setNodeDisplay(false)}>
@@ -206,11 +264,12 @@ const Menu = ({dispatch, chooseGroup, location}) => {
                 <div className={'albumTopRightContainer'}>
                     <p className={'albumName'}>{info && info.name ? info.name : ''}</p>
                     <p className={'albumText'}>{info && "创建日期: " + AppUtils.showValue(info.date)}</p>
-                    <p className={'albumText'}>{info && info.music.length > 0 && "所属团组: " + WorkUtils.parseGroupName(info.music[0].group)}</p>
+                    <p className={'albumText'}>{info && "歌曲标签: " + AppUtils.arrToString(category)}</p>
+                    <p className={'albumText'}>{info && "所属团组: " + AppUtils.arrToString(group)}</p>
                     <Button
                         type="primary"
                         shape="round"
-                        style={{width: '110px', marginTop: '25px'}}
+                        style={{width: '110px'}}
                         icon={<img src={Images.ICON_DIS_PLAY} style={{marginRight: '6px', marginBottom: '3px'}}/>}
                         onClick={() => playMusic(0)}
                     >
@@ -220,6 +279,19 @@ const Menu = ({dispatch, chooseGroup, location}) => {
             </div>
             {renderMusicList()}
             {renderRightClick()}
+            <SelectDialog
+                hint={'请选择要添加的歌单'}
+                isShow={addListDisplay}
+                result={addToList}
+                list={menu}
+                close={() => setAddListDisplay(false)}
+            />
+            <CustomDialog
+                isShow={confirmDialogShow}
+                hint={'确认删除歌曲？'}
+                result={onDelSong}
+                close={() => setConfirmDialogShow(false)}
+            />
         </div>
     )
 }

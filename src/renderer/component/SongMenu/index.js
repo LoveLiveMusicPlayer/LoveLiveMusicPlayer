@@ -3,6 +3,10 @@ import './index.css'
 import * as Images from '../../public/Images'
 import {SongMenuHelper} from "../../dao/SongMenuHelper";
 import {TextDialog} from "../TextDialog";
+import Bus from '../../utils/Event'
+import {WorkUtils} from "../../utils/WorkUtils";
+import {CustomDialog} from "../CustomDialog";
+import {AppUtils} from "../../utils/AppUtils";
 
 export const SongMenu = ({chooseItem, onChooseItem}) => {
 
@@ -10,6 +14,16 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
     const [menuList, setMenuList] = useState([])
     const [nameMenuDialogShow, setNameMenuDialogShow] = useState(false)
     const [refreshMenu, setRefreshMenu] = useState()
+
+    const [nodeTree, setNodeTree] = useState({
+        pageX: 0,
+        pageY: 0,
+        music: '',
+    })
+    const [nodeDisplay, setNodeDisplay] = useState(false)
+
+    const [confirmDialogShow, setConfirmDialogShow] = useState(false);
+    const [chooseMenu, setChooseMenu] = useState()
 
     useEffect(() => {
         SongMenuHelper.findAllMenu().then(res => {
@@ -21,13 +35,17 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
         const container = []
         menuList.map((item, index) => {
             container.push(
-                <div className={chooseItem === index + 1 ? 'selectContainer' : 'unselectContainer'}
-                     onClick={() => onChooseItem(index + 1)}>
+                <div
+                    className={chooseItem === index + 1 ? 'selectContainer' : 'unselectContainer'}
+                    onClick={() => onChooseItem(index + 1)}
+                    key={index}
+                    onContextMenu={event => onRightClick(event, item)}
+                >
                     <text className={'customText'}>{item.name}</text>
                 </div>
             )
         })
-        return container
+        return <div className={'menuContainer'}>{container}</div>
     }
 
     const onAddMenu = (text) => {
@@ -37,11 +55,68 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
         }).then(_ => {
             setRefreshMenu(new Date().getTime())
         })
-        // SongMenuHelper.deleteAllMenu()
+    }
+
+    const onDelMenu = (needDel) => {
+        if (needDel) {
+            SongMenuHelper.deleteMenu(chooseMenu).then(_ => {
+                setRefreshMenu(new Date().getTime())
+            })
+        }
+    }
+
+    const onRightClick = (event, music) => {
+        event.preventDefault()
+        setNodeTree({
+            pageX: event.pageX,
+            pageY: event.pageY,
+            music: music
+        })
+        setNodeDisplay(true)
+    }
+
+    const renderRightClick = () => {
+        const {pageX, pageY, music} = nodeTree
+        if (chooseMenu !== music.id) {
+            setChooseMenu(music.id)
+        }
+        const style = {
+            width: '100px',
+            position: 'absolute',
+            left: `${pageX}px`,
+            top: `${pageY - 80}px`,
+            display: nodeDisplay ? 'flex' : 'none',
+            flexDirection: 'column',
+            backgroundColor: '#fff',
+            borderRadius: '8px'
+        }
+        const menu = (
+            <div style={style}>
+                <a className={'link'} onClick={() => playAll(music.music)}>播放</a>
+                <a className={'link'} onClick={() => {
+                    setConfirmDialogShow(true)
+                }}>删除</a>
+            </div>
+        )
+        return nodeTree ? menu : null;
+    }
+
+    const playAll = (music) => {
+        const musicList = []
+        music.map(item => {
+            musicList.push({
+                id: item.id,
+                group: item.group
+            })
+        })
+        const result = WorkUtils.playMenuByMusicIds(musicList, 0)
+        if (!AppUtils.isNull(result?.message)) {
+            Bus.emit('onNotification', result.message)
+        }
     }
 
     return (
-        <div className={'songListContainer'}>
+        <div className={'songListContainer'} onClick={() => setNodeDisplay(false)}>
             <div className={'selectContainer'} style={{margin: 0, background: 'transparent'}}>
                 <text className={'customTitleText'}>我的音乐</text>
             </div>
@@ -68,17 +143,28 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
                 <img
                     className={'addMenu'}
                     src={addMenuPic}
-                    onClick={() => setNameMenuDialogShow(true)}
+                    onClick={() => {
+                        if (menuList && menuList.length >= 100) {
+                            Bus.emit('onNotification', '您不能再创建更多的歌单了')
+                        } else setNameMenuDialogShow(true)
+                    }}
                     onMouseOver={() => setAddMenuPic(Images.ICON_MENU_ADD_SELECT)}
                     onMouseOut={() => setAddMenuPic(Images.ICON_MENU_ADD_UNSELECT)}
                 />
             </div>
             {renderMenuList()}
+            {renderRightClick()}
             <TextDialog
                 isShow={nameMenuDialogShow}
                 hint={'请输入歌单名'}
                 result={onAddMenu}
                 close={() => setNameMenuDialogShow(false)}
+            />
+            <CustomDialog
+                isShow={confirmDialogShow}
+                hint={'确认删除歌单？'}
+                result={onDelMenu}
+                close={() => setConfirmDialogShow(false)}
             />
         </div>
     )
