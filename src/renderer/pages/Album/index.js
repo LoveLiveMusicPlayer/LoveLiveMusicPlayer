@@ -11,6 +11,7 @@ import * as Images from '../../public/Images'
 import {SongMenuHelper} from "../../dao/SongMenuHelper";
 import {SelectDialog} from "../../component/SelectDialog";
 import Bus from "../../utils/Event";
+import {LoveHelper} from "../../dao/LoveHelper";
 
 const {connect} = require('react-redux');
 
@@ -33,25 +34,44 @@ const Album = ({dispatch, chooseGroup, location}) => {
     const [addListDisplay, setAddListDisplay] = useState(false)
     const [willAddListMusic, setWillAddListMusic] = useState()
     const [menu, setMenu] = useState([])
+    const [refreshAlbum, setRefreshAlbum] = useState()
 
     useEffect(() => {
-        AlbumHelper.findOneAlbumByUniqueId(location.state.id).then(info => {
-            setInfo(info)
-            MusicHelper.findAllMusicByAlbumId(chooseGroup, info.id).then(musicList => {
-                const tableData = []
-                musicList.map((music, index) => {
-                    tableData.push({
-                        key: index,
-                        song: music.name,
-                        artist: music.artist,
-                        time: '04:00',
-                        music: music
-                    })
-                })
-                setTableData(tableData)
+        const onClickBody = () => {
+            setNodeDisplay(false)
+        }
+        Bus.addListener('onClickBody', onClickBody)
+        return () => Bus.removeListener('onClickBody', onClickBody)
+    }, [])
+
+    const findAlbumList = async () => {
+        const album = await AlbumHelper.findOneAlbumByUniqueId(location.state.id)
+        setInfo(album)
+        const musicList = await MusicHelper.findAllMusicByAlbumId(chooseGroup, album.id)
+        const tableData = []
+        const loveList = await LoveHelper.findAllLove()
+        musicList.map((music, index) => {
+            let isLove = false
+            loveList && loveList.map(item => {
+                if (music._id === item._id) {
+                    isLove = true
+                }
+            })
+            tableData.push({
+                key: index,
+                song: music.name,
+                artist: music.artist,
+                time: '04:00',
+                isLove: isLove,
+                music: music
             })
         })
-    }, [])
+        setTableData(tableData)
+    }
+
+    useEffect(() => {
+        findAlbumList()
+    }, [refreshAlbum])
 
     const columns = [
         {
@@ -134,7 +154,7 @@ const Album = ({dispatch, chooseGroup, location}) => {
                 event.preventDefault()
                 setNodeTree({
                     pageX: event.pageX,
-                    pageY: event.pageY,
+                    pageY: WorkUtils.calcRightClickPosition(event, 3),
                     music: record,
                     playIndex: index
                 })
@@ -193,7 +213,12 @@ const Album = ({dispatch, chooseGroup, location}) => {
     }
 
     const iLove = (music) => {
-        console.log(music)
+        LoveHelper.insertSongToLove(music.music).then(_ => {
+            setRefreshAlbum(new Date().getTime())
+            Bus.emit('onNotification', '已添加到我喜欢')
+        }).catch(err => {
+            Bus.emit('onNotification', err)
+        })
     }
 
     const addList = (music) => {

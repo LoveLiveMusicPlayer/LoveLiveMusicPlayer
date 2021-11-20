@@ -71,6 +71,7 @@ export default class AudioPlayer extends React.PureComponent {
             ...params,
         }
         data.playMode = Store.get('playMode') || 'orderLoop'
+        data.defaultVolume = Store.get('volume') || 1
         this.setState({
             params: data,
         })
@@ -101,7 +102,7 @@ export default class AudioPlayer extends React.PureComponent {
                     this.updateParams({audioLists})
                 }}
                 onAudioVolumeChange={volume => {
-                    Store.set('volume', volume)
+                    Store.set('volume', Math.sqrt(volume))
                 }}
                 onDeleteChange={truePlayIndex => {
                     isHandle = true

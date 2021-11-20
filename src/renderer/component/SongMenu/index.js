@@ -26,6 +26,14 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
     const [chooseMenu, setChooseMenu] = useState()
 
     useEffect(() => {
+        const onClickBody = () => {
+            setNodeDisplay(false)
+        }
+        Bus.addListener('onClickBody', onClickBody)
+        return () => Bus.removeListener('onClickBody', onClickBody)
+    }, [])
+
+    useEffect(() => {
         SongMenuHelper.findAllMenu().then(res => {
             setMenuList(res)
         })
@@ -69,7 +77,7 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
         event.preventDefault()
         setNodeTree({
             pageX: event.pageX,
-            pageY: event.pageY,
+            pageY: WorkUtils.calcRightClickPosition(event, 2),
             music: music
         })
         setNodeDisplay(true)

@@ -1,27 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import './index.css'
 import * as Images from '../../public/Images'
-import {Button, Table} from "antd";
+import {Button, Table, Tabs} from "antd";
 import {WorkUtils} from "../../utils/WorkUtils";
-import Store from "../../utils/Store";
-import ImagePagination from "../../component/Pagin/index";
-import {SongMenuHelper} from "../../dao/SongMenuHelper";
-import {AppUtils} from "../../utils/AppUtils";
-import {AlbumHelper} from "../../dao/AlbumHelper";
 import Bus from "../../utils/Event";
 import {SelectDialog} from "../../component/SelectDialog";
 import {CustomDialog} from "../../component/CustomDialog";
+import {SongMenuHelper} from "../../dao/SongMenuHelper";
 import {LoveHelper} from "../../dao/LoveHelper";
 
-const {connect} = require('react-redux');
+const {TabPane} = Tabs;
 
-const Menu = ({location}) => {
-
+export const Love = () => {
     const [btnFuncPic1, setBtnFuncPic1] = useState(Images.ICON_DIS_PLAY)
     const [btnFuncPic2, setBtnFuncPic2] = useState(Images.ICON_DIS_COLLECT)
-    const [btnFuncPic3, setBtnFuncPic3] = useState(Images.ICON_DIS_LOVE)
+    const [btnFuncPic3, setBtnFuncPic3] = useState(Images.ICON_LOVE)
 
-    const [info, setInfo] = useState()
     const [tableData, setTableData] = useState()
     const [nodeTree, setNodeTree] = useState({
         pageX: 0,
@@ -32,16 +26,25 @@ const Menu = ({location}) => {
     const [nodeDisplay, setNodeDisplay] = useState(false)
     const [rowHover, setRowHover] = useState()
 
-    const [group, setGroup] = useState([])
-    const [category, setCategory] = useState([])
-
     const [addListDisplay, setAddListDisplay] = useState(false)
     const [willAddListMusic, setWillAddListMusic] = useState()
     const [menu, setMenu] = useState([])
-    const [refreshMenu, setRefreshMenu] = useState()
+    const [refreshLove, setRefreshLove] = useState()
 
     const [confirmDialogShow, setConfirmDialogShow] = useState(false);
     const [chooseSong, setChooseSong] = useState()
+
+    const tabCallback = (key) => {
+        console.log(key)
+    }
+
+    const renderTabs = () => (
+        <Tabs defaultActiveKey="1" onChange={tabCallback} tabBarStyle={{color: 'white'}}>
+            <TabPane tab="歌曲" key="1"/>
+            <TabPane tab="专辑" key="2"/>
+            <TabPane tab="歌单" key="3"/>
+        </Tabs>
+    )
 
     const columns = [
         {
@@ -71,9 +74,9 @@ const Menu = ({location}) => {
                             <img
                                 className={'btnFunc'}
                                 src={btnFuncPic3}
-                                onMouseOver={() => setBtnFuncPic3(Images.ICON_LOVE)}
-                                onMouseOut={() => setBtnFuncPic3(Images.ICON_DIS_LOVE)}
-                                onClick={() => iLove(record)}
+                                onMouseOver={() => setBtnFuncPic3(Images.ICON_WILL_DIS_LOVE)}
+                                onMouseOut={() => setBtnFuncPic3(Images.ICON_LOVE)}
+                                onClick={() => disLove(record)}
                             />
                         </div>
                     </div>
@@ -92,31 +95,6 @@ const Menu = ({location}) => {
         }
     ];
 
-    const renderCover = () => {
-        if (info && info.music.length > 0) {
-            const coverList = []
-            const url = Store.get('url')
-            info.music.map((item, index) => {
-                if (coverList.length < 10) {
-                    coverList.push({
-                        src: url + item['cover_path'],
-                        id: index
-                    })
-                }
-            })
-            return (
-                <ImagePagination
-                    key={info.name}
-                    pages={coverList}
-                    playButton={false}
-                    whiteCover={false}
-                    effect={false}
-                    imgSide={200}
-                />
-            )
-        } else return null
-    }
-
     const onRowSelect = (record, index) => {
         return {
             onDoubleClick: () => {
@@ -126,7 +104,7 @@ const Menu = ({location}) => {
                 event.preventDefault()
                 setNodeTree({
                     pageX: event.pageX,
-                    pageY: WorkUtils.calcRightClickPosition(event, 4),
+                    pageY: WorkUtils.calcRightClickPosition(event, 3),
                     music: record,
                     playIndex: index
                 })
@@ -174,11 +152,7 @@ const Menu = ({location}) => {
             <div style={style}>
                 <a className={'link'} onClick={() => playMusic(playIndex)}>播放</a>
                 <a className={'link'} onClick={() => addList(music)}>添加到</a>
-                <a className={'link'} onClick={() => iLove(music)}>我喜欢</a>
-                <a className={'link'} onClick={() => {
-                    setChooseSong(playIndex)
-                    setConfirmDialogShow(true)
-                }}>删除</a>
+                <a className={'link'} onClick={() => disLove(music)}>移除</a>
             </div>
         )
         return nodeTree ? menu : null;
@@ -186,22 +160,13 @@ const Menu = ({location}) => {
 
     const playMusic = (playIndex) => {
         const musicList = []
-        info.music.map(item => {
+        tableData.map(item => {
             musicList.push({
-                id: item.id,
-                group: item.group
+                id: item.music.id,
+                group: item.music.group
             })
         })
         WorkUtils.playMenuByMusicIds(musicList, playIndex)
-    }
-
-    const iLove = (music) => {
-        LoveHelper.insertSongToLove(music.music).then(_ => {
-            setRefreshMenu(new Date().getTime())
-            Bus.emit('onNotification', '已添加到我喜欢')
-        }).catch(err => {
-            Bus.emit('onNotification', err)
-        })
     }
 
     const addList = (music) => {
@@ -222,10 +187,15 @@ const Menu = ({location}) => {
         })
     }
 
-    const onDelSong = (needDel) => {
-        if (needDel) {
-            SongMenuHelper.deleteSong(info.id, chooseSong).then(_ => {
-                setRefreshMenu(new Date().getTime())
+    const disLove = (music) => {
+        setChooseSong(music.music)
+        setConfirmDialogShow(true)
+    }
+
+    const onDelSong = (isDel) => {
+        if (isDel) {
+            LoveHelper.deleteSong(chooseSong).then(_ => {
+                setRefreshLove(new Date().getTime())
             }).catch(err => {
                 Bus.emit('onNotification', err)
             })
@@ -240,57 +210,28 @@ const Menu = ({location}) => {
         return () => Bus.removeListener('onClickBody', onClickBody)
     }, [])
 
-    const findMenuList = async () => {
-        const info = await SongMenuHelper.findMenuById(location.state.id)
-        setInfo(info)
-        const music = []
-        const albumList = []
-        const loveList = await LoveHelper.findAllLove()
-        info.music.map((item, index) => {
-            let isLove = false
-            loveList && loveList.map(love => {
-                if (item._id === love._id) {
-                    isLove = true
-                }
-            })
-            albumList.push(AlbumHelper.findOneAlbumByAlbumId(item.group, item.album))
-            music.push({
-                key: index,
-                song: item.name,
-                artist: item.artist,
-                time: '04:00',
-                isLove: isLove,
-                music: item
-            })
-        })
-        setTableData(music)
-        const categoryList = new Set()
-        const groupList = new Set()
-        Promise.allSettled(albumList).then(res => {
-            if (categoryList.size < 4) {
-                res.map(item => {
-                    groupList.add(item.value.group)
-                    categoryList.add(item.value.category)
-                })
-            }
-            setGroup(groupList)
-            setCategory(categoryList)
-        })
-    }
-
     useEffect(() => {
-        findMenuList()
-    }, [location.state, refreshMenu])
+        LoveHelper.findAllLove().then(res => {
+            const musicList = []
+            res.map((music, index) => {
+                musicList.push({
+                    key: index,
+                    song: music.name,
+                    artist: music.artist,
+                    time: '04:00',
+                    music: music
+                })
+            })
+            setTableData(musicList)
+        })
+    }, [refreshLove])
 
     return (
-        <div className={'albumContainer'} onClick={() => setNodeDisplay(false)}>
-            <div className={'albumTopContainer'}>
-                {renderCover()}
-                <div className={'albumTopRightContainer'}>
-                    <p className={'albumName'}>{info && info.name ? info.name : ''}</p>
-                    <p className={'albumText'}>{info && "创建日期: " + AppUtils.showValue(info.date)}</p>
-                    <p className={'albumText'}>{info && "歌曲标签: " + AppUtils.arrToString(category)}</p>
-                    <p className={'albumText'}>{info && "所属团组: " + AppUtils.arrToString(group)}</p>
+        <div className={'loveContainer'} onClick={() => setNodeDisplay(false)}>
+            <div className={'loveTopContainer'}>
+                <div className={'loveTopRightContainer'}>
+                    <p className={'loveName'}>我喜欢</p>
+                    {renderTabs()}
                     <Button
                         type="primary"
                         shape="round"
@@ -320,11 +261,3 @@ const Menu = ({location}) => {
         </div>
     )
 }
-
-function select(store) {
-    return {
-        chooseGroup: store.music.chooseGroup,
-    };
-}
-
-export default connect(select)(Menu);

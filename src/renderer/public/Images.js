@@ -18,6 +18,7 @@ import icon_collect from '../../../assets/image/icon_collect.png'
 import icon_dis_collect from '../../../assets/image/icon_dis_collect.png'
 import icon_love from '../../../assets/image/icon_love.png'
 import icon_dis_love from '../../../assets/image/icon_dis_love.png'
+import icon_will_dis_love from '../../../assets/image/icon_will_dis_love.png'
 import icon_play from '../../../assets/image/icon_play.png'
 import icon_dis_play from '../../../assets/image/icon_dis_play.png'
 import icon_play_select from '../../../assets/image/icon_play_select.png'
@@ -49,6 +50,7 @@ export const ICON_COLLECT = icon_collect
 export const ICON_DIS_COLLECT = icon_dis_collect
 export const ICON_LOVE = icon_love
 export const ICON_DIS_LOVE = icon_dis_love
+export const ICON_WILL_DIS_LOVE = icon_will_dis_love
 export const ICON_PLAY = icon_play
 export const ICON_DIS_PLAY = icon_dis_play
 export const ICON_PLAY_SELECT = icon_play_select

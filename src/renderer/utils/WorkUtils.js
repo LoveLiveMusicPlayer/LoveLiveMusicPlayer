@@ -236,5 +236,22 @@ export const WorkUtils = {
         if (name === 'Nijigasaki') {
             return '虹咲学园学园偶像同好会'
         } else return name
+    },
+
+    /**
+     * 计算右键弹窗 Y 轴坐标
+     * @param event
+     * @param number 弹窗内功能按键数
+     * @returns {number}
+     */
+    calcRightClickPosition(event, number) {
+        const dialogHeight = 40 * number
+        const faceHeight = document.body.clientHeight - 160
+        const innerFaceHeight = event.pageY - dialogHeight
+        let pageY = event.pageY
+        if (faceHeight - innerFaceHeight < dialogHeight) {
+            pageY = pageY - dialogHeight
+        }
+        return pageY
     }
 }

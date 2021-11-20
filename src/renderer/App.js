@@ -3,6 +3,7 @@ import {Route, Switch, useHistory, useLocation} from 'react-router-dom';
 import './App.global.css';
 import Home from './pages/Home'
 import Album from './pages/Album'
+import {Love} from './pages/Love'
 import AudioPlayer from "./utils/AudioPlayer";
 import Bus from "./utils/Event"
 import * as Images from './public/Images'
@@ -148,7 +149,7 @@ function App({dispatch}) {
         showLyric: true,
 
         // 默认播放音量 (default 1 range '0-1')
-        defaultVolume: Store.get('volume'),
+        defaultVolume: Store.get('volume') || 1,
 
         // 图片不可用时自动隐藏封面
         autoHiddenCover: false,
@@ -172,7 +173,12 @@ function App({dispatch}) {
     const onClickCover = () => {
         Bus.emit("openMusicDetail", !isOpenMusicDialog)
         options.theme = isOpenMusicDialog ? "light" : "dark"
+        const title = document.body.getElementsByClassName('audio-lists-panel-header-title')
         playerRef.current?.updateParams({theme: options.theme})
+        const spans = [...title[0].getElementsByTagName('span')]
+        spans.map(item => {
+            item.style.color = isOpenMusicDialog ? '#000000' : '#ffffff'
+        })
         isOpenMusicDialog = !isOpenMusicDialog
     }
 
@@ -203,6 +209,7 @@ function App({dispatch}) {
                     <Switch>
                         <Route path="/album" exact component={Album}/>
                         <Route path="/menu" exact component={Menu}/>
+                        <Route path="/love" exact component={Love}/>
                     </Switch>
                 </div>
             )
@@ -217,7 +224,8 @@ function App({dispatch}) {
                 history.push('/home')
                 break
             case -1:
-
+                setShowRouter(true)
+                history.push('/love')
                 break
             case 0:
 
@@ -276,7 +284,7 @@ function App({dispatch}) {
     }, [musicDetailVisible])
 
     return (
-        <div className={"outer_container"}>
+        <div className={"outer_container"} onClick={() => Bus.emit('onClickBody')}>
             <div className="header">
                 <div className={'logo'}>
                     <img src={Images.ICON_HEAD}/>

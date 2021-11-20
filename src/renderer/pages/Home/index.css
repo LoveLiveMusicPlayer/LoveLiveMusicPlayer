@@ -1,4 +1,10 @@
 @import '~antd/dist/antd.css';
+
+.homeContainer {
+    width: 100%;
+    height: calc(100% - 80px);
+}
+
 .container {
     display: flex;
     align-items: center;

@@ -173,7 +173,7 @@ const Home = ({dispatch, chooseGroup, showAlbum, isRoot}) => {
     }
 
     return (
-        <div style={{visibility: isRoot ? 'visible' : 'hidden', width: '100%', height: '100%'}}>
+        <div className={'homeContainer'} style={{visibility: isRoot ? 'visible' : 'hidden'}}>
             <FileDrop
                 onUpload={onUpload}
                 count={1}
