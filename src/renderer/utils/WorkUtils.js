@@ -7,6 +7,7 @@ import {AlbumHelper} from "../dao/AlbumHelper";
 import Bus from "./Event";
 import {MusicHelper} from "../dao/MusicHelper";
 import Store from "./Store";
+import {VersionUtils} from "./VersionUtils";
 
 const path = require('path');
 
@@ -78,10 +79,23 @@ export const WorkUtils = {
         })
     },
 
+    async requestLyric(url) {
+        let result = ""
+        try {
+            const response = await Network.get(url)
+            result = response.data
+        } catch (error) {
+            return new Promise((resolve, reject) => {
+                reject()
+            })
+        }
+        return result
+    },
+
     async requestUrl() {
         let result = null
         try {
-            const response = await Network.get('https://zhushenwudi1.oss-cn-hangzhou.aliyuncs.com/info.json')
+            const response = await Network.get(VersionUtils.refreshDataUrl())
             result = response.data.data
         } catch (error) {
             console.error(error);
@@ -146,6 +160,8 @@ export const WorkUtils = {
                         name: item.value.name,
                         singer: item.value.artist,
                         album: item.value.album,
+                        lyric: item.value.lyric,
+                        trans: item.value.trans,
                         playIndex: playIndex ? playIndex : 0,
                         cover: AppUtils.encodeURL(URL + item.value["cover_path"]),
                         musicSrc: AppUtils.encodeURL(URL + item.value["music_path"]),

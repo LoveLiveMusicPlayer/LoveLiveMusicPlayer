@@ -133,7 +133,7 @@ const createWindow = async () => {
 
     mainWindow = new BrowserWindow({
         show: false,
-        width: 1275,
+        width: 1250,
         height: 728,
         titleBarStyle: 'customButtonsOnHover',
         frame: false,

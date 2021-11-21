@@ -1,12 +1,11 @@
-import React, {forwardRef, useImperativeHandle, useState} from 'react';
+import React, {forwardRef, useEffect, useImperativeHandle, useState} from 'react';
 import './index.scss'
 import {Lrc} from 'react-lrc';
 import LyricLine from './LyricLine'
-import FileDrop from '../../component/DragAndDrop'
-import {AppUtils} from "../../utils/AppUtils";
 import * as Images from '../../public/Images'
 import Modal from "react-modal";
 import Store from '../../utils/Store'
+import {WorkUtils} from "../../utils/WorkUtils";
 
 export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen}, ref) => {
 
@@ -28,6 +27,8 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen}, ref) 
     const [musicInfo, setMusicInfo] = useState()
     const [lrcLanguage, setLrcLanguage] = useState("jp")
     const [lrcPosition, setLrcPosition] = useState("center")
+    const [jpLrcUrl, setJpLrcUrl] = useState()
+    const [zhLrcUrl, setZhLrcUrl] = useState()
 
     useImperativeHandle(ref, () => ({
         setMusicDetail: (info) => {
@@ -35,33 +36,44 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen}, ref) 
             if (mCover !== cover) {
                 setCover(mCover)
             }
+            setJpLrcUrl(info.lyric)
+            setZhLrcUrl(info.trans)
             setMusicInfo(info)
             if (currentSong == null || currentSong._id !== info._id) {
                 setCurrentLrcTime(0)
                 setCurrentSong(info)
-            } else if (jpLrc) {
+            } else {
                 setCurrentLrcTime(info.currentTime * 1000)
             }
         }
     }))
 
+    useEffect(() => {
+        if (jpLrcUrl && musicDetailVisible) {
+            WorkUtils.requestLyric(jpLrcUrl).then(res => {
+                const lrc = res.split('\n').map(item => {
+                    return item.trim()
+                }).join('\n')
+                setJpLrc(lrc)
+            }).catch(_ => {})
+        }
+    }, [jpLrcUrl, musicDetailVisible])
+
+    useEffect(() => {
+        if (zhLrcUrl && musicDetailVisible) {
+            WorkUtils.requestLyric(zhLrcUrl).then(res => {
+                const lrc = res.split('\n').map(item => {
+                    return item.trim()
+                }).join('\n')
+                setZhLrc(lrc)
+            }).catch(_ => {
+                setLrcLanguage('jp')
+            })
+        }
+    }, [zhLrcUrl, musicDetailVisible])
+
     const renderItem = ({active, line}) => {
         return <LyricLine content={line.content} active={active} position={lrcPosition} lang={lrcLanguage}/>
-    }
-
-    const onUpload = (file) => {
-        const name = file[0].name
-        const path = file[0].path
-        if (name.endsWith(".lrc")) {
-            const lrc = AppUtils.readFile(path).split('\n').map(item => {
-                return item.trim()
-            }).join('\n')
-            if (lrcLanguage === 'jp') {
-                setJpLrc(lrc)
-            } else {
-                setZhLrc(lrc)
-            }
-        }
     }
 
     const changeLrcPosition = () => {
@@ -103,11 +115,7 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen}, ref) 
             <div className={"blackArea"}/>
             <img className={"gauss"} src={cover}/>
 
-            <FileDrop
-                onUpload={onUpload}
-                count={1}
-                formats={['']}
-            >
+            <div>
                 <div className={'musicDetailContainer'}>
                     <div className={'lrcLeftContainer'}>
                         <img className={"cover"} src={cover}/>
@@ -141,7 +149,7 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen}, ref) 
                         </div>
                     </div>
                 </div>
-            </FileDrop>
+            </div>
         </Modal>
     )
 })

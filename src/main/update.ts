@@ -1,6 +1,7 @@
 import {app, dialog} from 'electron'
 import {autoUpdater} from 'electron-updater'
 import https from 'https'
+import {VersionUtils} from "../renderer/utils/VersionUtils";
 
 export default class update {
     private callback: Function | undefined;
@@ -34,7 +35,7 @@ export default class update {
 
     checkUpdate(callback: Function) {
         this.callback = callback
-        const url = 'https://zhushenwudi1.oss-cn-hangzhou.aliyuncs.com/info.json'
+        const url = VersionUtils.refreshDataUrl()
         // 这里先拉取更新信息，在对话框中显示版本的更新内容
         const req = https.request(url, req => {
             let message = ''
