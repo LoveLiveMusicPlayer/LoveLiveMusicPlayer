@@ -3,9 +3,6 @@ import ReactJkMusicPlayer from 'react-jinke-music-player'
 import 'react-jinke-music-player/assets/index.css'
 import Store from '../utils/Store'
 
-// 正在处理删除逻辑
-let isHandle = false
-
 export default class AudioPlayer extends React.PureComponent {
 
     constructor(props) {
@@ -30,7 +27,6 @@ export default class AudioPlayer extends React.PureComponent {
             }
         })
         if (!hasSong) {
-            isHandle = false
             this.updateParams({
                 clearPriorAudioLists: true,
                 quietUpdate: true,
@@ -54,20 +50,6 @@ export default class AudioPlayer extends React.PureComponent {
     // 是否处于显示歌词页面中
     onShowDetail = (isShow) => {
         this.setState({isShowDetail: isShow})
-    }
-
-    onChangeKey = (key) => {
-        const data = {
-            ...this.state.params,
-            [key]: !this.state.params[key],
-        }
-        if (key === 'light' || key === 'dark') {
-            data.theme = key
-        }
-        if (key === 'full' || key === 'mini') {
-            data.mode = key
-        }
-        this.setState({params: data})
     }
 
     // 更新播放器参数
@@ -99,10 +81,8 @@ export default class AudioPlayer extends React.PureComponent {
                     this.updateParams({playMode})
                 }}
                 onPlayIndexChange={(playIndex) => {
-                    if (!isHandle) {
-                        this.setState({playIndex: playIndex})
-                        this.updateParams({playIndex})
-                    }
+                    this.setState({playIndex: playIndex})
+                    this.updateParams({playIndex})
                 }}
                 onAudioListsChange={(playId, audioLists) => {
                     if (audioLists.length === 0) {
@@ -116,11 +96,6 @@ export default class AudioPlayer extends React.PureComponent {
                 }}
                 onAudioVolumeChange={volume => {
                     Store.set('volume', Math.sqrt(volume))
-                }}
-                onDeleteChange={truePlayIndex => {
-                    isHandle = true
-                    console.log(truePlayIndex)
-                    this.setState({playIndex: truePlayIndex})
                 }}
                 onCoverClick={_ => {
                     this.r.props.onClickCover()

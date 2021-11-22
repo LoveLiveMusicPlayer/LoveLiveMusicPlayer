@@ -313,6 +313,7 @@ function App({dispatch}) {
                 onClickCover={_ => onClickCover(isOpenMusicDialog)}
                 onAudioTimeChange={onAudioTimeChange}
                 onClearAudioList={_ => {
+                    document.getElementsByClassName('audio-lists-panel-header-close-btn')[0].click()
                     if (isOpenMusicDialog) {
                         onClickCover(isOpenMusicDialog)
                     }
