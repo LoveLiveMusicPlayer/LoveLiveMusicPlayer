@@ -3,6 +3,8 @@ import ReactJkMusicPlayer from 'react-jinke-music-player'
 import 'react-jinke-music-player/assets/index.css'
 import Store from '../utils/Store'
 
+let currentMusicUniqueId = ""
+
 export default class AudioPlayer extends React.PureComponent {
 
     constructor(props) {
@@ -84,9 +86,11 @@ export default class AudioPlayer extends React.PureComponent {
                     this.setState({playIndex: playIndex})
                     this.updateParams({playIndex})
                 }}
-                onAudioListsChange={(playId, audioLists) => {
+                onAudioListsChange={(playId, audioLists, audioInfo) => {
                     if (audioLists.length === 0) {
                         this.r.props.onClearAudioList()
+                        currentMusicUniqueId = ""
+                        Store.set("playId", "")
                     }
                     this.updateParams({
                         audioLists: audioLists,
@@ -94,6 +98,13 @@ export default class AudioPlayer extends React.PureComponent {
                         theme: audioLists.length === 0 || !this.state.isShowDetail ? 'light' : 'dark'
                     })
                 }}
+                onAudioPlayTrackChange={((currentPlayId, audioLists, audioInfo) => {
+                    if (audioInfo._id !== currentMusicUniqueId && audioLists.length > 0 && audioLists.length <= 20) {
+                        currentMusicUniqueId = audioInfo._id
+                        Store.set("playList", audioLists)
+                        Store.set("playId", audioInfo._id)
+                    }
+                })}
                 onAudioVolumeChange={volume => {
                     Store.set('volume', Math.sqrt(volume))
                 }}

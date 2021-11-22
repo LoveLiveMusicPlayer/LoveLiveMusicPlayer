@@ -244,6 +244,23 @@ function App({dispatch}) {
         }
     }
 
+    const getLatestPlayList = () => {
+        const playList = Store.get("playList")
+        const playId = Store.get("playId")
+        if (playList && playList.length > 0 && !AppUtils.isEmpty(playId)) {
+            let playIndex = 0
+            playList.map((item, index) => {
+                item.cover = Store.get('url') + 'LoveLive' + item.cover.split('/LoveLive')[1]
+                item.musicSrc = Store.get('url') + 'LoveLive' + item.musicSrc.split('/LoveLive')[1]
+                if (item._id === playId) {
+                    playIndex = index
+                }
+            })
+            playList[0].playIndex = playIndex
+            playerRef.current?.onChangeAudioList(playList)
+        }
+    }
+
     useEffect(() => {
         setTimeout(() => {
             openNotification('这是一个开源项目，完全免费！')
@@ -269,6 +286,8 @@ function App({dispatch}) {
             DBHelper.setBGColor(JSON.stringify(colors))
             AppUtils.setBodyColor(colors)
         })
+
+        setTimeout(() => getLatestPlayList(), 2000)
 
         return () => Bus.removeAllListeners()
     }, [])
