@@ -121,6 +121,12 @@ function App({dispatch}) {
         // 窗口显示模式 (mini | full)
         mode: 'full',
 
+        // mini模式显示圆形进度条
+        showMiniProcessBar: true,
+
+        // 加载失败是否跳到下一首
+        loadAudioErrorPlayNext: false,
+
         // 加载音频后是否自动播放
         autoPlay: true,
 
@@ -154,7 +160,7 @@ function App({dispatch}) {
         // 图片不可用时自动隐藏封面
         autoHiddenCover: false,
 
-        // 遇到音频空白帧自动播放和暂停
+        // 通过空格键控制音乐的播放与暂停
         spaceBar: true,
 
         // 时区 (en_US, zh_CN, default = 'en_US')
@@ -170,16 +176,17 @@ function App({dispatch}) {
         }
     }
 
-    const onClickCover = () => {
-        Bus.emit("openMusicDetail", !isOpenMusicDialog)
-        options.theme = isOpenMusicDialog ? "light" : "dark"
+    const onClickCover = (isWillClose) => {
+        Bus.emit("openMusicDetail", !isWillClose)
+        playerRef.current?.onShowDetail(!isWillClose)
+        options.theme = isWillClose ? "light" : "dark"
         const title = document.body.getElementsByClassName('audio-lists-panel-header-title')
         playerRef.current?.updateParams({theme: options.theme})
         const spans = [...title[0].getElementsByTagName('span')]
         spans.map(item => {
-            item.style.color = isOpenMusicDialog ? '#000000' : '#ffffff'
+            item.style.color = isWillClose ? '#000000' : '#ffffff'
         })
-        isOpenMusicDialog = !isOpenMusicDialog
+        isOpenMusicDialog = !isWillClose
     }
 
     const onClickCover2 = (isOpen) => {
@@ -303,8 +310,13 @@ function App({dispatch}) {
             <AudioPlayer
                 {...options}
                 ref={playerRef}
-                onClickCover={_ => onClickCover()}
+                onClickCover={_ => onClickCover(isOpenMusicDialog)}
                 onAudioTimeChange={onAudioTimeChange}
+                onClearAudioList={_ => {
+                    if (isOpenMusicDialog) {
+                        onClickCover(isOpenMusicDialog)
+                    }
+                }}
             />
 
             {showMenu ? <div className={"model"} onClick={onBabyClick}/> : null}

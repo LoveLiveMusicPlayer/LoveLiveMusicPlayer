@@ -61,7 +61,7 @@ const Album = ({dispatch, chooseGroup, location}) => {
                 key: index,
                 song: music.name,
                 artist: music.artist,
-                time: '04:00',
+                time: music.time,
                 isLove: isLove,
                 music: music
             })

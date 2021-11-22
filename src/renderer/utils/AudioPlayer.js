@@ -15,7 +15,8 @@ export default class AudioPlayer extends React.PureComponent {
                 ...props
             },
             playIndex: 0,
-            audioList: []
+            audioList: [],
+            isShowDetail: false
         }
         this.r = null
     }
@@ -48,6 +49,11 @@ export default class AudioPlayer extends React.PureComponent {
             audioLists: arr,
             playIndex: index
         })
+    }
+
+    // 是否处于显示歌词页面中
+    onShowDetail = (isShow) => {
+        this.setState({isShowDetail: isShow})
     }
 
     onChangeKey = (key) => {
@@ -99,16 +105,24 @@ export default class AudioPlayer extends React.PureComponent {
                     }
                 }}
                 onAudioListsChange={(playId, audioLists) => {
-                    this.updateParams({audioLists})
+                    if (audioLists.length === 0) {
+                        this.r.props.onClearAudioList()
+                    }
+                    this.updateParams({
+                        audioLists: audioLists,
+                        // 歌单列表为空 或者 不在歌词界面时显示白色背景
+                        theme: audioLists.length === 0 || !this.state.isShowDetail ? 'light' : 'dark'
+                    })
                 }}
                 onAudioVolumeChange={volume => {
                     Store.set('volume', Math.sqrt(volume))
                 }}
                 onDeleteChange={truePlayIndex => {
                     isHandle = true
+                    console.log(truePlayIndex)
                     this.setState({playIndex: truePlayIndex})
                 }}
-                onCoverClick={(mode, audioLists, audioInfo) => {
+                onCoverClick={_ => {
                     this.r.props.onClickCover()
                 }}
                 onAudioProgress={audioInfo => {

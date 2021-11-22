@@ -55,7 +55,7 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen}, ref) 
                     return item.trim()
                 }).join('\n')
                 setJpLrc(lrc)
-            }).catch(_ => {})
+            }).catch(_ => setJpLrc(''))
         }
     }, [jpLrcUrl, musicDetailVisible])
 
@@ -67,6 +67,7 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen}, ref) 
                 }).join('\n')
                 setZhLrc(lrc)
             }).catch(_ => {
+                setZhLrc('')
                 setLrcLanguage('jp')
             })
         }
