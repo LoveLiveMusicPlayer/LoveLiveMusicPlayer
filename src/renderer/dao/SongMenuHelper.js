@@ -85,5 +85,9 @@ export const SongMenuHelper = {
 
     deleteMenu(id) {
         return db.remove(id ? {id: id} : null, {multi: true})
+    },
+
+    removeAllMenu() {
+        return db.remove(null, {multi: true})
     }
 }

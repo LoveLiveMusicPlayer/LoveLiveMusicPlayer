@@ -1,10 +1,19 @@
-import React, {useState} from 'react';
+import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import {Button, Space} from "antd";
 import Modal from "react-modal";
 
-export const CustomDialog = ({isShow, hint, result, close}) => {
+export const CustomDialog = forwardRef((
+    {isShow, hint, result, showCancel, cancelText, thirdButton, fourthButton, confirmText, close, bottomContainer}, ref
+) => {
 
     const [wait, setWait] = useState(false)
+
+    useImperativeHandle(ref, () => ({
+        forceClose: () => {
+            setWait(false)
+            close()
+        }
+    }))
 
     const modalStyles = {
         overlay: {
@@ -16,10 +25,13 @@ export const CustomDialog = ({isShow, hint, result, close}) => {
             backgroundColor: 'rgba(0, 0, 0, 0.60)'
         },
         content: {
-            width: 300,
-            height: 150,
+            width: 'auto',
+            height: 'auto',
             top: '50%',
             left: '50%',
+            paddingLeft: '50px',
+            paddingRight: '50px',
+            paddingBottom: '20px',
             right: 'auto',
             bottom: 'auto',
             marginRight: '-50%',
@@ -37,34 +49,68 @@ export const CustomDialog = ({isShow, hint, result, close}) => {
             appElement={document.body}
             isOpen={isShow}
             onAfterOpen={null}
-            onRequestClose={close}
+            onRequestClose={() => {
+                if (!wait) {
+                    close()
+                }
+            }}
             style={modalStyles}>
             <p style={{fontWeight: 'bold'}}>{hint}</p>
             <Space size={'large'}>
-                <Button
-                    block
-                    onClick={() => {
-                        result(false)
-                        close()
-                    }}
-                >
-                    取消
-                </Button>
+                {
+                    showCancel ?
+                        <Button
+                            block
+                            onClick={() => {
+                                result && result(false)
+                                close()
+                            }}
+                        >
+                            {cancelText ? cancelText : '取消'}
+                        </Button> : null
+                }
+                {
+                    thirdButton ?
+                        <Button
+                            type="primary"
+                            loading={wait}
+                            onClick={() => {
+                                setWait(true)
+                                thirdButton.callback()
+                            }}
+                        >
+                            {thirdButton.text}
+                        </Button> : null
+                }
+                {
+                    fourthButton ?
+                        <Button
+                            type="primary"
+                            loading={wait}
+                            onClick={() => {
+                                setWait(true)
+                                fourthButton.callback()
+                            }}
+                        >
+                            {fourthButton.text}
+                        </Button> : null
+                }
                 <Button
                     type="primary"
                     loading={wait}
                     onClick={() => {
                         setWait(true)
-                        result(true)
+                        result && result(true)
                         setTimeout(() => {
                             setWait(false)
                             close()
                         }, 1000)
                     }}
                 >
-                    确定
+                    {confirmText ? confirmText : '确定'}
                 </Button>
             </Space>
+            {bottomContainer && bottomContainer()}
         </Modal>
     )
-}
+})

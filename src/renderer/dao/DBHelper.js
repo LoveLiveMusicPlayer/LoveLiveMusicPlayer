@@ -1,5 +1,9 @@
 import {AppUtils} from "../utils/AppUtils";
 import Store from "../utils/Store"
+import {AlbumHelper} from "./AlbumHelper";
+import {LoveHelper} from "./LoveHelper";
+import {MusicHelper} from "./MusicHelper";
+import {SongMenuHelper} from "./SongMenuHelper";
 
 export const DBHelper = {
     // 设置 http-server 信息
@@ -32,5 +36,29 @@ export const DBHelper = {
             colors = JSON.parse(tempColors)
         }
         return colors
+    },
+
+    removeUserDB() {
+        const dataVersion = Store.get('dataVersion')
+        Store.clear()
+        Store.set('dataVersion', dataVersion)
+    },
+
+    async removeDIYDB() {
+        const promiseArr = []
+        Store.clear()
+        promiseArr.push(LoveHelper.removeAllILove())
+        promiseArr.push(SongMenuHelper.removeAllMenu())
+        return Promise.allSettled(promiseArr)
+    },
+
+    async removeAllDB() {
+        const promiseArr = []
+        Store.clear()
+        promiseArr.push(AlbumHelper.removeAllAlbum())
+        promiseArr.push(LoveHelper.removeAllILove())
+        promiseArr.push(MusicHelper.removeAllMusic())
+        promiseArr.push(SongMenuHelper.removeAllMenu())
+        return Promise.allSettled(promiseArr)
     }
 }

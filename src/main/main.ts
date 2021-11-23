@@ -45,6 +45,11 @@ ipcMain.handle('openHttp', async (event, path, port) => {
     })
 })
 
+ipcMain.handle('restart', () => {
+    app.relaunch({args: process.argv.slice(1).concat(['--relaunch'])})
+    app.quit()
+})
+
 /**
  * 创建多态弹窗
  * @param args[0] "none", "info", "error", "question", "warning"
