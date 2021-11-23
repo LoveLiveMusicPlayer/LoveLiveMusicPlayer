@@ -33,7 +33,7 @@
 }
 
 .menu_category {
-    width: 50%;
+    width: 33%;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -44,7 +44,7 @@
 .menu_category_span {
     color: white;
     text-align: center;
-    width: 250px;
+    width: 170px;
     padding: 10px 10px 20px;
 }
 
