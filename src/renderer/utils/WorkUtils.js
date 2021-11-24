@@ -262,7 +262,7 @@ export const WorkUtils = {
 
     parseGroupName(name) {
         if (name === 'Nijigasaki') {
-            return '虹咲学园学园偶像同好会'
+            return '虹咲学园'
         } else return name
     },
 

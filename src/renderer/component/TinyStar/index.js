@@ -4,7 +4,7 @@ import * as Images from "../../public/Images";
 import Bus from "../../utils/Event";
 import './index.css'
 
-export const TinyStar = ({playAll, refreshData, changeColor, checkUpdate}) => {
+export const TinyStar = ({playAll, refreshData, deleteData, changeColor, checkUpdate}) => {
 
     const menu = (
         <Menu>
@@ -18,6 +18,10 @@ export const TinyStar = ({playAll, refreshData, changeColor, checkUpdate}) => {
             <Menu.Divider/>
             <Menu.Item key={"playAll"}>
                 <a onClick={playAll}>全部播放</a>
+            </Menu.Item>
+            <Menu.Divider/>
+            <Menu.Item key={"deleteData"}>
+                <a onClick={deleteData}>清理数据</a>
             </Menu.Item>
             <Menu.Divider/>
             <Menu.Item key={"refreshData"}>

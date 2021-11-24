@@ -37,4 +37,9 @@ export const LoveHelper = {
             reject('删除失败')
         }))
     },
+
+    // 删除全部我喜欢
+    removeAllILove() {
+        return db.remove(null, {multi: true})
+    }
 }

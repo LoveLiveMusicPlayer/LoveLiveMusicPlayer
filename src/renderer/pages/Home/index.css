@@ -21,3 +21,9 @@
     bottom: 180px;
     right: 30px;
 }
+
+.clearDialog {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}

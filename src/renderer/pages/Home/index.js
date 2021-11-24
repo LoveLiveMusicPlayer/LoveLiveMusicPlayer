@@ -17,6 +17,7 @@ import {MusicGallery} from "../../component/MusicGallery";
 import {PortDialog} from "../../component/PortDialog";
 import Store from '../../utils/Store'
 import * as Images from '../../public/Images'
+import {CustomDialog} from "../../component/CustomDialog";
 
 const {ipcRenderer} = require("electron")
 const {connect} = require('react-redux')
@@ -31,6 +32,7 @@ const Home = ({dispatch, chooseGroup, showAlbum, isRoot}) => {
     let loadingRef = useRef()
     // 选择主题色引用
     let colorPickerRef = useRef()
+    let clearDialog = useRef()
 
     // 屏幕宽度
     const [width, setWidth] = useState(window.innerWidth)
@@ -46,6 +48,8 @@ const Home = ({dispatch, chooseGroup, showAlbum, isRoot}) => {
     const [port, setPort] = useState(10000)
     // HTTP服务要加载的目录
     const [rootDir, setRootDir] = useState()
+
+    const [clearDialogVisible, setClearDialogVisible] = useState(false)
 
     const [btnPlay, setBtnPlay] = useState(Images.ICON_PLAY_UNSELECT)
 
@@ -166,6 +170,46 @@ const Home = ({dispatch, chooseGroup, showAlbum, isRoot}) => {
         })
     }
 
+    const onDelUserData = (isDel) => {
+        if (isDel) {
+            DBHelper.removeUserDB()
+            clearDialog.current?.forceClose()
+            restart()
+        }
+    }
+
+    // 删除全部数据
+    const deleteAllData = () => {
+        DBHelper.removeAllDB().then(_ => {
+            clearDialog.current?.forceClose()
+            restart()
+        })
+    }
+
+    const deleteDIYData = () => {
+        DBHelper.removeDIYDB().then(_ => {
+            clearDialog.current?.forceClose()
+            restart()
+        })
+    }
+
+    const restart = () => {
+        Bus.emit("onNotification", "应用即将重启")
+        setTimeout(() => {
+            ipcRenderer.invoke('restart')
+        }, 1000)
+    }
+
+    const renderClearDialogBottom = () => {
+        return (
+            <div className={'clearDialog'}>
+                <text>用户数据：主题背景、播放器配置</text>
+                <text>自建数据：用户数据、我喜欢、歌单</text>
+                <text>全部数据：自建数据、云端缓存数据</text>
+            </div>
+        )
+    }
+
     // 当选择了企划时将触发redux保存并获取企划数据
     const refreshAlbum = (gp) => {
         if (gp !== null && gp !== group) {
@@ -204,6 +248,7 @@ const Home = ({dispatch, chooseGroup, showAlbum, isRoot}) => {
                     changeColor={() => colorPickerRef.current?.open(DBHelper.getBGColor())}
                     checkUpdate={() => ipcRenderer.invoke('checkUpdate')}
                     refreshData={refreshData}
+                    deleteData={() => setClearDialogVisible(true)}
                 />
 
                 <img
@@ -223,6 +268,18 @@ const Home = ({dispatch, chooseGroup, showAlbum, isRoot}) => {
                     close={() => setPortInputVisible(false)}
                     setHttpServer={() => setHttpServer({path: rootDir, port: port})}
                     setPort={setPort}
+                />
+
+                <CustomDialog
+                    ref={clearDialog}
+                    isShow={clearDialogVisible}
+                    close={() => setClearDialogVisible(false)}
+                    hint={'请选择要清理的数据'}
+                    confirmText={'删除用户数据'}
+                    result={onDelUserData}
+                    thirdButton={{text: '删除全部数据', callback: () => deleteAllData()}}
+                    fourthButton={{text: '删除自建数据', callback: () => deleteDIYData()}}
+                    bottomContainer={renderClearDialogBottom}
                 />
             </FileDrop>
         </div>

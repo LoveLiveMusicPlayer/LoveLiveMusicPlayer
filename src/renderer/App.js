@@ -344,7 +344,7 @@ function App({dispatch}) {
             <GroupModal
                 showMenu={showMenu}
                 showCategory={showCategory}
-                chooseGroup={item => chooseGroup(item)}
+                chooseGroup={chooseGroup}
             />
 
             <MusicDetail

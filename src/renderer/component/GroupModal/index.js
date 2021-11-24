@@ -16,25 +16,35 @@ export const GroupModal = ({showCategory, showMenu, chooseGroup}) => {
                 showCategory ?
                     <div className={"move_category"}>
                         <div className={["hvr-grow", "menu_category"].join(' ')}>
-                            <img src={Images.MENU_MIUSI} width={'250px'} height={'250px'}
+                            <img src={Images.MENU_COMBINE} width={'170px'} height={'250px'}
+                                 onClick={() => chooseGroup("Combine")}/>
+                            <span className={"menu_category_span"}>组合</span>
+                        </div>
+                        <div className={["hvr-grow", "menu_category"].join(' ')}>
+                            <img src={Images.MENU_NIJI} width={'170px'} height={'250px'}
+                                 onClick={() => chooseGroup("Nijigasaki")}/>
+                            <span className={"menu_category_span"}>虹咲学园</span>
+                        </div>
+                        <div className={["hvr-grow", "menu_category"].join(' ')}>
+                            <img src={Images.MENU_MIUSI} width={'170px'} height={'250px'}
                                  onClick={() => chooseGroup("μ's")}/>
                             <span className={"menu_category_span"}>μ's</span>
                         </div>
-                        <div className={["hvr-grow", "menu_category"].join(' ')}>
-                            <img src={Images.MENU_AQOURS} width={'250px'} height={'250px'}
-                                 onClick={() => chooseGroup("Aqours")}/>
+                        <div className={["hvr-grow", "menu_category"].join(' ')} style={{visibility: 'hidden'}}>
+                            <img src={Images.MENU_AQOURS} width={'170px'} height={'250px'}/>
                             <span className={"menu_category_span"}>Aqours</span>
                         </div>
                         <div className={["hvr-grow", "menu_category"].join(' ')}>
-                            <img src={Images.MENU_NIJI} width={'250px'} height={'250px'}
-                                 onClick={() => chooseGroup("Nijigasaki")}/>
-                            <span className={"menu_category_span"}>虹咲学园学园偶像同好会</span>
-                        </div>
-                        <div className={["hvr-grow", "menu_category"].join(' ')}>
-                            <img src={Images.MENU_LIELLA} width={'250px'} height={'250px'}
+                            <img src={Images.MENU_LIELLA} width={'170px'} height={'250px'}
                                  onClick={() => chooseGroup("Liella!")}/>
                             <span className={"menu_category_span"}>Liella!</span>
                         </div>
+                        <div className={["hvr-grow", "menu_category"].join(' ')}>
+                            <img src={Images.MENU_AQOURS} width={'170px'} height={'250px'}
+                                 onClick={() => chooseGroup("Aqours")}/>
+                            <span className={"menu_category_span"}>Aqours</span>
+                        </div>
+
                     </div> : null
             }
         </>
