@@ -2,10 +2,12 @@ import fs from "fs";
 import path from "path";
 import * as mm from "music-metadata";
 import {WorkUtils} from "./WorkUtils";
+import moment from "moment";
 
 const {ipcRenderer} = require("electron")
 
 const coverArr = []
+const lyricUrl = "https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/"
 let lastDir = ""
 
 export const AppUtils = {
@@ -66,10 +68,18 @@ export const AppUtils = {
                 obj.artist = res.common.artist
                 obj.date = filePath.match(/\[(\S*)]/)[1]
                 obj.path = filePath.replace(splitPath, '').replaceAll(path.sep, '/')
+                obj.lyric = lyricUrl + "JP/" + obj.path.replace('.flac', '.lrc')
+                obj.time = this.parseDurationToTime(Math.floor(res.format.duration))
+                obj.trans = lyricUrl + "ZH/" + obj.path.replace('.flac', '.lrc')
             })
             infoList.push(obj)
         }
         return infoList
+    },
+
+    parseDurationToTime(duration) {
+        const time = moment.duration(duration, 'seconds')
+        return moment({m: time.minutes(), s: time.seconds()}).format('mm:ss')
     },
 
     /**

@@ -56,11 +56,11 @@ export const WorkUtils = {
         if (infoList) {
             for (let i = 0; i < infoList.length; i++) {
                 const music = infoList[i]
-                const obj = [i + "", music.title, music.album, music.artist, music.date, music.path, music.pic]
+                const obj = [i + 1, music.title, music.album, music.artist, music.date, music.path, music.pic, music.lyric, music.time, music.trans]
                 arr.push(obj)
             }
             EXCEL.outPut({
-                header: ['id', '歌曲名称', '专辑名称', '艺术家', '发售日期', '文件路径', '封面路径'],
+                header: ['id', '歌曲名称', '专辑名称', '艺术家', '发售日期', '文件路径', '封面路径', '日文歌词', '时长', '中文歌词'],
                 data: arr,
                 name: 'music'
             });
