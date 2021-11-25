@@ -40,3 +40,4 @@ yarn.lock
 /release/app/package-lock.json
 /release/build-linux/
 /release/build-mac/
+/release/build/
