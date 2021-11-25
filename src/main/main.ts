@@ -89,6 +89,8 @@ ipcMain.on('msgDialog', (event, args) => {
 
 // 获取当前 APP 版本号
 ipcMain.on('getAppVersion', event => {
+    // 缓存目录: /Users/hoshizora-rin/Library/Application\ Support
+    console.log(app.getPath('userData'))
     event.sender.send('getAppVersion', app.getVersion())
 })
 
