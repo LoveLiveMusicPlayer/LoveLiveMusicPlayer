@@ -89,8 +89,7 @@ ipcMain.on('msgDialog', (event, args) => {
 
 // 获取当前 APP 版本号
 ipcMain.on('getAppVersion', event => {
-    const version = app.getVersion().split('.').join('')
-    event.sender.send('getAppVersion', version)
+    event.sender.send('getAppVersion', app.getVersion())
 })
 
 // 打开一个获取文件的窗口
