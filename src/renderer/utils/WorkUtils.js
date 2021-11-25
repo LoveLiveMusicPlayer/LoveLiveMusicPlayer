@@ -79,6 +79,7 @@ export const WorkUtils = {
         })
     },
 
+    // 获取歌词
     async requestLyric(url) {
         let result = ""
         try {
@@ -92,6 +93,26 @@ export const WorkUtils = {
         return result
     },
 
+    // 获取该版本是否需要强制恢复初始状态
+    async requestNeedInit(version) {
+        let result = false
+        try {
+            const response = await Network.get("https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/init.json")
+            response.data.map(item => {
+                console.log(item)
+                if (item.version === version) {
+                    result = item.needInit
+                }
+            })
+        } catch (error) {
+            return new Promise((resolve, reject) => {
+                reject()
+            })
+        }
+        return result
+    },
+
+    // 获取数据更新的地址
     async requestUrl() {
         let result = null
         try {
@@ -103,6 +124,7 @@ export const WorkUtils = {
         return result
     },
 
+    // 获取更新数据信息
     async requestData(url) {
         let result = null
         try {
@@ -148,6 +170,7 @@ export const WorkUtils = {
         }
     },
 
+    // 将歌曲列表传给播放器
     putArrToPlayer(promiseArr, playIndex) {
         let isLoaded = true
         const URL = Store.get("url")
@@ -178,6 +201,7 @@ export const WorkUtils = {
         })
     },
 
+    // 根据专辑的唯一 id 播放
     playAlbumByUniqueId(_id) {
         AlbumHelper.findOneAlbumByUniqueId(_id).then(res => {
             const promiseArr = []
@@ -188,6 +212,7 @@ export const WorkUtils = {
         })
     },
 
+    // 根据专辑的 id 播放
     playAlbumByAlbumId(group, albumId, playIndex) {
         AlbumHelper.findOneAlbumByAlbumId(group, albumId).then(res => {
             const promiseArr = []
@@ -198,6 +223,7 @@ export const WorkUtils = {
         })
     },
 
+    // 播放团组内所有歌曲
     playAlbumsByGroup(group) {
         AlbumHelper.findAllAlbumsByGroup(group).then(albumList => {
             const promiseArr = []
@@ -210,6 +236,7 @@ export const WorkUtils = {
         })
     },
 
+    // 播放所有歌曲
     playAllAlbums() {
         AlbumHelper.findAllAlbums().then(albumList => {
             const promiseArr = []
@@ -222,6 +249,7 @@ export const WorkUtils = {
         })
     },
 
+    // 播放歌单歌曲
     playMenuByMusicIds(jsonArr, playIndex) {
         const promiseArr = []
         jsonArr.map(item => {
@@ -232,6 +260,7 @@ export const WorkUtils = {
         } else return Error('歌单内没有歌曲')
     },
 
+    // 下载数据更新
     async updateJsonData(onStart, onProgress, onAlbumEnd, onMusicEnd) {
         const dataUrl = await this.requestUrl()
         if (dataUrl == null) {

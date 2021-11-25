@@ -147,6 +147,7 @@ const Home = ({dispatch, chooseGroup, showAlbum, isRoot}) => {
         WorkUtils.playAlbumsByGroup(group)
     }
 
+    // 播放全部歌曲
     const playAll = () => {
         WorkUtils.playAllAlbums()
     }
@@ -178,7 +179,6 @@ const Home = ({dispatch, chooseGroup, showAlbum, isRoot}) => {
         }
     }
 
-    // 删除全部数据
     const deleteAllData = () => {
         DBHelper.removeAllDB().then(_ => {
             clearDialog.current?.forceClose()

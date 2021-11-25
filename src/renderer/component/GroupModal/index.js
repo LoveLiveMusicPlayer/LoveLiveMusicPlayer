@@ -18,7 +18,7 @@ export const GroupModal = ({showCategory, showMenu, chooseGroup}) => {
                         <div className={["hvr-grow", "menu_category"].join(' ')}>
                             <img src={Images.MENU_COMBINE} width={'170px'} height={'250px'}
                                  onClick={() => chooseGroup("Combine")}/>
-                            <span className={"menu_category_span"}>组合</span>
+                            <span className={"menu_category_span"}>多团联动</span>
                         </div>
                         <div className={["hvr-grow", "menu_category"].join(' ')}>
                             <img src={Images.MENU_NIJI} width={'170px'} height={'250px'}

@@ -18,11 +18,14 @@ const {connect} = require('react-redux');
 const Album = ({dispatch, chooseGroup, location}) => {
     let history = useHistory()
 
+    // 三个功能按钮图片
     const [btnFuncPic1, setBtnFuncPic1] = useState(Images.ICON_DIS_PLAY)
     const [btnFuncPic2, setBtnFuncPic2] = useState(Images.ICON_DIS_COLLECT)
     const [btnFuncPic3, setBtnFuncPic3] = useState(Images.ICON_DIS_LOVE)
 
+    // 专辑信息详情
     const [info, setInfo] = useState()
+    // 专辑列表数据
     const [tableData, setTableData] = useState()
     const [nodeTree, setNodeTree] = useState({
         pageX: 0,
@@ -44,6 +47,7 @@ const Album = ({dispatch, chooseGroup, location}) => {
         return () => Bus.removeListener('onClickBody', onClickBody)
     }, [])
 
+    // 查询当前专辑全部的歌曲信息
     const findAlbumList = async () => {
         const album = await AlbumHelper.findOneAlbumByUniqueId(location.state.id)
         setInfo(album)
@@ -213,6 +217,7 @@ const Album = ({dispatch, chooseGroup, location}) => {
     }
 
     const iLove = (music) => {
+        // 插入我喜欢列表
         LoveHelper.insertSongToLove(music.music).then(_ => {
             setRefreshAlbum(new Date().getTime())
             Bus.emit('onNotification', '已添加到我喜欢')
@@ -233,6 +238,7 @@ const Album = ({dispatch, chooseGroup, location}) => {
         })
     }
 
+    // 添加到歌单
     const addToList = (id) => {
         SongMenuHelper.insertSongToMenu(id, willAddListMusic).catch(err => {
             Bus.emit('onNotification', err)

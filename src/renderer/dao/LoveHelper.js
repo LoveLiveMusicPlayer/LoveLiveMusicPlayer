@@ -16,16 +16,14 @@ export const LoveHelper = {
         }))
     },
 
+    // 根据 id 获取
     findLoveById(_id) {
         return db.findOne({_id: _id})
     },
 
+    // 获取全部我喜欢的歌曲
     findAllLove() {
         return db.findAll(null, null, {timestamp: 1})
-    },
-
-    findLoveByIds(_ids) {
-        return db.findAll({_id: _ids})
     },
 
     // 删除歌曲

@@ -45,6 +45,7 @@ ipcMain.handle('openHttp', async (event, path, port) => {
     })
 })
 
+// 重启 App
 ipcMain.handle('restart', () => {
     app.relaunch({args: process.argv.slice(1).concat(['--relaunch'])})
     app.quit()
@@ -86,11 +87,20 @@ ipcMain.on('msgDialog', (event, args) => {
     })
 })
 
+// 获取当前 APP 版本号
+ipcMain.on('getAppVersion', event => {
+    const version = app.getVersion().split('.').join('')
+    if (!isDevelopment) {
+        event.sender.send('getAppVersion', version)
+    }
+})
+
 // 打开一个获取文件的窗口
 ipcMain.handle("fileDialog", (_event, _args) => {
     dialog.showOpenDialogSync({properties: ['openFile', 'multiSelections']})
 })
 
+// 检查更新
 ipcMain.handle("checkUpdate", (_event, _args) => {
     autoUpdater.checkUpdate(updateCallback)
 })

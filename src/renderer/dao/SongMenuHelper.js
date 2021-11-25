@@ -35,10 +35,12 @@ export const SongMenuHelper = {
         Promise.allSettled(arr)
     },
 
+    // 根据 id 获取指定歌单
     findMenuById(id) {
         return db.findOne({id: id})
     },
 
+    // 获取全部歌单
     findAllMenu() {
         return db.findAll(null, null, {id: 1})
     },
@@ -83,10 +85,12 @@ export const SongMenuHelper = {
         }))
     },
 
+    // 删除知道 id 的歌单
     deleteMenu(id) {
         return db.remove(id ? {id: id} : null, {multi: true})
     },
 
+    // 删除全部歌单
     removeAllMenu() {
         return db.remove(null, {multi: true})
     }

@@ -38,12 +38,14 @@ export const DBHelper = {
         return colors
     },
 
+    // 删除用户数据
     removeUserDB() {
         const dataVersion = Store.get('dataVersion')
         Store.clear()
         Store.set('dataVersion', dataVersion)
     },
 
+    // 删除自建数据
     async removeDIYDB() {
         const promiseArr = []
         Store.clear()
@@ -52,6 +54,7 @@ export const DBHelper = {
         return Promise.allSettled(promiseArr)
     },
 
+    // 删除全部数据
     async removeAllDB() {
         const promiseArr = []
         Store.clear()

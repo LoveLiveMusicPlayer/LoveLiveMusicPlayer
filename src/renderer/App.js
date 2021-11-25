@@ -20,7 +20,11 @@ import {SongMenu} from "./component/SongMenu";
 import {MusicDetail} from "./component/MusicDetail";
 import Store from '../../src/renderer/utils/Store'
 import Menu from "./pages/Menu";
+import {WorkUtils} from "./utils/WorkUtils";
 
+const {ipcRenderer} = require('electron')
+
+// 全局通知弹窗
 const openNotification = (message) => {
     notification.info({
         message: '请注意',
@@ -72,12 +76,14 @@ function App({dispatch}) {
         }
     }
 
+    // 点击了团组 item
     const chooseGroup = (gp) => {
         setShowMenu(false)
         setShowCategory(false)
         dispatch(musicAction.chooseGroup(gp))
     }
 
+    // 播放器参数配置
     const options = {
         // 播放列表
         audioLists: [],
@@ -176,6 +182,7 @@ function App({dispatch}) {
         }
     }
 
+    // 点击了左下角封面
     const onClickCover = (isWillClose) => {
         Bus.emit("openMusicDetail", !isWillClose)
         playerRef.current?.onShowDetail(!isWillClose)
@@ -200,6 +207,7 @@ function App({dispatch}) {
         }
     }
 
+    // 歌曲播放时间回调
     const onAudioTimeChange = (info) => {
         musicDetailRef.current?.setMusicDetail(info)
     }
@@ -223,6 +231,7 @@ function App({dispatch}) {
         } else return null
     }
 
+    // 左边栏内容选中
     const onMenuChange = (index) => {
         setChooseItem(index)
         switch (index) {
@@ -244,6 +253,7 @@ function App({dispatch}) {
         }
     }
 
+    // 播放上次记住的播放列表
     const getLatestPlayList = () => {
         const playList = Store.get("playList")
         const playId = Store.get("playId")
@@ -262,6 +272,26 @@ function App({dispatch}) {
     }
 
     useEffect(() => {
+        // 判断本次版本是否是强制恢复版本
+        ipcRenderer.on('getAppVersion', (event, version) => {
+            const initedVersion = Store.get('appInitedVersion')
+            if (AppUtils.isNull(initedVersion) || version !== initedVersion) {
+                WorkUtils.requestNeedInit(version).then(needInit => {
+                    if (needInit) {
+                        DBHelper.removeAllDB().then(_ => {
+                            Store.set('appInitedVersion', version)
+                            Bus.emit("onNotification", "应用准备强制恢复，即将重启")
+                            setTimeout(() => {
+                                ipcRenderer.invoke('restart')
+                            }, 2000)
+                        })
+                    }
+                }).catch(_ => {
+                })
+            }
+        })
+        ipcRenderer.send('getAppVersion')
+
         setTimeout(() => {
             openNotification('这是一个开源项目，完全免费！')
         }, 1000)
@@ -287,6 +317,7 @@ function App({dispatch}) {
             AppUtils.setBodyColor(colors)
         })
 
+        // 延迟获取上次关闭播放器前的播放列表
         setTimeout(() => getLatestPlayList(), 2000)
 
         return () => Bus.removeAllListeners()
