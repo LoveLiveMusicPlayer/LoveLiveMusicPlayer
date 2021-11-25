@@ -41,14 +41,14 @@ export const DBHelper = {
     // 删除用户数据
     removeUserDB() {
         const dataVersion = Store.get('dataVersion')
-        Store.clear()
+        this.clearStore()
         Store.set('dataVersion', dataVersion)
     },
 
     // 删除自建数据
     async removeDIYDB() {
         const promiseArr = []
-        Store.clear()
+        this.clearStore()
         promiseArr.push(LoveHelper.removeAllILove())
         promiseArr.push(SongMenuHelper.removeAllMenu())
         return Promise.allSettled(promiseArr)
@@ -57,11 +57,20 @@ export const DBHelper = {
     // 删除全部数据
     async removeAllDB() {
         const promiseArr = []
-        Store.clear()
+        this.clearStore()
         promiseArr.push(AlbumHelper.removeAllAlbum())
         promiseArr.push(LoveHelper.removeAllILove())
         promiseArr.push(MusicHelper.removeAllMusic())
         promiseArr.push(SongMenuHelper.removeAllMenu())
         return Promise.allSettled(promiseArr)
+    },
+
+    // 清除 store 前先保存 appInitedVersion版本
+    clearStore() {
+        const initedVersion = Store.get('appInitedVersion')
+        Store.clear()
+        if (!AppUtils.isEmpty(initedVersion)) {
+            Store.set('appInitedVersion', initedVersion)
+        }
     }
 }
