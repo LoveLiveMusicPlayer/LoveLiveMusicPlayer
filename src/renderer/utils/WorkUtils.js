@@ -99,7 +99,6 @@ export const WorkUtils = {
         try {
             const response = await Network.get("https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/init.json")
             response.data.map(item => {
-                console.log(item)
                 if (item.version === version) {
                     result = item.needInit
                 }
