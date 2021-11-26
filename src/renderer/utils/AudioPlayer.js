@@ -94,6 +94,7 @@ export default class AudioPlayer extends React.PureComponent {
                     this.updateParams({playIndex})
                 }}
                 onAudioListsChange={(playId, audioLists) => {
+                    Store.set("playList", audioLists)
                     if (audioLists.length === 0) {
                         this.r.props.onClearAudioList()
                         currentMusicUniqueId = ""
@@ -108,10 +109,11 @@ export default class AudioPlayer extends React.PureComponent {
                 onAudioPlayTrackChange={((currentPlayId, audioLists, audioInfo) => {
                     if (audioInfo._id !== currentMusicUniqueId && audioLists.length > 0 && audioLists.length <= 20) {
                         currentMusicUniqueId = audioInfo._id
-                        Store.set("playList", audioLists)
                     }
                 })}
-                onAudioPlay={audioInfo => Store.set("playId", audioInfo._id)}
+                onAudioPlay={audioInfo => {
+                    Store.set("playId", audioInfo._id)
+                }}
                 onAudioVolumeChange={volume => {
                     Store.set('volume', Math.sqrt(volume))
                 }}
