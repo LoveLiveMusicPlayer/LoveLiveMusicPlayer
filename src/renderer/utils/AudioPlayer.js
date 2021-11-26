@@ -107,7 +107,6 @@ export default class AudioPlayer extends React.PureComponent {
                     })
                 }}
                 onAudioPlayTrackChange={((currentPlayId, audioLists, audioInfo) => {
-                    Store.set("playList", audioLists)
                     if (audioInfo._id !== currentMusicUniqueId && audioLists.length > 0 && audioLists.length <= 20) {
                         currentMusicUniqueId = audioInfo._id
                     }
