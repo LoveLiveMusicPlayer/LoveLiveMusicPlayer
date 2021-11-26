@@ -267,7 +267,7 @@ function App({dispatch}) {
                 }
             })
             playList[0].playIndex = playIndex
-            playerRef.current?.onChangeAudioList(playList)
+            playerRef.current?.onChangeAudioList(playList, true)
         }
     }
 

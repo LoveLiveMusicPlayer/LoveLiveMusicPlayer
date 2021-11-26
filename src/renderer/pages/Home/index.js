@@ -203,9 +203,9 @@ const Home = ({dispatch, chooseGroup, showAlbum, isRoot}) => {
     const renderClearDialogBottom = () => {
         return (
             <div className={'clearDialog'}>
-                <text>用户数据：主题背景、播放器配置</text>
-                <text>自建数据：用户数据、我喜欢、歌单</text>
-                <text>全部数据：自建数据、云端缓存数据</text>
+                <div>用户数据：主题背景、播放器配置</div>
+                <div>自建数据：用户数据、我喜欢、歌单</div>
+                <div>全部数据：自建数据、云端缓存数据</div>
             </div>
         )
     }

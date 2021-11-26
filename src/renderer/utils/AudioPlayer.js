@@ -9,6 +9,7 @@ export default class AudioPlayer extends React.PureComponent {
 
     constructor(props) {
         super(props);
+        this.audioInstance = null
         this.state = {
             params: {
                 ...props
@@ -39,14 +40,19 @@ export default class AudioPlayer extends React.PureComponent {
     }
 
     // 切换专辑
-    onChangeAudioList = (arr) => {
-        const index = arr[0].playIndex ? arr[0].playIndex : 0
+    onChangeAudioList = (arr, init) => {
+        const index = arr && arr.length > 0 && arr[0].playIndex ? arr[0].playIndex : 0
         this.setState({playIndex: index})
         this.updateParams({
             clearPriorAudioLists: true,
             audioLists: arr,
             playIndex: index
         })
+        if (init && init === true) {
+            setTimeout(() => {
+                this.audioInstance.pause()
+            }, 500)
+        }
     }
 
     // 是否处于显示歌词页面中
@@ -72,6 +78,7 @@ export default class AudioPlayer extends React.PureComponent {
         params.playIndex = playIndex
         return (
             <ReactJkMusicPlayer
+                getAudioInstance={(instance) => (this.audioInstance = instance)}
                 ref={(ref) => this.r = ref}
                 style={{marginTop: '100px'}}
                 {...params}
