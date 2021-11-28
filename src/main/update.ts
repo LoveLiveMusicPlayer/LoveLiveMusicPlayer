@@ -47,7 +47,7 @@ export default class update {
                 const json = JSON.parse(message)
                 const localVersion = app.getVersion().split('.').join('')
                 const remoteVersion = json.version.split('.').join('')
-                if (localVersion > remoteVersion) {
+                if (localVersion >= remoteVersion) {
                     this.showDialog('已经是最新版本了', ["知道了"])
                 } else {
                     this.showDialog(`检测到新版本（${json.version}）是否更新`, ["取消", "确定"], json.message).then(rtn => {

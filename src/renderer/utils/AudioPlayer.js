@@ -94,7 +94,9 @@ export default class AudioPlayer extends React.PureComponent {
                     this.updateParams({playIndex})
                 }}
                 onAudioListsChange={(playId, audioLists) => {
-                    Store.set("playList", audioLists)
+                    if (audioLists.length < 20) {
+                        Store.set("playList", audioLists)
+                    }
                     if (audioLists.length === 0) {
                         this.r.props.onClearAudioList()
                         currentMusicUniqueId = ""
@@ -123,6 +125,29 @@ export default class AudioPlayer extends React.PureComponent {
                 onAudioProgress={audioInfo => {
                     if (audioInfo) {
                         this.r.props.onAudioTimeChange(audioInfo)
+                    }
+                }}
+                onAudioError={(error, currentPlayId, audioLists, audioInfo) => {
+                    switch (this.r.props.playMode) {
+                        case 'singleLoop':
+                            this.audioInstance.load()
+                            break
+                        case 'orderLoop':
+                            this.audioInstance.playNext()
+                            break
+                        case 'order':
+                            let count = 0
+                            audioLists.map((item, index) => {
+                                if (item._id === audioInfo._id) {
+                                    count = index
+                                }
+                            })
+                            if (count !== audioLists.length - 1) {
+                                this.audioInstance.playNext()
+                            }
+                            break
+                        default:
+                            break
                     }
                 }}
             />

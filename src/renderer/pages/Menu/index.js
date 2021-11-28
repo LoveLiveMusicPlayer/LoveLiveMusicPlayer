@@ -14,6 +14,7 @@ import {CustomDialog} from "../../component/CustomDialog";
 import {LoveHelper} from "../../dao/LoveHelper";
 
 const {connect} = require('react-redux');
+let isInit = true
 
 const Menu = ({location}) => {
 
@@ -31,6 +32,7 @@ const Menu = ({location}) => {
 
     const [nodeDisplay, setNodeDisplay] = useState(false)
     const [rowHover, setRowHover] = useState()
+    const [showCovers, setShowCovers] = useState([])
 
     const [group, setGroup] = useState([])
     const [category, setCategory] = useState([])
@@ -92,22 +94,35 @@ const Menu = ({location}) => {
         }
     ];
 
+    useEffect(() => {
+        isInit = true
+    }, [])
+
     const renderCover = () => {
         if (info && info.music.length > 0) {
-            const coverList = []
-            const url = Store.get('url')
-            info.music.map((item, index) => {
-                if (coverList.length < 10) {
-                    coverList.push({
-                        src: url + item['cover_path'],
-                        id: index
-                    })
-                }
-            })
+            if (isInit) {
+                const coverList = []
+                const url = Store.get('url')
+                const set = new Set()
+                info.music.map((item, index) => {
+                    const path = url + item['cover_path']
+                    set.add(path)
+                })
+                Array.from(set).map((item, index) => {
+                    if (coverList.length < 10) {
+                        coverList.push({
+                            src: item,
+                            id: index
+                        })
+                    }
+                })
+                setShowCovers(coverList)
+                isInit = false
+            }
             return (
                 <ImagePagination
                     key={info.name}
-                    pages={coverList}
+                    pages={showCovers}
                     playButton={false}
                     whiteCover={false}
                     effect={false}

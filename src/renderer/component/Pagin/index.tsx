@@ -18,6 +18,8 @@ interface ImagePaginationProps {
     playAll: any,
 }
 
+let intervalId: NodeJS.Timeout
+
 const Index = (
     {
         pages,
@@ -64,9 +66,11 @@ const Index = (
         setActivePlayButton(false);
     };
 
+    useEffect(() => {
+        clearInterval(intervalId)
+    }, [pages])
 
     useEffect(() => {
-        let intervalId: NodeJS.Timeout
         if (pages.length > 1) {
             intervalId = setInterval(() => {
                 if (activeIndex === (pages.length - 1)) {

@@ -305,7 +305,7 @@ export const WorkUtils = {
         const faceHeight = document.body.clientHeight - 160
         const innerFaceHeight = event.pageY - dialogHeight
         let pageY = event.pageY
-        if (faceHeight - innerFaceHeight < dialogHeight) {
+        if (faceHeight - innerFaceHeight < dialogHeight + 88) {
             pageY = pageY - dialogHeight
         }
         return pageY
