@@ -24,6 +24,7 @@ import {WorkUtils} from "./utils/WorkUtils";
 import {WindowButton} from "./component/WindowButton";
 
 const {ipcRenderer} = require('electron')
+const os = require("os").platform();
 
 // 全局通知弹窗
 const openNotification = (message) => {
@@ -295,6 +296,20 @@ function App({dispatch}) {
         })
         ipcRenderer.send('getAppVersion')
 
+        ipcRenderer.on('playMusic', _ => {
+            playerRef.current?.onTogglePlay()
+        })
+
+        ipcRenderer.on('prevMusic', _ => {
+            playerRef.current?.onPrevPlay()
+        })
+
+        ipcRenderer.on('nextMusic', _ => {
+            playerRef.current?.onNextPlay()
+        })
+    }, [])
+
+    useEffect(() => {
         setTimeout(() => {
             openNotification('这是一个开源项目，完全免费！')
         }, 1000)
@@ -353,7 +368,9 @@ function App({dispatch}) {
                     <div className={'logo'}>
                         <img src={Images.ICON_HEAD}/>
                     </div>
-                    <div className={'headerFunc'} style={{visibility: onShowFunc ? 'visible' : 'hidden'}}>
+                    <div className={'headerFunc'}
+                         style={{visibility: onShowFunc && os !== 'darwin' ? 'visible' : 'hidden'}}
+                    >
                         <WindowButton type={'close'}/>
                         <WindowButton type={'min'}/>
                         <WindowButton type={'max'}/>

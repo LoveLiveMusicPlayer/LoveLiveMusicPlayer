@@ -61,7 +61,7 @@ export default class AudioPlayer extends React.PureComponent {
         })
         if (init && init === true) {
             setTimeout(() => {
-                this.audioInstance.pause()
+                this.audioInstance?.pause()
             }, 500)
         }
     }
@@ -84,9 +84,21 @@ export default class AudioPlayer extends React.PureComponent {
         })
     }
 
+    onTogglePlay = () => {
+        this.audioInstance?.togglePlay()
+    }
+
+    onPrevPlay = () => {
+        this.audioInstance?.playPrev()
+    }
+
+    onNextPlay = () => {
+        this.audioInstance?.playNext()
+    }
+
     content = () => {
         return (
-            <Menu>
+            <Menu style={{marginBottom: 25}}>
                 <Menu.Item key={"addTo"}>
                     <a onClick={async () => {
                         if (!AppUtils.isEmpty(currentMusicUniqueId)) {
@@ -206,10 +218,10 @@ export default class AudioPlayer extends React.PureComponent {
                         }
                         switch (this.r.props.playMode) {
                             case 'singleLoop':
-                                this.audioInstance.load()
+                                this.audioInstance?.load()
                                 break
                             case 'orderLoop':
-                                this.audioInstance.playNext()
+                                this.audioInstance?.playNext()
                                 break
                             case 'order':
                                 let count = 0
@@ -219,7 +231,7 @@ export default class AudioPlayer extends React.PureComponent {
                                     }
                                 })
                                 if (count !== audioLists.length - 1) {
-                                    this.audioInstance.playNext()
+                                    this.audioInstance?.playNext()
                                 }
                                 break
                             default:

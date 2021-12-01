@@ -1,7 +1,7 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import {app, BrowserWindow, dialog, ipcMain, shell} from 'electron';
+import {app, BrowserWindow, dialog, ipcMain, Menu, shell} from 'electron';
 import MenuBuilder from './menu';
 import {portIsOccupied, resolveHtmlPath} from './util';
 import update from "./update";
@@ -100,21 +100,21 @@ ipcMain.handle("fileDialog", (_event, _args) => {
 })
 
 // 窗口最小化
-ipcMain.on('min',function(){
+ipcMain.on('min', function () {
     mainWindow?.minimize()
 })
 
 // 窗口最大化
-ipcMain.on('max',function(){
-    if(mainWindow?.isMaximized()){
+ipcMain.on('max', function () {
+    if (mainWindow?.isMaximized()) {
         mainWindow?.restore()
-    }else{
+    } else {
         mainWindow?.maximize()
     }
 })
 
 // 窗口关闭
-ipcMain.on('close',function(){
+ipcMain.on('close', function () {
     mainWindow?.hide()
     mainWindow?.close()
 })
@@ -171,7 +171,7 @@ const createWindow = async () => {
         show: false,
         width: 1250,
         height: 728,
-        titleBarStyle: 'hidden',
+        titleBarStyle: 'customButtonsOnHover',
         frame: false,
         minWidth: 1024,
         minHeight: 728,
@@ -215,6 +215,33 @@ const createWindow = async () => {
     });
 };
 
+
+const dockMenu = Menu.buildFromTemplate([
+    {
+        label: 'Github',
+        click() {
+            shell.openExternal("https://github.com/zhushenwudi/LoveLiveMusicPlayer")
+        }
+    }, {
+        label: '播放/暂停',
+        click() {
+            mainWindow?.webContents.send('playMusic')
+        }
+    },
+    {
+        label: '上一首',
+        click() {
+            mainWindow?.webContents.send('prevMusic')
+        }
+    },
+    {
+        label: '下一首',
+        click() {
+            mainWindow?.webContents.send('nextMusic')
+        }
+    }
+])
+
 /**
  * Add event listeners...
  */
@@ -227,7 +254,11 @@ app.on('window-all-closed', () => {
     }
 });
 
-app.whenReady().then(createWindow).catch(console.log);
+app.whenReady().then(() => {
+    if (process.platform === 'darwin') {
+        app.dock.setMenu(dockMenu)
+    }
+}).then(createWindow).catch(console.log);
 
 app.on('activate', () => {
     // On macOS it's common to re-create a window in the app when the
