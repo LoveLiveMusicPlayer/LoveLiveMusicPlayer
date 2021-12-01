@@ -9,9 +9,10 @@ import {CustomDialog} from "../../component/CustomDialog";
 import {SongMenuHelper} from "../../dao/SongMenuHelper";
 import {LoveHelper} from "../../dao/LoveHelper";
 
+const {connect} = require('react-redux')
 const {TabPane} = Tabs;
 
-export const Love = () => {
+const Love = ({playId}) => {
     const [btnFuncPic1, setBtnFuncPic1] = useState(Images.ICON_DIS_PLAY)
     const [btnFuncPic2, setBtnFuncPic2] = useState(Images.ICON_DIS_COLLECT)
     const [btnFuncPic3, setBtnFuncPic3] = useState(Images.ICON_LOVE)
@@ -53,9 +54,14 @@ export const Love = () => {
             key: 'song',
             render: (text, record, index) => {
                 const active = index === rowHover
+                const isCurrentPlay = record.music._id === playId
                 return (
                     <div style={{display: 'flex', flexDirection: 'row'}}>
-                        <div>{text}</div>
+                        {
+                            isCurrentPlay ?
+                                <img src={Images.ICON_PLAY} width={20} height={20} style={{marginRight: 10}}/> : null
+                        }
+                        <p style={{margin: 0, fontWeight: isCurrentPlay ? 800 : 400}}>{text}</p>
                         <div className={'btnFuncContainer'} style={{visibility: active ? 'visible' : 'hidden'}}>
                             <img
                                 className={'btnFunc'}
@@ -261,3 +267,11 @@ export const Love = () => {
         </div>
     )
 }
+
+function select(store) {
+    return {
+        playId: store.music.playId
+    };
+}
+
+export default connect(select)(Love);

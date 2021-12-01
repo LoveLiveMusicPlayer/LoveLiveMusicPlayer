@@ -11,10 +11,13 @@ import {LoveHelper} from "../dao/LoveHelper";
 import {SelectDialog} from "../component/SelectDialog";
 import {SongMenuHelper} from "../dao/SongMenuHelper";
 import {ipcRenderer} from "electron";
+import {musicAction} from "../actions/music";
+
+const {connect} = require('react-redux')
 
 let currentMusicUniqueId = ""
 
-export default class AudioPlayer extends React.PureComponent {
+class AudioPlayer extends React.PureComponent {
 
     constructor(props) {
         super(props);
@@ -201,6 +204,7 @@ export default class AudioPlayer extends React.PureComponent {
                     onAudioPlay={audioInfo => {
                         ipcRenderer.send('musicName', "当前播放:\n" + audioInfo.name)
                         currentMusicUniqueId = audioInfo._id
+                        this.props.dispatch(musicAction.playId(audioInfo._id))
                         Store.set("playId", audioInfo._id)
                     }}
                     onAudioVolumeChange={volume => {
@@ -254,3 +258,11 @@ export default class AudioPlayer extends React.PureComponent {
         )
     }
 }
+
+function select(store) {
+    return {
+        playId: store.music.playId,
+    };
+}
+
+export default connect(select, null, null, {forwardRef: true})(AudioPlayer);

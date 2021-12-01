@@ -2,7 +2,7 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import {app, BrowserWindow, dialog, ipcMain, Menu, shell, Tray} from 'electron';
+import {app, BrowserWindow, dialog, globalShortcut, ipcMain, Menu, shell, Tray} from 'electron';
 import MenuBuilder from './menu';
 import {portIsOccupied, resolveHtmlPath} from './util';
 import update from "./update";
@@ -225,11 +225,6 @@ const createWindow = async () => {
 
 const dockMenu = Menu.buildFromTemplate([
     {
-        label: 'Github',
-        click() {
-            shell.openExternal("https://github.com/zhushenwudi/LoveLiveMusicPlayer")
-        }
-    }, {
         label: '播放/暂停',
         click() {
             mainWindow?.webContents.send('playMusic')
@@ -246,6 +241,12 @@ const dockMenu = Menu.buildFromTemplate([
         click() {
             mainWindow?.webContents.send('nextMusic')
         }
+    },
+    {
+        label: '关于',
+        click() {
+            shell.openExternal("https://github.com/zhushenwudi/LoveLiveMusicPlayer")
+        }
     }
 ])
 
@@ -260,6 +261,9 @@ app.on('window-all-closed', () => {
 });
 
 app.whenReady().then(() => {
+    globalShortcut.register('CommandOrControl+P', () => {
+        mainWindow?.webContents.send('playMusic')
+    })
     if (process.platform === 'darwin') {
         app.dock.setMenu(dockMenu)
     } else if (process.platform === 'win32') {

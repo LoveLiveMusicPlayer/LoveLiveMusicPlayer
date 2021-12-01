@@ -16,7 +16,7 @@ import {LoveHelper} from "../../dao/LoveHelper";
 const {connect} = require('react-redux');
 let isInit = true
 
-const Menu = ({location}) => {
+const Menu = ({playId, location}) => {
 
     const [btnFuncPic1, setBtnFuncPic1] = useState(Images.ICON_DIS_PLAY)
     const [btnFuncPic2, setBtnFuncPic2] = useState(Images.ICON_DIS_COLLECT)
@@ -52,9 +52,14 @@ const Menu = ({location}) => {
             key: 'song',
             render: (text, record, index) => {
                 const active = index === rowHover
+                const isCurrentPlay = record.music._id === playId
                 return (
                     <div style={{display: 'flex', flexDirection: 'row'}}>
-                        <div>{text}</div>
+                        {
+                            isCurrentPlay ?
+                                <img src={Images.ICON_PLAY} width={20} height={20} style={{marginRight: 10}}/> : null
+                        }
+                        <p style={{margin: 0, fontWeight: isCurrentPlay ? 800 : 400}}>{text}</p>
                         <div className={'btnFuncContainer'} style={{visibility: active ? 'visible' : 'hidden'}}>
                             <img
                                 className={'btnFunc'}
@@ -336,7 +341,7 @@ const Menu = ({location}) => {
 
 function select(store) {
     return {
-        chooseGroup: store.music.chooseGroup,
+        playId: store.music.playId
     };
 }
 

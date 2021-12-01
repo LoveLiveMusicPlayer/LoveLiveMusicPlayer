@@ -9,4 +9,12 @@ export const musicAction = {
             })
         }
     },
+    playId(playId) {
+        return (dispatch) => {
+            dispatch({
+                type: TYPES.PLAY_ID,
+                playId
+            })
+        }
+    }
 }

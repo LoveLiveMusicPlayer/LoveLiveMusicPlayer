@@ -3,7 +3,7 @@ import {Route, Switch, useHistory, useLocation} from 'react-router-dom';
 import './App.global.css';
 import Home from './pages/Home'
 import Album from './pages/Album'
-import {Love} from './pages/Love'
+import Love from './pages/Love'
 import AudioPlayer from "./utils/AudioPlayer";
 import Bus from "./utils/Event"
 import * as Images from './public/Images'
