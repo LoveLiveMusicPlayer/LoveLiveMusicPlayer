@@ -1,7 +1,7 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import {app, BrowserWindow, dialog, ipcMain, Menu, shell} from 'electron';
+import {app, BrowserWindow, dialog, ipcMain, Menu, shell, Tray} from 'electron';
 import MenuBuilder from './menu';
 import {portIsOccupied, resolveHtmlPath} from './util';
 import update from "./update";
@@ -186,6 +186,44 @@ const createWindow = async () => {
     });
 
     mainWindow.loadURL(resolveHtmlPath('index.html'));
+
+    //系统托盘右键菜单
+    var trayMenuTemplate = [
+        {
+            label: '设置',
+            click: function () {} //打开相应页面
+        },
+        {
+            label: '意见反馈',
+            click: function () {}
+        },
+        {
+            label: '帮助',
+            click: function () {}
+        },
+        {
+            label: '关于微信',
+            click: function () {}
+        },
+        {
+            label: '退出微信',
+            click: function () {
+                app.quit();
+            }
+        }
+    ];
+
+    console.log(path.join(RESOURCES_PATH, 'icon.ico'))
+    const appTray = new Tray(path.join(RESOURCES_PATH, 'icon.ico'));
+
+    //图标的上下文菜单
+    const contextMenu = Menu.buildFromTemplate(trayMenuTemplate);
+
+    //设置此托盘图标的悬停提示内容
+    appTray.setToolTip('This is my application.');
+
+    //设置此图标的上下文菜单
+    appTray.setContextMenu(contextMenu);
 
     // @TODO: Use 'ready-to-show' event
     //        https://github.com/electron/electron/blob/main/docs/api/browser-window.md#using-ready-to-show-event
