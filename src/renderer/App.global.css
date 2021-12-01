@@ -67,6 +67,14 @@ a:hover {
     -webkit-app-region: no-drag;
 }
 
+.headerFunc {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    top: 7px;
+    left: 0
+}
+
 .outer_container {
     width: 100%;
     height: 100vh;

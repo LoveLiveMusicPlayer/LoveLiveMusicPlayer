@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-nocheck
 import React, {useEffect, useState} from 'react';
 import {Container, Dot, DotContainer, Img, Page, Play, PrevNext, Text, WhiteCover} from './styled-components'
 import * as Images from '../../public/Images'

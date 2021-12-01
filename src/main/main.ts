@@ -99,6 +99,26 @@ ipcMain.handle("fileDialog", (_event, _args) => {
     dialog.showOpenDialogSync({properties: ['openFile', 'multiSelections']})
 })
 
+// 窗口最小化
+ipcMain.on('min',function(){
+    mainWindow?.minimize()
+})
+
+// 窗口最大化
+ipcMain.on('max',function(){
+    if(mainWindow?.isMaximized()){
+        mainWindow?.restore()
+    }else{
+        mainWindow?.maximize()
+    }
+})
+
+// 窗口关闭
+ipcMain.on('close',function(){
+    mainWindow?.hide()
+    mainWindow?.close()
+})
+
 // 检查更新
 ipcMain.handle("checkUpdate", (_event, _args) => {
     autoUpdater.checkUpdate(updateCallback)
@@ -151,7 +171,7 @@ const createWindow = async () => {
         show: false,
         width: 1250,
         height: 728,
-        titleBarStyle: 'customButtonsOnHover',
+        titleBarStyle: 'hidden',
         frame: false,
         minWidth: 1024,
         minHeight: 728,

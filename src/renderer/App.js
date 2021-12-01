@@ -21,6 +21,7 @@ import {MusicDetail} from "./component/MusicDetail";
 import Store from '../../src/renderer/utils/Store'
 import Menu from "./pages/Menu";
 import {WorkUtils} from "./utils/WorkUtils";
+import {WindowButton} from "./component/WindowButton";
 
 const {ipcRenderer} = require('electron')
 
@@ -60,6 +61,8 @@ function App({dispatch}) {
     const [initHomeKey, setInitHomeKey] = useState("")
     // 是否显示路由容器
     const [showRouter, setShowRouter] = useState(false)
+    // 触摸Header显示功能按键
+    const [onShowFunc, setShowFunc] = useState(false)
 
     // 点击企划图片
     const onBabyClick = () => {
@@ -343,8 +346,18 @@ function App({dispatch}) {
     return (
         <div className={"outer_container"} onClick={() => Bus.emit('onClickBody')}>
             <div className="header">
-                <div className={'logo'}>
-                    <img src={Images.ICON_HEAD}/>
+                <div style={{position: 'relative'}}
+                     onMouseOver={() => setShowFunc(true)}
+                     onMouseOut={() => setShowFunc(false)}
+                >
+                    <div className={'logo'}>
+                        <img src={Images.ICON_HEAD}/>
+                    </div>
+                    <div className={'headerFunc'} style={{visibility: onShowFunc ? 'visible' : 'hidden'}}>
+                        <WindowButton type={'close'}/>
+                        <WindowButton type={'min'}/>
+                        <WindowButton type={'max'}/>
+                    </div>
                 </div>
                 {/*{renderBtnBack()}*/}
                 <MyTypeWriter/>
