@@ -2,6 +2,14 @@ import React from 'react'
 import ReactJkMusicPlayer from 'react-jinke-music-player'
 import 'react-jinke-music-player/assets/index.css'
 import Store from '../utils/Store'
+import * as Images from '../public/Images'
+import {Dropdown, Menu} from 'antd';
+import {MusicHelper} from "../dao/MusicHelper";
+import {AppUtils} from "./AppUtils";
+import Bus from '../utils/Event'
+import {LoveHelper} from "../dao/LoveHelper";
+import {SelectDialog} from "../component/SelectDialog";
+import {SongMenuHelper} from "../dao/SongMenuHelper";
 
 let currentMusicUniqueId = ""
 
@@ -16,7 +24,10 @@ export default class AudioPlayer extends React.PureComponent {
             },
             playIndex: 0,
             audioList: [],
-            isShowDetail: false
+            isShowDetail: false,
+            onHover: false,
+            addListDisplay: false,
+            menu: []
         }
         this.r = null
     }
@@ -73,84 +84,158 @@ export default class AudioPlayer extends React.PureComponent {
         })
     }
 
+    content = () => {
+        return (
+            <Menu>
+                <Menu.Item key={"addTo"}>
+                    <a onClick={async () => {
+                        if (!AppUtils.isEmpty(currentMusicUniqueId)) {
+                            SongMenuHelper.findAllMenu().then(menu => {
+                                if (menu.length > 0) {
+                                    this.setState({
+                                        addListDisplay: true,
+                                        menu: menu
+                                    })
+                                } else {
+                                    Bus.emit('onNotification', '请先新增歌单')
+                                }
+                            })
+                        } else {
+                            Bus.emit('onNotification', '歌曲未载入')
+                        }
+                    }}>添加到</a>
+                </Menu.Item>
+                <Menu.Divider/>
+                <Menu.Item key={"iLove"}>
+                    <a onClick={async () => {
+                        if (!AppUtils.isEmpty(currentMusicUniqueId)) {
+                            const music = await MusicHelper.findOneMusicByUniqueId(currentMusicUniqueId)
+                            LoveHelper.insertSongToLove(music).then(_ => {
+                                Bus.emit('onNotification', '已添加到我喜欢')
+                            })
+                        } else {
+                            Bus.emit('onNotification', '歌曲未载入')
+                        }
+                    }}>我喜欢</a>
+                </Menu.Item>
+            </Menu>
+        )
+    }
+
+    renderDIYButton = () => {
+        return (
+            <Dropdown overlay={this.content()} placement="bottomCenter">
+                <img
+                    src={Images.ICON_MORE}
+                    width={25}
+                    height={25}
+                    style={{opacity: this.state.onHover ? 0.9 : 1}}
+                    onMouseOver={() => this.setState({onHover: true})}
+                    onMouseOut={() => this.setState({onHover: false})}
+                />
+            </Dropdown>
+        )
+    }
+
+    addListToMenu = async (id) => {
+        if (!AppUtils.isEmpty(currentMusicUniqueId)) {
+            const music = await MusicHelper.findOneMusicByUniqueId(currentMusicUniqueId)
+            SongMenuHelper.insertSongToMenu(id, music).then(_ => {
+                Bus.emit('onNotification', '已添加到歌单')
+            })
+        } else {
+            Bus.emit('onNotification', '歌曲未载入')
+        }
+    }
+
     render() {
         const {params, playIndex} = this.state
         params.playIndex = playIndex
         return (
-            <ReactJkMusicPlayer
-                getAudioInstance={(instance) => (this.audioInstance = instance)}
-                ref={(ref) => this.r = ref}
-                style={{marginTop: '100px'}}
-                {...params}
-                onModeChange={(mode) => {
-                    this.updateParams({mode})
-                }}
-                onPlayModeChange={(playMode) => {
-                    Store.set('playMode', playMode)
-                    this.updateParams({playMode})
-                }}
-                onPlayIndexChange={(playIndex) => {
-                    this.setState({playIndex: playIndex})
-                    this.updateParams({playIndex})
-                }}
-                onAudioListsChange={(playId, audioLists) => {
-                    if (audioLists.length < 20) {
-                        Store.set("playList", audioLists)
-                    }
-                    if (audioLists.length === 0) {
-                        this.r.props.onClearAudioList()
-                        currentMusicUniqueId = ""
-                        Store.set("playId", "")
-                    }
-                    this.updateParams({
-                        audioLists: audioLists,
-                        // 歌单列表为空 或者 不在歌词界面时显示白色背景
-                        theme: audioLists.length === 0 || !this.state.isShowDetail ? 'light' : 'dark'
-                    })
-                }}
-                onAudioPlayTrackChange={((currentPlayId, audioLists, audioInfo) => {
-                    if (audioInfo._id !== currentMusicUniqueId && audioLists.length > 0 && audioLists.length <= 20) {
+            <div style={{position: 'relative', background: 'red'}}>
+                <ReactJkMusicPlayer
+                    getAudioInstance={(instance) => (this.audioInstance = instance)}
+                    ref={(ref) => this.r = ref}
+                    style={{marginTop: '100px'}}
+                    {...params}
+                    onModeChange={(mode) => {
+                        this.updateParams({mode})
+                    }}
+                    onPlayModeChange={(playMode) => {
+                        Store.set('playMode', playMode)
+                        this.updateParams({playMode})
+                    }}
+                    onPlayIndexChange={(playIndex) => {
+                        this.setState({playIndex: playIndex})
+                        this.updateParams({playIndex})
+                    }}
+                    onAudioListsChange={(playId, audioLists) => {
+                        if (audioLists.length < 20) {
+                            Store.set("playList", audioLists)
+                        }
+                        if (audioLists.length === 0) {
+                            this.r.props.onClearAudioList()
+                            currentMusicUniqueId = ""
+                            Store.set("playId", "")
+                        }
+                        this.updateParams({
+                            audioLists: audioLists,
+                            // 歌单列表为空 或者 不在歌词界面时显示白色背景
+                            theme: audioLists.length === 0 || !this.state.isShowDetail ? 'light' : 'dark'
+                        })
+                    }}
+                    onAudioPlay={audioInfo => {
                         currentMusicUniqueId = audioInfo._id
-                    }
-                })}
-                onAudioPlay={audioInfo => {
-                    Store.set("playId", audioInfo._id)
-                }}
-                onAudioVolumeChange={volume => {
-                    Store.set('volume', Math.sqrt(volume))
-                }}
-                onCoverClick={_ => {
-                    this.r.props.onClickCover()
-                }}
-                onAudioProgress={audioInfo => {
-                    if (audioInfo) {
-                        this.r.props.onAudioTimeChange(audioInfo)
-                    }
-                }}
-                onAudioError={(error, currentPlayId, audioLists, audioInfo) => {
-                    switch (this.r.props.playMode) {
-                        case 'singleLoop':
-                            this.audioInstance.load()
-                            break
-                        case 'orderLoop':
-                            this.audioInstance.playNext()
-                            break
-                        case 'order':
-                            let count = 0
-                            audioLists.map((item, index) => {
-                                if (item._id === audioInfo._id) {
-                                    count = index
-                                }
-                            })
-                            if (count !== audioLists.length - 1) {
+                        Store.set("playId", audioInfo._id)
+                    }}
+                    onAudioVolumeChange={volume => {
+                        Store.set('volume', Math.sqrt(volume))
+                    }}
+                    onCoverClick={_ => {
+                        this.r.props.onClickCover()
+                    }}
+                    onAudioProgress={audioInfo => {
+                        if (audioInfo) {
+                            this.r.props.onAudioTimeChange(audioInfo)
+                        }
+                    }}
+                    onAudioError={(error, currentPlayId, audioLists, audioInfo) => {
+                        // 无法加载流则跳过
+                        if (error.message === "MEDIA_ELEMENT_ERROR: Format error") {
+                            return
+                        }
+                        switch (this.r.props.playMode) {
+                            case 'singleLoop':
+                                this.audioInstance.load()
+                                break
+                            case 'orderLoop':
                                 this.audioInstance.playNext()
-                            }
-                            break
-                        default:
-                            break
-                    }
-                }}
-            />
+                                break
+                            case 'order':
+                                let count = 0
+                                audioLists.map((item, index) => {
+                                    if (item._id === audioInfo._id) {
+                                        count = index
+                                    }
+                                })
+                                if (count !== audioLists.length - 1) {
+                                    this.audioInstance.playNext()
+                                }
+                                break
+                            default:
+                                break
+                        }
+                    }}
+                    extendsContent={this.renderDIYButton()}
+                />
+                <SelectDialog
+                    hint={'请选择要添加的歌单'}
+                    isShow={this.state.addListDisplay}
+                    result={(id) => this.addListToMenu(id)}
+                    list={this.state.menu}
+                    close={() => this.setState({addListDisplay: false})}
+                />
+            </div>
         )
     }
 }

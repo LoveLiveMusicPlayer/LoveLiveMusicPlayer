@@ -49,17 +49,19 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen}, ref) 
     }))
 
     useEffect(() => {
+        setJpLrc('')
         if (jpLrcUrl && musicDetailVisible) {
             WorkUtils.requestLyric(jpLrcUrl).then(res => {
                 const lrc = res.split('\n').map(item => {
                     return item.trim()
                 }).join('\n')
                 setJpLrc(lrc)
-            }).catch(_ => setJpLrc(''))
+            })
         }
     }, [jpLrcUrl, musicDetailVisible])
 
     useEffect(() => {
+        setZhLrc('')
         if (zhLrcUrl && musicDetailVisible) {
             WorkUtils.requestLyric(zhLrcUrl).then(res => {
                 const lrc = res.split('\n').map(item => {
@@ -67,7 +69,6 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen}, ref) 
                 }).join('\n')
                 setZhLrc(lrc)
             }).catch(_ => {
-                setZhLrc('')
                 setLrcLanguage('jp')
             })
         }

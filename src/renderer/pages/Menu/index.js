@@ -214,8 +214,6 @@ const Menu = ({location}) => {
         LoveHelper.insertSongToLove(music.music).then(_ => {
             setRefreshMenu(new Date().getTime())
             Bus.emit('onNotification', '已添加到我喜欢')
-        }).catch(err => {
-            Bus.emit('onNotification', err)
         })
     }
 
@@ -232,8 +230,8 @@ const Menu = ({location}) => {
     }
 
     const addToList = (id) => {
-        SongMenuHelper.insertSongToMenu(id, willAddListMusic).catch(err => {
-            Bus.emit('onNotification', err)
+        SongMenuHelper.insertSongToMenu(id, willAddListMusic).then(_ => {
+            Bus.emit('onNotification', '已添加到歌单')
         })
     }
 
@@ -273,7 +271,7 @@ const Menu = ({location}) => {
                 key: index,
                 song: item.name,
                 artist: item.artist,
-                time: '04:00',
+                time: item.time,
                 isLove: isLove,
                 music: item
             })

@@ -1,4 +1,5 @@
 const db = require('../utils/Database')("iLove")
+import Bus from '../utils/Event'
 
 export const LoveHelper = {
     // 加入我喜欢
@@ -11,9 +12,9 @@ export const LoveHelper = {
         if (!isHasCurrentMusic) {
             music.timestamp = new Date().getTime()
             return db.insert(music)
-        } else return new Promise(((resolve, reject) => {
-            reject('歌曲已经存在')
-        }))
+        } else return new Promise(_ => {
+            Bus.emit('onNotification', '歌曲已经存在')
+        })
     },
 
     // 根据 id 获取

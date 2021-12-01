@@ -33,6 +33,11 @@ export const MusicHelper = {
         return db.findAll({group: group})
     },
 
+    // 根据唯一 id 获取音乐信息
+    findOneMusicByUniqueId(id) {
+        return db.findOne({_id: id})
+    },
+
     // 根据 id 和 group 获取音乐信息
     findOneMusic(id, group) {
         return db.findOne({id: id, group: group})
@@ -48,8 +53,8 @@ export const MusicHelper = {
         return db.remove(null, {multi: true})
     },
 
-    // 根据id删除音乐信息
-    removeMusicById(id) {
+    // 根据唯一id删除音乐信息
+    removeMusicByUniqueId(id) {
         return db.remove({_id: id})
     }
 }

@@ -14,6 +14,7 @@ import icon_japanese from '../../../assets/image/icon_japanese.png'
 import icon_position_left from '../../../assets/image/icon_position_left.png'
 import icon_position_center from '../../../assets/image/icon_position_center.png'
 import icon_back from '../../../assets/image/icon_back.png'
+import icon_more from '../../../assets/image/icon_more.png'
 
 import icon_collect from '../../../assets/image/icon_collect.png'
 import icon_dis_collect from '../../../assets/image/icon_dis_collect.png'
@@ -47,6 +48,7 @@ export const ICON_JAPANESE = icon_japanese
 export const ICON_POSITION_LEFT = icon_position_left
 export const ICON_POSITION_CENTER = icon_position_center
 export const ICON_BACK = icon_back
+export const ICON_MORE = icon_more
 
 export const ICON_COLLECT = icon_collect
 export const ICON_DIS_COLLECT = icon_dis_collect

@@ -1,5 +1,6 @@
 import moment from 'moment'
 import {AppUtils} from "../utils/AppUtils";
+import Bus from '../utils/Event'
 
 const db = require('../utils/Database')("songMenu")
 
@@ -64,9 +65,9 @@ export const SongMenuHelper = {
         if (!isHasCurrentMusic) {
             menu.music.push(music)
             return db.update({id: menuId}, menu)
-        } else return new Promise(((resolve, reject) => {
-            reject('歌曲已经存在')
-        }))
+        } else return new Promise(_ => {
+            Bus.emit('onNotification', '歌曲已经存在')
+        })
     },
 
     /**

@@ -182,8 +182,8 @@ export const Love = () => {
     }
 
     const addToList = (id) => {
-        SongMenuHelper.insertSongToMenu(id, willAddListMusic).catch(err => {
-            Bus.emit('onNotification', err)
+        SongMenuHelper.insertSongToMenu(id, willAddListMusic).then(_ => {
+            Bus.emit('onNotification', '已添加到歌单')
         })
     }
 
@@ -218,7 +218,7 @@ export const Love = () => {
                     key: index,
                     song: music.name,
                     artist: music.artist,
-                    time: '04:00',
+                    time: music.time,
                     music: music
                 })
             })
