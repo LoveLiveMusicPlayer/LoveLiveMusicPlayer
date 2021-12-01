@@ -10,6 +10,7 @@ import Bus from '../utils/Event'
 import {LoveHelper} from "../dao/LoveHelper";
 import {SelectDialog} from "../component/SelectDialog";
 import {SongMenuHelper} from "../dao/SongMenuHelper";
+import {ipcRenderer} from "electron";
 
 let currentMusicUniqueId = ""
 
@@ -181,6 +182,7 @@ export default class AudioPlayer extends React.PureComponent {
                         this.setState({playIndex: playIndex})
                         this.updateParams({playIndex})
                     }}
+                    onAudioPause={() => ipcRenderer.send('musicName', 'LoveLive!')}
                     onAudioListsChange={(playId, audioLists) => {
                         if (audioLists.length < 20) {
                             Store.set("playList", audioLists)
@@ -197,6 +199,7 @@ export default class AudioPlayer extends React.PureComponent {
                         })
                     }}
                     onAudioPlay={audioInfo => {
+                        ipcRenderer.send('musicName', "当前播放:\n" + audioInfo.name)
                         currentMusicUniqueId = audioInfo._id
                         Store.set("playId", audioInfo._id)
                     }}

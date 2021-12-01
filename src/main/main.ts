@@ -1,3 +1,4 @@
+// @ts-nocheck
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
@@ -12,12 +13,18 @@ const Store = require('electron-store');
 Store.initRenderer();
 const autoUpdater = new update()
 
+const RESOURCES_PATH = app.isPackaged
+    ? path.join(process.resourcesPath, 'assets')
+    : path.join(__dirname, '../../assets');
+
 // 当前HTTP服务是否开启
 let isHttpServerOpen = false
 // http-server实例
 let mServer: any
 
 let mainWindow: BrowserWindow | null = null;
+
+let appTray = null
 
 let updateCallback = (progressObj: string) => {
     if (mainWindow) {
@@ -99,6 +106,11 @@ ipcMain.handle("fileDialog", (_event, _args) => {
     dialog.showOpenDialogSync({properties: ['openFile', 'multiSelections']})
 })
 
+// 获取当前播放歌曲的名字
+ipcMain.on("musicName", (event, args) => {
+    appTray?.setToolTip(args);
+})
+
 // 窗口最小化
 ipcMain.on('min', function () {
     mainWindow?.minimize()
@@ -116,7 +128,6 @@ ipcMain.on('max', function () {
 // 窗口关闭
 ipcMain.on('close', function () {
     mainWindow?.hide()
-    mainWindow?.close()
 })
 
 // 检查更新
@@ -159,10 +170,6 @@ const createWindow = async () => {
         await installExtensions();
     }
 
-    const RESOURCES_PATH = app.isPackaged
-        ? path.join(process.resourcesPath, 'assets')
-        : path.join(__dirname, '../../assets');
-
     const getAssetPath = (...paths: string[]): string => {
         return path.join(RESOURCES_PATH, ...paths);
     };
@@ -186,44 +193,6 @@ const createWindow = async () => {
     });
 
     mainWindow.loadURL(resolveHtmlPath('index.html'));
-
-    //系统托盘右键菜单
-    var trayMenuTemplate = [
-        {
-            label: '设置',
-            click: function () {} //打开相应页面
-        },
-        {
-            label: '意见反馈',
-            click: function () {}
-        },
-        {
-            label: '帮助',
-            click: function () {}
-        },
-        {
-            label: '关于微信',
-            click: function () {}
-        },
-        {
-            label: '退出微信',
-            click: function () {
-                app.quit();
-            }
-        }
-    ];
-
-    console.log(path.join(RESOURCES_PATH, 'icon.ico'))
-    const appTray = new Tray(path.join(RESOURCES_PATH, 'icon.ico'));
-
-    //图标的上下文菜单
-    const contextMenu = Menu.buildFromTemplate(trayMenuTemplate);
-
-    //设置此托盘图标的悬停提示内容
-    appTray.setToolTip('This is my application.');
-
-    //设置此图标的上下文菜单
-    appTray.setContextMenu(contextMenu);
 
     // @TODO: Use 'ready-to-show' event
     //        https://github.com/electron/electron/blob/main/docs/api/browser-window.md#using-ready-to-show-event
@@ -285,16 +254,67 @@ const dockMenu = Menu.buildFromTemplate([
  */
 
 app.on('window-all-closed', () => {
-    // Respect the OSX convention of having the application in memory even
-    // after all windows have been closed
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
+    // if (process.platform !== 'darwin') {
+    //     app.quit();
+    // }
 });
 
 app.whenReady().then(() => {
     if (process.platform === 'darwin') {
         app.dock.setMenu(dockMenu)
+    } else if (process.platform === 'win32') {
+        //系统托盘右键菜单
+        const trayMenuTemplate = [
+            {
+                label: '播放/暂停',
+                click() {
+                    mainWindow?.webContents.send('playMusic')
+                }
+            },
+            {
+                label: '上一首',
+                click() {
+                    mainWindow?.webContents.send('prevMusic')
+                }
+            },
+            {
+                label: '下一首',
+                click() {
+                    mainWindow?.webContents.send('nextMusic')
+                }
+            },
+            {
+                label: '关于',
+                click() {
+                    shell.openExternal("https://github.com/zhushenwudi/LoveLiveMusicPlayer")
+                }
+            },
+            {
+                label: '退出',
+                click() {
+                    app.quit();
+                }
+            }
+        ];
+
+        appTray = new Tray(path.join(RESOURCES_PATH, 'icon.ico'));
+
+        //图标的上下文菜单
+        const contextMenu = Menu.buildFromTemplate(trayMenuTemplate);
+
+        //设置此托盘图标的悬停提示内容
+        appTray.setToolTip('LoveLive!');
+
+        appTray.on('click', () => {
+            if (!mainWindow?.isVisible()) {
+                mainWindow?.show()
+            } else if (mainWindow?.isMinimized()) {
+                mainWindow?.restore()
+            }
+        })
+
+        //设置此图标的上下文菜单
+        appTray.setContextMenu(contextMenu);
     }
 }).then(createWindow).catch(console.log);
 
