@@ -17,6 +17,7 @@ import {AlbumHelper} from "../dao/AlbumHelper";
 const {connect} = require('react-redux')
 
 let currentMusicUniqueId = ""
+let currentPlayList = []
 
 class AudioPlayer extends React.PureComponent {
 
@@ -94,11 +95,15 @@ class AudioPlayer extends React.PureComponent {
     }
 
     onPrevPlay = () => {
-        this.audioInstance?.playPrev()
+        if (currentPlayList.length > 1) {
+            this.audioInstance?.playPrev()
+        } else this.audioInstance?.load()
     }
 
     onNextPlay = () => {
-        this.audioInstance?.playNext()
+        if (currentPlayList.length > 1) {
+            this.audioInstance?.playNext()
+        } else this.audioInstance?.load()
     }
 
     content = () => {
@@ -191,6 +196,7 @@ class AudioPlayer extends React.PureComponent {
                         if (audioLists.length < 20) {
                             Store.set("playList", audioLists)
                         }
+                        currentPlayList = audioLists
                         if (audioLists.length === 0) {
                             this.r.props.onClearAudioList()
                             currentMusicUniqueId = ""
