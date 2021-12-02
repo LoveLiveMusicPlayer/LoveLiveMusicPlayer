@@ -208,6 +208,13 @@ const createWindow = async () => {
         }
     });
 
+    mainWindow.on('close', event => {
+        if (process.platform === 'darwin') {
+            event.preventDefault()
+            mainWindow?.hide()
+        }
+    })
+
     mainWindow.on('closed', () => {
         mainWindow = null;
     });
@@ -253,12 +260,6 @@ const dockMenu = Menu.buildFromTemplate([
 /**
  * Add event listeners...
  */
-
-app.on('window-all-closed', () => {
-    // if (process.platform !== 'darwin') {
-    //     app.quit();
-    // }
-});
 
 app.whenReady().then(() => {
     globalShortcut.register('CommandOrControl+P', () => {
@@ -312,6 +313,7 @@ app.whenReady().then(() => {
         appTray.on('click', () => {
             if (!mainWindow?.isVisible()) {
                 mainWindow?.show()
+                mainWindow?.focus();
             } else if (mainWindow?.isMinimized()) {
                 mainWindow?.restore()
             }
@@ -323,8 +325,10 @@ app.whenReady().then(() => {
 }).then(createWindow).catch(console.log);
 
 app.on('activate', () => {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    // 这里只在生产环境才执行版本检测。
+    // 在macOS上，当单击dock图标且没有其他窗口打开时，通常会在应用程序中重新创建一个窗口。
     if (mainWindow === null) createWindow();
+    else if (!mainWindow?.isVisible()) {
+        mainWindow?.show()
+        mainWindow?.focus();
+    }
 });

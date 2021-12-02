@@ -240,6 +240,13 @@ export const AppUtils = {
             } else str += WorkUtils.parseGroupName(item)
         })
         return AppUtils.isEmpty(str) ? '-' : str
+    },
+
+    // 颜色取反
+    colorReverse(originColor) {
+        const old = "0x" + originColor.replace(/#/g, "")
+        let str = "000000" + (0xFFFFFF - old).toString(16);
+        return str.substring(str.length - 6, str.length);
     }
 }
 

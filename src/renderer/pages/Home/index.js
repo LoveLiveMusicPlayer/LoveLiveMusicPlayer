@@ -23,7 +23,7 @@ const {ipcRenderer} = require("electron")
 const {connect} = require('react-redux')
 const {Content} = Layout;
 
-const Home = ({dispatch, chooseGroup, showAlbum, isRoot}) => {
+const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
     let history = useHistory()
 
     // 专辑列表引用
@@ -259,6 +259,8 @@ const Home = ({dispatch, chooseGroup, showAlbum, isRoot}) => {
                     onMouseOut={() => setBtnPlay(Images.ICON_PLAY_UNSELECT)}
                 />
 
+                <p className={'version'}>版本号: {appVersion}</p>
+
                 <ColorPicker ref={colorPickerRef} onChangeColor={onColorPickerChange}/>
 
                 <PortDialog
@@ -289,6 +291,7 @@ const Home = ({dispatch, chooseGroup, showAlbum, isRoot}) => {
 function select(store) {
     return {
         chooseGroup: store.music.chooseGroup,
+        appVersion: store.app.appVersion
     };
 }
 

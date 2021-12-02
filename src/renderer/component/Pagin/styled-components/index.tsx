@@ -42,7 +42,15 @@ export const Container = styled.div`
             transform-origin: center;
             }
         ` : css``
-}
+};
+    ${(props: { isForwards: boolean; }) =>
+    props.isForwards ?
+        css`
+          -webkit-animation: ${myScaleHover} .2s;
+          animation-fill-mode: forwards;
+          transform-origin: center;
+        ` : css``
+};
 `;
 
 export const pageFade = keyframes`

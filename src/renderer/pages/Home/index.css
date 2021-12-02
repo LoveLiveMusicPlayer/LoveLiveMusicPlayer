@@ -18,8 +18,16 @@
     width: 50px;
     height: 50px;
     position: absolute;
-    bottom: 180px;
+    bottom: 185px;
     right: 30px;
+}
+
+.version {
+    margin: 0;
+    position: absolute;
+    bottom: 160px;
+    right: 10px;
+    color: white;
 }
 
 .clearDialog {

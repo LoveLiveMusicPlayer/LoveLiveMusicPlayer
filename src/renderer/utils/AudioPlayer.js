@@ -12,6 +12,7 @@ import {SelectDialog} from "../component/SelectDialog";
 import {SongMenuHelper} from "../dao/SongMenuHelper";
 import {ipcRenderer} from "electron";
 import {musicAction} from "../actions/music";
+import {AlbumHelper} from "../dao/AlbumHelper";
 
 const {connect} = require('react-redux')
 
@@ -206,6 +207,9 @@ class AudioPlayer extends React.PureComponent {
                         currentMusicUniqueId = audioInfo._id
                         this.props.dispatch(musicAction.playId(audioInfo._id))
                         Store.set("playId", audioInfo._id)
+                        AlbumHelper.findOneAlbumByAlbumId(this.props.chooseGroup, audioInfo.album).then(res => {
+                            this.props.dispatch(musicAction.albumId(res._id))
+                        })
                     }}
                     onAudioVolumeChange={volume => {
                         Store.set('volume', Math.sqrt(volume))
@@ -262,6 +266,7 @@ class AudioPlayer extends React.PureComponent {
 function select(store) {
     return {
         playId: store.music.playId,
+        chooseGroup: store.music.chooseGroup
     };
 }
 

@@ -22,6 +22,7 @@ import Store from '../../src/renderer/utils/Store'
 import Menu from "./pages/Menu";
 import {WorkUtils} from "./utils/WorkUtils";
 import {WindowButton} from "./component/WindowButton";
+import {appAction} from "./actions/app";
 
 const {ipcRenderer} = require('electron')
 const os = require("os").platform();
@@ -279,6 +280,7 @@ function App({dispatch}) {
         // 判断本次版本是否是强制恢复版本
         ipcRenderer.on('getAppVersion', (event, version) => {
             const initedVersion = Store.get('appInitedVersion')
+            dispatch(appAction.appVersion(version))
             if (AppUtils.isNull(initedVersion) || version !== initedVersion) {
                 WorkUtils.requestNeedInit(version).then(needInit => {
                     if (needInit) {
@@ -419,7 +421,8 @@ function App({dispatch}) {
 
 function select(store) {
     return {
-        chooseGroup: store.music.chooseGroup
+        chooseGroup: store.music.chooseGroup,
+        appVersion: store.app.appVersion
     };
 }
 

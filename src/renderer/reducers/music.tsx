@@ -2,7 +2,8 @@ import * as TYPES from './types';
 
 const initialState = {
     chooseGroup: "μ's",
-    playId: ''
+    playId: '',
+    albumId: ''
 }
 
 export default function reducer(state = initialState, action: any) {
@@ -18,6 +19,12 @@ export default function reducer(state = initialState, action: any) {
             return {
                 ...state,
                 playId: action.playId
+            }
+        // 记录当前播放的专辑唯一id
+        case TYPES.ALBUM_ID:
+            return {
+                ...state,
+                albumId: action.albumId
             }
         default:
             return state;

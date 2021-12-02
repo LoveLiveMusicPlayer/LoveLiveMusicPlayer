@@ -16,5 +16,13 @@ export const musicAction = {
                 playId
             })
         }
+    },
+    albumId(albumId) {
+        return (dispatch) => {
+            dispatch({
+                type: TYPES.ALBUM_ID,
+                albumId
+            })
+        }
     }
 }
