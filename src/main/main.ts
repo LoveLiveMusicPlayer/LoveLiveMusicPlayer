@@ -19,12 +19,15 @@ const RESOURCES_PATH = app.isPackaged
 
 // 当前HTTP服务是否开启
 let isHttpServerOpen = false
+
 // http-server实例
 let mServer: any
 
 let mainWindow: BrowserWindow | null = null;
 
 let appTray = null
+
+let willQuitApp = false
 
 let updateCallback = (progressObj: string) => {
     if (mainWindow) {
@@ -209,9 +212,11 @@ const createWindow = async () => {
     });
 
     mainWindow.on('close', event => {
-        if (process.platform === 'darwin') {
-            event.preventDefault()
-            mainWindow?.hide()
+        if (!willQuitApp) {
+            if (process.platform === 'darwin') {
+                event.preventDefault()
+                mainWindow?.hide()
+            }
         }
     })
 
@@ -332,3 +337,7 @@ app.on('activate', () => {
         mainWindow?.focus();
     }
 });
+
+app.on('before-quit', () => {
+    willQuitApp = true
+})
