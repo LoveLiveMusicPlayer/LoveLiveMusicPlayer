@@ -56,7 +56,7 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen}, ref) 
                     return item.trim()
                 }).join('\n')
                 setJpLrc(lrc)
-            })
+            }).catch(_ => {})
         }
     }, [jpLrcUrl, musicDetailVisible])
 
