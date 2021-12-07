@@ -170,6 +170,20 @@ class AudioPlayer extends React.PureComponent {
         }
     }
 
+    handleNextPlay = (audioLists, audioInfo, playMode) => {
+        let orderLoopCount = 0
+        audioLists.map((item, index) => {
+            if (item._id === audioInfo._id) {
+                orderLoopCount = index
+            }
+        })
+        if (orderLoopCount !== audioLists.length - 1) {
+            this.audioInstance?.playNext()
+        } else if (playMode === 'orderLoop') {
+            this.audioInstance?.playByIndex(1)
+        }
+    }
+
     render() {
         const {params, playIndex} = this.state
         params.playIndex = playIndex
@@ -230,7 +244,7 @@ class AudioPlayer extends React.PureComponent {
                     }}
                     onAudioError={(error, currentPlayId, audioLists, audioInfo) => {
                         // 无法加载流则跳过
-                        if (error.message === "MEDIA_ELEMENT_ERROR: Format error") {
+                        if (error.message === null || error.message === "MEDIA_ELEMENT_ERROR: Format error") {
                             return
                         }
                         switch (this.r.props.playMode) {
@@ -238,16 +252,13 @@ class AudioPlayer extends React.PureComponent {
                                 this.audioInstance?.load()
                                 break
                             case 'orderLoop':
-                                this.audioInstance?.playNext()
+                                this.handleNextPlay(audioLists, audioInfo, 'orderLoop')
                                 break
                             case 'order':
-                                let count = 0
-                                audioLists.map((item, index) => {
-                                    if (item._id === audioInfo._id) {
-                                        count = index
-                                    }
-                                })
-                                if (count !== audioLists.length - 1) {
+                                this.handleNextPlay(audioLists, audioInfo, 'order')
+                                break
+                            case 'shufflePlay':
+                                if (error.code === 4) {
                                     this.audioInstance?.playNext()
                                 }
                                 break

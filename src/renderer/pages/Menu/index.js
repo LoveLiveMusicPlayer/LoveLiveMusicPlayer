@@ -14,7 +14,7 @@ import {CustomDialog} from "../../component/CustomDialog";
 import {LoveHelper} from "../../dao/LoveHelper";
 
 const {connect} = require('react-redux');
-let isInit = true
+let currentMenuName = null
 
 const Menu = ({playId, location}) => {
 
@@ -100,12 +100,12 @@ const Menu = ({playId, location}) => {
     ];
 
     useEffect(() => {
-        isInit = true
+        currentMenuName = null
     }, [])
 
     const renderCover = () => {
         if (info && info.music.length > 0) {
-            if (isInit) {
+            if (currentMenuName !== info.name) {
                 const coverList = []
                 const url = Store.get('url')
                 const set = new Set()
@@ -122,7 +122,7 @@ const Menu = ({playId, location}) => {
                     }
                 })
                 setShowCovers(coverList)
-                isInit = false
+                currentMenuName = info.name
             }
             return (
                 <ImagePagination
@@ -303,7 +303,7 @@ const Menu = ({playId, location}) => {
     return (
         <div className={'albumContainer'} onClick={() => setNodeDisplay(false)}>
             <div className={'albumTopContainer'}>
-                {renderCover()}
+                {renderCover(info)}
                 <div className={'albumTopRightContainer'}>
                     <p className={'albumName'}>{info && info.name ? info.name : ''}</p>
                     <p className={'albumText'}>{info && "创建日期: " + AppUtils.showValue(info.date)}</p>
