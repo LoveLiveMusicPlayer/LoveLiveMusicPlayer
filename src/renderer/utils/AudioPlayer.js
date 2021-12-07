@@ -228,7 +228,7 @@ class AudioPlayer extends React.PureComponent {
                         this.props.dispatch(musicAction.playId(audioInfo._id))
                         Store.set("playId", audioInfo._id)
                         AlbumHelper.findOneAlbumByAlbumId(this.props.chooseGroup, audioInfo.album).then(res => {
-                            this.props.dispatch(musicAction.albumId(res._id))
+                            res._id && this.props.dispatch(musicAction.albumId(res._id))
                         })
                     }}
                     onAudioVolumeChange={volume => {
