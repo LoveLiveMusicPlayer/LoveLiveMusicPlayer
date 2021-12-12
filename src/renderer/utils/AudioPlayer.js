@@ -33,7 +33,8 @@ class AudioPlayer extends React.PureComponent {
             isShowDetail: false,
             onHover: false,
             addListDisplay: false,
-            menu: []
+            menu: [],
+            lyricShow: false
         }
         this.r = null
     }
@@ -146,16 +147,29 @@ class AudioPlayer extends React.PureComponent {
 
     renderDIYButton = () => {
         return (
-            <Dropdown overlay={this.content()} placement="bottomCenter">
+            <>
+                <Dropdown overlay={this.content()} placement="bottomCenter">
+                    <img
+                        src={Images.ICON_MORE}
+                        width={25}
+                        height={25}
+                        style={{opacity: this.state.onHover ? 0.9 : 1}}
+                        onMouseOver={() => this.setState({onHover: true})}
+                        onMouseOut={() => this.setState({onHover: false})}
+                    />
+                </Dropdown>
+                <div style={{width: 10}}/>
                 <img
-                    src={Images.ICON_MORE}
+                    src={this.state.lyricShow ? Images.ICON_LRC_OPEN : Images.ICON_LRC_CLOSE}
                     width={25}
                     height={25}
-                    style={{opacity: this.state.onHover ? 0.9 : 1}}
-                    onMouseOver={() => this.setState({onHover: true})}
-                    onMouseOut={() => this.setState({onHover: false})}
+                    onClick={() => {
+                        const status = !this.state.lyricShow
+                        this.setState({lyricShow: status})
+                        this.r.props.onClickLyric(status)
+                    }}
                 />
-            </Dropdown>
+            </>
         )
     }
 

@@ -1,7 +1,7 @@
 import {app, dialog} from 'electron'
 import {autoUpdater} from 'electron-updater'
 import https from 'https'
-import {VersionUtils} from "../renderer/utils/VersionUtils";
+import {VersionUtils} from "../../renderer/utils/VersionUtils";
 
 export default class update {
     private callback: Function | undefined;

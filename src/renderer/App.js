@@ -201,6 +201,10 @@ function App({dispatch}) {
         isOpenMusicDialog = !isWillClose
     }
 
+    const onClickLyric = (status) => {
+        ipcRenderer.send('toggle-desktop-lyric', status)
+    }
+
     const onClickCover2 = (isOpen) => {
         setMusicDetailVisible(isOpen)
         if (isOpen) {
@@ -392,6 +396,7 @@ function App({dispatch}) {
             <AudioPlayer
                 {...options}
                 ref={playerRef}
+                onClickLyric={status => onClickLyric(status)}
                 onClickCover={_ => onClickCover(isOpenMusicDialog)}
                 onAudioTimeChange={onAudioTimeChange}
                 onClearAudioList={_ => {

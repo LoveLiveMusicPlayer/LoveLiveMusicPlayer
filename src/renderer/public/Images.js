@@ -25,6 +25,8 @@ import icon_play from '../../../assets/image/icon_play.png'
 import icon_dis_play from '../../../assets/image/icon_dis_play.png'
 import icon_play_select from '../../../assets/image/icon_play_select.png'
 import icon_play_unselect from '../../../assets/image/icon_play_unselect.png'
+import icon_lrc_open from '../../../assets/image/icon_lrc_open.png'
+import icon_lrc_close from '../../../assets/image/icon_lrc_close.png'
 
 import icon_func_music from '../../../assets/image/icon_func_music.png'
 import icon_func_love from '../../../assets/image/icon_func_love.png'
@@ -59,6 +61,8 @@ export const ICON_PLAY = icon_play
 export const ICON_DIS_PLAY = icon_dis_play
 export const ICON_PLAY_SELECT = icon_play_select
 export const ICON_PLAY_UNSELECT = icon_play_unselect
+export const ICON_LRC_OPEN = icon_lrc_open
+export const ICON_LRC_CLOSE = icon_lrc_close
 
 export const ICON_FUNC_MUSIC = icon_func_music
 export const ICON_FUNC_LOVE = icon_func_love

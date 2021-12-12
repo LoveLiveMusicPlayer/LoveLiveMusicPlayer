@@ -38,6 +38,8 @@ if (
 }
 
 // @ts-ignore
+// @ts-ignore
+// @ts-ignore
 export default merge(baseConfig, {
     devtool: 'inline-source-map',
 
@@ -46,19 +48,29 @@ export default merge(baseConfig, {
     // target: ['web', 'electron-renderer'],
     target: 'electron-renderer',
 
-    entry: [
-        `webpack-dev-server/client?http://localhost:${port}/dist`,
-        'webpack/hot/only-dev-server',
-        'core-js',
-        'regenerator-runtime/runtime',
-        path.join(webpackPaths.srcRendererPath, 'index.tsx'),
-    ],
+    // entry: [
+    //     `webpack-dev-server/client?http://localhost:${port}/dist`,
+    //     'webpack/hot/only-dev-server',
+    //     'core-js',
+    //     'regenerator-runtime/runtime',
+    //     path.join(webpackPaths.srcRendererPath, 'index.tsx'),
+    //     path.join(webpackPaths.srcRendererPath, 'pages/DesktopLyric/index.tsx')
+    // ],
+
+    entry: {
+        dist: `webpack-dev-server/client?http://localhost:${port}/dist`,
+        devServer: 'webpack/hot/only-dev-server',
+        coreJs: 'core-js',
+        runtime: 'regenerator-runtime/runtime',
+        index: path.join(webpackPaths.srcRendererPath, 'index.tsx'),
+        lrc: path.join(webpackPaths.srcRendererPath, 'pages/DesktopLyric/index.tsx')
+    },
 
     output: {
         path: webpackPaths.distRendererPath,
         // @ts-ignore
         publicPath: '/',
-        filename: 'renderer.dev.js',
+        filename: '[name].dev.js'
         // library: {
         //   type: 'umd',
         // },
@@ -186,6 +198,22 @@ export default merge(baseConfig, {
             env: process.env.NODE_ENV,
             isDevelopment: process.env.NODE_ENV !== 'production',
             nodeModules: webpackPaths.appNodeModulesPath,
+            excludeChunks: ['lrc']
+        }),
+        // @ts-ignore
+        new HtmlWebpackPlugin({
+            filename: path.join('desktop-lyric.html'),
+            template: path.join(webpackPaths.srcRendererPath, 'pages/DesktopLyric/index.html'),
+            minify: {
+                collapseWhitespace: true,
+                removeAttributeQuotes: true,
+                removeComments: true,
+            },
+            isBrowser: false,
+            env: process.env.NODE_ENV,
+            isDevelopment: process.env.NODE_ENV !== 'production',
+            nodeModules: webpackPaths.appNodeModulesPath,
+            excludeChunks: ['index']
         }),
     ],
 
