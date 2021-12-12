@@ -1,29 +1,41 @@
 body {
     display: flex;
-    background-color: #ff19c6;
     flex-direction: column;
     justify-content: center;
-    //align-items: center;
     align-self: center;
-
+    margin: 0;
+    padding: 0;
 }
 
 .desktop-lyric {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #ffff00;
+    flex-direction: column;
     border-radius: 10px;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+
+    .function {
+        width: 100%;
+        height: 25px;
+        flex-direction: row;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        position: absolute;
+        top: 0
+    }
 
     .playing-lyric {
         box-sizing: border-box;
         width: max-content;
-
-        margin: 10px;
+        -webkit-user-select: none;
+        margin: 25px 0 0;
         padding: 0 15px;
         font-size: 40px;
         color: #fff;
-        background: #7d7d7d;
         text-shadow: 1px 1px 5px #7d7d7d, 1px -1px 3px #7d7d7d;
         text-align: center;
         font-family: "Microsoft JhengHei", "明黑", Arial, Helvetica;
@@ -33,9 +45,9 @@ body {
 
         &:hover {
             cursor: grab;
-            border-radius: 2px;
-            box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3),
-            inset 0 0 8px 0 rgba(255, 255, 255, 0.5);
+            //border-radius: 2px;
+            //box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3),
+            //inset 0 0 8px 0 rgba(255, 255, 255, 0.5);
         }
     }
 

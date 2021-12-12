@@ -4,14 +4,17 @@ const {screen} = require("electron");
 
 const createLyricWindow = function (BrowserWindow) {
     const {width, height} = screen.getPrimaryDisplay().workAreaSize;
+    const trulyWidth = parseInt(width / 2) > 800 ? 800 : parseInt(width / 2)
     const obj = {
-        minWidth: 500,
-        width: width / 3,
+        minWidth: 800,
+        width: trulyWidth,
+        maxHeight: 180,
         height: 100,
+        minHeight: 100,
         show: false,
         frame: false,
-        x: width / 2,
-        y: height - 50,
+        x: parseInt(width / 2) - trulyWidth / 2,
+        y: parseInt(height) - 150,
         fullscreenable: false,
         minimizable: false,
         maximizable: false,

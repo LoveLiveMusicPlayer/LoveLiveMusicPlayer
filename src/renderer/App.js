@@ -320,6 +320,10 @@ function App({dispatch}) {
             openNotification('这是一个开源项目，完全免费！')
         }, 1000)
 
+        document.ondragstart = function () {
+            return false;
+        };
+
         // 设置背景色
         AppUtils.setBodyColor(DBHelper.getBGColor())
 
