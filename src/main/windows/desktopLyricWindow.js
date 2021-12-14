@@ -28,7 +28,7 @@ const createLyricWindow = function (BrowserWindow) {
             nodeIntegration: true,
             enableRemoteModule: true,
             contextIsolation: false,
-            devTools: false,
+            devTools: true,
         },
     };
 

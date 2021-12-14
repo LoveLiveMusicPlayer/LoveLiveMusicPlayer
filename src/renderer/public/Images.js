@@ -34,6 +34,16 @@ import icon_func_history from '../../../assets/image/icon_func_history.png'
 import icon_menu_add_select from '../../../assets/image/icon_menu_add_select.png'
 import icon_menu_add_unselect from '../../../assets/image/icon_menu_add_unselect.png'
 
+import lrc_close_touch from '../../../assets/image/lrc_close_touch.png'
+import lrc_close_untouch from '../../../assets/image/lrc_close_untouch.png'
+import lrc_fontsize_up_touch from '../../../assets/image/lrc_fontsize_up_touch.png'
+import lrc_fontsize_up_untouch from '../../../assets/image/lrc_fontsize_up_untouch.png'
+import lrc_fontsize_down_touch from '../../../assets/image/lrc_fontsize_down_touch.png'
+import lrc_fontsize_down_untouch from '../../../assets/image/lrc_fontsize_down_untouch.png'
+import lrc_lock_touch from '../../../assets/image/lrc_lock_touch.png'
+import lrc_lock_untouch from '../../../assets/image/lrc_lock_untouch.png'
+import lrc_lock_locked from '../../../assets/image/lrc_lock_locked.png'
+
 export const ICON_HEAD = icon_head
 export const ICON_MENU = icon_menu
 export const ICON_TILE = icon_tile
@@ -69,3 +79,14 @@ export const ICON_FUNC_LOVE = icon_func_love
 export const ICON_FUNC_HISTORY = icon_func_history
 export const ICON_MENU_ADD_SELECT = icon_menu_add_select
 export const ICON_MENU_ADD_UNSELECT = icon_menu_add_unselect
+
+export const LRC_CLOSE_TOUCH = lrc_close_touch
+export const LRC_CLOSE_UNTOUCH = lrc_close_untouch
+export const LRC_FONTSIZE_UP_TOUCH = lrc_fontsize_up_touch
+export const LRC_FONTSIZE_UP_UNTOUCH = lrc_fontsize_up_untouch
+export const LRC_FONTSIZE_DOWN_TOUCH = lrc_fontsize_down_touch
+export const LRC_FONTSIZE_DOWN_UNTOUCH = lrc_fontsize_down_untouch
+
+export const LRC_LOCK_TOUCH = lrc_lock_touch
+export const LRC_LOCK_UNTOUCH = lrc_lock_untouch
+export const LRC_LOCK_LOCKED = lrc_lock_locked

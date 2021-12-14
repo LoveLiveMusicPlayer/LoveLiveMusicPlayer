@@ -10,14 +10,15 @@ import Bus from '../utils/Event'
 import {LoveHelper} from "../dao/LoveHelper";
 import {SelectDialog} from "../component/SelectDialog";
 import {SongMenuHelper} from "../dao/SongMenuHelper";
-import {ipcRenderer} from "electron";
 import {musicAction} from "../actions/music";
 import {AlbumHelper} from "../dao/AlbumHelper";
 
+const {ipcRenderer} = require('electron')
 const {connect} = require('react-redux')
 
 let currentMusicUniqueId = ""
 let currentPlayList = []
+
 
 class AudioPlayer extends React.PureComponent {
 
@@ -37,6 +38,12 @@ class AudioPlayer extends React.PureComponent {
             lyricShow: false
         }
         this.r = null
+    }
+
+    componentWillMount() {
+        ipcRenderer.on("toggle-desktop-lyric-reply", () => {
+            this.setState({lyricShow: !this.state.lyricShow})
+        })
     }
 
     // 添加一个音频
@@ -164,9 +171,9 @@ class AudioPlayer extends React.PureComponent {
                     width={25}
                     height={25}
                     onClick={() => {
-                        const status = !this.state.lyricShow
-                        this.setState({lyricShow: status})
-                        this.r.props.onClickLyric(status)
+                        // const status = !this.state.lyricShow
+                        // this.setState({lyricShow: status})
+                        this.r.props.onClickLyric(!this.state.lyricShow)
                     }}
                 />
             </>

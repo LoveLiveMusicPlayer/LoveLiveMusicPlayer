@@ -127,6 +127,7 @@ export default function () {
         } else {
             global.lyricWindow?.hide()
         }
+        global.mainWindow?.webContents.send('toggle-desktop-lyric-reply')
     })
 
     ipcMain.on("fix-desktop-lyric", (event, data) => {
