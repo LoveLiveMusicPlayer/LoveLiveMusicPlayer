@@ -243,6 +243,7 @@
         "antd": "^4.16.13",
         "axios": "^0.24.0",
         "buffer": "^6.0.3",
+        "clrc": "^2.2.0",
         "electron-debug": "^3.2.0",
         "electron-log": "^4.4.1",
         "electron-store": "^8.0.1",

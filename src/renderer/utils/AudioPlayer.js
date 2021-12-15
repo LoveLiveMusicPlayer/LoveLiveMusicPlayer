@@ -12,13 +12,14 @@ import {SelectDialog} from "../component/SelectDialog";
 import {SongMenuHelper} from "../dao/SongMenuHelper";
 import {musicAction} from "../actions/music";
 import {AlbumHelper} from "../dao/AlbumHelper";
+import {WorkUtils} from "./WorkUtils";
 
 const {ipcRenderer} = require('electron')
 const {connect} = require('react-redux')
 
 let currentMusicUniqueId = ""
 let currentPlayList = []
-
+const lrc = {jpLrc: null, zhLrc: null}
 
 class AudioPlayer extends React.PureComponent {
 
@@ -243,14 +244,35 @@ class AudioPlayer extends React.PureComponent {
                             theme: audioLists.length === 0 || !this.state.isShowDetail ? 'light' : 'dark'
                         })
                     }}
-                    onAudioPlay={audioInfo => {
-                        ipcRenderer.send('musicName', "当前播放:\n" + audioInfo.name)
-                        currentMusicUniqueId = audioInfo._id
-                        this.props.dispatch(musicAction.playId(audioInfo._id))
-                        Store.set("playId", audioInfo._id)
-                        AlbumHelper.findOneAlbumByAlbumId(this.props.chooseGroup, audioInfo.album).then(res => {
-                            res._id && this.props.dispatch(musicAction.albumId(res._id))
-                        })
+                    onAudioPlay={async audioInfo => {
+                        try {
+                            ipcRenderer.send('musicName', "当前播放:\n" + audioInfo.name)
+                            currentMusicUniqueId = audioInfo._id
+                            this.props.dispatch(musicAction.playId(audioInfo._id))
+                            Store.set("playId", audioInfo._id)
+                            AlbumHelper.findOneAlbumByAlbumId(this.props.chooseGroup, audioInfo.album).then(res => {
+                                res._id && this.props.dispatch(musicAction.albumId(res._id))
+                            })
+
+                            if (audioInfo.lyric) {
+                                const jpResp = await WorkUtils.requestLyric(audioInfo.lyric)
+                                if (!AppUtils.isEmpty(jpResp)) {
+                                    lrc.jpLrc = jpResp.split('\n').map(item => {
+                                        return item.trim()
+                                    }).join('\n')
+                                }
+                            }
+                            if (audioInfo.trans) {
+                                const zhResp = await WorkUtils.requestLyric(audioInfo.trans)
+                                if (!AppUtils.isEmpty(zhResp)) {
+                                    lrc.zhLrc = zhResp.split('\n').map(item => {
+                                        return item.trim()
+                                    }).join('\n')
+                                }
+                            }
+                        } catch (e) {
+                            console.log(e)
+                        }
                     }}
                     onAudioVolumeChange={volume => {
                         Store.set('volume', Math.sqrt(volume))
@@ -260,7 +282,15 @@ class AudioPlayer extends React.PureComponent {
                     }}
                     onAudioProgress={audioInfo => {
                         if (audioInfo) {
-                            this.r.props.onAudioTimeChange(audioInfo)
+                            this.r.props.onAudioTimeChange({
+                                cover: audioInfo.cover,
+                                jpLrc: lrc.jpLrc,
+                                zhLrc: lrc.zhLrc,
+                                _id: audioInfo._id,
+                                name: audioInfo.name,
+                                singer: audioInfo.singer,
+                                currentTime: audioInfo.currentTime * 1000 + 300
+                            })
                         }
                     }}
                     onAudioError={(error, currentPlayId, audioLists, audioInfo) => {

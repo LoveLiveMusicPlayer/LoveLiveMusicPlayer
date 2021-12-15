@@ -247,6 +247,25 @@ export const AppUtils = {
         const old = "0x" + originColor.replace(/#/g, "")
         let str = "000000" + (0xFFFFFF - old).toString(16);
         return str.substring(str.length - 6, str.length);
+    },
+
+    // 判断点是否在矩形区域内
+    isPointInArea(point, area) {
+        const deltaX = point.x - area.left
+        const deltaY = point.y - area.top
+        return !(deltaX <= 0 || deltaX >= area.right - area.left || deltaY <= 0 || deltaY >= area.bottom - area.top);
+    },
+
+    // 获取当前播放的索引
+    currentLyricIndex(lyricList, currentMillisecond) {
+        let index = 0;
+        for (const {length} = lyricList; index <= length; index += 1) {
+            const lyric = lyricList[index];
+            if (!lyric || lyric.startMillisecond > currentMillisecond) {
+                break;
+            }
+        }
+        return index - 1;
     }
 }
 

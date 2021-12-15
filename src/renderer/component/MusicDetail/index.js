@@ -1,11 +1,11 @@
-import React, {forwardRef, useEffect, useImperativeHandle, useState} from 'react';
+import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import './index.scss'
 import {Lrc} from 'react-lrc';
 import LyricLine from './LyricLine'
 import * as Images from '../../public/Images'
 import Modal from "react-modal";
 import Store from '../../utils/Store'
-import {WorkUtils} from "../../utils/WorkUtils";
+import {AppUtils} from "../../utils/AppUtils";
 
 export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen}, ref) => {
 
@@ -27,8 +27,6 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen}, ref) 
     const [musicInfo, setMusicInfo] = useState()
     const [lrcLanguage, setLrcLanguage] = useState("jp")
     const [lrcPosition, setLrcPosition] = useState("center")
-    const [jpLrcUrl, setJpLrcUrl] = useState()
-    const [zhLrcUrl, setZhLrcUrl] = useState()
 
     useImperativeHandle(ref, () => ({
         setMusicDetail: (info) => {
@@ -36,43 +34,26 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen}, ref) 
             if (mCover !== cover) {
                 setCover(mCover)
             }
-            setJpLrcUrl(info.lyric)
-            setZhLrcUrl(info.trans)
-            setMusicInfo(info)
+            setMusicInfo({
+                name: info.name,
+                singer: info.singer,
+            })
             if (currentSong == null || currentSong._id !== info._id) {
                 setCurrentLrcTime(0)
                 setCurrentSong(info)
             } else {
-                setCurrentLrcTime(info.currentTime * 1000)
+                setCurrentLrcTime(info.currentTime)
             }
+            if (AppUtils.isEmpty(info.zhLrc)) {
+                if (lrcLanguage === 'zh') {
+                    setLrcLanguage('jp')
+                }
+            } else {
+                setZhLrc(info.zhLrc)
+            }
+            setJpLrc(info.jpLrc)
         }
     }))
-
-    useEffect(() => {
-        setJpLrc('')
-        if (jpLrcUrl && musicDetailVisible) {
-            WorkUtils.requestLyric(jpLrcUrl).then(res => {
-                const lrc = res.split('\n').map(item => {
-                    return item.trim()
-                }).join('\n')
-                setJpLrc(lrc)
-            }).catch(_ => {})
-        }
-    }, [jpLrcUrl, musicDetailVisible])
-
-    useEffect(() => {
-        setZhLrc('')
-        if (zhLrcUrl && musicDetailVisible) {
-            WorkUtils.requestLyric(zhLrcUrl).then(res => {
-                const lrc = res.split('\n').map(item => {
-                    return item.trim()
-                }).join('\n')
-                setZhLrc(lrc)
-            }).catch(_ => {
-                setLrcLanguage('jp')
-            })
-        }
-    }, [zhLrcUrl, musicDetailVisible])
 
     const renderItem = ({active, line}) => {
         return <LyricLine content={line.content} active={active} position={lrcPosition} lang={lrcLanguage}/>

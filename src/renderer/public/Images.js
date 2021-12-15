@@ -43,6 +43,8 @@ import lrc_fontsize_down_untouch from '../../../assets/image/lrc_fontsize_down_u
 import lrc_lock_touch from '../../../assets/image/lrc_lock_touch.png'
 import lrc_lock_untouch from '../../../assets/image/lrc_lock_untouch.png'
 import lrc_lock_locked from '../../../assets/image/lrc_lock_locked.png'
+import lrc_color_touch from '../../../assets/image/lrc_color_touch.png'
+import lrc_color_untouch from '../../../assets/image/lrc_color_untouch.png'
 
 export const ICON_HEAD = icon_head
 export const ICON_MENU = icon_menu
@@ -86,7 +88,8 @@ export const LRC_FONTSIZE_UP_TOUCH = lrc_fontsize_up_touch
 export const LRC_FONTSIZE_UP_UNTOUCH = lrc_fontsize_up_untouch
 export const LRC_FONTSIZE_DOWN_TOUCH = lrc_fontsize_down_touch
 export const LRC_FONTSIZE_DOWN_UNTOUCH = lrc_fontsize_down_untouch
-
 export const LRC_LOCK_TOUCH = lrc_lock_touch
 export const LRC_LOCK_UNTOUCH = lrc_lock_untouch
 export const LRC_LOCK_LOCKED = lrc_lock_locked
+export const LRC_COLOR_TOUCH = lrc_color_touch
+export const LRC_COLOR_UNTOUCH = lrc_color_untouch

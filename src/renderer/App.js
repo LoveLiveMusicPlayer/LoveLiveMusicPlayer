@@ -23,6 +23,7 @@ import Menu from "./pages/Menu";
 import {WorkUtils} from "./utils/WorkUtils";
 import {WindowButton} from "./component/WindowButton";
 import {appAction} from "./actions/app";
+import {parse as parseLrc} from 'clrc';
 
 const {ipcRenderer} = require('electron')
 const os = require("os").platform();
@@ -65,6 +66,9 @@ function App({dispatch}) {
     const [showRouter, setShowRouter] = useState(false)
     // 触摸Header显示功能按键
     const [onShowFunc, setShowFunc] = useState(false)
+
+    const [singleLine, setSingleLine] = useState(false)
+    const [currentLrcStatus, setCurrentLrcStatus] = useState(0) // 0: 前后均日; 1: 前日后中; 2: 前罗马后日;
 
     // 点击企划图片
     const onBabyClick = () => {
@@ -219,6 +223,50 @@ function App({dispatch}) {
     // 歌曲播放时间回调
     const onAudioTimeChange = (info) => {
         musicDetailRef.current?.setMusicDetail(info)
+        let jpIndex = 0
+        let zhIndex = 0
+        let jpList = null
+        if (info.jpLrc) {
+            jpList = parseLrc(info.jpLrc)
+            jpIndex = AppUtils.currentLyricIndex(jpList.lyrics, info.currentTime)
+        }
+
+        let prevLrc = null
+        let nextLrc = null
+        let singleLrc = null
+        switch (currentLrcStatus) {
+            case 0:
+                if (jpIndex !== -1 && jpList) {
+                    if (jpIndex % 2 === 0) {
+                        prevLrc = jpList.lyrics[jpIndex].content
+                        if (jpList.lyrics.length > jpIndex + 1) {
+                            nextLrc = jpList.lyrics[jpIndex + 1].content
+                        }
+                    } else {
+                        prevLrc = jpList.lyrics[jpIndex - 1].content
+                        nextLrc = jpList.lyrics[jpIndex].content
+                    }
+                    singleLrc = jpList.lyrics[jpIndex].content
+                }
+                break
+            case 1:
+                let zhList = null
+                if (info.zhLrc) {
+                    zhList = parseLrc(info.zhLrc)
+                    zhIndex = AppUtils.currentLyricIndex(zhList.lyrics, info.currentTime)
+                }
+                if (jpIndex !== -1 && jpList) {
+                    prevLrc = jpList.lyrics[jpIndex].content
+                    singleLrc = jpList.lyrics[jpIndex].content
+                }
+                if (zhIndex !== -1 && zhList) {
+                    nextLrc = zhList.lyrics[zhIndex].content
+                }
+                break
+            default:
+                break
+        }
+        ipcRenderer.send('desktop-lrc-text', {prevLrc: prevLrc, nextLrc: nextLrc, singleLrc: singleLrc})
     }
 
     const renderBtnBack = () => {
@@ -301,6 +349,10 @@ function App({dispatch}) {
             }
         })
         ipcRenderer.send('getAppVersion')
+
+        ipcRenderer.on("desktop-lrc-single-change", (event, args) => {
+            setSingleLine(args)
+        })
 
         ipcRenderer.on('playMusic', _ => {
             playerRef.current?.onTogglePlay()

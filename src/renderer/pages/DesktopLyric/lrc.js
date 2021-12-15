@@ -2,14 +2,22 @@ import React, {useEffect, useState} from 'react';
 import './index.less'
 import {ipcRenderer} from 'electron'
 import * as Images from '../../public/Images'
+import {AppUtils} from "../../utils/AppUtils";
+import Store from '../../utils/Store'
 
 let win = require('@electron/remote').getGlobal("lyricWindow");
 let isLocking = false
 
-// TODO: 歌词颜色
+const green = 'rgba(11,214,158)'
+const blue = 'rgba(0,141,239)'
+const pink = 'rgba(255,79,176)'
+const gray = 'rgba(77,84,85)'
+const red = 'rgba(255,73,88)'
+
 export default function () {
-    const [currentLyric, setCurrentLyric] = useState(null)
-    const [nextLyric, setNextLyric] = useState(null)
+    const [prevLrc, setPrevLrc] = useState(null)
+    const [nextLrc, setNextLrc] = useState(null)
+    const [singleLrc, setSingleLrc] = useState(null)
     const [singleLine, setSingleLine] = useState(true)
     const [width, setWidth] = useState(window.innerWidth)
     const [height, setHeight] = useState(window.innerHeight)
@@ -17,10 +25,19 @@ export default function () {
     const [mouseOver, setMouseOver] = useState(false)
 
     const [closeOver, setCloseOver] = useState(false)
+    const [lockOver, setLockOver] = useState(false)
     const [fontSizeUpOver, setFontSizeUpOver] = useState(false)
     const [fontSizeDownOver, setFontSizeDownOver] = useState(false)
-    const [lockOver, setLockOver] = useState(false)
+    const [colorOver, setColorOver] = useState(false)
     const [fontSize, setFontSize] = useState(28)
+
+    const [textColor, setTextColor] = useState(green)
+
+    const [nodeTree, setNodeTree] = useState({
+        pageX: 0,
+        pageY: 0,
+    })
+    const [nodeDisplay, setNodeDisplay] = useState(false)
 
     // 监听窗口改变大小
     const listener = function () {
@@ -31,70 +48,47 @@ export default function () {
     useEffect(() => {
         if (window.innerHeight > 140 && singleLine) {
             setSingleLine(false)
+            ipcRenderer.send("desktop-lrc-single-change", false)
         }
         if (window.innerHeight <= 140 && !singleLine) {
             setSingleLine(true)
+            ipcRenderer.send("desktop-lrc-single-change", true)
         }
     }, [height, singleLine])
 
     useEffect(() => {
+        // 初始化用户参数
+        setTextColor(Store.get("lrcColor"))
+        setFontSize(Store.get("lrcFontSize"))
+
         win.setIgnoreMouseEvents(false)
+        win.setWindowButtonVisibility(false)
+
+        ipcRenderer.on("desktop-lrc-text", (event, args) => {
+            setPrevLrc(args.prevLrc)
+            setNextLrc(args.nextLrc)
+            setSingleLrc(args.singleLrc)
+        })
 
         document.ondragstart = function () {
             return false;
         };
 
+        window.addEventListener("click", (e) => {
+            const position = document.getElementById('colorImg').getBoundingClientRect()
+            const isPointInRect = AppUtils.isPointInArea(e, position)
+            if (!isPointInRect) {
+                setNodeDisplay(false)
+            }
+        })
+
         // 添加窗口大小变化监听器
         window.addEventListener("resize", listener)
 
         const lrc = document.querySelector(".desktop-lyric");
-        let biasX = 0;
-        let biasY = 0;
-
-        let {width, height} = win.getBounds();
-
-        const moveEvent = (e) => {
-            if (win.movable) {
-                win.setBounds({
-                    x: e.screenX - biasX,
-                    y: e.screenY - biasY,
-                    width,
-                    height,
-                });
-            }
-        };
-
-        lrc.addEventListener("mousedown", function (e) {
-            if (win.movable) {
-                width = win.getBounds().width;
-                height = win.getBounds().height;
-                switch (e.button) {
-                    case 0:
-                        biasX = e.x;
-                        biasY = e.y;
-                        lrc.addEventListener("mousemove", moveEvent);
-                        break;
-                    case 2:
-                        break;
-                }
-            }
-        });
-
-        lrc.addEventListener("mouseup", (e) => {
-            if (win.movable) {
-                biasX = 0;
-                biasY = 0;
-                lrc.removeEventListener("mousemove", moveEvent);
-            }
-        });
 
         lrc.addEventListener("mouseleave", (e) => {
             setMouseOver(false)
-            if (win.movable) {
-                biasX = 0;
-                biasY = 0;
-                lrc.removeEventListener("mousemove", moveEvent);
-            }
         });
 
         lrc.addEventListener("mouseover", (e) => {
@@ -105,11 +99,14 @@ export default function () {
     }, [])
 
     function configFontSize(isUp) {
+        let size = fontSize
         if (isUp && fontSize < 34) {
-            setFontSize(fontSize + 2)
+            size = fontSize + 2
         } else if (!isUp && fontSize > 16) {
-            setFontSize(fontSize - 2)
+            size = fontSize - 2
         }
+        Store.set("lrcFontSize", size)
+        setFontSize(size)
     }
 
     function configLock() {
@@ -120,6 +117,7 @@ export default function () {
         } else {
             win.setIgnoreMouseEvents(true, {forward: true})
         }
+        win.setWindowButtonVisibility(false)
         setIsLock(!isLock)
         isLocking = !isLock
     }
@@ -223,28 +221,99 @@ export default function () {
         )
     }
 
+    function renderColor() {
+        let colorImg = Images.LRC_COLOR_UNTOUCH
+        let colorVisible = 'visible'
+        if (!mouseOver || isLock) {
+            colorVisible = 'hidden'
+        }
+        if (mouseOver && colorOver) {
+            colorImg = Images.LRC_COLOR_TOUCH
+        }
+        return (
+            <img
+                id={'colorImg'}
+                src={colorImg}
+                title={'设置颜色'}
+                style={{width: 18, height: 18, visibility: colorVisible, marginLeft: 13}}
+                onClick={configColor}
+                onMouseOver={_ => setColorOver(true)}
+                onMouseOut={_ => setColorOver(false)}
+            />
+        )
+    }
+
+    function configColor(e) {
+        setNodeTree({
+            pageX: e.pageX,
+            pageY: e.pageY
+        })
+        setNodeDisplay(true)
+    }
+
+    function renderColorPanel() {
+        const {pageX, pageY} = nodeTree
+        const style = {
+            position: 'absolute',
+            left: `${pageX}px`,
+            top: `${pageY}px`,
+            display: nodeDisplay ? 'flex' : 'none',
+            flexDirection: 'row',
+            backgroundColor: '#fff',
+            borderRadius: '8px'
+        }
+        const menu = (
+            <div style={style}>
+                <div style={{width: 30, height: 30, backgroundColor: green}} onClick={_ => {
+                    setTextColor(green)
+                    Store.set("lrcColor", green)
+                    setNodeDisplay(false)
+                }}/>
+                <div style={{width: 30, height: 30, backgroundColor: blue}} onClick={_ => {
+                    Store.set("lrcColor", blue)
+                    setTextColor(blue)
+                }}/>
+                <div style={{width: 30, height: 30, backgroundColor: pink}} onClick={_ => {
+                    Store.set("lrcColor", pink)
+                    setTextColor(pink)
+                }}/>
+                <div style={{width: 30, height: 30, backgroundColor: gray}} onClick={_ => {
+                    Store.set("lrcColor", gray)
+                    setTextColor(gray)
+                }}/>
+                <div style={{width: 30, height: 30, backgroundColor: red}} onClick={_ => {
+                    Store.set("lrcColor", red)
+                    setTextColor(red)
+                }}/>
+            </div>
+        )
+        return nodeTree ? menu : null;
+    }
+
     return (
         <div className="desktop-lyric" id="desktop"
              style={{height: height, background: mouseOver && !isLock ? '#fff' : 'transparent'}}>
             <div className="function" style={{visibility: mouseOver ? 'visible' : 'hidden'}}>
                 {renderClose()}
+                {renderFontSizeDown()}
                 {renderLock()}
                 {renderFontSizeUp()}
-                {renderFontSizeDown()}
+                {renderColor()}
             </div>
             <div
                 className="playing-lyric"
                 id={'lrc'}
                 style={{
-                    width: width,
+                    width: singleLine ? width - 100 : width,
                     fontSize: fontSize,
                     display: 'flex',
+                    color: textColor,
                     justifyContent: singleLine ? 'center' : 'flex-start',
                     marginLeft: singleLine ? 0 : 50
                 }}
             >
                 <div className={'text-lrc'} style={{maxWidth: singleLine ? width : width / 3 * 2}}>
-                    {currentLyric ? currentLyric : "暂无歌词暂无歌词暂无歌词暂无歌词暂无歌词暂无歌词"}
+                    {singleLine ? singleLrc : prevLrc ? prevLrc : "暂无歌词"}
                 </div>
             </div>
             {
@@ -256,16 +325,17 @@ export default function () {
                             width: width,
                             fontSize: fontSize,
                             display: 'flex',
+                            color: textColor,
                             justifyContent: 'flex-end',
-                            marginRight: singleLine ? 0 : 50
+                            marginRight: 50
                         }}
                     >
                         <div className={'text-lrc'} style={{maxWidth: width / 3 * 2}}>
-                            {nextLyric ? nextLyric : "暂无歌词暂无歌词暂无歌词暂无歌词歌词暂无歌词暂无歌词"}
+                            {nextLrc ? nextLrc : "暂无歌词"}
                         </div>
                     </div>
             }
-
+            {renderColorPanel()}
         </div>
     )
 }

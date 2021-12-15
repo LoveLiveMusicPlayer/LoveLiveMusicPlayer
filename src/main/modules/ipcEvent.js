@@ -130,6 +130,14 @@ export default function () {
         global.mainWindow?.webContents.send('toggle-desktop-lyric-reply')
     })
 
+    ipcMain.on('desktop-lrc-text', (event, args) => {
+        global.lyricWindow?.webContents.send('desktop-lrc-text', args)
+    })
+
+    ipcMain.on('desktop-lrc-single-change', (event, args) => {
+        global.mainWindow?.webContents.send('desktop-lrc-single-change')
+    })
+
     ipcMain.on("fix-desktop-lyric", (event, data) => {
         global.lyricWindow?.setIgnoreMouseEvents(data, {
             forward: true,
