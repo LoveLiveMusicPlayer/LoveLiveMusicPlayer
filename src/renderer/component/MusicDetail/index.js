@@ -7,7 +7,7 @@ import Modal from "react-modal";
 import Store from '../../utils/Store'
 import {AppUtils} from "../../utils/AppUtils";
 
-export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen}, ref) => {
+export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLanguage, lrcLanguageCallback}, ref) => {
 
     const parseCover = (blueCover) => {
         const URL = Store.get("url")
@@ -25,7 +25,7 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen}, ref) 
     const [currentLrcTime, setCurrentLrcTime] = useState()
     const [cover, setCover] = useState()
     const [musicInfo, setMusicInfo] = useState()
-    const [lrcLanguage, setLrcLanguage] = useState("jp")
+
     const [lrcPosition, setLrcPosition] = useState("center")
 
     useImperativeHandle(ref, () => ({
@@ -46,7 +46,9 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen}, ref) 
             }
             if (AppUtils.isEmpty(info.zhLrc)) {
                 if (lrcLanguage === 'zh') {
-                    setLrcLanguage('jp')
+                    if (lrcLanguageCallback) {
+                        lrcLanguageCallback('jp')
+                    }
                 }
             } else {
                 setZhLrc(info.zhLrc)
@@ -64,7 +66,9 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen}, ref) 
     }
 
     const changeLanguage = () => {
-        setLrcLanguage(lrcLanguage === 'jp' ? 'zh' : 'jp')
+        if (lrcLanguageCallback) {
+            lrcLanguageCallback(lrcLanguage === 'jp' ? 'zh' : 'jp')
+        }
     }
 
     const musicDetailStyles = {

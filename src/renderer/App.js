@@ -40,6 +40,8 @@ const openNotification = (message) => {
     });
 };
 
+let currentLrcStatus = 'jp' // jp: 前后均日; zh: 前日后中; roma: 前罗马后日;
+
 function App({dispatch}) {
     let playerRef = useRef()
     let musicDetailRef = useRef()
@@ -66,9 +68,8 @@ function App({dispatch}) {
     const [showRouter, setShowRouter] = useState(false)
     // 触摸Header显示功能按键
     const [onShowFunc, setShowFunc] = useState(false)
-
-    const [singleLine, setSingleLine] = useState(false)
-    const [currentLrcStatus, setCurrentLrcStatus] = useState(0) // 0: 前后均日; 1: 前日后中; 2: 前罗马后日;
+    // 同步当前歌词语言
+    const [lrcLanguage, setLrcLanguage] = useState('jp')
 
     // 点击企划图片
     const onBabyClick = () => {
@@ -235,7 +236,7 @@ function App({dispatch}) {
         let nextLrc = null
         let singleLrc = null
         switch (currentLrcStatus) {
-            case 0:
+            case 'jp':
                 if (jpIndex !== -1 && jpList) {
                     if (jpIndex % 2 === 0) {
                         prevLrc = jpList.lyrics[jpIndex].content
@@ -249,7 +250,7 @@ function App({dispatch}) {
                     singleLrc = jpList.lyrics[jpIndex].content
                 }
                 break
-            case 1:
+            case 'zh':
                 let zhList = null
                 if (info.zhLrc) {
                     zhList = parseLrc(info.zhLrc)
@@ -350,10 +351,6 @@ function App({dispatch}) {
         })
         ipcRenderer.send('getAppVersion')
 
-        ipcRenderer.on("desktop-lrc-single-change", (event, args) => {
-            setSingleLine(args)
-        })
-
         ipcRenderer.on('playMusic', _ => {
             playerRef.current?.onTogglePlay()
         })
@@ -368,6 +365,16 @@ function App({dispatch}) {
     }, [])
 
     useEffect(() => {
+        ipcRenderer.send('desktop-lrc-language-change', lrcLanguage)
+        currentLrcStatus = lrcLanguage
+    }, [lrcLanguage])
+
+    useEffect(() => {
+        const lrcLanguage = Store.get("lrcLanguage")
+        if (lrcLanguage) {
+            setLrcLanguage(lrcLanguage)
+        }
+
         setTimeout(() => {
             openNotification('这是一个开源项目，完全免费！')
         }, 1000)
@@ -475,6 +482,8 @@ function App({dispatch}) {
                 ref={musicDetailRef}
                 musicDetailVisible={musicDetailVisible}
                 isDialogOpen={isDialogOpen}
+                lrcLanguage={lrcLanguage}
+                lrcLanguageCallback={language => setLrcLanguage(language)}
             />
         </div>
     );

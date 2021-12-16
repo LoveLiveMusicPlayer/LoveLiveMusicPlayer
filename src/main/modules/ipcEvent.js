@@ -134,8 +134,8 @@ export default function () {
         global.lyricWindow?.webContents.send('desktop-lrc-text', args)
     })
 
-    ipcMain.on('desktop-lrc-single-change', (event, args) => {
-        global.mainWindow?.webContents.send('desktop-lrc-single-change')
+    ipcMain.on('desktop-lrc-language-change', (event, args) => {
+        global.lyricWindow?.webContents.send('desktop-lrc-language-change', args)
     })
 
     ipcMain.on("fix-desktop-lyric", (event, data) => {

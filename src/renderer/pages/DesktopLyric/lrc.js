@@ -18,7 +18,10 @@ export default function () {
     const [prevLrc, setPrevLrc] = useState(null)
     const [nextLrc, setNextLrc] = useState(null)
     const [singleLrc, setSingleLrc] = useState(null)
+
     const [singleLine, setSingleLine] = useState(true)
+    const [lrcLanguage, setLrcLanguage] = useState('jp')
+
     const [width, setWidth] = useState(window.innerWidth)
     const [height, setHeight] = useState(window.innerHeight)
     const [isLock, setIsLock] = useState(false)
@@ -48,11 +51,9 @@ export default function () {
     useEffect(() => {
         if (window.innerHeight > 140 && singleLine) {
             setSingleLine(false)
-            ipcRenderer.send("desktop-lrc-single-change", false)
         }
         if (window.innerHeight <= 140 && !singleLine) {
             setSingleLine(true)
-            ipcRenderer.send("desktop-lrc-single-change", true)
         }
     }, [height, singleLine])
 
@@ -68,6 +69,10 @@ export default function () {
             setPrevLrc(args.prevLrc)
             setNextLrc(args.nextLrc)
             setSingleLrc(args.singleLrc)
+        })
+
+        ipcRenderer.on('desktop-lrc-language-change', (event, args) => {
+            setLrcLanguage(args)
         })
 
         document.ondragstart = function () {
@@ -308,12 +313,12 @@ export default function () {
                     fontSize: fontSize,
                     display: 'flex',
                     color: textColor,
-                    justifyContent: singleLine ? 'center' : 'flex-start',
-                    marginLeft: singleLine ? 0 : 50
+                    justifyContent: (singleLine || lrcLanguage !== 'jp') ? 'center' : 'flex-start',
+                    marginLeft: (singleLine || lrcLanguage !== 'jp') ? 0 : 50
                 }}
             >
                 <div className={'text-lrc'} style={{maxWidth: singleLine ? width : width / 3 * 2}}>
-                    {singleLine ? singleLrc : prevLrc ? prevLrc : "暂无歌词"}
+                    {singleLine ? (singleLrc ? singleLrc : "暂无歌词") : (prevLrc ? prevLrc : "暂无歌词")}
                 </div>
             </div>
             {
@@ -326,8 +331,8 @@ export default function () {
                             fontSize: fontSize,
                             display: 'flex',
                             color: textColor,
-                            justifyContent: 'flex-end',
-                            marginRight: 50
+                            justifyContent: lrcLanguage !== 'jp' ? 'center' : 'flex-end',
+                            marginRight: lrcLanguage !== 'jp' ? 0 : 50
                         }}
                     >
                         <div className={'text-lrc'} style={{maxWidth: width / 3 * 2}}>
