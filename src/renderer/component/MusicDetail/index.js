@@ -1,11 +1,12 @@
 import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import './index.scss'
 import {Lrc} from 'react-lrc';
-import LyricLine from './LyricLine'
+import {LyricDoubleLine, LyricLine} from './LyricLine'
 import * as Images from '../../public/Images'
 import Modal from "react-modal";
 import Store from '../../utils/Store'
 import {AppUtils} from "../../utils/AppUtils";
+import {parse as parseLrc} from "clrc";
 
 export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLanguage, lrcLanguageCallback}, ref) => {
 
@@ -57,8 +58,20 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
         }
     }))
 
-    const renderItem = ({active, line}) => {
-        return <LyricLine content={line.content} active={active} position={lrcPosition} lang={lrcLanguage}/>
+    const renderItem = ({index, active, line}) => {
+        if (lrcLanguage === 'jp') {
+            return <LyricLine content={line.content} active={active} position={lrcPosition} lang={lrcLanguage}/>
+        } else {
+            const jpList = parseLrc(jpLrc)
+            let content = ''
+            if (index < jpList.lyrics.length) {
+                content = jpList ? jpList.lyrics[index].content : ''
+            }
+            return (
+                <LyricDoubleLine active={active} position={lrcPosition} headContent={content}
+                                 footContent={line.content}/>
+            )
+        }
     }
 
     const changeLrcPosition = () => {

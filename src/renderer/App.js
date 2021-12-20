@@ -40,7 +40,7 @@ const openNotification = (message) => {
     });
 };
 
-let currentLrcStatus = 'jp' // jp: 前后均日; zh: 前日后中; roma: 前罗马后日;
+let currentLrcStatus = 'jp' // jp: 前后均日; zh: 前日后中; roma: 前日后罗马;
 
 function App({dispatch}) {
     let playerRef = useRef()
@@ -237,7 +237,7 @@ function App({dispatch}) {
         let singleLrc = null
         switch (currentLrcStatus) {
             case 'jp':
-                if (jpIndex !== -1 && jpList) {
+                if (jpIndex !== -1 && jpList && jpIndex < jpList.lyrics.length) {
                     if (jpIndex % 2 === 0) {
                         prevLrc = jpList.lyrics[jpIndex].content
                         if (jpList.lyrics.length > jpIndex + 1) {
@@ -256,11 +256,11 @@ function App({dispatch}) {
                     zhList = parseLrc(info.zhLrc)
                     zhIndex = AppUtils.currentLyricIndex(zhList.lyrics, info.currentTime)
                 }
-                if (jpIndex !== -1 && jpList) {
+                if (jpIndex !== -1 && jpList && jpIndex < jpList.lyrics.length) {
                     prevLrc = jpList.lyrics[jpIndex].content
                     singleLrc = jpList.lyrics[jpIndex].content
                 }
-                if (zhIndex !== -1 && zhList) {
+                if (zhIndex !== -1 && zhList && zhIndex < zhList.lyrics.length) {
                     nextLrc = zhList.lyrics[zhIndex].content
                 }
                 break

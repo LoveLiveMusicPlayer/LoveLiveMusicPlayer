@@ -13,6 +13,12 @@ import createLyricWindow from "./windows/desktopLyricWindow";
 let mainWindow: BrowserWindow | null = null;
 let willQuitApp = false
 
+// 阻止应用多开
+const gotTheLock = app.requestSingleInstanceLock()
+if (!gotTheLock) {
+    app.quit()
+}
+
 const getAssetPath = (...paths: string[]): string => {
     return path.join(RESOURCES_PATH, ...paths);
 };

@@ -318,7 +318,7 @@ export default function () {
                 }}
             >
                 <div className={'text-lrc'} style={{maxWidth: singleLine ? width : width / 3 * 2}}>
-                    {singleLine ? (singleLrc ? singleLrc : "暂无歌词") : (prevLrc ? prevLrc : "暂无歌词")}
+                    {singleLine ? (singleLrc ? singleLrc.trim() : "") : (prevLrc ? prevLrc.trim() : "")}
                 </div>
             </div>
             {
@@ -336,7 +336,7 @@ export default function () {
                         }}
                     >
                         <div className={'text-lrc'} style={{maxWidth: width / 3 * 2}}>
-                            {nextLrc ? nextLrc : "暂无歌词"}
+                            {nextLrc ? nextLrc.trim() : ""}
                         </div>
                     </div>
             }
