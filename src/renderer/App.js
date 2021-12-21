@@ -226,6 +226,7 @@ function App({dispatch}) {
         musicDetailRef.current?.setMusicDetail(info)
         let jpIndex = 0
         let zhIndex = 0
+        let romaIndex = 0
         let jpList = null
         if (info.jpLrc) {
             jpList = parseLrc(info.jpLrc)
@@ -262,6 +263,20 @@ function App({dispatch}) {
                 }
                 if (zhIndex !== -1 && zhList && zhIndex < zhList.lyrics.length) {
                     nextLrc = zhList.lyrics[zhIndex].content
+                }
+                break
+            case 'roma':
+                let romaList = null
+                if (info.romaLrc) {
+                    romaList = parseLrc(info.romaLrc)
+                    romaIndex = AppUtils.currentLyricIndex(romaList.lyrics, info.currentTime)
+                }
+                if (jpIndex !== -1 && jpList && jpIndex < jpList.lyrics.length) {
+                    prevLrc = jpList.lyrics[jpIndex].content
+                    singleLrc = jpList.lyrics[jpIndex].content
+                }
+                if (romaIndex !== -1 && romaList && romaIndex < romaList.lyrics.length) {
+                    nextLrc = romaList.lyrics[romaIndex].content
                 }
                 break
             default:
@@ -330,20 +345,27 @@ function App({dispatch}) {
     }
 
     useEffect(() => {
+        const finish = () => {
+            Bus.emit("onNotification", "应用准备强制恢复，即将重启")
+            setTimeout(() => {
+                ipcRenderer.invoke('restart')
+            }, 2000)
+        }
         // 判断本次版本是否是强制恢复版本
         ipcRenderer.on('getAppVersion', (event, version) => {
             const initedVersion = Store.get('appInitedVersion')
             dispatch(appAction.appVersion(version))
             if (AppUtils.isNull(initedVersion) || version !== initedVersion) {
-                WorkUtils.requestNeedInit(version).then(needInit => {
-                    if (needInit) {
-                        DBHelper.removeAllDB().then(_ => {
-                            Store.set('appInitedVersion', version)
-                            Bus.emit("onNotification", "应用准备强制恢复，即将重启")
-                            setTimeout(() => {
-                                ipcRenderer.invoke('restart')
-                            }, 2000)
-                        })
+                WorkUtils.requestNeedInit(version).then(status => {
+                    switch (status) {
+                        case 1: // 删除音乐数据
+                            DBHelper.removeMusicDB().then(finish)
+                            break
+                        case 2: // 删除全部数据
+                            DBHelper.removeAllDB().then(finish)
+                            break
+                        default:
+                            break
                     }
                 }).catch(_ => {
                 })

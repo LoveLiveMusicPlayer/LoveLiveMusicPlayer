@@ -95,12 +95,12 @@ export const WorkUtils = {
 
     // 获取该版本是否需要强制恢复初始状态
     async requestNeedInit(version) {
-        let result = false
+        let result = 0
         try {
             const response = await Network.get("https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/init.json")
             response.data.map(item => {
                 if (item.version === version) {
-                    result = item.needInit
+                    result = item.status
                 }
             })
         } catch (error) {
@@ -184,6 +184,7 @@ export const WorkUtils = {
                         album: item.value.album,
                         lyric: item.value.lyric,
                         trans: item.value.trans,
+                        roma: item.value.roma,
                         playIndex: playIndex ? playIndex : 0,
                         cover: AppUtils.encodeURL(URL + item.value["cover_path"]),
                         musicSrc: AppUtils.encodeURL(URL + item.value["music_path"]),

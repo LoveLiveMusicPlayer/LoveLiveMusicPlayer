@@ -65,6 +65,15 @@ export const DBHelper = {
         return Promise.allSettled(promiseArr)
     },
 
+    // 删除音乐数据
+    async removeMusicDB() {
+        const promiseArr = []
+        this.clearStore()
+        promiseArr.push(AlbumHelper.removeAllAlbum())
+        promiseArr.push(MusicHelper.removeAllMusic())
+        return Promise.allSettled(promiseArr)
+    },
+
     // 清除 store 前先保存 appInitedVersion版本
     clearStore() {
         const initedVersion = Store.get('appInitedVersion')

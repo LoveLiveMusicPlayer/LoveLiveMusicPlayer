@@ -23,6 +23,7 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
     const [currentSong, setCurrentSong] = useState()
     const [jpLrc, setJpLrc] = useState('')
     const [zhLrc, setZhLrc] = useState('')
+    const [romaLrc, setRomaLrc] = useState('')
     const [currentLrcTime, setCurrentLrcTime] = useState()
     const [cover, setCover] = useState()
     const [musicInfo, setMusicInfo] = useState()
@@ -45,16 +46,15 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
             } else {
                 setCurrentLrcTime(info.currentTime)
             }
-            if (AppUtils.isEmpty(info.zhLrc)) {
-                if (lrcLanguage === 'zh') {
-                    if (lrcLanguageCallback) {
-                        lrcLanguageCallback('jp')
-                    }
-                }
-            } else {
+            if (!AppUtils.isEmpty(info.jpLrc)) {
+                setJpLrc(info.jpLrc)
+            }
+            if (!AppUtils.isEmpty(info.zhLrc)) {
                 setZhLrc(info.zhLrc)
             }
-            setJpLrc(info.jpLrc)
+            if (!AppUtils.isEmpty(info.romaLrc)) {
+                setRomaLrc(info.romaLrc)
+            }
         }
     }))
 
@@ -74,13 +74,29 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
         }
     }
 
+    const renderLrc = () => {
+        if (lrcLanguage === 'jp') {
+            return jpLrc
+        } else if (lrcLanguage === 'zh') {
+            return zhLrc
+        } else {
+            return romaLrc
+        }
+    }
+
     const changeLrcPosition = () => {
         setLrcPosition(lrcPosition === 'center' ? 'left' : 'center')
     }
 
     const changeLanguage = () => {
         if (lrcLanguageCallback) {
-            lrcLanguageCallback(lrcLanguage === 'jp' ? 'zh' : 'jp')
+            if (lrcLanguage === 'jp') {
+                lrcLanguageCallback('zh')
+            } else if (lrcLanguage === 'zh') {
+                lrcLanguageCallback('roma')
+            } else {
+                lrcLanguageCallback('jp')
+            }
         }
     }
 
@@ -104,6 +120,14 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
         },
     };
 
+    const lrcIcon = () => {
+        if (lrcLanguage === 'jp') {
+            return Images.ICON_JAPANESE
+        } else if (lrcLanguage === 'zh') {
+            return Images.ICON_CHINESE
+        } else return Images.ICON_ROMA
+    }
+
     return (
         <Modal
             className={musicDetailVisible ? "music_detail_modal_in" : "music_detail_modal_out"}
@@ -122,7 +146,7 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
                         <div className={'tools'}>
                             <img
                                 style={{width: '30px', height: '30px'}}
-                                src={lrcLanguage === 'jp' ? Images.ICON_JAPANESE : Images.ICON_CHINESE}
+                                src={lrcIcon()}
                                 onClick={changeLanguage}
                             />
                             <img
@@ -139,7 +163,7 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
                             <Lrc
                                 className="lrc"
                                 style={{overflow: 'hidden !important'}}
-                                lrc={lrcLanguage === 'jp' ? jpLrc : zhLrc}
+                                lrc={renderLrc()}
                                 intervalOfRecoveringAutoScrollAfterUserScroll={1000}
                                 topBlank={true}
                                 bottomBlank={true}

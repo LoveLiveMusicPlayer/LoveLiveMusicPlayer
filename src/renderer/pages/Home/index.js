@@ -179,8 +179,8 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
         }
     }
 
-    const deleteAllData = () => {
-        DBHelper.removeAllDB().then(_ => {
+    const deleteMusicData = () => {
+        DBHelper.removeMusicDB().then(_ => {
             clearDialog.current?.forceClose()
             restart()
         })
@@ -205,7 +205,7 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
             <div className={'clearDialog'}>
                 <div>用户数据：主题背景、播放器配置</div>
                 <div>自建数据：用户数据、我喜欢、歌单</div>
-                <div>全部数据：自建数据、云端缓存数据</div>
+                <div>歌曲数据：云端缓存数据</div>
             </div>
         )
     }
@@ -279,7 +279,7 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
                     hint={'请选择要清理的数据'}
                     confirmText={'删除用户数据'}
                     result={onDelUserData}
-                    thirdButton={{text: '删除全部数据', callback: () => deleteAllData()}}
+                    thirdButton={{text: '删除歌曲数据', callback: () => deleteMusicData()}}
                     fourthButton={{text: '删除自建数据', callback: () => deleteDIYData()}}
                     bottomContainer={renderClearDialogBottom}
                 />

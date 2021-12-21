@@ -19,7 +19,7 @@ const {connect} = require('react-redux')
 
 let currentMusicUniqueId = ""
 let currentPlayList = []
-const lrc = {jpLrc: null, zhLrc: null}
+const lrc = {jpLrc: null, zhLrc: null, romaLrc: null}
 
 class AudioPlayer extends React.PureComponent {
 
@@ -206,6 +206,23 @@ class AudioPlayer extends React.PureComponent {
         }
     }
 
+    // 网络获取歌词
+    requestLrc = async (url) => {
+        try {
+            if (url) {
+                const resp = await WorkUtils.requestLyric(url)
+                if (!AppUtils.isEmpty(resp)) {
+                    return resp.split('\n').map(item => {
+                        return item.trim()
+                    }).join('\n')
+                }
+            }
+        } catch (e) {
+            console.log(e)
+        }
+        return null
+    }
+
     render() {
         const {params, playIndex} = this.state
         params.playIndex = playIndex
@@ -251,28 +268,14 @@ class AudioPlayer extends React.PureComponent {
                             this.props.dispatch(musicAction.playId(audioInfo._id))
                             Store.set("playId", audioInfo._id)
                             AlbumHelper.findOneAlbumByAlbumId(this.props.chooseGroup, audioInfo.album).then(res => {
-                                res._id && this.props.dispatch(musicAction.albumId(res._id))
+                                res && res._id && this.props.dispatch(musicAction.albumId(res._id))
                             })
-
-                            if (audioInfo.lyric) {
-                                const jpResp = await WorkUtils.requestLyric(audioInfo.lyric)
-                                if (!AppUtils.isEmpty(jpResp)) {
-                                    lrc.jpLrc = jpResp.split('\n').map(item => {
-                                        return item.trim()
-                                    }).join('\n')
-                                }
-                            }
-                            if (audioInfo.trans) {
-                                const zhResp = await WorkUtils.requestLyric(audioInfo.trans)
-                                if (!AppUtils.isEmpty(zhResp)) {
-                                    lrc.zhLrc = zhResp.split('\n').map(item => {
-                                        return item.trim()
-                                    }).join('\n')
-                                }
-                            }
                         } catch (e) {
                             console.log(e)
                         }
+                        lrc.jpLrc = await this.requestLrc(audioInfo.lyric)
+                        lrc.zhLrc = await this.requestLrc(audioInfo.trans)
+                        lrc.romaLrc = await this.requestLrc(audioInfo.roma)
                     }}
                     onAudioVolumeChange={volume => {
                         Store.set('volume', Math.sqrt(volume))
@@ -286,6 +289,7 @@ class AudioPlayer extends React.PureComponent {
                                 cover: audioInfo.cover,
                                 jpLrc: lrc.jpLrc,
                                 zhLrc: lrc.zhLrc,
+                                romaLrc: lrc.romaLrc,
                                 _id: audioInfo._id,
                                 name: audioInfo.name,
                                 singer: audioInfo.singer,

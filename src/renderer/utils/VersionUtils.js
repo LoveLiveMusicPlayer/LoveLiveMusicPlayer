@@ -1,5 +1,5 @@
 // 是否是预发环境
-const isPre = false
+const isPre = true
 
 export const VersionUtils = {
     refreshDataUrl() {

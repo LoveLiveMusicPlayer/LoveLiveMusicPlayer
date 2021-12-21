@@ -59,8 +59,8 @@ export default function () {
 
     useEffect(() => {
         // 初始化用户参数
-        setTextColor(Store.get("lrcColor"))
-        setFontSize(Store.get("lrcFontSize"))
+        setTextColor(Store.get("lrcColor") || green)
+        setFontSize(Store.get("lrcFontSize") || 28)
 
         win.setIgnoreMouseEvents(false)
         win.setWindowButtonVisibility(false)
@@ -94,6 +94,7 @@ export default function () {
 
         lrc.addEventListener("mouseleave", (e) => {
             setMouseOver(false)
+            setNodeDisplay(false)
         });
 
         lrc.addEventListener("mouseover", (e) => {

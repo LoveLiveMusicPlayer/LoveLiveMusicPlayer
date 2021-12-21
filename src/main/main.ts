@@ -11,6 +11,7 @@ import init, {RESOURCES_PATH} from "./modules/inital";
 import createLyricWindow from "./windows/desktopLyricWindow";
 
 let mainWindow: BrowserWindow | null = null;
+let lyricWindow: BrowserWindow | null = null;
 let willQuitApp = false
 
 // 阻止应用多开
@@ -109,11 +110,14 @@ const createWindow = async () => {
                 event.preventDefault()
                 mainWindow?.hide()
             }
+        } else {
+            lyricWindow?.hide()
         }
     })
 
     mainWindow.on('closed', () => {
-        mainWindow = null;
+        mainWindow = null
+        global.lyricWindow = null
     });
 
     const menuBuilder = new MenuBuilder(mainWindow);
@@ -132,7 +136,7 @@ app.on('ready', async () => {
     })
     createFuncBtn()
     await createWindow()
-    global.lyricWindow = createLyricWindow(BrowserWindow);
+    global.lyricWindow = lyricWindow = createLyricWindow(BrowserWindow);
     ipcMain.on("thumbar-buttons", (e, {playing}) => {
         if (mainWindow === null) return;
         if (process.platform === "win32") {
@@ -152,4 +156,10 @@ app.on('activate', () => {
 
 app.on('before-quit', () => {
     willQuitApp = true
+})
+
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+        app.quit()
+    }
 })

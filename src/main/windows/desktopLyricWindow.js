@@ -39,6 +39,10 @@ const createLyricWindow = function (BrowserWindow) {
     require('@electron/remote/main').enable(lyricWindow.webContents)
     // lyricWindow.setIgnoreMouseEvents(true)
 
+    lyricWindow.on('close', () => {
+        console.log("close")
+    })
+
     return lyricWindow;
 };
 export default createLyricWindow;
