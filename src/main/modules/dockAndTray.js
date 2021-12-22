@@ -1,5 +1,6 @@
 import {app, Menu, shell, Tray} from "electron";
 import path from "path";
+import {RESOURCES_PATH} from "./inital";
 
 let appTray = null
 

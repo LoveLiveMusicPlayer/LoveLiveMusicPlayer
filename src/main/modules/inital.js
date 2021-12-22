@@ -9,7 +9,7 @@ require('@electron/remote/main').initialize()
 
 export const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, 'assets')
-    : path.join(__dirname, '../../assets');
+    : path.join(__dirname, '../../../assets');
 
 export default function () {
 
