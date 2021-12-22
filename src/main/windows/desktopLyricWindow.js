@@ -3,6 +3,11 @@ import {ipcMain} from "electron";
 
 const {screen} = require("electron");
 
+let clickX
+let clickY
+let clientX
+let clientY
+
 const createLyricWindow = function (BrowserWindow) {
     const {width, height} = screen.getPrimaryDisplay().workAreaSize;
     const trulyWidth = parseInt(width / 2) > 800 ? 800 : parseInt(width / 2)
@@ -29,7 +34,7 @@ const createLyricWindow = function (BrowserWindow) {
             nodeIntegration: true,
             enableRemoteModule: true,
             contextIsolation: false,
-            devTools: false,
+            devTools: true,
         },
     };
 
@@ -38,15 +43,22 @@ const createLyricWindow = function (BrowserWindow) {
     lyricWindow.loadURL(resolveHtmlPath("desktop-lyric.html"));
 
     require('@electron/remote/main').enable(lyricWindow.webContents)
-    // lyricWindow.setIgnoreMouseEvents(true)
-
-    lyricWindow.on('close', () => {
-        console.log("close")
-    })
 
     ipcMain.on('windowMoving', (e, {mouseX, mouseY}) => {
+        if (clickX !== mouseX || clickY !== mouseY) {
+            clickX = mouseX
+            clickY = mouseY
+            clientX = lyricWindow.getSize()[0]
+            clientY = lyricWindow.getSize()[1]
+        }
+
         const { x, y } = screen.getCursorScreenPoint()
-        lyricWindow.setPosition(x - mouseX, y - mouseY)
+        lyricWindow.setBounds({
+            width: clientX,
+            height: clientY,
+            x: x - mouseX,
+            y: y - mouseY
+        });
     });
 
     return lyricWindow;

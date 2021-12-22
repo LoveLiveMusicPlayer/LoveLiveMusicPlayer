@@ -7,9 +7,9 @@ import Store from '../../utils/Store'
 
 let win = require('@electron/remote').getGlobal("lyricWindow");
 let isLocking = false
-let mouseX;
-let mouseY;
-let animationId;
+let mouseX
+let mouseY
+let animationId
 
 const green = 'rgba(11,214,158)'
 const blue = 'rgba(0,141,239)'
@@ -92,6 +92,10 @@ export default function () {
             }
         }
 
+        document.onblur = (e) => {
+            console.log("into here")
+        }
+
         // 添加窗口大小变化监听器
         window.addEventListener("resize", listener)
 
@@ -105,8 +109,8 @@ export default function () {
 
     const onMouseDown = (e) => {
         if (!isLocking) {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
+            mouseX = e.clientX
+            mouseY = e.clientY
             document.addEventListener('mouseup', onMouseUp)
             requestAnimationFrame(moveWindow);
         }
@@ -118,10 +122,12 @@ export default function () {
     }
 
     const onMouseOver = () => {
+        console.log("over")
         setMouseOver(true)
     }
 
     const onMouseOut = () => {
+        console.log("out")
         setMouseOver(false)
         setNodeDisplay(false)
     }
@@ -191,7 +197,7 @@ export default function () {
                 id={'locker'}
                 src={lockImg}
                 style={{width: 20, height: 18, visibility: lockVisible, marginLeft: 13}}
-                title={isLock ? '锁定窗口' : '解锁窗口'}
+                title={isLock ? '解锁窗口' : '锁定窗口'}
                 onClick={_ => configLock()}
                 onMouseOver={_ => {
                     if (isLocking) {
@@ -201,8 +207,7 @@ export default function () {
                 }}
                 onMouseOut={_ => {
                     if (isLocking) {
-                        // win.setIgnoreMouseEvents(true, {forward: true})
-                        win.setIgnoreMouseEvents(false)
+                        win.setIgnoreMouseEvents(true, {forward: true})
                     }
                     setLockOver(false)
                 }}
