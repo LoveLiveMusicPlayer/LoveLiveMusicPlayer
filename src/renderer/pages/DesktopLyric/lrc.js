@@ -92,16 +92,6 @@ export default function () {
             }
         }
 
-        // const lrc = document.querySelector(".desktop-lyric");
-
-        document.body.addEventListener("mouseout", (e) => {
-            console.log("mouseout")
-        });
-
-        document.body.addEventListener("mouseover", (e) => {
-            console.log("mouseover")
-        })
-
         // 添加窗口大小变化监听器
         window.addEventListener("resize", listener)
 
@@ -128,12 +118,10 @@ export default function () {
     }
 
     const onMouseOver = () => {
-        console.log("over")
         setMouseOver(true)
     }
 
     const onMouseOut = () => {
-        console.log("out")
         setMouseOver(false)
         setNodeDisplay(false)
     }
@@ -152,11 +140,11 @@ export default function () {
     function configLock() {
         win.setResizable(isLock)
         win.setMovable(isLock)
-        // if (isLock) {
+        if (isLock) {
             win.setIgnoreMouseEvents(false)
-        // } else {
-        //     win.setIgnoreMouseEvents(true, {forward: true})
-        // }
+        } else {
+            win.setIgnoreMouseEvents(true, {forward: true})
+        }
         if (process.platform === 'darwin') {
             win.setWindowButtonVisibility(false)
         }
