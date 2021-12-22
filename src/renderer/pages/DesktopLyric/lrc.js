@@ -63,7 +63,9 @@ export default function () {
         setFontSize(Store.get("lrcFontSize") || 28)
 
         win.setIgnoreMouseEvents(false)
-        win.setWindowButtonVisibility(false)
+        if (process.platform === 'darwin') {
+            win.setWindowButtonVisibility(false)
+        }
 
         ipcRenderer.on("desktop-lrc-text", (event, args) => {
             setPrevLrc(args.prevLrc)
@@ -123,7 +125,9 @@ export default function () {
         } else {
             win.setIgnoreMouseEvents(true, {forward: true})
         }
-        win.setWindowButtonVisibility(false)
+        if (process.platform === 'darwin') {
+            win.setWindowButtonVisibility(false)
+        }
         setIsLock(!isLock)
         isLocking = !isLock
     }
