@@ -14,6 +14,7 @@ const createLyricWindow = function (BrowserWindow) {
     const obj = {
         minWidth: 800,
         width: trulyWidth,
+        maxWidth: parseInt(width / 10 * 9),
         maxHeight: 180,
         height: 100,
         minHeight: 100,

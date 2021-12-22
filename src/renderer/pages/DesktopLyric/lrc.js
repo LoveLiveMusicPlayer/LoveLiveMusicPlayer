@@ -4,6 +4,7 @@ import {ipcRenderer} from 'electron'
 import * as Images from '../../public/Images'
 import {AppUtils} from "../../utils/AppUtils";
 import Store from '../../utils/Store'
+import {LRC_LOCK_LOCKED_BLUR} from "../../public/Images";
 
 let win = require('@electron/remote').getGlobal("lyricWindow");
 let isLocking = false
@@ -92,10 +93,6 @@ export default function () {
             }
         }
 
-        document.onblur = (e) => {
-            console.log("into here")
-        }
-
         // 添加窗口大小变化监听器
         window.addEventListener("resize", listener)
 
@@ -122,12 +119,10 @@ export default function () {
     }
 
     const onMouseOver = () => {
-        console.log("over")
         setMouseOver(true)
     }
 
     const onMouseOut = () => {
-        console.log("out")
         setMouseOver(false)
         setNodeDisplay(false)
     }
@@ -185,6 +180,9 @@ export default function () {
         if (!mouseOver) {
             lockVisible = 'hidden'
         }
+        if (isLock && !lockOver) {
+            lockImg = Images.LRC_LOCK_LOCKED_BLUR
+        }
         if (!isLock && mouseOver) {
             if (lockOver) {
                 lockImg = Images.LRC_LOCK_TOUCH
@@ -201,12 +199,14 @@ export default function () {
                 onClick={_ => configLock()}
                 onMouseOver={_ => {
                     if (isLocking) {
+                        console.log("over")
                         win.setIgnoreMouseEvents(false)
                     }
                     setLockOver(true)
                 }}
                 onMouseOut={_ => {
                     if (isLocking) {
+                        console.log("out")
                         win.setIgnoreMouseEvents(true, {forward: true})
                     }
                     setLockOver(false)
