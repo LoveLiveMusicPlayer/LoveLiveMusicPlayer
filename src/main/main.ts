@@ -60,15 +60,15 @@ const setThumbarButtons = function (mainWindow, playing) {
 init()
 
 const createWindow = async () => {
-    if (
-        process.env.NODE_ENV === 'development' ||
-        process.env.DEBUG_PROD === 'true'
-    ) {
-        await installExtensions();
-    }
+    // if (
+    //     process.env.NODE_ENV === 'development' ||
+    //     process.env.DEBUG_PROD === 'true'
+    // ) {
+    //     await installExtensions();
+    // }
 
     global.mainWindow = mainWindow = new BrowserWindow({
-        show: false,
+        show: true,
         width: 1250,
         height: 728,
         titleBarStyle: 'customButtonsOnHover',
@@ -111,13 +111,13 @@ const createWindow = async () => {
                 mainWindow?.hide()
             }
         } else {
-            lyricWindow?.hide()
+            app.exit(0)
         }
     })
 
     mainWindow.on('closed', () => {
         mainWindow = null
-        global.lyricWindow = null
+        lyricWindow = null
     });
 
     const menuBuilder = new MenuBuilder(mainWindow);
@@ -152,7 +152,7 @@ app.on('activate', () => {
         mainWindow?.show()
         mainWindow?.focus();
     }
-});
+})
 
 app.on('before-quit', () => {
     willQuitApp = true

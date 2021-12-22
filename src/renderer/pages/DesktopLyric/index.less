@@ -5,17 +5,18 @@ body {
     align-self: center;
     margin: 0;
     padding: 0;
+    -webkit-app-region: no-drag;
 }
 
 .desktop-lyric {
     display: flex;
-    justify-content: center;
     align-items: center;
     flex-direction: column;
     border-radius: 10px;
     margin: 0;
-    padding: 15px 0 0;
+    padding: 0;
     -webkit-user-select: none;
+    -webkit-app-region: no-drag;
 
     .function {
         width: 100%;
@@ -38,6 +39,7 @@ body {
         text-indent: 2px;
         white-space: nowrap;
         overflow-x: auto;
+        -webkit-app-region: no-drag;
 
         &:hover {
             cursor: grab;
@@ -48,6 +50,7 @@ body {
             overflow: hidden;
             word-break: break-all;
             white-space: nowrap;
+            -webkit-app-region: no-drag;
         }
     }
 

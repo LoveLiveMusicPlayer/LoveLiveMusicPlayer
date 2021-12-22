@@ -7,6 +7,9 @@ import Store from '../../utils/Store'
 
 let win = require('@electron/remote').getGlobal("lyricWindow");
 let isLocking = false
+let mouseX;
+let mouseY;
+let animationId;
 
 const green = 'rgba(11,214,158)'
 const blue = 'rgba(0,141,239)'
@@ -81,30 +84,59 @@ export default function () {
             return false;
         };
 
-        window.addEventListener("click", (e) => {
+        window.onclick = (e) => {
             const position = document.getElementById('colorImg').getBoundingClientRect()
             const isPointInRect = AppUtils.isPointInArea(e, position)
             if (!isPointInRect) {
                 setNodeDisplay(false)
             }
+        }
+
+        // const lrc = document.querySelector(".desktop-lyric");
+
+        document.body.addEventListener("mouseout", (e) => {
+            console.log("mouseout")
+        });
+
+        document.body.addEventListener("mouseover", (e) => {
+            console.log("mouseover")
         })
 
         // 添加窗口大小变化监听器
         window.addEventListener("resize", listener)
 
-        const lrc = document.querySelector(".desktop-lyric");
-
-        lrc.addEventListener("mouseleave", (e) => {
-            setMouseOver(false)
-            setNodeDisplay(false)
-        });
-
-        lrc.addEventListener("mouseover", (e) => {
-            setMouseOver(true)
-        })
-
         return () => window.removeEventListener("resize", listener)
     }, [])
+
+    const onMouseUp = () => {
+        document.removeEventListener('mouseup', onMouseUp)
+        cancelAnimationFrame(animationId)
+    }
+
+    const onMouseDown = (e) => {
+        if (!isLocking) {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            document.addEventListener('mouseup', onMouseUp)
+            requestAnimationFrame(moveWindow);
+        }
+    }
+
+    const moveWindow = () => {
+        ipcRenderer.send('windowMoving', { mouseX, mouseY });
+        animationId = requestAnimationFrame(moveWindow);
+    }
+
+    const onMouseOver = () => {
+        console.log("over")
+        setMouseOver(true)
+    }
+
+    const onMouseOut = () => {
+        console.log("out")
+        setMouseOver(false)
+        setNodeDisplay(false)
+    }
 
     function configFontSize(isUp) {
         let size = fontSize
@@ -120,11 +152,11 @@ export default function () {
     function configLock() {
         win.setResizable(isLock)
         win.setMovable(isLock)
-        if (isLock) {
+        // if (isLock) {
             win.setIgnoreMouseEvents(false)
-        } else {
-            win.setIgnoreMouseEvents(true, {forward: true})
-        }
+        // } else {
+        //     win.setIgnoreMouseEvents(true, {forward: true})
+        // }
         if (process.platform === 'darwin') {
             win.setWindowButtonVisibility(false)
         }
@@ -181,7 +213,8 @@ export default function () {
                 }}
                 onMouseOut={_ => {
                     if (isLocking) {
-                        win.setIgnoreMouseEvents(true, {forward: true})
+                        // win.setIgnoreMouseEvents(true, {forward: true})
+                        win.setIgnoreMouseEvents(false)
                     }
                     setLockOver(false)
                 }}
@@ -302,50 +335,57 @@ export default function () {
 
     return (
         <div className="desktop-lyric" id="desktop"
-             style={{height: height, background: mouseOver && !isLock ? '#fff' : 'transparent'}}>
-            <div className="function" style={{visibility: mouseOver ? 'visible' : 'hidden'}}>
-                {renderClose()}
-                {renderFontSizeDown()}
-                {renderLock()}
-                {renderFontSizeUp()}
-                {renderColor()}
-            </div>
-            <div
-                className="playing-lyric"
-                id={'lrc'}
-                style={{
-                    width: singleLine ? width - 100 : width,
-                    fontSize: fontSize,
-                    display: 'flex',
-                    color: textColor,
-                    justifyContent: (singleLine || lrcLanguage !== 'jp') ? 'center' : 'flex-start',
-                    marginLeft: (singleLine || lrcLanguage !== 'jp') ? 0 : 50
-                }}
-            >
-                <div className={'text-lrc'} style={{maxWidth: singleLine ? width : width / 3 * 2}}>
-                    {singleLine ? (singleLrc ? singleLrc.trim() : "") : (prevLrc ? prevLrc.trim() : "")}
+             style={{height: height, background: mouseOver && !isLock ? '#fff' : 'transparent'}}
+             onMouseDown={onMouseDown}
+             onMouseEnter={onMouseOver}
+             onMouseLeave={onMouseOut}
+        >
+            <div style={{margin: 0, height: 25,width: '100%'}}/>
+            <div style={{display: 'flex', flexDirection: 'column', flex: 1, width: '100%', justifyContent: 'center', alignItems: 'center'}}>
+                <div className="function" style={{visibility: mouseOver ? 'visible' : 'hidden'}}>
+                    {renderClose()}
+                    {renderFontSizeDown()}
+                    {renderLock()}
+                    {renderFontSizeUp()}
+                    {renderColor()}
                 </div>
-            </div>
-            {
-                singleLine ? null :
-                    <div
-                        className="playing-lyric"
-                        id={'lrc'}
-                        style={{
-                            width: width,
-                            fontSize: fontSize,
-                            display: 'flex',
-                            color: textColor,
-                            justifyContent: lrcLanguage !== 'jp' ? 'center' : 'flex-end',
-                            marginRight: lrcLanguage !== 'jp' ? 0 : 50
-                        }}
-                    >
-                        <div className={'text-lrc'} style={{maxWidth: width / 3 * 2}}>
-                            {nextLrc ? nextLrc.trim() : ""}
-                        </div>
+                <div
+                    className="playing-lyric"
+                    id={'lrc'}
+                    style={{
+                        width: singleLine ? width - 100 : width,
+                        fontSize: fontSize,
+                        display: 'flex',
+                        color: textColor,
+                        justifyContent: (singleLine || lrcLanguage !== 'jp') ? 'center' : 'flex-start',
+                        marginLeft: (singleLine || lrcLanguage !== 'jp') ? 0 : 50
+                    }}
+                >
+                    <div className={'text-lrc'} style={{maxWidth: singleLine ? width : width / 3 * 2}}>
+                        {singleLine ? (singleLrc ? singleLrc.trim() : "") : (prevLrc ? prevLrc.trim() : "")}
                     </div>
-            }
-            {renderColorPanel()}
+                </div>
+                {
+                    singleLine ? null :
+                        <div
+                            className="playing-lyric"
+                            id={'lrc'}
+                            style={{
+                                width: width,
+                                fontSize: fontSize,
+                                display: 'flex',
+                                color: textColor,
+                                justifyContent: lrcLanguage !== 'jp' ? 'center' : 'flex-end',
+                                marginRight: lrcLanguage !== 'jp' ? 0 : 50
+                            }}
+                        >
+                            <div className={'text-lrc'} style={{maxWidth: width / 3 * 2}}>
+                                {nextLrc ? nextLrc.trim() : ""}
+                            </div>
+                        </div>
+                }
+                {renderColorPanel()}
+            </div>
         </div>
     )
 }

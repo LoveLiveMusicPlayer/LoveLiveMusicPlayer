@@ -1,4 +1,5 @@
 import {resolveHtmlPath} from "../util";
+import {ipcMain} from "electron";
 
 const {screen} = require("electron");
 
@@ -28,7 +29,7 @@ const createLyricWindow = function (BrowserWindow) {
             nodeIntegration: true,
             enableRemoteModule: true,
             contextIsolation: false,
-            devTools: false,
+            devTools: true,
         },
     };
 
@@ -42,6 +43,11 @@ const createLyricWindow = function (BrowserWindow) {
     lyricWindow.on('close', () => {
         console.log("close")
     })
+
+    ipcMain.on('windowMoving', (e, {mouseX, mouseY}) => {
+        const { x, y } = screen.getCursorScreenPoint()
+        lyricWindow.setPosition(x - mouseX, y - mouseY)
+    });
 
     return lyricWindow;
 };
