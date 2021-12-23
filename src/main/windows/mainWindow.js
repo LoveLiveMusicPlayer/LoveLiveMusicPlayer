@@ -1,10 +1,9 @@
-import {thumbarButtons} from "../modules/dockAndTray";
-
-const {resolveHtmlPath} = require("../util");
 import initIpcEvent from "../modules/ipcEvent";
 import {getAssetPath} from "../main";
-const {app, shell} = require("electron");
 import MenuBuilder from "../modules/menu";
+
+const {resolveHtmlPath} = require("../util");
+const {app, shell} = require("electron");
 
 const createMainWindow = function (BrowserWindow) {
     const option = {
@@ -27,14 +26,16 @@ const createMainWindow = function (BrowserWindow) {
 
     let mainWindow = new BrowserWindow(option);
 
-    // hook掉标题栏右键菜单
-    mainWindow.hookWindowMessage(278, () => {
-        mainWindow?.setEnabled(false)
-        setTimeout(() => {
-            mainWindow?.setEnabled(true)
-        }, 100)
-        return true
-    })
+    if (process.platform === 'win32') {
+        // hook掉标题栏右键菜单
+        mainWindow.hookWindowMessage(278, () => {
+            mainWindow?.setEnabled(false)
+            setTimeout(() => {
+                mainWindow?.setEnabled(true)
+            }, 100)
+            return true
+        })
+    }
 
     require('@electron/remote/main').enable(mainWindow.webContents)
 
