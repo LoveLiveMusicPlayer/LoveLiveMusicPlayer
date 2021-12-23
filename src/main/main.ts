@@ -4,7 +4,7 @@ import 'regenerator-runtime/runtime';
 import path from 'path';
 import {app, BrowserWindow, globalShortcut, ipcMain, shell} from 'electron';
 import MenuBuilder from './modules/menu';
-import {installExtensions, resolveHtmlPath} from './util';
+import {resolveHtmlPath} from './util';
 import initIpcEvent from "./modules/ipcEvent";
 import createFuncBtn from "./modules/dockAndTray";
 import init, {RESOURCES_PATH} from "./modules/inital";
@@ -60,13 +60,6 @@ const setThumbarButtons = function (mainWindow, playing) {
 init()
 
 const createWindow = async () => {
-    // if (
-    //     process.env.NODE_ENV === 'development' ||
-    //     process.env.DEBUG_PROD === 'true'
-    // ) {
-    //     await installExtensions();
-    // }
-
     global.mainWindow = mainWindow = new BrowserWindow({
         show: true,
         width: 1250,
@@ -84,6 +77,15 @@ const createWindow = async () => {
             webSecurity: false
         },
     });
+
+    // hook掉标题栏右键菜单
+    mainWindow.hookWindowMessage(278, () => {
+        mainWindow?.setEnabled(false)
+        setTimeout(() => {
+            mainWindow?.setEnabled(true)
+        }, 100)
+        return true
+    })
 
     require('@electron/remote/main').enable(<Electron.WebContents>mainWindow.webContents)
 
