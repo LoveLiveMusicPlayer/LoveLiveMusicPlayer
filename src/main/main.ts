@@ -3,7 +3,7 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
 import {app, BrowserWindow, globalShortcut, ipcMain} from 'electron';
-import createFuncBtn, {setThumbarButtons, thumbarButtons} from "./modules/dockAndTray";
+import createFuncBtn, {thumbarButtons} from "./modules/dockAndTray";
 import init, {RESOURCES_PATH} from "./modules/inital";
 import createLyricWindow from "./windows/desktopLyricWindow";
 import createMainWindow from "./windows/mainWindow";

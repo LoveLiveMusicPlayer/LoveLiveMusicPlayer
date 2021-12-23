@@ -8,6 +8,7 @@ import Bus from "./Event";
 import {MusicHelper} from "../dao/MusicHelper";
 import Store from "./Store";
 import {VersionUtils} from "./VersionUtils";
+import {INIT_CHECK_FILE} from "./URLHelper";
 
 const path = require('path');
 
@@ -56,11 +57,11 @@ export const WorkUtils = {
         if (infoList) {
             for (let i = 0; i < infoList.length; i++) {
                 const music = infoList[i]
-                const obj = [i + 1, music.title, music.album, music.artist, music.date, music.path, music.pic, music.lyric, music.time, music.trans]
+                const obj = [i + 1, music.title, music.album, music.artist, music.date, music.path, music.pic, music.lyric, music.time, music.trans, music.roma]
                 arr.push(obj)
             }
             EXCEL.outPut({
-                header: ['id', '歌曲名称', '专辑名称', '艺术家', '发售日期', '文件路径', '封面路径', '日文歌词', '时长', '中文歌词'],
+                header: ['id', '歌曲名称', '专辑名称', '艺术家', '发售日期', '文件路径', '封面路径', '日文歌词', '时长', '中文歌词', '罗马歌词'],
                 data: arr,
                 name: 'music'
             });
@@ -97,7 +98,7 @@ export const WorkUtils = {
     async requestNeedInit(version) {
         let result = 0
         try {
-            const response = await Network.get("https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/init.json")
+            const response = await Network.get(INIT_CHECK_FILE)
             response.data.map(item => {
                 if (item.version === version) {
                     result = item.status

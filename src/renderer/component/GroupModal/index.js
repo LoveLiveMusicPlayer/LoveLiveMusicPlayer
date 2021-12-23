@@ -44,7 +44,6 @@ export const GroupModal = ({showCategory, showMenu, chooseGroup}) => {
                                  onClick={() => chooseGroup("Aqours")}/>
                             <span className={"menu_category_span"}>Aqours</span>
                         </div>
-
                     </div> : null
             }
         </>

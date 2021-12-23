@@ -3,11 +3,12 @@ import path from "path";
 import * as mm from "music-metadata";
 import {WorkUtils} from "./WorkUtils";
 import moment from "moment";
+import {OSS_URL_HEAD} from "./URLHelper";
 
 const {ipcRenderer} = require("electron")
 
 const coverArr = []
-const lyricUrl = "https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/"
+const lyricUrl = OSS_URL_HEAD
 let lastDir = ""
 
 export const AppUtils = {
@@ -71,6 +72,7 @@ export const AppUtils = {
                 obj.lyric = lyricUrl + "JP/" + obj.path.replace('.flac', '.lrc')
                 obj.time = this.parseDurationToTime(Math.floor(res.format.duration))
                 obj.trans = lyricUrl + "ZH/" + obj.path.replace('.flac', '.lrc')
+                obj.roma = lyricUrl + "ROMA/" + obj.path.replace('.flac', '.lrc')
             })
             infoList.push(obj)
         }
