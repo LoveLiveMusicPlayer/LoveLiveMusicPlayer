@@ -46,15 +46,10 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
             } else {
                 setCurrentLrcTime(info.currentTime)
             }
-            if (!AppUtils.isEmpty(info.jpLrc)) {
-                setJpLrc(info.jpLrc)
-            }
-            if (!AppUtils.isEmpty(info.zhLrc)) {
-                setZhLrc(info.zhLrc)
-            }
-            if (!AppUtils.isEmpty(info.romaLrc)) {
-                setRomaLrc(info.romaLrc)
-            }
+
+            setJpLrc(AppUtils.isEmpty(info.jpLrc) ? '' : info.jpLrc)
+            setZhLrc(AppUtils.isEmpty(info.zhLrc) ? '' : info.zhLrc)
+            setRomaLrc(AppUtils.isEmpty(info.romaLrc) ? '' : info.romaLrc)
         }
     }))
 
