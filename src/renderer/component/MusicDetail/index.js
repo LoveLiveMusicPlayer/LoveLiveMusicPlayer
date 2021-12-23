@@ -53,15 +53,17 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
         }
     }))
 
-    const renderItem = ({index, active, line}) => {
+    const renderItem = ({active, line}) => {
         if (lrcLanguage === 'jp') {
             return <LyricLine content={line.content} active={active} position={lrcPosition} lang={lrcLanguage}/>
         } else {
             const jpList = parseLrc(jpLrc)
             let content = ''
-            if (index < jpList.lyrics.length) {
-                content = jpList ? jpList.lyrics[index].content : ''
-            }
+            jpList && jpList.lyrics.map(item => {
+                if (item.startMillisecond === line.startMillisecond) {
+                    content = item.content
+                }
+            })
             return (
                 <LyricDoubleLine active={active} position={lrcPosition} headContent={content}
                                  footContent={line.content}/>
