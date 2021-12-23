@@ -1,8 +1,13 @@
-import {app, Menu, shell, Tray} from "electron";
+import {app, Menu, nativeImage, shell, Tray} from "electron";
 import path from "path";
 import {RESOURCES_PATH} from "./inital";
 
 let appTray = null
+
+const prevIcon = nativeImage.createFromPath(path.join(RESOURCES_PATH, "image/prev.png"))
+const pauseIcon = nativeImage.createFromPath(path.join(RESOURCES_PATH, "image/pause.png"))
+const playIcon = nativeImage.createFromPath(path.join(RESOURCES_PATH, "image/play.png"))
+const nextIcon = nativeImage.createFromPath(path.join(RESOURCES_PATH, "image/next.png"))
 
 const dockMenu = Menu.buildFromTemplate([
     {
@@ -64,6 +69,30 @@ const trayMenuTemplate = [
         }
     }
 ];
+
+export const thumbarButtons = [
+    {
+        tooltip: "上一曲",
+        icon: prevIcon,
+        click() {
+            global.mainWindow.webContents.send("prevMusic");
+        },
+    },
+    {
+        tooltip: "播放",
+        icon: playIcon,
+        click() {
+            global.mainWindow.webContents.send("playMusic");
+        },
+    },
+    {
+        tooltip: "下一曲",
+        icon: nextIcon,
+        click() {
+            global.mainWindow.webContents.send("nextMusic");
+        },
+    }
+]
 
 export default function () {
     if (process.platform === 'darwin') {

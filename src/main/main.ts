@@ -2,8 +2,8 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import {app, BrowserWindow, globalShortcut, ipcMain, nativeImage} from 'electron';
-import createFuncBtn from "./modules/dockAndTray";
+import {app, BrowserWindow, globalShortcut, ipcMain} from 'electron';
+import createFuncBtn, {setThumbarButtons, thumbarButtons} from "./modules/dockAndTray";
 import init, {RESOURCES_PATH} from "./modules/inital";
 import createLyricWindow from "./windows/desktopLyricWindow";
 import createMainWindow from "./windows/mainWindow";
@@ -18,39 +18,6 @@ export const getAssetPath = (...paths: string[]): string => {
     return path.join(RESOURCES_PATH, ...paths);
 };
 
-// 设置底部任务栏按钮和缩略图
-const setThumbarButtons = function (playing) {
-    const prevIcon = nativeImage.createFromPath(getAssetPath("prev.png"))
-    const pauseIcon = nativeImage.createFromPath(getAssetPath("pause.png"))
-    const playIcon = nativeImage.createFromPath(getAssetPath("play.png"))
-    const nextIcon = nativeImage.createFromPath(getAssetPath("next.png"))
-    global.mainWindow.setThumbarButtons([
-        {
-            tooltip: "上一曲",
-            icon: prevIcon,
-            click() {
-                global.mainWindow.webContents.send("prevMusic");
-            },
-        },
-        {
-            tooltip: playing ? "暂停" : "播放",
-            icon: playing ? pauseIcon : playIcon,
-            click() {
-                global.mainWindow.webContents.send("playMusic", {
-                    value: !playing,
-                });
-            },
-        },
-        {
-            tooltip: "下一曲",
-            icon: nextIcon,
-            click() {
-                global.mainWindow.webContents.send("nextMusic");
-            },
-        },
-    ]);
-};
-
 init()
 
 app.on('ready', async () => {
@@ -60,12 +27,10 @@ app.on('ready', async () => {
     createFuncBtn()
     global.mainWindow = createMainWindow(BrowserWindow)
     global.lyricWindow = createLyricWindow(BrowserWindow);
-    ipcMain.on("thumbar-buttons", (e, {playing}) => {
-        if (global.mainWindow === null) return;
-        if (process.platform === "win32") {
-            setThumbarButtons(playing);
-        }
-    });
+    if (process.platform === "win32") {
+        // 设置底部任务栏按钮和缩略图
+        global.mainWindow.setThumbarButtons(thumbarButtons);
+    }
 })
 
 app.on('activate', () => {

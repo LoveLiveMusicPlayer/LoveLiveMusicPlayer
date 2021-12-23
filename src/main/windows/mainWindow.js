@@ -1,3 +1,5 @@
+import {thumbarButtons} from "../modules/dockAndTray";
+
 const {resolveHtmlPath} = require("../util");
 import initIpcEvent from "../modules/ipcEvent";
 import {getAssetPath} from "../main";

@@ -244,7 +244,10 @@ class AudioPlayer extends React.PureComponent {
                         this.setState({playIndex: playIndex})
                         this.updateParams({playIndex})
                     }}
-                    onAudioPause={() => ipcRenderer.send('musicName', 'LoveLive!')}
+                    onAudioPause={() => {
+                        ipcRenderer.send('musicName', 'LoveLive!')
+                        ipcRenderer.send('setPlaying', false)
+                    }}
                     onAudioListsChange={(playId, audioLists) => {
                         if (audioLists.length < 20) {
                             Store.set("playList", audioLists)
@@ -264,6 +267,7 @@ class AudioPlayer extends React.PureComponent {
                     onAudioPlay={async audioInfo => {
                         try {
                             ipcRenderer.send('musicName', "当前播放:\n" + audioInfo.name)
+                            ipcRenderer.send('setPlaying', true)
                             currentMusicUniqueId = audioInfo._id
                             this.props.dispatch(musicAction.playId(audioInfo._id))
                             Store.set("playId", audioInfo._id)

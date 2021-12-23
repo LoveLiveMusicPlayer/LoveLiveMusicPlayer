@@ -1,6 +1,9 @@
-import {app, dialog, ipcMain} from "electron";
+import {app, dialog, ipcMain, nativeImage} from "electron";
 import {portIsOccupied} from "../util";
 import update from "./update";
+import {thumbarButtons} from "./dockAndTray";
+import path from "path";
+import {RESOURCES_PATH} from "./inital";
 
 const httpserver = require('http-server');
 const autoUpdater = new update()
@@ -95,6 +98,15 @@ export default function () {
     // 获取当前播放歌曲的名字
     ipcMain.on("musicName", (event, args) => {
         global.appTray?.setToolTip(args);
+    })
+
+    ipcMain.on("setPlaying", (event, isPlaying) => {
+        thumbarButtons[1].tooltip = isPlaying ? "暂停" : "播放"
+        thumbarButtons[1].icon = nativeImage.createFromPath(path.join(RESOURCES_PATH, isPlaying ? "image/pause.png" : "image/play.png"))
+        thumbarButtons[1].click = () => {
+            global.mainWindow.webContents.send("playMusic");
+        }
+        global.mainWindow.setThumbarButtons(thumbarButtons);
     })
 
     // 窗口最小化
