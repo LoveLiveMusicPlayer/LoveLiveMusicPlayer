@@ -146,8 +146,4 @@ export default function () {
             global.lyricWindow?.webContents.send("show-lock");
         }
     });
-
-    ipcMain.handle('closeLrc', () => {
-
-    })
 }
