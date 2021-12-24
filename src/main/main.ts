@@ -1,22 +1,17 @@
 // @ts-nocheck
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-import path from 'path';
-import {app, BrowserWindow, globalShortcut, ipcMain} from 'electron';
+import {app, BrowserWindow, globalShortcut} from 'electron';
 import createFuncBtn, {thumbarButtons} from "./modules/dockAndTray";
-import init, {RESOURCES_PATH} from "./modules/inital";
+import init from "./modules/inital";
 import createLyricWindow from "./windows/desktopLyricWindow";
 import createMainWindow from "./windows/mainWindow";
 
 // 阻止应用多开
 const gotTheLock = app.requestSingleInstanceLock()
 if (!gotTheLock) {
-    app.quit()
+    app.exit(0)
 }
-
-export const getAssetPath = (...paths: string[]): string => {
-    return path.join(RESOURCES_PATH, ...paths);
-};
 
 init()
 
@@ -26,7 +21,7 @@ app.on('ready', async () => {
     })
     createFuncBtn()
     global.mainWindow = createMainWindow(BrowserWindow)
-    global.lyricWindow = createLyricWindow(BrowserWindow);
+    global.lyricWindow = createLyricWindow(BrowserWindow)
     if (process.platform === "win32") {
         // 设置底部任务栏按钮和缩略图
         global.mainWindow.setThumbarButtons(thumbarButtons);
@@ -35,10 +30,10 @@ app.on('ready', async () => {
 
 app.on('activate', () => {
     // 在macOS上，当单击dock图标且没有其他窗口打开时，通常会在应用程序中重新创建一个窗口。
-    if (global.mainWindow === null) createMainWindow();
+    if (global.mainWindow === null) createMainWindow()
     else if (!global.mainWindow?.isVisible()) {
         global.mainWindow?.show()
-        global.mainWindow?.focus();
+        global.mainWindow?.focus()
     }
 })
 

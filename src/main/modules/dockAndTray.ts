@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {app, Menu, nativeImage, shell, Tray} from "electron";
 import path from "path";
 import {RESOURCES_PATH} from "./inital";
@@ -93,7 +94,7 @@ export default function () {
     if (process.platform === 'darwin') {
         app.dock.setMenu(dockMenu)
     } else if (process.platform === 'win32') {
-        global.appTray = appTray = new Tray(path.join(RESOURCES_PATH, 'icon.ico'));
+        global.appTray = appTray = new Tray(path.join(RESOURCES_PATH, 'icons/16x16.png'));
 
         //图标的上下文菜单
         const contextMenu = Menu.buildFromTemplate(trayMenuTemplate);

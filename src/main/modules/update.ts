@@ -1,7 +1,8 @@
-import {app, dialog} from 'electron'
+import {app} from 'electron'
 import {autoUpdater} from 'electron-updater'
 import https from 'https'
 import {VersionUtils} from "../../renderer/utils/VersionUtils";
+import {Dialog} from "./dialog";
 
 export default class update {
     private callback: Function | undefined;
@@ -16,7 +17,11 @@ export default class update {
         // https://www.electron.build/auto-update#events
         // https://electronjs.org/docs/api/auto-updater#autoupdaterquitandinstall
         autoUpdater.on('update-downloaded', _info => {
-            this.showDialog("已更新完成，请重启应用", ["确定"]).then(_ => {
+            Dialog({
+                type: 'info',
+                message: "已更新完成，请重启应用",
+                buttons: ["确定"]
+            }).then(_ => {
                 this.isSuccess = true
                 autoUpdater.quitAndInstall(true, true)
             })
@@ -24,7 +29,7 @@ export default class update {
 
         autoUpdater.on('error', _info => {
             if (!this.isSuccess) {
-                this.showDialog("更新失败，请稍后重试", ["知道了"])
+                Dialog({type: 'error', message: "更新失败，请稍后重试"})
             }
         })
 
@@ -48,9 +53,14 @@ export default class update {
                 const localVersion = app.getVersion().split('.').join('')
                 const remoteVersion = json.version.split('.').join('')
                 if (localVersion >= remoteVersion) {
-                    this.showDialog('已经是最新版本了', ["知道了"])
+                    Dialog({type: 'info', message: '已经是最新版本了'})
                 } else {
-                    this.showDialog(`检测到新版本（${json.version}）是否更新`, ["取消", "确定"], json.message).then(rtn => {
+                    Dialog({
+                        type: 'info',
+                        message: `检测到新版本（${json.version}）是否更新`,
+                        buttons: ["取消", "确定"],
+                        detail: json.message
+                    }).then(rtn => {
                         if (rtn.response === 1) {
                             autoUpdater.autoDownload = true
                             autoUpdater.setFeedURL(json.url)
@@ -61,24 +71,5 @@ export default class update {
             })
         })
         req.end()
-    }
-
-    showDialog(message: string, buttons: string[], detail?: string) {
-        return dialog.showMessageBox({
-            type: 'info',
-            title: '软件更新',
-            message: message,
-            detail: this.checkNull(detail),
-            buttons: buttons,
-            noLink: true
-        })
-    }
-
-    checkNull(value?: string): string {
-        if (value === null || value == undefined) {
-            return ""
-        } else {
-            return value
-        }
     }
 }

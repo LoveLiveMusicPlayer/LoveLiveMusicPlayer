@@ -3,25 +3,25 @@ import {ipcMain} from "electron";
 
 const {screen} = require("electron");
 
-let clickX
-let clickY
-let clientX
-let clientY
+let clickX: number
+let clickY: number
+let clientX: number
+let clientY: number
 
-const createLyricWindow = function (BrowserWindow) {
+const createLyricWindow = function (BrowserWindow: any) {
     const {width, height} = screen.getPrimaryDisplay().workAreaSize;
-    const trulyWidth = parseInt(width / 2) > 800 ? 800 : parseInt(width / 2)
+    const trulyWidth = Math.floor(width / 2) > 800 ? 800 : Math.floor(width / 2)
     const obj = {
         minWidth: 800,
         width: trulyWidth,
-        maxWidth: parseInt(width / 10 * 9),
+        maxWidth: Math.floor(width / 10 * 9),
         maxHeight: 180,
         height: 100,
         minHeight: 100,
         show: false,
         frame: false,
-        x: parseInt(width / 2) - trulyWidth / 2,
-        y: parseInt(height) - 150,
+        x: Math.floor(width / 2) - trulyWidth / 2,
+        y: Math.floor(height) - 150,
         fullscreenable: false,
         minimizable: false,
         maximizable: false,
@@ -45,7 +45,7 @@ const createLyricWindow = function (BrowserWindow) {
 
     require('@electron/remote/main').enable(lyricWindow.webContents)
 
-    ipcMain.on('windowMoving', (e, {mouseX, mouseY}) => {
+    ipcMain.on('windowMoving', (_event, {mouseX, mouseY}) => {
         if (clickX !== mouseX || clickY !== mouseY) {
             clickX = mouseX
             clickY = mouseY

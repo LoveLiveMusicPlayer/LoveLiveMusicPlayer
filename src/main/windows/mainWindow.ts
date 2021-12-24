@@ -1,11 +1,13 @@
+// @ts-nocheck
 import initIpcEvent from "../modules/ipcEvent";
-import {getAssetPath} from "../main";
 import MenuBuilder from "../modules/menu";
+import path from "path";
+import {RESOURCES_PATH} from "../modules/inital";
 
 const {resolveHtmlPath} = require("../util");
 const {app, shell} = require("electron");
 
-const createMainWindow = function (BrowserWindow) {
+const createMainWindow = function (BrowserWindow: any) {
     const option = {
         show: true,
         width: 1250,
@@ -15,7 +17,7 @@ const createMainWindow = function (BrowserWindow) {
         frame: false,
         minWidth: 1024,
         minHeight: 728,
-        icon: getAssetPath('icon.png'),
+        icon: path.join(RESOURCES_PATH, 'icon.png'),
         webPreferences: {
             nodeIntegration: true,
             nodeIntegrationInWorker: false,

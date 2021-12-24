@@ -1,9 +1,11 @@
+// @ts-nocheck
 import {app, dialog, ipcMain, nativeImage} from "electron";
 import {portIsOccupied} from "../util";
 import update from "./update";
 import {thumbarButtons} from "./dockAndTray";
 import path from "path";
 import {RESOURCES_PATH} from "./inital";
+import Dialog from "./dialog";
 
 const httpserver = require('http-server');
 const autoUpdater = new update()
@@ -53,34 +55,7 @@ export default function () {
      * @param args[1] message
      */
     ipcMain.on('msgDialog', (event, args) => {
-        let title = ""
-        switch (args.type) {
-            case "info":
-                title = "提示"
-                break
-            case "error":
-                title = "错误"
-                break
-            case "question":
-                title = "请示"
-                break
-            case "warning":
-                title = "警告"
-                break
-            default:
-                break
-        }
-        dialog.showMessageBox({
-            type: args.type,// 图标类型
-            title: title,// 信息提示框标题
-            message: args.message,// 信息提示框内容
-            buttons: ["知道了"],// 下方显示的按钮
-            noLink: true, // win下的样式
-            // icon:nativeImage.createFromPath("./icon/png.png"),// 图标
-            // cancelId: 1// 点击x号关闭返回值
-        }).then(returnValue => {
-            event.sender.send("msgDialogCallback", returnValue.response)
-        })
+        Dialog(args)
     })
 
     // 获取当前 APP 版本号
