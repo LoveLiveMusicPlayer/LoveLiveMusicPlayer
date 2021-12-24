@@ -11,6 +11,7 @@ const createMainWindow = function (BrowserWindow) {
         width: 1250,
         height: 728,
         titleBarStyle: 'customButtonsOnHover',
+        transparent: true,
         frame: false,
         minWidth: 1024,
         minHeight: 728,
@@ -58,10 +59,8 @@ const createMainWindow = function (BrowserWindow) {
 
     mainWindow.on('close', event => {
         if (!global.willQuitApp) {
-            if (process.platform === 'darwin') {
-                event.preventDefault()
-                mainWindow?.hide()
-            }
+            event.preventDefault()
+            mainWindow?.hide()
         } else {
             app.exit(0)
         }
