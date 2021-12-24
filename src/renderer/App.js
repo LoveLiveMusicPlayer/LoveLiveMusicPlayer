@@ -392,10 +392,7 @@ function App({dispatch}) {
     }, [lrcLanguage])
 
     useEffect(() => {
-        const lrcLanguage = Store.get("lrcLanguage")
-        if (lrcLanguage) {
-            setLrcLanguage(lrcLanguage)
-        }
+        setLrcLanguage(Store.get("lrcLanguage") || 'jp')
 
         setTimeout(() => {
             openNotification('这是一个开源项目，完全免费！')

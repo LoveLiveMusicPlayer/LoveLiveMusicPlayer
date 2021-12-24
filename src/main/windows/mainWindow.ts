@@ -9,7 +9,7 @@ const {app, shell} = require("electron");
 
 const createMainWindow = function (BrowserWindow: any) {
     const option = {
-        show: true,
+        show: false,
         width: 1250,
         height: 728,
         titleBarStyle: 'customButtonsOnHover',
@@ -46,6 +46,10 @@ const createMainWindow = function (BrowserWindow: any) {
     initIpcEvent();
 
     mainWindow.loadURL(resolveHtmlPath('index.html'));
+
+    mainWindow.on('ready-to-show', () => {
+        mainWindow.show()
+    })
 
     mainWindow.webContents.on('did-finish-load', () => {
         if (!mainWindow) {
