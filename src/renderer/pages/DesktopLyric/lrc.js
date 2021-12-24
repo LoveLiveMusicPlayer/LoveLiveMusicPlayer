@@ -101,6 +101,7 @@ export default function () {
 
     const onMouseUp = () => {
         document.removeEventListener('mouseup', onMouseUp)
+        win.setResizable(true)
         cancelAnimationFrame(animationId)
     }
 
@@ -108,6 +109,7 @@ export default function () {
         if (!isLocking) {
             mouseX = e.clientX
             mouseY = e.clientY
+            win.setResizable(false)
             document.addEventListener('mouseup', onMouseUp)
             requestAnimationFrame(moveWindow);
         }
