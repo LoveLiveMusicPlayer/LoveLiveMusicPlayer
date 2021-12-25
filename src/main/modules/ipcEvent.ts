@@ -100,7 +100,9 @@ export default function () {
 
     // 窗口关闭
     ipcMain.on('close', function () {
-        global.mainWindow?.hide()
+        if (process.platform !== 'linux') {
+            global.mainWindow?.hide()
+        } else global.mainWindow?.minimize()
     })
 
     // 检查更新

@@ -67,7 +67,11 @@ const createMainWindow = function (BrowserWindow: any) {
     mainWindow.on('close', event => {
         if (!global.willQuitApp) {
             event.preventDefault()
-            mainWindow?.hide()
+            if (process.platform === 'linux') {
+                app.exit(0)
+            } else {
+                mainWindow?.hide()
+            }
         } else {
             app.exit(0)
         }

@@ -145,7 +145,7 @@ export default function () {
         win.setMovable(isLock)
         if (isLock) {
             win.setIgnoreMouseEvents(false)
-        } else {
+        } else if (process.platform !== 'linux') {
             win.setIgnoreMouseEvents(true, {forward: true})
         }
         if (process.platform === 'darwin') {
@@ -191,7 +191,7 @@ export default function () {
                     setLockOver(true)
                 }}
                 onMouseOut={_ => {
-                    if (isLocking) {
+                    if (isLocking && process.platform !== 'linux') {
                         win.setIgnoreMouseEvents(true, {forward: true})
                     }
                     setLockOver(false)

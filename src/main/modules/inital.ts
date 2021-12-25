@@ -14,6 +14,7 @@ export const RESOURCES_PATH = app.isPackaged
 export default function () {
 
     app.commandLine.appendSwitch("--disable-http-cache")
+    app.commandLine.appendSwitch('wm-window-animations-disabled')
 
     if (process.env.NODE_ENV === 'production') {
         const sourceMapSupport = require('source-map-support');
