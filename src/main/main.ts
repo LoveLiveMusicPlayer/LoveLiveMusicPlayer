@@ -13,6 +13,8 @@ if (!gotTheLock) {
     app.exit(0)
 }
 
+global.isInit = true
+
 init()
 
 app.on('ready', async () => {

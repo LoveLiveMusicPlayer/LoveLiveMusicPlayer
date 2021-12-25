@@ -48,6 +48,7 @@ const createMainWindow = function (BrowserWindow: any) {
     mainWindow.loadURL(resolveHtmlPath('index.html'));
 
     mainWindow.on('ready-to-show', () => {
+        global.isInit = false
         mainWindow.show()
     })
 

@@ -57,27 +57,17 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
         if (lrcLanguage === 'jp') {
             return <LyricLine content={line.content} active={active} position={lrcPosition} lang={lrcLanguage}/>
         } else {
-            const jpList = parseLrc(jpLrc)
+            const secondList = parseLrc(lrcLanguage === 'zh' ? zhLrc : romaLrc)
             let content = ''
-            jpList && jpList.lyrics.map(item => {
+            secondList && secondList.lyrics.map(item => {
                 if (item.startMillisecond === line.startMillisecond) {
                     content = item.content
                 }
             })
             return (
-                <LyricDoubleLine active={active} position={lrcPosition} headContent={content}
-                                 footContent={line.content}/>
+                <LyricDoubleLine active={active} position={lrcPosition} headContent={line.content}
+                                 footContent={content}/>
             )
-        }
-    }
-
-    const renderLrc = () => {
-        if (lrcLanguage === 'jp') {
-            return jpLrc
-        } else if (lrcLanguage === 'zh') {
-            return zhLrc
-        } else {
-            return romaLrc
         }
     }
 
@@ -160,7 +150,7 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
                             <Lrc
                                 className="lrc"
                                 style={{overflow: 'hidden !important'}}
-                                lrc={renderLrc()}
+                                lrc={jpLrc}
                                 intervalOfRecoveringAutoScrollAfterUserScroll={1000}
                                 topBlank={true}
                                 bottomBlank={true}

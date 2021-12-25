@@ -103,11 +103,13 @@ export default function () {
         appTray.setToolTip('LoveLive!');
 
         appTray.on('click', () => {
-            if (!global.mainWindow?.isVisible()) {
-                global.mainWindow?.show()
-                global.mainWindow?.focus();
-            } else if (global.mainWindow?.isMinimized()) {
-                global.mainWindow?.restore()
+            if (!global.isInit) {
+                if (!global.mainWindow?.isVisible()) {
+                    global.mainWindow?.show()
+                    global.mainWindow?.focus();
+                } else if (global.mainWindow?.isMinimized()) {
+                    global.mainWindow?.restore()
+                }
             }
         })
 
