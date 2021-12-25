@@ -17,7 +17,7 @@
 4. 本项目为开源项目，不接受任何的催单和索取行为
 5. 本人技术能力有限，职业是Android开发工程师，本项目旨在学习Electron开发
 
-PS：由于无损音频涉及版权无法开源，请加入QQ群获取音频文件（60G）
+PS：由于无损音频涉及版权无法开源，请加入QQ群获取音频文件（61G）
 
 计划目录 ：（√代表已完成，x代表正在施工...）
 
@@ -28,7 +28,9 @@ PS：由于无损音频涉及版权无法开源，请加入QQ群获取音频文�
 - [整张专辑播放与切换] √
 - [自定义歌单] √
 - [我喜欢] √
-- [在线中日文歌词] √
+- [在线中文、日文、罗马音歌词] √
+- [桌面歌词] √
+- [win系统托盘 + mac dock功能项] √
 - [专辑与歌曲分类] x
 - [歌曲与艺术家索引] x
 - [未完待续...] x
@@ -82,6 +84,14 @@ B站空间：<https://space.bilibili.com/4367965>
 | 中须霞保护协会 | <https://github.com/KasuminDESU>      | Aqours BD+小组曲   |
 | 中须霞保护协会 | <https://github.com/KasuminDESU>      | 虹咲学园 全部   |
 | Starfarer      | <https://github.com/EndingEra>        | Liella! 全部        |
+|     <br>      |                                     |                       |
+| 罗马音↓↓   |                                     |                       |
+| 中须霞保护协会 | <https://github.com/KasuminDESU>      | 虹咲学园 全部   |
+|     <br>      |                                     |                       |
+| 二次校对↓↓   |                                     |                       |
+| 桜の吹雪   | <https://github.com/stevewang00>      | μ's 1/3           |
+| 朱神无敌   | QQ:<a>404288461</a>                        | μ's 1/6 |
+| 中须霞保护协会 | <https://github.com/KasuminDESU>      | μ's 1/2 + 虹咲学园 全部  |
 
 ## 特别鸣谢
 
