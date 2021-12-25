@@ -4,7 +4,6 @@ import {ipcRenderer} from 'electron'
 import * as Images from '../../public/Images'
 import {AppUtils} from "../../utils/AppUtils";
 import Store from '../../utils/Store'
-import {LRC_LOCK_LOCKED_BLUR} from "../../public/Images";
 
 let win = require('@electron/remote').getGlobal("lyricWindow");
 let isLocking = false
@@ -36,6 +35,7 @@ export default function () {
     const [fontSizeUpOver, setFontSizeUpOver] = useState(false)
     const [fontSizeDownOver, setFontSizeDownOver] = useState(false)
     const [colorOver, setColorOver] = useState(false)
+    const [lrcOver, setLrcOver] = useState(false)
     const [fontSize, setFontSize] = useState(28)
 
     const [textColor, setTextColor] = useState(green)
@@ -156,14 +156,8 @@ export default function () {
     }
 
     function renderClose() {
-        let closeImg = Images.LRC_CLOSE_UNTOUCH
-        let closeVisible = 'visible'
-        if (!mouseOver || isLock) {
-            closeVisible = 'hidden'
-        }
-        if (mouseOver && closeOver) {
-            closeImg = Images.LRC_CLOSE_TOUCH
-        }
+        let closeImg = (mouseOver && closeOver) ? Images.LRC_CLOSE_TOUCH : Images.LRC_CLOSE_UNTOUCH
+        let closeVisible = (mouseOver && !isLock) ? 'visible' : 'hidden'
         return (
             <img
                 src={closeImg}
@@ -177,20 +171,11 @@ export default function () {
     }
 
     function renderLock() {
-        let lockImg = Images.LRC_LOCK_LOCKED
-        let lockVisible = 'visible'
-        if (!mouseOver) {
-            lockVisible = 'hidden'
-        }
-        if (isLock && !lockOver) {
-            lockImg = Images.LRC_LOCK_LOCKED_BLUR
-        }
+        let lockVisible = mouseOver ? 'visible' : 'hidden'
+        let lockImg = (isLock && !lockOver) ?
+            Images.LRC_LOCK_LOCKED_BLUR : Images.LRC_LOCK_LOCKED
         if (!isLock && mouseOver) {
-            if (lockOver) {
-                lockImg = Images.LRC_LOCK_TOUCH
-            } else {
-                lockImg = Images.LRC_LOCK_UNTOUCH
-            }
+            lockImg = lockOver ? Images.LRC_LOCK_TOUCH : Images.LRC_LOCK_UNTOUCH
         }
         return (
             <img
@@ -201,14 +186,12 @@ export default function () {
                 onClick={_ => configLock()}
                 onMouseOver={_ => {
                     if (isLocking) {
-                        console.log("over")
                         win.setIgnoreMouseEvents(false)
                     }
                     setLockOver(true)
                 }}
                 onMouseOut={_ => {
                     if (isLocking) {
-                        console.log("out")
                         win.setIgnoreMouseEvents(true, {forward: true})
                     }
                     setLockOver(false)
@@ -218,14 +201,9 @@ export default function () {
     }
 
     function renderFontSizeUp() {
-        let fontSizeUpImg = Images.LRC_FONTSIZE_UP_UNTOUCH
-        let fontSizeUpVisible = 'visible'
-        if (!mouseOver || isLock) {
-            fontSizeUpVisible = 'hidden'
-        }
-        if (mouseOver && fontSizeUpOver) {
-            fontSizeUpImg = Images.LRC_FONTSIZE_UP_TOUCH
-        }
+        let fontSizeUpImg = (mouseOver && fontSizeUpOver) ?
+            Images.LRC_FONTSIZE_UP_TOUCH : Images.LRC_FONTSIZE_UP_UNTOUCH
+        let fontSizeUpVisible = (mouseOver && !isLock) ? 'visible' : 'hidden'
         return (
             <img
                 src={fontSizeUpImg}
@@ -239,14 +217,9 @@ export default function () {
     }
 
     function renderFontSizeDown() {
-        let fontSizeDownImg = Images.LRC_FONTSIZE_DOWN_UNTOUCH
-        let fontSizeDownVisible = 'visible'
-        if (!mouseOver || isLock) {
-            fontSizeDownVisible = 'hidden'
-        }
-        if (mouseOver && fontSizeDownOver) {
-            fontSizeDownImg = Images.LRC_FONTSIZE_DOWN_TOUCH
-        }
+        let fontSizeDownImg = (mouseOver && fontSizeDownOver) ?
+            Images.LRC_FONTSIZE_DOWN_TOUCH : Images.LRC_FONTSIZE_DOWN_UNTOUCH
+        let fontSizeDownVisible = (mouseOver && !isLock) ? 'visible' : 'hidden'
         return (
             <img
                 src={fontSizeDownImg}
@@ -260,14 +233,8 @@ export default function () {
     }
 
     function renderColor() {
-        let colorImg = Images.LRC_COLOR_UNTOUCH
-        let colorVisible = 'visible'
-        if (!mouseOver || isLock) {
-            colorVisible = 'hidden'
-        }
-        if (mouseOver && colorOver) {
-            colorImg = Images.LRC_COLOR_TOUCH
-        }
+        let colorImg = (mouseOver && colorOver) ? Images.LRC_COLOR_TOUCH : Images.LRC_COLOR_UNTOUCH
+        let colorVisible = (mouseOver && !isLock) ? 'visible' : 'hidden'
         return (
             <img
                 id={'colorImg'}
@@ -328,6 +295,53 @@ export default function () {
         return nodeTree ? menu : null;
     }
 
+    function renderLrc() {
+        let lrcVisible = (mouseOver && !isLock) ? 'visible' : 'hidden'
+        let lrcImg
+        switch (lrcLanguage) {
+            case 'jp':
+                lrcImg = (mouseOver && lrcOver) ?
+                    Images.LRC_LANGUAGE_JAPANESE_TOUCH : Images.LRC_LANGUAGE_JAPANESE_UNTOUCH
+                break
+            case 'zh':
+                lrcImg = (mouseOver && lrcOver) ?
+                    Images.LRC_LANGUAGE_CHINESE_TOUCH : Images.LRC_LANGUAGE_CHINESE_UNTOUCH
+                break
+            default:
+                lrcImg = (mouseOver && lrcOver) ?
+                    Images.LRC_LANGUAGE_ROMA_TOUCH : Images.LRC_LANGUAGE_ROMA_UNTOUCH
+                break
+        }
+
+        return (
+            <img
+                src={lrcImg}
+                title={'切换歌词'}
+                style={{width: 18, height: 18, visibility: lrcVisible, marginLeft: 13}}
+                onClick={changeLrcLanguage}
+                onMouseOver={_ => setLrcOver(true)}
+                onMouseOut={_ => setLrcOver(false)}
+            />
+        )
+    }
+
+    const changeLrcLanguage = () => {
+        let language
+        switch (lrcLanguage) {
+            case 'jp':
+                language = 'zh'
+                break
+            case 'zh':
+                language = 'roma'
+                break
+            default:
+                language = 'jp'
+                break
+        }
+        ipcRenderer.send('main-lrc-language-change', language)
+        setLrcLanguage(language)
+    }
+
     return (
         <div className="desktop-lyric" id="desktop"
              style={{height: height, background: mouseOver && !isLock ? '#fff' : 'transparent'}}
@@ -335,14 +349,22 @@ export default function () {
              onMouseEnter={onMouseOver}
              onMouseLeave={onMouseOut}
         >
-            <div style={{margin: 0, height: 25,width: '100%'}}/>
-            <div style={{display: 'flex', flexDirection: 'column', flex: 1, width: '100%', justifyContent: 'center', alignItems: 'center'}}>
+            <div style={{margin: 0, height: 25, width: '100%'}}/>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                flex: 1,
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}>
                 <div className="function" style={{visibility: mouseOver ? 'visible' : 'hidden'}}>
                     {renderClose()}
                     {renderFontSizeDown()}
                     {renderLock()}
                     {renderFontSizeUp()}
                     {renderColor()}
+                    {renderLrc()}
                 </div>
                 <div
                     className="playing-lyric"

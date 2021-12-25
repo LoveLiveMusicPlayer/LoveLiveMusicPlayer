@@ -47,6 +47,12 @@ import lrc_lock_locked from '../../../assets/image/lrc_lock_locked.png'
 import lrc_lock_locked_blur from '../../../assets/image/lrc_lock_locked_blur.png'
 import lrc_color_touch from '../../../assets/image/lrc_color_touch.png'
 import lrc_color_untouch from '../../../assets/image/lrc_color_untouch.png'
+import lrc_language_japanese_touch from '../../../assets/image/lrc_language_japanese_touch.png'
+import lrc_language_japanese_untouch from '../../../assets/image/lrc_language_japanese_untouch.png'
+import lrc_language_chinese_touch from '../../../assets/image/lrc_language_chinese_touch.png'
+import lrc_language_chinese_untouch from '../../../assets/image/lrc_language_chinese_untouch.png'
+import lrc_language_roma_touch from '../../../assets/image/lrc_language_roma_touch.png'
+import lrc_language_roma_untouch from '../../../assets/image/lrc_language_roma_untouch.png'
 
 export const ICON_HEAD = icon_head
 export const ICON_MENU = icon_menu
@@ -97,3 +103,9 @@ export const LRC_LOCK_LOCKED = lrc_lock_locked
 export const LRC_LOCK_LOCKED_BLUR = lrc_lock_locked_blur
 export const LRC_COLOR_TOUCH = lrc_color_touch
 export const LRC_COLOR_UNTOUCH = lrc_color_untouch
+export const LRC_LANGUAGE_JAPANESE_TOUCH = lrc_language_japanese_touch
+export const LRC_LANGUAGE_JAPANESE_UNTOUCH = lrc_language_japanese_untouch
+export const LRC_LANGUAGE_CHINESE_TOUCH = lrc_language_chinese_touch
+export const LRC_LANGUAGE_CHINESE_UNTOUCH = lrc_language_chinese_untouch
+export const LRC_LANGUAGE_ROMA_TOUCH = lrc_language_roma_touch
+export const LRC_LANGUAGE_ROMA_UNTOUCH = lrc_language_roma_untouch

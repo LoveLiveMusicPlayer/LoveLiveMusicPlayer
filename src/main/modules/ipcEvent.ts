@@ -125,6 +125,10 @@ export default function () {
         global.lyricWindow?.webContents.send('desktop-lrc-language-change', args)
     })
 
+    ipcMain.on('main-lrc-language-change', (event, args) => {
+        global.mainWindow?.webContents.send('main-lrc-language-change', args)
+    })
+
     ipcMain.on("fix-desktop-lyric", (event, data) => {
         global.lyricWindow?.setIgnoreMouseEvents(data, {
             forward: true,

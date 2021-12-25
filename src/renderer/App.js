@@ -384,6 +384,10 @@ function App({dispatch}) {
         ipcRenderer.on('nextMusic', _ => {
             playerRef.current?.onNextPlay()
         })
+
+        ipcRenderer.on('main-lrc-language-change', (event, language) => {
+            setLrcLanguage(language)
+        })
     }, [])
 
     useEffect(() => {
