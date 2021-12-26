@@ -27,6 +27,7 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
     const [currentLrcTime, setCurrentLrcTime] = useState()
     const [cover, setCover] = useState()
     const [musicInfo, setMusicInfo] = useState()
+    const [resetLrc, setResetLrc] = useState(new Date().getTime())
 
     const [lrcPosition, setLrcPosition] = useState("center")
 
@@ -84,6 +85,7 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
             } else {
                 lrcLanguageCallback('jp')
             }
+            setResetLrc(new Date().getTime())
         }
     }
 
@@ -148,6 +150,7 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
                         <p className={'artist'}>{musicInfo && musicInfo.singer}</p>
                         <div className={'lrcContainer'}>
                             <Lrc
+                                key={resetLrc}
                                 className="lrc"
                                 style={{overflow: 'hidden !important'}}
                                 lrc={jpLrc}

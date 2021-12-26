@@ -7,8 +7,8 @@ import Store from '../../utils/Store'
 
 let win = require('@electron/remote').getGlobal("lyricWindow");
 let isLocking = false
-let mouseX
-let mouseY
+let mouseX = 0
+let mouseY = 0
 let animationId
 
 const green = 'rgba(11,214,158)'
@@ -62,9 +62,19 @@ export default function () {
     }, [height, singleLine])
 
     useEffect(() => {
+        if (isLock) {
+            Store.set('lrcWindow', win.getBounds())
+        }
+    }, [isLock])
+
+    useEffect(() => {
         // 初始化用户参数
         setTextColor(Store.get("lrcColor") || green)
         setFontSize(Store.get("lrcFontSize") || 28)
+        const bounds = Store.get('lrcWindow')
+        if (bounds !== undefined) {
+            win.setBounds(bounds)
+        }
 
         win.setIgnoreMouseEvents(false)
         if (process.platform === 'darwin') {

@@ -344,6 +344,24 @@ function App({dispatch}) {
         }
     }
 
+    // 获取最新的数据版本，比较并提示
+    const fetchLatestVersionHint = () => {
+        WorkUtils.fetchLatestVersionHint().then(resp => {
+            if (!AppUtils.isNull(resp)) {
+                const array = []
+                const currentDataVersion = Store.get('dataVersion') || 0
+                resp.reverse().map(item => {
+                    if (item.version > currentDataVersion && array.length < 3) {
+                        array.push(item.message)
+                    }
+                })
+                array.reverse().map(item => {
+                    openNotification(item + "，请关注群文件更新目录")
+                })
+            }
+        })
+    }
+
     useEffect(() => {
         const finish = () => {
             Bus.emit("onNotification", "应用准备强制恢复，即将重启")
@@ -427,8 +445,11 @@ function App({dispatch}) {
             AppUtils.setBodyColor(colors)
         })
 
-        // 延迟获取上次关闭播放器前的播放列表
-        setTimeout(() => getLatestPlayList(), 2000)
+        // 延迟获取上次关闭播放器前的播放列表 + 获取最新的dataVersion数据，提示更新数据
+        setTimeout(() => {
+            getLatestPlayList()
+            fetchLatestVersionHint()
+        }, 2000)
 
         return () => Bus.removeAllListeners()
     }, [])

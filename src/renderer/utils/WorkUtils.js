@@ -8,7 +8,7 @@ import Bus from "./Event";
 import {MusicHelper} from "../dao/MusicHelper";
 import Store from "./Store";
 import {VersionUtils} from "./VersionUtils";
-import {INIT_CHECK_FILE} from "./URLHelper";
+import {INIT_CHECK_FILE, REQUEST_LATEST_VERSION_URL} from "./URLHelper";
 
 const path = require('path');
 
@@ -108,6 +108,17 @@ export const WorkUtils = {
             return new Promise((resolve, reject) => {
                 reject()
             })
+        }
+        return result
+    },
+
+    async fetchLatestVersionHint() {
+        let result = null
+        try {
+            const response = await Network.get(REQUEST_LATEST_VERSION_URL)
+            result = response.data
+        } catch (error) {
+            console.error(error);
         }
         return result
     },
