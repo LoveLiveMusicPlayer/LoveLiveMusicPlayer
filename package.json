@@ -238,6 +238,7 @@
     "dependencies": {
         "@ant-design/pro-layout": "^6.25.1",
         "@electron/remote": "^2.0.1",
+        "@sentry/electron": "^2.5.4",
         "@super-effective/react-color-picker": "^2.1.2",
         "animate.css": "^4.1.1",
         "antd": "^4.16.13",
@@ -253,6 +254,7 @@
         "moment": "^2.29.1",
         "music-metadata": "^7.11.4",
         "nedb": "^1.8.0",
+        "node-machine-id": "^1.1.12",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-jinke-music-player": "^4.24.2",

@@ -24,6 +24,9 @@ import {WorkUtils} from "./utils/WorkUtils";
 import {WindowButton} from "./component/WindowButton";
 import {appAction} from "./actions/app";
 import {parse as parseLrc} from 'clrc';
+import * as Sentry from '@sentry/electron';
+import {machineId} from 'node-machine-id';
+import {SENTRY_URL} from "./utils/URLHelper";
 
 const {ipcRenderer} = require('electron')
 const os = require("os").platform();
@@ -416,8 +419,14 @@ function App({dispatch}) {
     useEffect(() => {
         setLrcLanguage(Store.get("lrcLanguage") || 'jp')
 
+        Sentry.init({dsn: SENTRY_URL});
+
         setTimeout(() => {
             openNotification('这是一个开源项目，完全免费！')
+            // 上报电脑唯一标识
+            machineId(true).then(id => {
+                Sentry.captureMessage(id)
+            })
         }, 1000)
 
         document.ondragstart = function () {
