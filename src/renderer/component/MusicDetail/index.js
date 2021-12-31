@@ -1,12 +1,13 @@
-import React, {forwardRef, useImperativeHandle, useState} from 'react';
+import React, {forwardRef, useImperativeHandle, useMemo, useState} from 'react';
 import './index.scss'
 import {Lrc} from 'react-lrc';
 import {LyricDoubleLine, LyricLine} from './LyricLine'
 import * as Images from '../../public/Images'
 import Modal from "react-modal";
 import Store from '../../utils/Store'
-import {AppUtils} from "../../utils/AppUtils";
 import {parse as parseLrc} from "clrc";
+
+let currentPlayId = 0
 
 export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLanguage, lrcLanguageCallback}, ref) => {
 
@@ -20,10 +21,8 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
         return cover
     }
 
-    const [currentSong, setCurrentSong] = useState()
-    const [jpLrc, setJpLrc] = useState('')
-    const [zhLrc, setZhLrc] = useState('')
-    const [romaLrc, setRomaLrc] = useState('')
+    const [lrc, setLrc] = useState({})
+    const [timerLrc, setTimerLrc] = useState([])
     const [currentLrcTime, setCurrentLrcTime] = useState()
     const [cover, setCover] = useState()
     const [musicInfo, setMusicInfo] = useState()
@@ -33,42 +32,80 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
 
     useImperativeHandle(ref, () => ({
         setMusicDetail: (info) => {
-            const mCover = parseCover(info.cover)
-            if (mCover !== cover) {
-                setCover(mCover)
-            }
+            setCover(parseCover(info.cover))
+
             setMusicInfo({
                 name: info.name,
                 singer: info.singer,
             })
-            if (currentSong == null || currentSong._id !== info._id) {
-                setCurrentLrcTime(0)
-                setCurrentSong(info)
-            } else {
-                setCurrentLrcTime(info.currentTime)
-            }
 
-            setJpLrc(AppUtils.isEmpty(info.jpLrc) ? '' : info.jpLrc)
-            setZhLrc(AppUtils.isEmpty(info.zhLrc) ? '' : info.zhLrc)
-            setRomaLrc(AppUtils.isEmpty(info.romaLrc) ? '' : info.romaLrc)
+            if (currentPlayId !== info._id) {
+                currentPlayId = info._id
+                setCurrentLrcTime(0)
+            } else setCurrentLrcTime(info.currentTime)
+
+            setLrc({
+                jpLrc: info.jpLrc || '',
+                zhLrc: info.zhLrc || '',
+                romaLrc: info.romaLrc || ''
+            })
         }
     }))
+
+    useMemo(() => {
+        if (lrc.jpLrc && lrc.zhLrc && lrc.romaLrc) {
+            const array = []
+            const jpList = parseLrc(lrc.jpLrc)
+            const zhList = parseLrc(lrc.zhLrc)
+            const romaList = parseLrc(lrc.romaLrc)
+            jpList && jpList.lyrics.map(jp => {
+                let mZh
+                let mRoma
+                zhList && zhList.lyrics.map(zh => {
+                    if (jp.startMillisecond === zh.startMillisecond) {
+                        mZh = zh.content
+                    }
+                })
+                romaList && romaList.lyrics.map(roma => {
+                    if (jp.startMillisecond === roma.startMillisecond) {
+                        mRoma = roma.content
+                    }
+                })
+                array.push({
+                    time: jp.startMillisecond,
+                    jp: jp.content || '',
+                    zh: mZh || '',
+                    roma: mRoma || ''
+                })
+            })
+            setTimerLrc(array)
+        }
+    }, [lrc])
+
+    const mCover = useMemo(() => {
+        return () => cover
+    }, [cover])
+
+    const [mName, mSinger] = useMemo(() => {
+        if (musicInfo) {
+            return [musicInfo.name, musicInfo.singer]
+        }
+        return ['', '']
+    }, [musicInfo])
 
     const renderItem = ({active, line}) => {
         if (lrcLanguage === 'jp') {
             return <LyricLine content={line.content} active={active} position={lrcPosition} lang={lrcLanguage}/>
         } else {
-            const secondList = parseLrc(lrcLanguage === 'zh' ? zhLrc : romaLrc)
             let content = ''
-            secondList && secondList.lyrics.map(item => {
-                if (item.startMillisecond === line.startMillisecond) {
-                    content = item.content
+            timerLrc && timerLrc.map(item => {
+                if (item.time === line.startMillisecond) {
+                    content = lrcLanguage === 'zh' ? item.zh : item.roma
                 }
             })
-            return (
-                <LyricDoubleLine active={active} position={lrcPosition} headContent={line.content}
-                                 footContent={content}/>
-            )
+
+            return <LyricDoubleLine active={active} position={lrcPosition} headContent={line.content}
+                                    footContent={content}/>
         }
     }
 
@@ -126,12 +163,12 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
             onRequestClose={null}
             style={musicDetailStyles}>
             <div className={"blackArea"}/>
-            <img className={"gauss"} src={cover}/>
+            <img className={"gauss"} src={mCover}/>
 
             <div>
                 <div className={'musicDetailContainer'}>
                     <div className={'lrcLeftContainer'}>
-                        <img className={"cover"} src={cover}/>
+                        <img className={"cover"} src={mCover}/>
                         <div className={'tools'}>
                             <img
                                 style={{width: '30px', height: '30px'}}
@@ -146,14 +183,14 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
                         </div>
                     </div>
                     <div className={'lrcRightContainer'}>
-                        <p className={'title'}>{musicInfo && musicInfo.name}</p>
-                        <p className={'artist'}>{musicInfo && musicInfo.singer}</p>
+                        <p className={'title'}>{mName}</p>
+                        <p className={'artist'}>{mSinger}</p>
                         <div className={'lrcContainer'}>
                             <Lrc
                                 key={resetLrc}
                                 className="lrc"
                                 style={{overflow: 'hidden !important'}}
-                                lrc={jpLrc}
+                                lrc={lrc.jpLrc}
                                 intervalOfRecoveringAutoScrollAfterUserScroll={1000}
                                 topBlank={true}
                                 bottomBlank={true}
