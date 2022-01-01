@@ -63,7 +63,7 @@ export const SelectDialog = ({isShow, hint, list, result, close}) => {
                 onAfterOpen={null}
                 onRequestClose={close}
                 style={modalStyles}>
-                <p style={{fontWeight: 'bold'}}>{hint}</p>
+                <p style={{fontWeight: 'bold', marginBottom: 20}}>{hint}</p>
                 {list.length > 0 ? renderSelector() : null}
                 <Button
                     type="primary"

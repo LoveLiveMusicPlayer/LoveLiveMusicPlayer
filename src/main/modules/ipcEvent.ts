@@ -17,11 +17,9 @@ let mServer
 let isHttpServerOpen = false
 
 let updateCallback = (progressObj) => {
-    if (global.mainWindow) {
-        const obj = JSON.parse(progressObj)
-        if (obj.percent > 0) {
-            global.mainWindow.setProgressBar(obj.percent)
-        }
+    const obj = JSON.parse(progressObj)
+    if (obj.percent > 0) {
+        global?.mainWindow?.setProgressBar(obj.percent)
     }
 }
 
@@ -72,71 +70,71 @@ export default function () {
 
     // 获取当前播放歌曲的名字
     ipcMain.on("musicName", (event, args) => {
-        global.appTray?.setToolTip(args);
+        global?.appTray?.setToolTip(args);
     })
 
     ipcMain.on("setPlaying", (event, isPlaying) => {
         thumbarButtons[1].tooltip = isPlaying ? "暂停" : "播放"
         thumbarButtons[1].icon = nativeImage.createFromPath(path.join(RESOURCES_PATH, isPlaying ? "image/pause.png" : "image/play.png"))
         thumbarButtons[1].click = () => {
-            global.mainWindow.webContents.send("playMusic");
+            global?.mainWindow?.webContents.send("playMusic");
         }
-        global.mainWindow.setThumbarButtons(thumbarButtons);
+        global?.mainWindow?.setThumbarButtons(thumbarButtons);
     })
 
     // 窗口最小化
     ipcMain.on('min', function () {
-        global.mainWindow?.minimize()
+        global.mainWindow.minimize()
     })
 
     // 窗口最大化
     ipcMain.on('max', function () {
-        if (global.mainWindow?.isMaximized()) {
-            global.mainWindow?.restore()
+        if (global?.mainWindow?.isMaximized()) {
+            global?.mainWindow?.unmaximize()
         } else {
-            global.mainWindow?.maximize()
+            global?.mainWindow?.maximize()
         }
     })
 
     // 窗口关闭
     ipcMain.on('close', function () {
         if (process.platform !== 'linux') {
-            global.mainWindow?.hide()
-        } else global.mainWindow?.minimize()
+            global?.mainWindow?.hide()
+        } else global?.mainWindow?.minimize()
     })
 
     // 检查更新
     ipcMain.handle("checkUpdate", (_event, _args) => {
-        autoUpdater.checkUpdate(updateCallback)
+        autoUpdater?.checkUpdate(updateCallback)
     })
 
     ipcMain.on('toggle-desktop-lyric', (event, args) => {
         if (args) {
-            global.lyricWindow?.showInactive()
+            global?.lyricWindow?.showInactive()
         } else {
-            global.lyricWindow?.hide()
+            global?.lyricWindow?.hide()
         }
-        global.mainWindow?.webContents.send('toggle-desktop-lyric-reply')
+        global?.mainWindow?.webContents.send('toggle-desktop-lyric-reply')
     })
 
     ipcMain.on('desktop-lrc-text', (event, args) => {
-        global.lyricWindow?.webContents.send('desktop-lrc-text', args)
+        args && global?.lyricWindow?.webContents.send('desktop-lrc-text', args)
     })
 
     ipcMain.on('desktop-lrc-language-change', (event, args) => {
-        global.lyricWindow?.webContents.send('desktop-lrc-language-change', args)
+        args && global?.lyricWindow?.webContents.send('desktop-lrc-language-change', args)
     })
 
     ipcMain.on('main-lrc-language-change', (event, args) => {
-        global.mainWindow?.webContents.send('main-lrc-language-change', args)
+        args && global?.mainWindow?.webContents.send('main-lrc-language-change', args)
     })
 
     ipcMain.on("fix-desktop-lyric", (event, data) => {
-        global.lyricWindow?.setIgnoreMouseEvents(data, {
+        global?.lyricWindow?.setIgnoreMouseEvents(data, {
             forward: true,
         });
         if (data === false) {
-            global.lyricWindow?.webContents.send("show-lock");
+            global?.lyricWindow?.webContents.send("show-lock");
         }
     });
 }

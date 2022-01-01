@@ -55,7 +55,7 @@ export const CustomDialog = forwardRef((
                 }
             }}
             style={modalStyles}>
-            <p style={{fontWeight: 'bold'}}>{hint}</p>
+            <p style={{fontWeight: 'bold', marginBottom: 20}}>{hint}</p>
             <Space size={'large'}>
                 {
                     showCancel ?

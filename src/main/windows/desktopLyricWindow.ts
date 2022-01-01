@@ -62,6 +62,11 @@ const createLyricWindow = function (BrowserWindow: any) {
         });
     });
 
+    // 禁用alt + f4
+    lyricWindow.webContents.on('before-input-event', (_event: any, input: any) => {
+        lyricWindow.webContents.setIgnoreMenuShortcuts(input.key === "F4" && input.alt)
+    })
+
     return lyricWindow;
 };
 export default createLyricWindow;

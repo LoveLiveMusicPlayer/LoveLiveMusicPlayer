@@ -172,7 +172,7 @@ export default function () {
         return (
             <img
                 src={closeImg}
-                title={'关闭桌面歌词'}
+                title={'关闭歌词'}
                 style={{width: 18, height: 18, visibility: closeVisible}}
                 onClick={_ => ipcRenderer.send('toggle-desktop-lyric', false)}
                 onMouseOver={_ => setCloseOver(true)}
