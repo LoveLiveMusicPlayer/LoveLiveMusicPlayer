@@ -260,7 +260,7 @@ const Album = ({dispatch, chooseGroup, location, playId}) => {
                     <Button
                         type="primary"
                         shape="round"
-                        style={{width: '110px'}}
+                        style={{width: 110, marginTop: 10}}
                         icon={<img src={Images.ICON_DIS_PLAY} style={{marginRight: '6px', marginBottom: '3px'}}/>}
                         onClick={() => WorkUtils.playAlbumByUniqueId(info._id)}
                     >
