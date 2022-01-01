@@ -116,7 +116,8 @@ export default function () {
     }
 
     const onMouseDown = (e) => {
-        if (!isLocking) {
+        if (e.button === 0 && !isLocking) {
+            console.log(e)
             mouseX = e.clientX
             mouseY = e.clientY
             win.setResizable(false)
