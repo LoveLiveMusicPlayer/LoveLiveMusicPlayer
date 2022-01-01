@@ -32,6 +32,7 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
 
     useImperativeHandle(ref, () => ({
         setMusicDetail: (info) => {
+
             setCover(parseCover(info.cover))
 
             setMusicInfo({
@@ -83,7 +84,7 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
     }, [lrc])
 
     const mCover = useMemo(() => {
-        return () => cover
+        return cover
     }, [cover])
 
     const [mName, mSinger] = useMemo(() => {

@@ -49,7 +49,7 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
                     key={index}
                     onContextMenu={event => onRightClick(event, item)}
                 >
-                    <text className={'customText'}>{item.name}</text>
+                    <p className={'customText'}>{item.name}</p>
                 </div>
             )
         })
@@ -126,27 +126,27 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
     return (
         <div className={'songListContainer'} onClick={() => setNodeDisplay(false)}>
             <div className={'selectContainer'} style={{margin: 0, background: 'transparent'}}>
-                <text className={'customTitleText'}>我的音乐</text>
+                <p className={'customTitleText'}>我的音乐</p>
             </div>
             <div className={chooseItem === -2 ? 'selectContainer' : 'unselectContainer'}
                  onClick={() => onChooseItem(-2)}>
                 <img className={'customPic'} src={Images.ICON_FUNC_MUSIC}/>
-                <text className={'customText'} style={{paddingLeft: '10px'}}>音乐馆</text>
+                <p className={'customText'} style={{paddingLeft: '10px'}}>音乐馆</p>
             </div>
             <div className={chooseItem === -1 ? 'selectContainer' : 'unselectContainer'}
                  onClick={() => onChooseItem(-1)}>
                 <img className={'customPic'} src={Images.ICON_FUNC_LOVE}/>
-                <text className={'customText'} style={{paddingLeft: '10px'}}>我喜欢</text>
+                <p className={'customText'} style={{paddingLeft: '10px'}}>我喜欢</p>
             </div>
             <div className={chooseItem === 0 ? 'selectContainer' : 'unselectContainer'} onClick={() => onChooseItem(0)}>
                 <img className={'customPic'} src={Images.ICON_FUNC_HISTORY}/>
-                <text className={'customText'} style={{paddingLeft: '10px'}}>最近播放</text>
+                <p className={'customText'} style={{paddingLeft: '10px'}}>最近播放</p>
             </div>
 
             <div style={{marginTop: '30px'}}/>
             <div className={'addMenuContainer'}>
                 <div className={'selectContainer'} style={{margin: 0, background: 'transparent'}}>
-                    <text className={'customTitleText'}>创建的歌单</text>
+                    <p className={'customTitleText'}>创建的歌单</p>
                 </div>
                 <img
                     className={'addMenu'}
