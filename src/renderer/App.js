@@ -48,6 +48,7 @@ function App({dispatch}) {
 
     let honokaTimer = null
     let isOpenMusicDialog = false
+    let prevLyric = {prevLrc: '', nextLrc: '', singleLrc: ''}
     let history = useHistory()
     let location = useLocation()
 
@@ -225,64 +226,21 @@ function App({dispatch}) {
     const onAudioTimeChange = (info) => {
         musicDetailRef.current?.setMusicDetail(info)
         let jpIndex = 0
-        let zhIndex = 0
-        let romaIndex = 0
         let jpList = null
         if (info.jpLrc) {
             jpList = parseLrc(info.jpLrc)
-            jpIndex = AppUtils.currentLyricIndex(jpList.lyrics, info.currentTime)
+            jpIndex = WorkUtils.currentLyricIndex(jpList.lyrics, info.currentTime)
         }
 
-        let prevLrc = null
-        let nextLrc = null
-        let singleLrc = null
-        switch (currentLrcStatus) {
-            case 'jp':
-                if (jpIndex !== -1 && jpList && jpIndex < jpList.lyrics.length) {
-                    if (jpIndex % 2 === 0) {
-                        prevLrc = jpList.lyrics[jpIndex].content
-                        if (jpList.lyrics.length > jpIndex + 1) {
-                            nextLrc = jpList.lyrics[jpIndex + 1].content
-                        }
-                    } else {
-                        prevLrc = jpList.lyrics[jpIndex - 1].content
-                        nextLrc = jpList.lyrics[jpIndex].content
-                    }
-                    singleLrc = jpList.lyrics[jpIndex].content
-                }
-                break
-            case 'zh':
-                let zhList = null
-                if (info.zhLrc) {
-                    zhList = parseLrc(info.zhLrc)
-                    zhIndex = AppUtils.currentLyricIndex(zhList.lyrics, info.currentTime)
-                }
-                if (jpIndex !== -1 && jpList && jpIndex < jpList.lyrics.length) {
-                    prevLrc = jpList.lyrics[jpIndex].content
-                    singleLrc = jpList.lyrics[jpIndex].content
-                }
-                if (zhIndex !== -1 && zhList && zhIndex < zhList.lyrics.length) {
-                    nextLrc = zhList.lyrics[zhIndex].content
-                }
-                break
-            case 'roma':
-                let romaList = null
-                if (info.romaLrc) {
-                    romaList = parseLrc(info.romaLrc)
-                    romaIndex = AppUtils.currentLyricIndex(romaList.lyrics, info.currentTime)
-                }
-                if (jpIndex !== -1 && jpList && jpIndex < jpList.lyrics.length) {
-                    prevLrc = jpList.lyrics[jpIndex].content
-                    singleLrc = jpList.lyrics[jpIndex].content
-                }
-                if (romaIndex !== -1 && romaList && romaIndex < romaList.lyrics.length) {
-                    nextLrc = romaList.lyrics[romaIndex].content
-                }
-                break
-            default:
-                break
+        const {prevLrc, nextLrc, singleLrc} = WorkUtils.parseTickLrc(currentLrcStatus, info, jpList, jpIndex)
+
+        // 过滤传递文本，优化总线传输
+        if (prevLyric.prevLrc !== prevLrc || prevLyric.nextLrc !== nextLrc || prevLyric.singleLrc !== singleLrc) {
+            prevLyric.prevLrc = prevLrc
+            prevLyric.nextLrc = nextLrc
+            prevLyric.singleLrc = singleLrc
+            ipcRenderer.send('desktop-lrc-text', {prevLrc: prevLrc, nextLrc: nextLrc, singleLrc: singleLrc})
         }
-        ipcRenderer.send('desktop-lrc-text', {prevLrc: prevLrc, nextLrc: nextLrc, singleLrc: singleLrc})
     }
 
     const renderBtnBack = () => {

@@ -9,6 +9,7 @@ import {MusicHelper} from "../dao/MusicHelper";
 import Store from "./Store";
 import {VersionUtils} from "./VersionUtils";
 import {INIT_CHECK_FILE, REQUEST_LATEST_VERSION_URL} from "./URLHelper";
+import {parse as parseLrc} from "clrc";
 
 const path = require('path');
 
@@ -322,5 +323,73 @@ export const WorkUtils = {
             pageY = pageY - dialogHeight
         }
         return pageY
+    },
+
+    // 获取当前播放的索引
+    currentLyricIndex(lyricList, currentMillisecond) {
+        let index = 0;
+        for (const {length} = lyricList; index <= length; index += 1) {
+            const lyric = lyricList[index];
+            if (!lyric || lyric.startMillisecond > currentMillisecond) {
+                break;
+            }
+        }
+        return index - 1;
+    },
+
+    // 将中日罗马三种歌词解析并获取当前要播放的三种形式的歌词行
+    parseTickLrc(currentLrcStatus, info, jpList, jpIndex) {
+        let zhIndex = 0
+        let romaIndex = 0
+        let prevLrc = null
+        let nextLrc = null
+        let singleLrc = null
+        switch (currentLrcStatus) {
+            case 'jp':
+                if (jpIndex !== -1 && jpList && jpIndex < jpList.lyrics.length) {
+                    if (jpIndex % 2 === 0) {
+                        prevLrc = jpList.lyrics[jpIndex].content
+                        if (jpList.lyrics.length > jpIndex + 1) {
+                            nextLrc = jpList.lyrics[jpIndex + 1].content
+                        }
+                    } else {
+                        prevLrc = jpList.lyrics[jpIndex - 1].content
+                        nextLrc = jpList.lyrics[jpIndex].content
+                    }
+                    singleLrc = jpList.lyrics[jpIndex].content
+                }
+                break
+            case 'zh':
+                let zhList = null
+                if (info.zhLrc) {
+                    zhList = parseLrc(info.zhLrc)
+                    zhIndex = WorkUtils.currentLyricIndex(zhList.lyrics, info.currentTime)
+                }
+                if (jpIndex !== -1 && jpList && jpIndex < jpList.lyrics.length) {
+                    prevLrc = jpList.lyrics[jpIndex].content
+                    singleLrc = jpList.lyrics[jpIndex].content
+                }
+                if (zhIndex !== -1 && zhList && zhIndex < zhList.lyrics.length) {
+                    nextLrc = zhList.lyrics[zhIndex].content
+                }
+                break
+            case 'roma':
+                let romaList = null
+                if (info.romaLrc) {
+                    romaList = parseLrc(info.romaLrc)
+                    romaIndex = WorkUtils.currentLyricIndex(romaList.lyrics, info.currentTime)
+                }
+                if (jpIndex !== -1 && jpList && jpIndex < jpList.lyrics.length) {
+                    prevLrc = jpList.lyrics[jpIndex].content
+                    singleLrc = jpList.lyrics[jpIndex].content
+                }
+                if (romaIndex !== -1 && romaList && romaIndex < romaList.lyrics.length) {
+                    nextLrc = romaList.lyrics[romaIndex].content
+                }
+                break
+            default:
+                break
+        }
+        return {prevLrc: prevLrc, nextLrc: nextLrc, singleLrc: singleLrc}
     }
 }

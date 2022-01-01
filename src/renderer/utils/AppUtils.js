@@ -257,18 +257,6 @@ export const AppUtils = {
         const deltaY = point.y - area.top
         return !(deltaX <= 0 || deltaX >= area.right - area.left || deltaY <= 0 || deltaY >= area.bottom - area.top);
     },
-
-    // 获取当前播放的索引
-    currentLyricIndex(lyricList, currentMillisecond) {
-        let index = 0;
-        for (const {length} = lyricList; index <= length; index += 1) {
-            const lyric = lyricList[index];
-            if (!lyric || lyric.startMillisecond > currentMillisecond) {
-                break;
-            }
-        }
-        return index - 1;
-    }
 }
 
 module.export = AppUtils
