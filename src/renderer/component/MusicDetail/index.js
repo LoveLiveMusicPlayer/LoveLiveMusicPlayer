@@ -6,6 +6,7 @@ import * as Images from '../../public/Images'
 import Modal from "react-modal";
 import Store from '../../utils/Store'
 import {parse as parseLrc} from "clrc";
+import {AppUtils} from "../../utils/AppUtils";
 
 let currentPlayId = 0
 
@@ -54,12 +55,13 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
     }))
 
     useMemo(() => {
-        if (lrc.jpLrc && lrc.zhLrc && lrc.romaLrc) {
-            const array = []
-            const jpList = parseLrc(lrc.jpLrc)
-            const zhList = parseLrc(lrc.zhLrc)
-            const romaList = parseLrc(lrc.romaLrc)
-            jpList && jpList.lyrics.map(jp => {
+        const array = []
+        const jpList = AppUtils.isNull(lrc.jpLrc) ? null : parseLrc(lrc.jpLrc)
+        if (jpList) {
+            const zhList = AppUtils.isNull(lrc.zhLrc) ? null : parseLrc(lrc.zhLrc)
+            const romaList = AppUtils.isNull(lrc.romaLrc) ? null : parseLrc(lrc.romaLrc)
+
+            jpList.lyrics.map(jp => {
                 let mZh
                 let mRoma
                 zhList && zhList.lyrics.map(zh => {
