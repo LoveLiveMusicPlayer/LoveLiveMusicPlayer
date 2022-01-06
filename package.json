@@ -246,6 +246,7 @@
         "buffer": "^6.0.3",
         "clrc": "^2.2.0",
         "electron-debug": "^3.2.0",
+        "electron-frameless-window-plugin": "^1.0.4",
         "electron-log": "^4.4.1",
         "electron-store": "^8.0.1",
         "electron-updater": "^4.3.9",

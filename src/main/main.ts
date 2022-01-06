@@ -7,6 +7,8 @@ import init from "./modules/inital";
 import createLyricWindow from "./windows/desktopLyricWindow";
 import createMainWindow from "./windows/mainWindow";
 
+const {plugin} = require('electron-frameless-window-plugin')
+
 // 阻止应用多开
 const gotTheLock = app.requestSingleInstanceLock()
 if (!gotTheLock) {
@@ -47,4 +49,8 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit()
     }
+})
+
+plugin({
+    setGlobal: true
 })
