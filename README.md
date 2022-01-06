@@ -86,12 +86,13 @@ B站空间：<https://space.bilibili.com/4367965>
 | Starfarer      | <https://github.com/EndingEra>        | Liella! 全部        |
 |     <br>      |                                     |                       |
 | 罗马音↓↓   |                                     |                       |
-| 中须霞保护协会 | <https://github.com/KasuminDESU>      | 虹咲学园 全部   |
+| Overlord灬冰翼丶 | <https://space.bilibili.com/232694650>      |  μ's  |
+| 中须霞保护协会 | <https://github.com/KasuminDESU>      | Aqours + 虹咲学园 + Liella!   |
 |     <br>      |                                     |                       |
 | 二次校对↓↓   |                                     |                       |
-| 桜の吹雪   | <https://github.com/stevewang00>      | μ's 1/3           |
-| 朱神无敌   | QQ:<a>404288461</a>                        | μ's 1/6 |
-| 中须霞保护协会 | <https://github.com/KasuminDESU>      | μ's 1/2 + 虹咲学园 全部  |
+| 桜の吹雪   | <https://github.com/stevewang00>      | 1/3 μ's            |
+| 朱神无敌   | QQ:<a>404288461</a>                        | 1/6 μ's  |
+| 中须霞保护协会 | <https://github.com/KasuminDESU>      | 1/2 μ's + Aqours + 虹咲学园 + Liella!  |
 
 ## 特别鸣谢
 
