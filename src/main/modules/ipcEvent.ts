@@ -84,19 +84,12 @@ export default function () {
 
     // 窗口最小化
     ipcMain.on('min', function () {
-        global.mainWindow.minimize()
+        global?.mainWindow?.minimize()
     })
 
     // 窗口最大化
     ipcMain.on('max', function () {
-        console.log("isFullScreen:" + global.mainWindow.isFullScreen())
-        console.log("isMaximized: " + global.mainWindow.isMaximized())
         global?.mainWindow?.setFullScreen(!global?.mainWindow?.isMaximized())
-        // if (global?.mainWindow?.isMaximized()) {
-        //     global?.mainWindow?.unmaximize()
-        // } else {
-        //     global?.mainWindow?.maximize()
-        // }
     })
 
     // 窗口关闭

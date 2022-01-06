@@ -5,7 +5,7 @@ import path from "path";
 import {RESOURCES_PATH} from "../modules/inital";
 
 const {resolveHtmlPath} = require("../util");
-const {app, shell} = require("electron");
+const {app, shell, globalShortcut} = require("electron");
 const framelessPlugin = require('../modules/framelessPlugin')
 
 const createMainWindow = function (BrowserWindow: any) {
@@ -60,7 +60,7 @@ const createMainWindow = function (BrowserWindow: any) {
     });
 
     mainWindow.on('close', event => {
-        if (!global.willQuitApp) {
+        if (!global?.willQuitApp) {
             event.preventDefault()
             if (process.platform === 'linux') {
                 app.exit(0)
@@ -74,7 +74,7 @@ const createMainWindow = function (BrowserWindow: any) {
 
     mainWindow.on('closed', () => {
         mainWindow = null
-        global.lyricWindow = null
+        global?.lyricWindow = null
     });
 
     const menuBuilder = new MenuBuilder(mainWindow);
@@ -85,6 +85,12 @@ const createMainWindow = function (BrowserWindow: any) {
         event.preventDefault();
         shell.openExternal(url);
     });
+
+    globalShortcut.register('ESC', () => {
+        if (mainWindow.isMaximized()) {
+            mainWindow.setFullScreen(false)
+        }
+    })
 
     return mainWindow
 }
