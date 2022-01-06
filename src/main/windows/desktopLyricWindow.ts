@@ -26,7 +26,7 @@ const createLyricWindow = function (BrowserWindow: any) {
         minimizable: false,
         maximizable: false,
         transparent: true,
-        alwaysOnTop: true,
+        alwaysOnTop: false,
         skipTaskbar: true, // 任务栏中不显示窗口
         closable: false,
         hasShadow: false,
@@ -40,6 +40,8 @@ const createLyricWindow = function (BrowserWindow: any) {
     };
 
     let lyricWindow = new BrowserWindow(obj);
+
+    lyricWindow.setAlwaysOnTop(true, "floating", 999)
 
     lyricWindow.loadURL(resolveHtmlPath("desktop-lyric.html"));
 

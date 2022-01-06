@@ -388,7 +388,12 @@ export default function () {
                         marginLeft: (singleLine || lrcLanguage !== 'jp') ? 0 : 50
                     }}
                 >
-                    <div className={'text-lrc'} style={{maxWidth: singleLine ? width : width / 3 * 2}}>
+                    <div
+                        className={'text-lrc'}
+                        style={{
+                            maxWidth: singleLine ? width : width / 3 * 2,
+                            fontWeight: process.platform === 'darwin' ? 'normal' : 'bold'
+                        }}>
                         {singleLine ? (singleLrc ? singleLrc.trim() : "") : (prevLrc ? prevLrc.trim() : "")}
                     </div>
                 </div>
@@ -406,7 +411,12 @@ export default function () {
                                 marginRight: lrcLanguage !== 'jp' ? 0 : 50
                             }}
                         >
-                            <div className={'text-lrc'} style={{maxWidth: width / 3 * 2}}>
+                            <div
+                                className={'text-lrc'}
+                                style={{
+                                    maxWidth: width / 3 * 2,
+                                    fontWeight: process.platform === 'darwin' ? 'normal' : 'bold'
+                                }}>
                                 {nextLrc ? nextLrc.trim() : ""}
                             </div>
                         </div>
