@@ -2,7 +2,7 @@ import {app, crashReporter} from "electron";
 import path from "path";
 import * as Sentry from "@sentry/electron";
 import {SENTRY_URL} from "../../renderer/utils/URLHelper";
-import {machineId} from "node-machine-id";
+import {machineId, machineIdSync} from "node-machine-id";
 
 const Store = require('electron-store');
 
@@ -16,6 +16,7 @@ export const RESOURCES_PATH = app.isPackaged
 
 export default function () {
     Sentry.init({dsn: SENTRY_URL});
+    Sentry.setTag("sn", machineIdSync(true))
     app.commandLine.appendSwitch("--disable-http-cache")
     app.commandLine.appendSwitch('wm-window-animations-disabled')
 

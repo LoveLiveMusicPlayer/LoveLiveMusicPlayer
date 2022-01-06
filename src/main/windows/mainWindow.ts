@@ -6,6 +6,7 @@ import {RESOURCES_PATH} from "../modules/inital";
 
 const {resolveHtmlPath} = require("../util");
 const {app, shell} = require("electron");
+const framelessPlugin = require('../modules/framelessPlugin')
 
 const createMainWindow = function (BrowserWindow: any) {
     const option = {
@@ -29,16 +30,10 @@ const createMainWindow = function (BrowserWindow: any) {
 
     let mainWindow = new BrowserWindow(option);
 
-    if (process.platform === 'win32') {
-        // hook掉标题栏右键菜单
-        mainWindow.hookWindowMessage(278, () => {
-            mainWindow?.setEnabled(false)
-            setTimeout(() => {
-                mainWindow?.setEnabled(true)
-            }, 100)
-            return true
-        })
-    }
+    // 修复透明窗口缩放窗口异常
+    framelessPlugin.plugin({
+        browserWindow: mainWindow
+    })
 
     require('@electron/remote/main').enable(mainWindow.webContents)
 

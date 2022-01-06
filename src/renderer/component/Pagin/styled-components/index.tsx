@@ -26,6 +26,7 @@ export const myScaleHover = keyframes`
     100% {-webkit-transform: scale(1.1)}
 `
 
+// @ts-ignore
 export const Container = styled.div`
     position: relative;
     display: flex;
