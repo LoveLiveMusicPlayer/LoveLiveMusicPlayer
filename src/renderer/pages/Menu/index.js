@@ -7,16 +7,16 @@ import Store from "../../utils/Store";
 import ImagePagination from "../../component/Pagin/index";
 import {SongMenuHelper} from "../../dao/SongMenuHelper";
 import {AppUtils} from "../../utils/AppUtils";
-import {AlbumHelper} from "../../dao/AlbumHelper";
 import Bus from "../../utils/Event";
 import {SelectDialog} from "../../component/SelectDialog";
 import {CustomDialog} from "../../component/CustomDialog";
 import {LoveHelper} from "../../dao/LoveHelper";
+import {useLocation, useParams} from "react-router-dom";
 
 const {connect} = require('react-redux');
 let currentMenuName = null
 
-const Menu = ({playId, location}) => {
+const Menu = ({playId}) => {
 
     const [btnFuncPic1, setBtnFuncPic1] = useState(Images.ICON_DIS_PLAY)
     const [btnFuncPic2, setBtnFuncPic2] = useState(Images.ICON_DIS_COLLECT)
@@ -44,6 +44,8 @@ const Menu = ({playId, location}) => {
 
     const [confirmDialogShow, setConfirmDialogShow] = useState(false);
     const [chooseSong, setChooseSong] = useState()
+    let location = useLocation();
+    let params = useParams();
 
     const columns = [
         {
@@ -259,46 +261,17 @@ const Menu = ({playId, location}) => {
     }, [])
 
     const findMenuList = async () => {
-        const info = await SongMenuHelper.findMenuById(location.state.id)
-        setInfo(info)
-        const music = []
-        const albumList = []
-        const loveList = await LoveHelper.findAllLove()
-        info.music.map((item, index) => {
-            let isLove = false
-            loveList && loveList.map(love => {
-                if (item._id === love._id) {
-                    isLove = true
-                }
-            })
-            albumList.push(AlbumHelper.findOneAlbumByAlbumId(item.group, item.album))
-            music.push({
-                key: index,
-                song: item.name,
-                artist: item.artist,
-                time: item.time,
-                isLove: isLove,
-                music: item
-            })
-        })
-        setTableData(music)
-        const categoryList = new Set()
-        const groupList = new Set()
-        Promise.allSettled(albumList).then(res => {
-            if (categoryList.size < 4) {
-                res.map(item => {
-                    groupList.add(item.value.group)
-                    categoryList.add(item.value.category)
-                })
-            }
-            setGroup(groupList)
-            setCategory(categoryList)
-        })
+        await WorkUtils.findMySongList(Number(params.id),
+            (info) => setInfo(info),
+            (table) => setTableData(table),
+            (gp) => setGroup(gp),
+            (cate) => setCategory(cate)
+        )
     }
 
     useEffect(() => {
         findMenuList()
-    }, [location.state, refreshMenu])
+    }, [location.state, refreshMenu, params])
 
     return (
         <div className={'albumContainer'} onClick={() => setNodeDisplay(false)}>

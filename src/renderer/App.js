@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Route, Switch, useHistory, useLocation} from 'react-router-dom';
+import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import './App.global.css';
 import Home from './pages/Home'
 import Album from './pages/Album'
@@ -49,7 +49,7 @@ function App({dispatch}) {
     let honokaTimer = null
     let isOpenMusicDialog = false
     let prevLyric = {prevLrc: '', nextLrc: '', singleLrc: ''}
-    let history = useHistory()
+    let navigate = useNavigate()
     let location = useLocation()
 
     // 音乐馆: -2; 我喜欢: -1; 最近播放: 0; 歌单: 1 ~ n
@@ -245,18 +245,18 @@ function App({dispatch}) {
 
     const renderBtnBack = () => {
         return initHomeKey === location.key ? null :
-            <img className={'imgBack'} src={Images.ICON_BACK} onClick={() => history.goBack()}/>
+            <img className={'imgBack'} src={Images.ICON_BACK} onClick={() => navigate(-1)}/>
     }
 
     const renderRouter = () => {
         if (showRouter) {
             return (
                 <div className={'routerContainer'}>
-                    <Switch>
-                        <Route path="/album" exact component={Album}/>
-                        <Route path="/menu" exact component={Menu}/>
-                        <Route path="/love" exact component={Love}/>
-                    </Switch>
+                    <Routes>
+                        <Route path="/album" element={<Album/>}/>
+                        <Route path="/menu/:id" element={<Menu/>}/>
+                        <Route path="/love" element={<Love/>}/>
+                    </Routes>
                 </div>
             )
         } else return null
@@ -268,18 +268,17 @@ function App({dispatch}) {
         switch (index) {
             case -2:
                 setShowRouter(false)
-                history.push('/home')
+                navigate('/home', {replace: true})
                 break
             case -1:
                 setShowRouter(true)
-                history.push('/love')
+                navigate('/love', {replace: true})
                 break
             case 0:
-
                 break
             default:
                 setShowRouter(true)
-                history.push('/menu', {id: index})
+                navigate(`/menu/${index}`, {replace: true})
                 break
         }
     }

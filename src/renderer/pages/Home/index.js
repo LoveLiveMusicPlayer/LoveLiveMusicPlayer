@@ -11,7 +11,7 @@ import {Loading} from "../../component/Loading";
 import {DBHelper} from "../../dao/DBHelper";
 import {ColorPicker} from "../../component/ColorPicker";
 import {WorkUtils} from "../../utils/WorkUtils";
-import {useHistory} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {TinyStar} from "../../component/TinyStar";
 import {MusicGallery} from "../../component/MusicGallery";
 import {PortDialog} from "../../component/PortDialog";
@@ -24,7 +24,7 @@ const {connect} = require('react-redux')
 const {Content} = Layout;
 
 const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
-    let history = useHistory()
+    let navigate = useNavigate()
 
     // 专辑列表引用
     let musicGalleryRef = useRef()
@@ -139,7 +139,7 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
     // 显示专辑详情
     const showAlbumInfo = (id) => {
         showAlbum()
-        history.push('/album', {id: id})
+        navigate('/album', {id: id})
     }
 
     // 播放团内全部专辑

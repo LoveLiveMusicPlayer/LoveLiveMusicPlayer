@@ -10,6 +10,8 @@ import Store from "./Store";
 import {VersionUtils} from "./VersionUtils";
 import {INIT_CHECK_FILE, REQUEST_LATEST_VERSION_URL} from "./URLHelper";
 import {parse as parseLrc} from "clrc";
+import {SongMenuHelper} from "../dao/SongMenuHelper";
+import {LoveHelper} from "../dao/LoveHelper";
 
 const path = require('path');
 
@@ -290,16 +292,16 @@ export const WorkUtils = {
             AppUtils.openMsgDialog("info", "已是最新数据，无需更新")
             return
         }
-        onStart()
+        onStart && onStart()
         await AlbumHelper.insertOrUpdateAlbum(JSON.stringify(data.album), function (progress) {
-            onProgress(progress)
+            onProgress && onProgress(progress)
         })
-        onAlbumEnd(data)
+        onAlbumEnd && onAlbumEnd(data)
         await MusicHelper.insertOrUpdateMusic(JSON.stringify(data.music), function (progress) {
-            onProgress(progress)
+            onProgress && onProgress(progress)
         })
         Store.set("dataVersion", data.version)
-        onMusicEnd()
+        onMusicEnd && onMusicEnd()
     },
 
     parseGroupName(name) {
@@ -391,5 +393,44 @@ export const WorkUtils = {
                 break
         }
         return {prevLrc: prevLrc, nextLrc: nextLrc, singleLrc: singleLrc}
+    },
+
+    // 获取 歌单id 的 歌曲列表
+    async findMySongList(menuId, setInfo, setTableData, setGroup, setCategory) {
+        const info = await SongMenuHelper.findMenuById(menuId)
+        setInfo && setInfo(info)
+        const music = []
+        const albumList = []
+        const loveList = await LoveHelper.findAllLove()
+        info.music.map((item, index) => {
+            let isLove = false
+            loveList && loveList.map(love => {
+                if (item._id === love._id) {
+                    isLove = true
+                }
+            })
+            albumList.push(AlbumHelper.findOneAlbumByAlbumId(item.group, item.album))
+            music.push({
+                key: index,
+                song: item.name,
+                artist: item.artist,
+                time: item.time,
+                isLove: isLove,
+                music: item
+            })
+        })
+        setTableData && setTableData(music)
+        const categoryList = new Set()
+        const groupList = new Set()
+        Promise.allSettled(albumList).then(res => {
+            if (categoryList.size < 4) {
+                res.map(item => {
+                    groupList.add(item.value.group)
+                    categoryList.add(item.value.category)
+                })
+            }
+            setGroup && setGroup(groupList)
+            setCategory && setCategory(categoryList)
+        })
     }
 }
