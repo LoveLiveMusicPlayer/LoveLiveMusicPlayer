@@ -1,5 +1,5 @@
 // @ts-nocheck
-import {app, dialog, globalShortcut, ipcMain, nativeImage} from "electron";
+import {app, dialog, ipcMain, nativeImage} from "electron";
 import {portIsOccupied} from "../util";
 import update from "./update";
 import {thumbarButtons} from "./dockAndTray";
@@ -89,13 +89,6 @@ export default function () {
 
     // 窗口最大化
     ipcMain.on('max', function () {
-        if (global?.mainWindow?.isMaximized()) {
-            globalShortcut.unregisterAll()
-        } else {
-            globalShortcut.register('ESC', () => {
-                global?.mainWindow?.setFullScreen(false)
-            })
-        }
         global?.mainWindow?.setFullScreen(!global?.mainWindow?.isMaximized())
     })
 

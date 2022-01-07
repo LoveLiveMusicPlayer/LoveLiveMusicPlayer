@@ -4,6 +4,7 @@ import MenuBuilder from "../modules/menu";
 import path from "path";
 import {RESOURCES_PATH} from "../modules/inital";
 import {clearTimeout} from "timers";
+import {globalShortcut} from "electron";
 
 const {resolveHtmlPath} = require("../util");
 const {app, shell} = require("electron");
@@ -61,6 +62,18 @@ const createMainWindow = function (BrowserWindow: any) {
             mainWindow.focus();
         }
     });
+
+    // 进入全屏时注册 esc 退出功能
+    mainWindow.on('enter-full-screen', () => {
+        globalShortcut.register('ESC', () => {
+            mainWindow.setFullScreen(false)
+        })
+    })
+
+    // 离开全屏时注销 esc 退出功能
+    mainWindow.on('leave-full-screen', () => {
+        globalShortcut.unregisterAll()
+    })
 
     mainWindow.on('close', event => {
         if (!global?.willQuitApp) {
