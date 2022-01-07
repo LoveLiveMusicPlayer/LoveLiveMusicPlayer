@@ -38,8 +38,6 @@ if (
 }
 
 // @ts-ignore
-// @ts-ignore
-// @ts-ignore
 export default merge(baseConfig, {
     devtool: 'inline-source-map',
 
@@ -235,7 +233,7 @@ export default merge(baseConfig, {
             disableDotRule: false,
         },
         onBeforeSetupMiddleware() {
-            console.log('Starting Main Process...');
+            console.log('启动主线程...');
             spawn('npm', ['run', 'start:main'], {
                 shell: true,
                 env: process.env,
