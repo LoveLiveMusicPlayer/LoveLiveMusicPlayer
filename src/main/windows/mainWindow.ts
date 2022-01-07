@@ -19,6 +19,7 @@ const createMainWindow = function (BrowserWindow: any) {
         height: 728,
         titleBarStyle: 'customButtonsOnHover',
         transparent: true,
+        maximizable: false,
         frame: false,
         minWidth: 1024,
         minHeight: 728,
