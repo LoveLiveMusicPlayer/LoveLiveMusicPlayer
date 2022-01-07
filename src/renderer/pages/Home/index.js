@@ -139,7 +139,7 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
     // 显示专辑详情
     const showAlbumInfo = (id) => {
         showAlbum()
-        navigate('/album', {id: id})
+        navigate(`/album/${id}`)
     }
 
     // 播放团内全部专辑

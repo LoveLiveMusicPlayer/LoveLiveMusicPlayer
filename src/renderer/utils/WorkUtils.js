@@ -432,5 +432,31 @@ export const WorkUtils = {
             setGroup && setGroup(groupList)
             setCategory && setCategory(categoryList)
         })
+    },
+
+    // 获取 专辑id 的 歌曲列表
+    async findAlbumList(albumUniqueId, groupId, setInfo, setTableData) {
+        const album = await AlbumHelper.findOneAlbumByUniqueId(albumUniqueId)
+        setInfo && setInfo(album)
+        const musicList = await MusicHelper.findAllMusicByAlbumId(groupId, album.id)
+        const tableData = []
+        const loveList = await LoveHelper.findAllLove()
+        musicList.map((music, index) => {
+            let isLove = false
+            loveList && loveList.map(item => {
+                if (music._id === item._id) {
+                    isLove = true
+                }
+            })
+            tableData.push({
+                key: index,
+                song: music.name,
+                artist: music.artist,
+                time: music.time,
+                isLove: isLove,
+                music: music
+            })
+        })
+        setTableData && setTableData(tableData)
     }
 }

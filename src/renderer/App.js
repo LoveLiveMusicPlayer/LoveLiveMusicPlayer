@@ -253,7 +253,7 @@ function App({dispatch}) {
             return (
                 <div className={'routerContainer'}>
                     <Routes>
-                        <Route path="/album" element={<Album/>}/>
+                        <Route path="/album/:id" element={<Album/>}/>
                         <Route path="/menu/:id" element={<Menu/>}/>
                         <Route path="/love" element={<Love/>}/>
                     </Routes>

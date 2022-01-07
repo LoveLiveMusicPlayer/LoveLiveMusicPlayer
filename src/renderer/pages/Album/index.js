@@ -1,11 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {useHistory} from "react-router-dom";
-import {AlbumHelper} from "../../dao/AlbumHelper";
+import {useParams} from "react-router-dom";
 import './index.css'
 import Store from '../../utils/Store'
 import ImagePagination from "../../component/Pagin/index";
 import {Button, Table} from 'antd'
-import {MusicHelper} from "../../dao/MusicHelper";
 import {WorkUtils} from "../../utils/WorkUtils";
 import * as Images from '../../public/Images'
 import {SongMenuHelper} from "../../dao/SongMenuHelper";
@@ -15,8 +13,8 @@ import {LoveHelper} from "../../dao/LoveHelper";
 
 const {connect} = require('react-redux');
 
-const Album = ({dispatch, chooseGroup, location, playId}) => {
-    let history = useHistory()
+const Album = ({dispatch, chooseGroup, playId}) => {
+    let params = useParams()
 
     // 三个功能按钮图片
     const [btnFuncPic1, setBtnFuncPic1] = useState(Images.ICON_DIS_PLAY)
@@ -48,34 +46,18 @@ const Album = ({dispatch, chooseGroup, location, playId}) => {
     }, [])
 
     // 查询当前专辑全部的歌曲信息
-    const findAlbumList = async () => {
-        const album = await AlbumHelper.findOneAlbumByUniqueId(location.state.id)
-        setInfo(album)
-        const musicList = await MusicHelper.findAllMusicByAlbumId(chooseGroup, album.id)
-        const tableData = []
-        const loveList = await LoveHelper.findAllLove()
-        musicList.map((music, index) => {
-            let isLove = false
-            loveList && loveList.map(item => {
-                if (music._id === item._id) {
-                    isLove = true
-                }
-            })
-            tableData.push({
-                key: index,
-                song: music.name,
-                artist: music.artist,
-                time: music.time,
-                isLove: isLove,
-                music: music
-            })
-        })
-        setTableData(tableData)
+    const findAlbumList = () => {
+        WorkUtils.findAlbumList(
+            params.id,
+            chooseGroup,
+            (info) => setInfo(info),
+            (table) => setTableData(table)
+        )
     }
 
     useEffect(() => {
         findAlbumList()
-    }, [refreshAlbum])
+    }, [refreshAlbum, params])
 
     const columns = [
         {
