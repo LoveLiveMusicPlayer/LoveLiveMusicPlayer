@@ -3,10 +3,13 @@ import initIpcEvent from "../modules/ipcEvent";
 import MenuBuilder from "../modules/menu";
 import path from "path";
 import {RESOURCES_PATH} from "../modules/inital";
+import {clearTimeout} from "timers";
 
 const {resolveHtmlPath} = require("../util");
-const {app, shell, globalShortcut} = require("electron");
+const {app, shell} = require("electron");
 const framelessPlugin = require('../modules/framelessPlugin')
+
+let timer = null
 
 const createMainWindow = function (BrowserWindow: any) {
     const option = {
@@ -77,6 +80,14 @@ const createMainWindow = function (BrowserWindow: any) {
         global?.lyricWindow = null
     });
 
+    mainWindow.on('will-resize', () => {
+        global?.lyricWindow?.webContents.send('main-window-resize', true)
+        timer && clearTimeout(timer)
+        timer = setTimeout(() => {
+            global?.lyricWindow?.webContents.send('main-window-resize', false)
+        }, 500)
+    })
+
     const menuBuilder = new MenuBuilder(mainWindow);
     menuBuilder.buildMenu();
 
@@ -85,12 +96,6 @@ const createMainWindow = function (BrowserWindow: any) {
         event.preventDefault();
         shell.openExternal(url);
     });
-
-    globalShortcut.register('ESC', () => {
-        if (mainWindow.isMaximized()) {
-            mainWindow.setFullScreen(false)
-        }
-    })
 
     return mainWindow
 }

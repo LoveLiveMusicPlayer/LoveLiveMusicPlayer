@@ -91,6 +91,16 @@ export default function () {
             setLrcLanguage(args)
         })
 
+        ipcRenderer.on('main-window-resize', (event, args) => {
+            if (isLocking) {
+                if (args) {
+                    win.setIgnoreMouseEvents(false)
+                } else {
+                    win.setIgnoreMouseEvents(true, {forward: true})
+                }
+            }
+        })
+
         document.ondragstart = function () {
             return false;
         };
@@ -154,8 +164,10 @@ export default function () {
         win.setResizable(isLock)
         win.setMovable(isLock)
         if (isLock) {
+            // 不可以色色(划屏幕)
             win.setIgnoreMouseEvents(false)
         } else if (process.platform !== 'linux') {
+            // 可以色色(划屏幕)
             win.setIgnoreMouseEvents(true, {forward: true})
         }
         if (process.platform === 'darwin') {

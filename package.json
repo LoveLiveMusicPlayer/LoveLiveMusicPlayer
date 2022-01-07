@@ -264,6 +264,7 @@
         "react-router-dom": "^6.2.1",
         "react-tiny-virtual-list": "^2.2.0",
         "react-typewriter-effect": "^1.1.0",
+        "reactcss": "^1.2.3",
         "redux": "^4.1.1",
         "redux-persist": "^6.0.0",
         "redux-thunk": "^2.4.1",

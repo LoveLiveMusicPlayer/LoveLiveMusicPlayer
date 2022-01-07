@@ -29,6 +29,10 @@ body {
         top: 0;
     }
 
+    &:hover {
+        cursor: grab;
+    }
+
     .playing-lyric {
         box-sizing: border-box;
         margin: 0;
@@ -40,10 +44,6 @@ body {
         white-space: nowrap;
         overflow-x: auto;
         -webkit-app-region: no-drag;
-
-        &:hover {
-            cursor: grab;
-        }
 
         .text-lrc {
             text-overflow: ellipsis;
