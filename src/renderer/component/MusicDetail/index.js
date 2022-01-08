@@ -10,7 +10,7 @@ import {AppUtils} from "../../utils/AppUtils";
 
 let currentPlayId = 0
 
-export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLanguage, lrcLanguageCallback}, ref) => {
+export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLanguage, isFullScreen, lrcLanguageCallback}, ref) => {
 
     const parseCover = (blueCover) => {
         const URL = Store.get("url")
@@ -136,6 +136,7 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
             left: 0,
             right: 0,
             bottom: 0,
+            borderRadius: isFullScreen ? 0 : 12,
             backgroundColor: 'rgba(0, 0, 0, 0)'
         },
         content: {
@@ -145,6 +146,7 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
             bottom: 0,
             height: '100%',
             borderWidth: 0,
+            borderRadius: isFullScreen ? 0 : 12,
             backgroundColor: 'rgba(0, 0, 0, 0.9)'
         },
     };
@@ -165,8 +167,8 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
             onAfterOpen={null}
             onRequestClose={null}
             style={musicDetailStyles}>
-            <div className={"blackArea"}/>
-            <img className={"gauss"} src={mCover}/>
+            <div className={"blackArea"} style={{borderRadius: isFullScreen ? 0 : 12}}/>
+            <img className={"gauss"} src={mCover} style={{top: isFullScreen ? '0%' : '5%', height: isFullScreen ? '100%' : '90%'}}/>
 
             <div>
                 <div className={'musicDetailContainer'}>

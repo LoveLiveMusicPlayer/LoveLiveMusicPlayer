@@ -79,7 +79,7 @@ a:hover {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    border-radius: 16px;
+    border-radius: 12px;
 }
 
 .logo {

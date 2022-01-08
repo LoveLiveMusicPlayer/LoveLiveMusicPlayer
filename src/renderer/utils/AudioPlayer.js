@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactJkMusicPlayer from 'react-jinke-music-player'
+import ReactJkMusicPlayer from '../component/MusicPlayer'
 import 'react-jinke-music-player/assets/index.css'
 import Store from '../utils/Store'
 import * as Images from '../public/Images'

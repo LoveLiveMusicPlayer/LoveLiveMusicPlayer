@@ -69,11 +69,13 @@ const createMainWindow = function (BrowserWindow: any) {
         globalShortcut.register('ESC', () => {
             mainWindow.setFullScreen(false)
         })
+        mainWindow.webContents.send('enter-full-screen', true)
     })
 
     // 离开全屏时注销 esc 退出功能
     mainWindow.on('leave-full-screen', () => {
         globalShortcut.unregisterAll()
+        mainWindow.webContents.send('enter-full-screen', false)
     })
 
     mainWindow.on('close', event => {

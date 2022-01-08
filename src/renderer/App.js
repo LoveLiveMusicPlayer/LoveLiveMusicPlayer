@@ -71,6 +71,8 @@ function App({dispatch}) {
     const [onShowFunc, setShowFunc] = useState(false)
     // 同步当前歌词语言
     const [lrcLanguage, setLrcLanguage] = useState('jp')
+    // 是否处于全屏模式
+    const [fullScreen, setFullScreen] = useState(false)
 
     // 点击企划图片
     const onBabyClick = () => {
@@ -363,7 +365,20 @@ function App({dispatch}) {
         ipcRenderer.on('main-lrc-language-change', (event, language) => {
             setLrcLanguage(language)
         })
+
+        ipcRenderer.on('enter-full-screen', (event, args) => {
+            setFullScreen(args)
+        })
     }, [])
+
+    useEffect(() => {
+        document.getElementById('music-player-panel').style.borderRadius = fullScreen ? 0 : '12px'
+        document.getElementsByClassName('outer_container')[0].style.borderRadius = fullScreen ? 0 : '12px'
+    }, [fullScreen])
+
+    useEffect(() => {
+        document.getElementById('music-player-panel').style.borderRadius = '12px'
+    }, [playerRef])
 
     useEffect(() => {
         ipcRenderer.send('desktop-lrc-language-change', lrcLanguage)
@@ -471,7 +486,12 @@ function App({dispatch}) {
                 }}
             />
 
-            {showMenu ? <div className={"model"} onClick={onBabyClick}/> : null}
+            {showMenu ?
+                <div
+                    className={"model"}
+                    style={{borderRadius: fullScreen ? 0 : 12}}
+                    onClick={onBabyClick}/> : null
+            }
 
             <GroupModal
                 showMenu={showMenu}
@@ -484,6 +504,7 @@ function App({dispatch}) {
                 musicDetailVisible={musicDetailVisible}
                 isDialogOpen={isDialogOpen}
                 lrcLanguage={lrcLanguage}
+                isFullScreen={fullScreen}
                 lrcLanguageCallback={language => setLrcLanguage(language)}
             />
         </div>
