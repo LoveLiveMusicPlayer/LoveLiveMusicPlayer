@@ -227,7 +227,7 @@ class AudioPlayer extends React.PureComponent {
         const {params, playIndex} = this.state
         params.playIndex = playIndex
         return (
-            <div style={{position: 'relative', background: 'red'}}>
+            <div style={{position: 'relative'}}>
                 <ReactJkMusicPlayer
                     getAudioInstance={(instance) => (this.audioInstance = instance)}
                     ref={(ref) => this.r = ref}

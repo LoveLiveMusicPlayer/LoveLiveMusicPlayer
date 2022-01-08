@@ -210,12 +210,14 @@ export const AppUtils = {
             return output;
         };
 
-        document.body.style.background = 'linear-gradient(\n' +
+        const container = document.getElementsByClassName('outer_container')[0]
+        container.style.background = 'linear-gradient(\n' +
             '                200.96deg,\n' +
             `                ${colors.color1} -49.09%,\n` +
             `                ${gradientColors(colors.color1, colors.color2, 2)[0]} 10.77%,\n` +
             `                ${colors.color2} 129.35%\n` +
             `            )`
+        document.body.style.background = 'transparent'
     },
 
     // 返回1..100中，数组内不存在的最小值

@@ -1,6 +1,5 @@
 body {
     position: relative;
-    color: white;
     height: 100vh;
     font-family: sans-serif;
     overflow-x: hidden;
@@ -79,7 +78,8 @@ a:hover {
     width: 100%;
     height: 100vh;
     display: flex;
-    flex-direction: column
+    flex-direction: column;
+    border-radius: 16px;
 }
 
 .logo {
