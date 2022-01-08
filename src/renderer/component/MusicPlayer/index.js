@@ -48,29 +48,14 @@ import {MODE} from './config/mode'
 import {AUDIO_NETWORK_STATE, AUDIO_READY_STATE} from './config/audioState'
 import PLAY_MODE from './config/playMode'
 import PROP_TYPES from './config/propTypes'
-import {
-    PROGRESS_BAR_SLIDER_OPTIONS,
-    VOLUME_BAR_SLIDER_OPTIONS,
-} from './config/slider'
+import {PROGRESS_BAR_SLIDER_OPTIONS, VOLUME_BAR_SLIDER_OPTIONS,} from './config/slider'
 import {THEME} from './config/theme'
 import {VOLUME_FADE} from './config/volumeFade'
-import {
-    DEFAULT_PLAY_INDEX,
-    DEFAULT_VOLUME,
-    DEFAULT_REMOVE_ID,
-    PLAYER_KEY,
-} from './config/player'
+import {DEFAULT_PLAY_INDEX, DEFAULT_REMOVE_ID, DEFAULT_VOLUME, PLAYER_KEY,} from './config/player'
 import SORTABLE_CONFIG from './config/sortable'
 import LOCALE_CONFIG from './locale'
 import Lyric from './lyric'
-import {
-    adjustVolume,
-    arrayEqual,
-    createRandomNum,
-    formatTime,
-    isSafari,
-    uuId,
-} from './utils'
+import {adjustVolume, arrayEqual, createRandomNum, formatTime, isSafari, uuId,} from './utils'
 
 Sortable.mount(new Swap())
 
@@ -143,6 +128,7 @@ export default class ReactJkMusicPlayer extends PureComponent {
         updateIntervalEndVolume: undefined,
         isAudioSeeking: false,
         isResetCoverRotate: false,
+        fullScreen: false
     }
 
     static defaultProps = {
@@ -543,10 +529,15 @@ export default class ReactJkMusicPlayer extends PureComponent {
                 )}
                 {toggle && (!isMobile || !responsive) && (
                     <div
-                        id={'music-player-panel'}
                         className={cls('music-player-panel', 'translate', {
                             'glass-bg': glassBg,
                         })}
+                        style={{
+                            borderTopLeftRadius: 12,
+                            borderTopRightRadius: 12,
+                            borderBottomLeftRadius: this.state.fullScreen ? 0 : 12,
+                            borderBottomRightRadius: this.state.fullScreen ? 0 : 12
+                        }}
                     >
                         <section className="panel-content">
                             {/* lgtm [js/trivial-conditional] */}
@@ -2143,6 +2134,12 @@ export default class ReactJkMusicPlayer extends PureComponent {
         }
     }
 
+    setFullScreen = (isFullScreen) => {
+        this.setState({
+            fullScreen: isFullScreen
+        })
+    }
+
     playByIndex = (index) => {
         this.updatePlayIndex(index)
     }
@@ -2177,6 +2174,10 @@ export default class ReactJkMusicPlayer extends PureComponent {
             {
                 name: 'clear',
                 value: this.clearAudioLists,
+            },
+            {
+                name: 'setFullScreen',
+                value: this.setFullScreen,
             },
             {
                 name: 'sortable',

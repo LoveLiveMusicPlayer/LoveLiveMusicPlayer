@@ -115,6 +115,10 @@ class AudioPlayer extends React.PureComponent {
         } else this.audioInstance?.load()
     }
 
+    setFull = (isFullScreen) => {
+        this.audioInstance.setFullScreen(isFullScreen)
+    }
+
     content = () => {
         return (
             <Menu style={{marginBottom: 25}}>

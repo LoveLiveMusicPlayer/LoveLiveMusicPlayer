@@ -19,7 +19,7 @@ const createMainWindow = function (BrowserWindow: any) {
         height: 728,
         titleBarStyle: 'customButtonsOnHover',
         transparent: true,
-        maximizable: false,
+        maximizable: process.platform === 'darwin',
         frame: false,
         minWidth: 1024,
         minHeight: 728,
@@ -29,7 +29,8 @@ const createMainWindow = function (BrowserWindow: any) {
             nodeIntegrationInWorker: false,
             enableRemoteModule: true,
             contextIsolation: false,
-            webSecurity: false
+            webSecurity: false,
+            devTools: false
         }
     }
 

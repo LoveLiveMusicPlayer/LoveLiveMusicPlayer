@@ -372,13 +372,9 @@ function App({dispatch}) {
     }, [])
 
     useEffect(() => {
-        document.getElementById('music-player-panel').style.borderRadius = fullScreen ? 0 : '12px'
         document.getElementsByClassName('outer_container')[0].style.borderRadius = fullScreen ? 0 : '12px'
+        playerRef.current?.setFull(fullScreen)
     }, [fullScreen])
-
-    useEffect(() => {
-        document.getElementById('music-player-panel').style.borderRadius = '12px'
-    }, [playerRef])
 
     useEffect(() => {
         ipcRenderer.send('desktop-lrc-language-change', lrcLanguage)
