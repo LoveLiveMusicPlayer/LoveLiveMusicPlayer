@@ -33,7 +33,7 @@ const PlayerMobile = ({
   shouldShowPlayIcon,
   isResetCoverRotate,
 }) => (
-  <div className={cls(prefix, { 'default-bg': !glassBg, 'glass-bg': glassBg })}>
+  <div className={cls(prefix, { 'default-bg': !glassBg, 'glass-bg': glassBg })} style={{borderRadius: 12}}>
     <PlayModeTip
       prefix={prefix}
       visible={playModeTipVisible}
