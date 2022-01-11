@@ -20,6 +20,12 @@ export const AppUtils = {
         return this.isNull(text) || text === ''
     },
 
+    isNullOrNumber(text, defaultValue) {
+        if (text === null || text === undefined) {
+            return defaultValue
+        } else return text
+    },
+
     showValue(text) {
         if (text) return text
         else return '-'
@@ -47,6 +53,22 @@ export const AppUtils = {
 
     readFile(filePath) {
         return fs.readFileSync(filePath, 'utf-8')
+    },
+
+    _strMapToObj(strMap) {
+        let obj = Object.create(null);
+        for (let [k, v] of strMap) {
+            obj[k] = v;
+        }
+        return obj;
+    },
+
+    _objToStrMap(obj) {
+        let strMap = new Map();
+        for (let k of Object.keys(obj)) {
+            strMap.set(k, obj[k]);
+        }
+        return strMap;
     },
 
     /**

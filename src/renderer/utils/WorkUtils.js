@@ -339,6 +339,27 @@ export const WorkUtils = {
         return index - 1;
     },
 
+    // 获取当前播放的索引
+    threeLyricIndex(lyricList, currentMillisecond) {
+        let index = 0;
+        for (const {length} = lyricList; index <= length; index += 1) {
+            const lyric = lyricList[index];
+            if (!lyric || lyric.startMillisecond > currentMillisecond) {
+                break;
+            }
+        }
+
+        index = index - 1;
+
+        if (lyricList.length - 1 === index) {
+            return {prev: index - 1, current: index, next: 0}
+        }
+        if (index === 0) {
+            return {prev: 0, current: 0, next: 1}
+        }
+        return {prev: index - 1, current: index, next: index + 1};
+    },
+
     // 将中日罗马三种歌词解析并获取当前要播放的三种形式的歌词行
     parseTickLrc(currentLrcStatus, info, jpList, jpIndex) {
         let zhIndex = 0
@@ -458,5 +479,17 @@ export const WorkUtils = {
             })
         })
         setTableData && setTableData(tableData)
+    },
+
+    aaa(map) {
+        const notZeroMap = new Map()
+        map.forEach((value, key) => {
+            if (value > 0) {
+                notZeroMap.set(key, value)
+            }
+        })
+        notZeroMap.forEach((value, key) => {
+            console.log(key + " - " + value)
+        })
     }
 }

@@ -9,8 +9,17 @@ import {parse as parseLrc} from "clrc";
 import {AppUtils} from "../../utils/AppUtils";
 
 let currentPlayId = 0
+let latest = {prevTime: 0, currentTime: 0, nextTime: 0}
 
-export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLanguage, isFullScreen, lrcLanguageCallback}, ref) => {
+let map = new Map()
+
+export const MusicDetail = forwardRef(({
+                                           musicDetailVisible,
+                                           isDialogOpen,
+                                           lrcLanguage,
+                                           isFullScreen,
+                                           lrcLanguageCallback
+                                       }, ref) => {
 
     const parseCover = (blueCover) => {
         const URL = Store.get("url")
@@ -31,10 +40,18 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
 
     const [lrcPosition, setLrcPosition] = useState("center")
 
-    const [playProgress, setPlayProgress] = useState({name: null, time: 0, current: 0, total: 0})
+    const [playProgress, setPlayProgress] = useState({name: null, prevTime: 0, currentTime: 0, nextTime: 0})
 
     useImperativeHandle(ref, () => ({
-        setMusicDetail: (info, currentIndex, totalIndex) => {
+        setMusicDetail: (info, prevTime, currentTime, nextTime, timeList) => {
+
+            if (timeList.length > 0) {
+                latest = {prevTime: 0, currentTime: currentTime, nextTime: timeList[0]}
+                map.clear()
+                timeList.map(time => {
+                    map.set(time, 0)
+                })
+            }
 
             setCover(parseCover(info.cover))
 
@@ -54,18 +71,31 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
                 romaLrc: info.romaLrc || ''
             })
 
-            setPlayProgress({name: info.name, time: info.currentTime, current: currentIndex, total: totalIndex})
+            setPlayProgress({name: info.name, currentTime, prevTime, nextTime})
         }
     }))
 
     useMemo(() => {
-        if (3 * playProgress.current > playProgress.total) {
-            playProgress.name && Store.set("upReportSong", {
-                name: playProgress.name,
-                time: Math.floor(playProgress.time)
-            })
+        const prevTime = playProgress.prevTime
+        const currentTime = playProgress.currentTime
+        const nextTime = playProgress.nextTime
+
+        if (latest.currentTime >= prevTime && latest.currentTime <= currentTime) {
+            if (map.has(currentTime)) {
+                map.set(currentTime, map.get(currentTime) + 1)
+            }
+            if (currentTime - prevTime > 1000) {
+                Store.set("upReportSong", JSON.stringify(AppUtils._strMapToObj(map)))
+            }
+        } else if (prevTime === latest.nextTime) {
+            if (map.has(currentTime)) {
+                map.set(currentTime, map.get(currentTime) + 1)
+            }
         }
-    }, [playProgress.current, playProgress.total])
+
+
+        latest = {prevTime, currentTime, nextTime}
+    }, [playProgress.prevTime, playProgress.currentTime, playProgress.nextTime])
 
     useMemo(() => {
         const array = []

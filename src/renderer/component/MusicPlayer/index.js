@@ -1474,12 +1474,15 @@ export default class ReactJkMusicPlayer extends PureComponent {
                 this.audioListsPlay(
                     isNext
                         ? audioLists[currentPlayIndex + 1][PLAYER_KEY]
-                        : audioLists[currentPlayIndex - 1][PLAYER_KEY],
+                        : audioLists[currentPlayIndex - 1][PLAYER_KEY]
                 )
                 break
 
             // 列表循环
             case PLAY_MODE.orderLoop:
+                if (audioLists.length === 1) {
+                    return this.audioListsPlay(audioLists[0][PLAYER_KEY], true)
+                }
                 if (isNext) {
                     if (currentPlayIndex === audioListsLen - 1) {
                         return this.audioListsPlay(audioLists[0][PLAYER_KEY])
@@ -1487,9 +1490,7 @@ export default class ReactJkMusicPlayer extends PureComponent {
                     this.audioListsPlay(audioLists[currentPlayIndex + 1][PLAYER_KEY])
                 } else {
                     if (currentPlayIndex === 0) {
-                        return this.audioListsPlay(
-                            audioLists[audioListsLen - 1][PLAYER_KEY],
-                        )
+                        return this.audioListsPlay(audioLists[audioListsLen - 1][PLAYER_KEY])
                     }
                     this.audioListsPlay(audioLists[currentPlayIndex - 1][PLAYER_KEY])
                 }

@@ -275,7 +275,13 @@ class AudioPlayer extends React.PureComponent {
                                 const upReportSongInfo = Store.get("upReportSong")
                                 if (upReportSongInfo) {
                                     Store.delete("upReportSong")
-                                    ipcRenderer.send('upReportSong', upReportSongInfo)
+
+                                    const map = AppUtils._objToStrMap(JSON.parse(upReportSongInfo))
+                                    // const {mostNum, count} = WorkUtils.findMostNum(map.values)
+                                    // console.log(mostNum + " - " + count)
+                                    WorkUtils.aaa(map)
+
+                                    // ipcRenderer.send('upReportSong', upReportSongInfo)
                                 }
                             }
                             AlbumHelper.findOneAlbumByAlbumId(this.props.chooseGroup, audioInfo.album).then(res => {

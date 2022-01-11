@@ -48,9 +48,11 @@ function App({dispatch}) {
 
     let honokaTimer = null
     let isOpenMusicDialog = false
+    let latestJPLyric = null
     let prevLyric = {prevLrc: '', nextLrc: '', singleLrc: ''}
     let navigate = useNavigate()
     let location = useLocation()
+    let timeList = []
 
     // 音乐馆: -2; 我喜欢: -1; 最近播放: 0; 歌单: 1 ~ n
     const [chooseItem, setChooseItem] = useState(-2)
@@ -227,13 +229,30 @@ function App({dispatch}) {
     // 歌曲播放时间回调
     const onAudioTimeChange = (info) => {
         let jpIndex = 0
+        let prevTime = 0
+        let currentTime = 0
+        let nextTime = 0
         let jpList = null
+
         if (info.jpLrc) {
             jpList = parseLrc(info.jpLrc)
-            jpIndex = WorkUtils.currentLyricIndex(jpList.lyrics, info.currentTime)
-        }
+            const triple = WorkUtils.threeLyricIndex(jpList.lyrics, info.currentTime)
+            jpIndex = triple.current
+            currentTime = AppUtils.isNull(jpList.lyrics[jpIndex]) ? 0 : jpList.lyrics[jpIndex].startMillisecond
+            prevTime = AppUtils.isNull(jpList.lyrics[triple.prev]) ? 0 : jpList.lyrics[triple.prev].startMillisecond
+            nextTime = AppUtils.isNull(jpList.lyrics[triple.next]) ? 0 : jpList.lyrics[triple.next].startMillisecond
 
-        musicDetailRef.current?.setMusicDetail(info, jpIndex, jpList === null ? 0 : jpList.lyrics.length)
+            if (info.jpLrc !== latestJPLyric) {
+                latestJPLyric = info.jpLrc
+                timeList.slice(0, timeList.length)
+                jpList.lyrics.map(item => {
+                    timeList.push(item.startMillisecond)
+                })
+            } else {
+                timeList = []
+            }
+        }
+        musicDetailRef.current?.setMusicDetail(info, prevTime, currentTime, nextTime, timeList)
 
         const {prevLrc, nextLrc, singleLrc} = WorkUtils.parseTickLrc(currentLrcStatus, info, jpList, jpIndex)
 
