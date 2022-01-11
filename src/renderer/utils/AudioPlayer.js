@@ -176,8 +176,6 @@ class AudioPlayer extends React.PureComponent {
                     width={25}
                     height={25}
                     onClick={() => {
-                        // const status = !this.state.lyricShow
-                        // this.setState({lyricShow: status})
                         this.r.props.onClickLyric(!this.state.lyricShow)
                     }}
                 />
@@ -270,14 +268,21 @@ class AudioPlayer extends React.PureComponent {
                     }}
                     onAudioPlay={async audioInfo => {
                         try {
-                            ipcRenderer.send('musicName', "当前播放:\n" + audioInfo.name)
-                            ipcRenderer.send('setPlaying', true)
                             currentMusicUniqueId = audioInfo._id
                             this.props.dispatch(musicAction.playId(audioInfo._id))
-                            Store.set("playId", audioInfo._id)
+                            if (Store.get("playId") !== audioInfo._id) {
+                                Store.set("playId", audioInfo._id)
+                                const upReportSongInfo = Store.get("upReportSong")
+                                if (upReportSongInfo) {
+                                    Store.delete("upReportSong")
+                                    ipcRenderer.send('upReportSong', upReportSongInfo)
+                                }
+                            }
                             AlbumHelper.findOneAlbumByAlbumId(this.props.chooseGroup, audioInfo.album).then(res => {
                                 res && res._id && this.props.dispatch(musicAction.albumId(res._id))
                             })
+                            ipcRenderer.send('musicName', "当前播放:\n" + audioInfo.name)
+                            ipcRenderer.send('setPlaying', true)
                         } catch (e) {
                             console.log(e)
                         }

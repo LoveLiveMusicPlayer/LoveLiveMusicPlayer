@@ -5,10 +5,10 @@ import path from "path";
 import {RESOURCES_PATH} from "../modules/inital";
 import {clearTimeout} from "timers";
 import {globalShortcut} from "electron";
-import {upReport} from "../util";
+import {upReportOpenTime} from "../util";
 
 const {resolveHtmlPath} = require("../util");
-const {app, shell} = require("electron");
+const {shell} = require("electron");
 const framelessPlugin = require('../modules/framelessPlugin')
 
 let timer = null
@@ -84,12 +84,12 @@ const createMainWindow = function (BrowserWindow: any) {
         if (!global?.willQuitApp) {
             event.preventDefault()
             if (process.platform === 'linux') {
-                upReport(global)
+                upReportOpenTime(global)
             } else {
                 mainWindow?.hide()
             }
         } else {
-            upReport(global)
+            upReportOpenTime(global)
         }
     })
 

@@ -31,8 +31,10 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
 
     const [lrcPosition, setLrcPosition] = useState("center")
 
+    const [playProgress, setPlayProgress] = useState({name: null, time: 0, current: 0, total: 0})
+
     useImperativeHandle(ref, () => ({
-        setMusicDetail: (info) => {
+        setMusicDetail: (info, currentIndex, totalIndex) => {
 
             setCover(parseCover(info.cover))
 
@@ -51,8 +53,19 @@ export const MusicDetail = forwardRef(({musicDetailVisible, isDialogOpen, lrcLan
                 zhLrc: info.zhLrc || '',
                 romaLrc: info.romaLrc || ''
             })
+
+            setPlayProgress({name: info.name, time: info.currentTime, current: currentIndex, total: totalIndex})
         }
     }))
+
+    useMemo(() => {
+        if (3 * playProgress.current > playProgress.total) {
+            playProgress.name && Store.set("upReportSong", {
+                name: playProgress.name,
+                time: Math.floor(playProgress.time)
+            })
+        }
+    }, [playProgress.current, playProgress.total])
 
     useMemo(() => {
         const array = []

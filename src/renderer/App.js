@@ -226,13 +226,14 @@ function App({dispatch}) {
 
     // 歌曲播放时间回调
     const onAudioTimeChange = (info) => {
-        musicDetailRef.current?.setMusicDetail(info)
         let jpIndex = 0
         let jpList = null
         if (info.jpLrc) {
             jpList = parseLrc(info.jpLrc)
             jpIndex = WorkUtils.currentLyricIndex(jpList.lyrics, info.currentTime)
         }
+
+        musicDetailRef.current?.setMusicDetail(info, jpIndex, jpList === null ? 0 : jpList.lyrics.length)
 
         const {prevLrc, nextLrc, singleLrc} = WorkUtils.parseTickLrc(currentLrcStatus, info, jpList, jpIndex)
 

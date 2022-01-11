@@ -74,17 +74,28 @@ export function portIsOccupied(port: number) {
 }
 
 // 停止运行前上传使用时长数据
-export function upReport(global: any) {
+export function upReportOpenTime(global: any) {
     const startTime = global.startTime
     const endTime = new Date().getTime()
     const during = endTime - startTime
     if (during > 100000) {
-        Sentry.setTag("t-during", during)
-        Sentry.setTag("t-beginTime", startTime)
-        Sentry.setTag("t-ceaseTime", endTime)
-        Sentry.captureMessage('start - end - during')
+        Sentry.withScope(scope => {
+            scope.setTag("t-during", during)
+            scope.setTag("t-beginTime", startTime)
+            scope.setTag("t-ceaseTime", endTime)
+            Sentry.captureMessage('start-end-during')
+        })
     }
     setTimeout(() => {
         app.exit(0)
     }, 1500)
+}
+
+// 上传播放歌曲数据
+export function upReportPlaySong(upReportSongInfo: any) {
+    Sentry.withScope(scope => {
+        scope.setTag("s-name", upReportSongInfo.name)
+        scope.setTag("s-time", upReportSongInfo.time)
+        Sentry.captureMessage("play-song-info")
+    })
 }

@@ -6,7 +6,7 @@ import createFuncBtn, {thumbarButtons} from "./modules/dockAndTray";
 import init from "./modules/inital";
 import createLyricWindow from "./windows/desktopLyricWindow";
 import createMainWindow from "./windows/mainWindow";
-import {upReport} from "./util";
+import {upReportOpenTime} from "./util";
 
 // 阻止应用多开
 const gotTheLock = app.requestSingleInstanceLock()
@@ -53,5 +53,5 @@ app.on('window-all-closed', () => {
 
 powerMonitor.on('shutdown', e => {
     e.preventDefault()
-    upReport(global)
+    upReportOpenTime(global)
 })

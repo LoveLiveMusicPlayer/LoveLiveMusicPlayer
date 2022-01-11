@@ -1,6 +1,6 @@
 // @ts-nocheck
 import {app, dialog, ipcMain, nativeImage} from "electron";
-import {portIsOccupied} from "../util";
+import {portIsOccupied, upReportPlaySong} from "../util";
 import update from "./update";
 import {thumbarButtons} from "./dockAndTray";
 import path from "path";
@@ -133,4 +133,8 @@ export default function () {
             global?.lyricWindow?.webContents.send("show-lock");
         }
     });
+
+    ipcMain.on("upReportSong", (event, data) => {
+        data && upReportPlaySong(data)
+    })
 }
