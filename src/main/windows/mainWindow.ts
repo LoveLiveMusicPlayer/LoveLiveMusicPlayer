@@ -4,6 +4,7 @@ import MenuBuilder from "../modules/menu";
 import path from "path";
 import {RESOURCES_PATH} from "../modules/inital";
 import {clearTimeout} from "timers";
+import * as Sentry from "@sentry/electron";
 import {globalShortcut} from "electron";
 
 const {resolveHtmlPath} = require("../util");
@@ -32,6 +33,22 @@ const createMainWindow = function (BrowserWindow: any) {
             webSecurity: false,
             devTools: false
         }
+    }
+
+    // 停止运行前上传使用时长数据
+    const upReport = () => {
+        const startTime = global.startTime
+        const endTime = new Date().getTime()
+        const during = endTime - startTime
+        if (during > 100000) {
+            Sentry.setTag("t-during", during)
+            Sentry.setTag("t-beginTime", startTime)
+            Sentry.setTag("t-ceaseTime", endTime)
+            Sentry.captureMessage('start - end - during')
+        }
+        setTimeout(() => {
+            app.exit(0)
+        }, 1500)
     }
 
     let mainWindow = new BrowserWindow(option);
@@ -83,12 +100,12 @@ const createMainWindow = function (BrowserWindow: any) {
         if (!global?.willQuitApp) {
             event.preventDefault()
             if (process.platform === 'linux') {
-                app.exit(0)
+                upReport()
             } else {
                 mainWindow?.hide()
             }
         } else {
-            app.exit(0)
+            upReport()
         }
     })
 
