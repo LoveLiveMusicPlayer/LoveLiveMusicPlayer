@@ -1,11 +1,12 @@
 // @ts-nocheck
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-import {app, BrowserWindow, globalShortcut} from 'electron';
+import {app, BrowserWindow, globalShortcut, powerMonitor} from 'electron';
 import createFuncBtn, {thumbarButtons} from "./modules/dockAndTray";
 import init from "./modules/inital";
 import createLyricWindow from "./windows/desktopLyricWindow";
 import createMainWindow from "./windows/mainWindow";
+import {upReport} from "./util";
 
 // 阻止应用多开
 const gotTheLock = app.requestSingleInstanceLock()
@@ -48,4 +49,9 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit()
     }
+})
+
+powerMonitor.on('shutdown', e => {
+    e.preventDefault()
+    upReport(global)
 })

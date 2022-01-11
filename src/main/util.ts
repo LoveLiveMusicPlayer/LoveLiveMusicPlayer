@@ -1,16 +1,18 @@
 /* eslint import/prefer-default-export: off, import/no-mutable-exports: off */
 import {URL} from 'url';
 import path from 'path';
+import * as Sentry from "@sentry/electron";
+import {app} from "electron";
 
 const net = require('net')
 
 export let resolveHtmlPath: (htmlFileName: string) => string;
 
 if (process.env.NODE_ENV === 'development') {
-  const port = process.env.PORT || 1212;
-  resolveHtmlPath = (htmlFileName: string) => {
-      const url = new URL(`http://localhost:${port}`);
-      url.pathname = htmlFileName;
+    const port = process.env.PORT || 1212;
+    resolveHtmlPath = (htmlFileName: string) => {
+        const url = new URL(`http://localhost:${port}`);
+        url.pathname = htmlFileName;
       return url.href;
   };
 } else {
@@ -69,4 +71,20 @@ export function portIsOccupied(port: number) {
             }
         })
     })
+}
+
+// 停止运行前上传使用时长数据
+export function upReport(global: any) {
+    const startTime = global.startTime
+    const endTime = new Date().getTime()
+    const during = endTime - startTime
+    if (during > 100000) {
+        Sentry.setTag("t-during", during)
+        Sentry.setTag("t-beginTime", startTime)
+        Sentry.setTag("t-ceaseTime", endTime)
+        Sentry.captureMessage('start - end - during')
+    }
+    setTimeout(() => {
+        app.exit(0)
+    }, 1500)
 }
