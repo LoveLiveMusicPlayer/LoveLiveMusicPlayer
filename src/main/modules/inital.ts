@@ -17,6 +17,7 @@ export const RESOURCES_PATH = app.isPackaged
 export default function () {
     Sentry.init({dsn: SENTRY_URL});
     Sentry.setTag("sn", machineIdSync(true))
+    Sentry.setTag("s-env", process.env.NODE_ENV)
     app.commandLine.appendSwitch("--disable-http-cache")
     app.commandLine.appendSwitch('wm-window-animations-disabled')
 

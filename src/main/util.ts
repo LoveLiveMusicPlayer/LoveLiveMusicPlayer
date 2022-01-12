@@ -94,9 +94,9 @@ export function upReportOpenTime(global: any) {
 // 上传播放歌曲数据
 export function upReportPlaySong(reportInfo: any) {
     Sentry.withScope(scope => {
-        scope.setTag("s-name", reportInfo.name)
-        scope.setTag("s-count", reportInfo.count)
-        scope.setTag("s-during", reportInfo.during)
+        scope.setTag("t-name", reportInfo.name)
+        scope.setTag("t-count", reportInfo.count)
+        scope.setTag("t-during", reportInfo.during)
         Sentry.captureMessage("play-song-info")
     })
 }
