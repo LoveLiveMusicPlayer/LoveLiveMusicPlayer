@@ -31,7 +31,7 @@ const createMainWindow = function (BrowserWindow: any) {
             enableRemoteModule: true,
             contextIsolation: false,
             webSecurity: false,
-            devTools: false
+            devTools: true
         }
     }
 

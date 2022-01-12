@@ -244,6 +244,7 @@ class AudioPlayer extends React.PureComponent {
                     {...params}
                     onModeChange={(mode) => {
                         this.updateParams({mode})
+                        this.r.props.onPlayerModeChange(mode)
                     }}
                     onPlayModeChange={(playMode) => {
                         Store.set('playMode', playMode)
