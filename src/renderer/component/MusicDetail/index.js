@@ -84,7 +84,7 @@ export const MusicDetail = forwardRef(({
             if (map.has(currentTime)) {
                 map.set(currentTime, map.get(currentTime) + 1)
             }
-            if (currentTime - prevTime > 1000) {
+            if (currentTime - prevTime > 800) {
                 Store.set("upReportSong", JSON.stringify(AppUtils._strMapToObj(map)))
             }
         } else if (prevTime === latest.nextTime) {

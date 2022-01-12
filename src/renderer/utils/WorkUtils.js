@@ -489,9 +489,9 @@ export const WorkUtils = {
         // 播放时长
         let during = 0
         // 完整的map
-        let mapList = []
+        const mapList = []
         // 过滤掉0的map
-        let map_no_zero = []
+        const map_no_zero = []
         originMap.forEach((value, key) => {
             mapList.push({
                 time: key,
@@ -523,8 +523,8 @@ export const WorkUtils = {
             obj = _.filter(obj, function (o) {
                 return o.count > Math.floor(mapList.length / 3)
             })
-            // 对满足要求的kv进行降序排序，首位即使出现频率最高的播放数
-            obj = _.orderBy(obj, 'count', 'desc')
+            // 对满足要求的kv进行记录播放数的降序排序，首位即是出现频率最高的播放数
+            obj = _.orderBy(obj, 'value', 'desc')
 
             if (obj.length > 0) {
                 // 取首位的记录的播放数

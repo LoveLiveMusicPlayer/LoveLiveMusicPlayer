@@ -263,14 +263,14 @@ function App({dispatch}) {
                 // 改变当前的日文歌词
                 latestJPLyric = info.jpLrc
                 // 清空数组
-                timeList.slice(0, timeList.length)
+                timeList = []
                 // 将每一句歌词的起始时间戳拼成数组对象
                 jpList.lyrics.map(item => {
                     timeList.push(item.startMillisecond)
                 })
             } else {
                 // 歌词没有发生改变时，清空数组，让歌词页逻辑不再被触发
-                timeList.slice(0, timeList.length)
+                timeList = []
             }
         }
         // 将各种各样的信息发送到歌词页中，等待进一步的逻辑判断
