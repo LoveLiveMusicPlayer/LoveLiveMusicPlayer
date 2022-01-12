@@ -12,6 +12,7 @@ import {INIT_CHECK_FILE, REQUEST_LATEST_VERSION_URL} from "./URLHelper";
 import {parse as parseLrc} from "clrc";
 import {SongMenuHelper} from "../dao/SongMenuHelper";
 import {LoveHelper} from "../dao/LoveHelper";
+import * as _ from 'lodash'
 
 const path = require('path');
 
@@ -481,15 +482,61 @@ export const WorkUtils = {
         setTableData && setTableData(tableData)
     },
 
-    aaa(map) {
-        const notZeroMap = new Map()
-        map.forEach((value, key) => {
+    // 计算播放的真实次数和对应的时长
+    calcTrulyPlayInfo(originMap) {
+        let count
+        let during = 0
+        let mapList = []
+        let map_no_zero = []
+        originMap.forEach((value, key) => {
+            mapList.push({
+                time: key,
+                count: value
+            })
             if (value > 0) {
-                notZeroMap.set(key, value)
+                map_no_zero.push({
+                    time: key,
+                    count: value
+                })
             }
         })
-        notZeroMap.forEach((value, key) => {
-            console.log(key + " - " + value)
-        })
+
+        const calcObj = _.countBy(map_no_zero, 'count')
+        let obj = []
+        for (let key in calcObj) {
+            if (calcObj.hasOwnProperty(key)) {
+                obj.push({
+                    value: key,
+                    count: calcObj[key]
+                })
+            }
+        }
+
+        if (obj.length > 0) {
+            obj = _.filter(obj, function (o) {
+                return o.count > Math.floor(mapList.length / 3)
+            })
+            obj = _.orderBy(obj, 'count', 'desc')
+
+            if (obj.length > 0) {
+                count = Number(obj[0].value)
+
+                for (let i = 0; i < mapList.length - 2; i++) {
+                    const currentCount = Number(mapList[i].count)
+                    const currentTime = Number(mapList[i].time)
+                    const trulyCount = currentCount > count ? count : currentCount
+
+                    if (i === 0) {
+                        during += currentTime * trulyCount
+                    } else {
+                        during += (Number(mapList[i + 1].time) - currentTime) * trulyCount
+                    }
+                }
+
+                return {count, during}
+            }
+        }
+
+        return null
     }
 }

@@ -251,6 +251,7 @@
         "electron-updater": "^4.6.1",
         "http-server": "^14.0.0",
         "js-export-xlsx": "^1.0.9",
+        "lodash": "^4.17.21",
         "moment": "^2.29.1",
         "music-metadata": "^7.11.4",
         "nedb": "^1.8.0",

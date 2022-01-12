@@ -135,6 +135,6 @@ export default function () {
     });
 
     ipcMain.on("upReportSong", (event, data) => {
-        data && upReportPlaySong(data)
+        upReportPlaySong(data)
     })
 }
