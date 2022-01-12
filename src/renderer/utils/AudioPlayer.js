@@ -20,6 +20,7 @@ const {connect} = require('react-redux')
 let currentMusicUniqueId = ""
 let currentPlayList = []
 const lrc = {jpLrc: null, zhLrc: null, romaLrc: null}
+let currentMusicName = null
 
 class AudioPlayer extends React.PureComponent {
 
@@ -99,22 +100,26 @@ class AudioPlayer extends React.PureComponent {
         })
     }
 
+    // 切换播放/暂停
     onTogglePlay = () => {
         this.audioInstance?.togglePlay()
     }
 
+    // 上一首
     onPrevPlay = () => {
         if (currentPlayList.length > 1) {
             this.audioInstance?.playPrev()
         } else this.audioInstance?.load()
     }
 
+    // 下一首
     onNextPlay = () => {
         if (currentPlayList.length > 1) {
             this.audioInstance?.playNext()
         } else this.audioInstance?.load()
     }
 
+    // 设置播放器是否全屏
     setFull = (isFullScreen) => {
         this.audioInstance.setFullScreen(isFullScreen)
     }
@@ -183,6 +188,7 @@ class AudioPlayer extends React.PureComponent {
         )
     }
 
+    // 添加一首歌到指定歌单
     addListToMenu = async (id) => {
         if (!AppUtils.isEmpty(currentMusicUniqueId)) {
             const music = await MusicHelper.findOneMusicByUniqueId(currentMusicUniqueId)
@@ -194,6 +200,7 @@ class AudioPlayer extends React.PureComponent {
         }
     }
 
+    // 使得对应播放模式切换到正确的歌曲（修复播放器三方库的bug）
     handleNextPlay = (audioLists, audioInfo, playMode) => {
         let orderLoopCount = 0
         audioLists.map((item, index) => {
@@ -268,18 +275,25 @@ class AudioPlayer extends React.PureComponent {
                     }}
                     onAudioPlay={async audioInfo => {
                         try {
+                            // 记录当前播放的歌曲唯一id
                             currentMusicUniqueId = audioInfo._id
                             this.props.dispatch(musicAction.playId(audioInfo._id))
+                            // 当唯一id与记录的id不相同时，触发上报逻辑
                             if (Store.get("playId") !== audioInfo._id) {
                                 Store.set("playId", audioInfo._id)
+                                // 获取歌词页保存的map
                                 const upReportSongInfo = Store.get("upReportSong")
                                 if (upReportSongInfo) {
+                                    // 清空map对应的存储
                                     Store.delete("upReportSong")
-
+                                    // 生成可读的原map
                                     const map = AppUtils._objToStrMap(JSON.parse(upReportSongInfo))
                                     const reportInfo = WorkUtils.calcTrulyPlayInfo(map)
-                                    if (reportInfo) {
-                                        reportInfo.name = audioInfo.name
+                                    // 当上报信息存在时
+                                    if (reportInfo && currentMusicName) {
+                                        // 赋值 切歌前的歌曲名
+                                        reportInfo.name = currentMusicName
+                                        // 发送到主线程进行上报
                                         ipcRenderer.send('upReportSong', reportInfo)
                                     }
                                 }
@@ -289,6 +303,7 @@ class AudioPlayer extends React.PureComponent {
                             })
                             ipcRenderer.send('musicName', "当前播放:\n" + audioInfo.name)
                             ipcRenderer.send('setPlaying', true)
+                            currentMusicName = audioInfo.name
                         } catch (e) {
                             console.log(e)
                         }

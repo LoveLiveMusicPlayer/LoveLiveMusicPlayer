@@ -43,16 +43,23 @@ const openNotification = (message) => {
 let currentLrcStatus = 'jp' // jp: 前后均日; zh: 前日后中; roma: 前日后罗马;
 
 function App({dispatch}) {
+    // 播放器控件 引用
     let playerRef = useRef()
+    // 歌词页 引用
     let musicDetailRef = useRef()
 
     let honokaTimer = null
+    // 控制打开歌词页
     let isOpenMusicDialog = false
+    // 控制更新切换歌曲
     let latestJPLyric = null
+    // 上次显示歌词（上一句、本句、下一句）
     let prevLyric = {prevLrc: '', nextLrc: '', singleLrc: ''}
+    // 切换的歌曲对应的每句的起始时间轴数组
+    let timeList = []
+
     let navigate = useNavigate()
     let location = useLocation()
-    let timeList = []
 
     // 音乐馆: -2; 我喜欢: -1; 最近播放: 0; 歌单: 1 ~ n
     const [chooseItem, setChooseItem] = useState(-2)
@@ -211,11 +218,8 @@ function App({dispatch}) {
         isOpenMusicDialog = !isWillClose
     }
 
-    const onClickLyric = (status) => {
-        ipcRenderer.send('toggle-desktop-lyric', status)
-    }
-
-    const onClickCover2 = (isOpen) => {
+    // 点击了左下角封面回调
+    const onClickCoverCallback = (isOpen) => {
         setMusicDetailVisible(isOpen)
         if (isOpen) {
             setIsDialogOpen(true)
@@ -226,34 +230,55 @@ function App({dispatch}) {
         }
     }
 
+    // 切换桌面歌词开关状态
+    const onClickLyric = (status) => {
+        ipcRenderer.send('toggle-desktop-lyric', status)
+    }
+
     // 歌曲播放时间回调
     const onAudioTimeChange = (info) => {
+        // 当前播放的索引（以日文歌词为基准）
         let jpIndex = 0
+        // 前一句的起始时间轴
         let prevTime = 0
+        // 本句的起始时间轴
         let currentTime = 0
+        // 后一句的起始时间轴
         let nextTime = 0
+        // 根据日文歌词解析出来的歌词列表
         let jpList = null
 
         if (info.jpLrc) {
+            // 将日文字符串歌词转化为可被处理的歌词数组
             jpList = parseLrc(info.jpLrc)
+            // 得到当前时间对应的前一句、本句、后一句对应的索引
             const triple = WorkUtils.threeLyricIndex(jpList.lyrics, info.currentTime)
             jpIndex = triple.current
+            // 得到当前时间对应的前一句、本句、后一句对应的起始时间戳
             currentTime = AppUtils.isNull(jpList.lyrics[jpIndex]) ? 0 : jpList.lyrics[jpIndex].startMillisecond
             prevTime = AppUtils.isNull(jpList.lyrics[triple.prev]) ? 0 : jpList.lyrics[triple.prev].startMillisecond
             nextTime = AppUtils.isNull(jpList.lyrics[triple.next]) ? 0 : jpList.lyrics[triple.next].startMillisecond
-
+            // 当日文歌词改变时，认为切换了歌曲（可能存在相同歌词，认为是同一首歌曲，但是问题不大）
             if (info.jpLrc !== latestJPLyric) {
+                // 改变当前的日文歌词
                 latestJPLyric = info.jpLrc
+                // 清空数组
                 timeList.slice(0, timeList.length)
+                // 将每一句歌词的起始时间戳拼成数组对象
                 jpList.lyrics.map(item => {
                     timeList.push(item.startMillisecond)
                 })
             } else {
-                timeList = []
+                // 歌词没有发生改变时，清空数组，让歌词页逻辑不再被触发
+                timeList.slice(0, timeList.length)
             }
         }
+        // 将各种各样的信息发送到歌词页中，等待进一步的逻辑判断
         musicDetailRef.current?.setMusicDetail(info, prevTime, currentTime, nextTime, timeList)
 
+        // 获取桌面歌词要显示的歌词
+        // 当为单行歌词时，要显示的是 singleLrc
+        // 当为双行歌词时，要显示的分别是 prevLrc、nextLrc
         const {prevLrc, nextLrc, singleLrc} = WorkUtils.parseTickLrc(currentLrcStatus, info, jpList, jpIndex)
 
         // 过滤传递文本，优化总线传输
@@ -261,6 +286,7 @@ function App({dispatch}) {
             prevLyric.prevLrc = prevLrc
             prevLyric.nextLrc = nextLrc
             prevLyric.singleLrc = singleLrc
+            // 将歌词信息发送到桌面歌词窗口
             ipcRenderer.send('desktop-lrc-text', {prevLrc: prevLrc, nextLrc: nextLrc, singleLrc: singleLrc})
         }
     }
@@ -270,6 +296,7 @@ function App({dispatch}) {
             <img className={'imgBack'} src={Images.ICON_BACK} onClick={() => navigate(-1)}/>
     }
 
+    // 搭建路由逻辑
     const renderRouter = () => {
         if (showRouter) {
             return (
@@ -455,8 +482,8 @@ function App({dispatch}) {
 
     useEffect(() => {
         // 实现点击封面收回时延迟动效的监听器
-        Bus.addListener("openMusicDetail", onClickCover2)
-        return () => removeEventListener("openMusicDetail", onClickCover2)
+        Bus.addListener("openMusicDetail", onClickCoverCallback)
+        return () => removeEventListener("openMusicDetail", onClickCoverCallback)
     }, [musicDetailVisible])
 
     return (

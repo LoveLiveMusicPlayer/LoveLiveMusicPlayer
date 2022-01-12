@@ -55,6 +55,7 @@ export const AppUtils = {
         return fs.readFileSync(filePath, 'utf-8')
     },
 
+    // map转对象
     _strMapToObj(strMap) {
         let obj = Object.create(null);
         for (let [k, v] of strMap) {
@@ -63,6 +64,7 @@ export const AppUtils = {
         return obj;
     },
 
+    // 对象转map
     _objToStrMap(obj) {
         let strMap = new Map();
         for (let k of Object.keys(obj)) {

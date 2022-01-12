@@ -484,9 +484,13 @@ export const WorkUtils = {
 
     // 计算播放的真实次数和对应的时长
     calcTrulyPlayInfo(originMap) {
+        // 播放次数
         let count
+        // 播放时长
         let during = 0
+        // 完整的map
         let mapList = []
+        // 过滤掉0的map
         let map_no_zero = []
         originMap.forEach((value, key) => {
             mapList.push({
@@ -501,6 +505,8 @@ export const WorkUtils = {
             }
         })
 
+        // 将过滤掉0的map根据 count 字段进行数量统计生成计算后的对象
+        // value: 记录的播放数; count: 在全部歌词中统计到播放数的总数
         const calcObj = _.countBy(map_no_zero, 'count')
         let obj = []
         for (let key in calcObj) {
@@ -513,23 +519,32 @@ export const WorkUtils = {
         }
 
         if (obj.length > 0) {
+            // 过滤不满足播放全部歌词1/3的kv
             obj = _.filter(obj, function (o) {
                 return o.count > Math.floor(mapList.length / 3)
             })
+            // 对满足要求的kv进行降序排序，首位即使出现频率最高的播放数
             obj = _.orderBy(obj, 'count', 'desc')
 
             if (obj.length > 0) {
+                // 取首位的记录的播放数
                 count = Number(obj[0].value)
 
+                // 将完整的map进行遍历，在前置设置虚拟节点0，并且不取map的最后一位
                 for (let i = 0; i < mapList.length - 2; i++) {
                     const currentCount = Number(mapList[i].count)
                     const currentTime = Number(mapList[i].time)
-                    const trulyCount = currentCount > count ? count : currentCount
+                    // 得到的要进行计算的次数
+                    const calcCount = currentCount > count ? count : currentCount
 
                     if (i === 0) {
-                        during += currentTime * trulyCount
+                        // 第一帧步长直接取 mapList[0].time - 0 即 ${currentTime}
+                        // 时长则是 步长 * 播放次数
+                        during += currentTime * calcCount
                     } else {
-                        during += (Number(mapList[i + 1].time) - currentTime) * trulyCount
+                        // 后续帧步长则取 后一帧的起始时间戳 - 当前帧的起始时间戳
+                        // 时长则是 步长 * 播放次数
+                        during += (Number(mapList[i + 1].time) - currentTime) * calcCount
                     }
                 }
 
