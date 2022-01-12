@@ -76,7 +76,7 @@ const createMainWindow = function (BrowserWindow: any) {
 
     // 离开全屏时注销 esc 退出功能
     mainWindow.on('leave-full-screen', () => {
-        globalShortcut.unregisterAll()
+        globalShortcut.unregister('ESC')
         mainWindow.webContents.send('enter-full-screen', false)
     })
 
