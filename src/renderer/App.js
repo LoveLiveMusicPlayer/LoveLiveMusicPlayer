@@ -83,8 +83,6 @@ function App({dispatch}) {
     // 是否处于全屏模式
     const [fullScreen, setFullScreen] = useState(false)
 
-    const [playerWindowMode, setPlayerWindowMode] = useState('full')
-
     // 点击企划图片
     const onBabyClick = () => {
         setShowMenu(!showMenu)
@@ -203,23 +201,24 @@ function App({dispatch}) {
         volumeFade: {
             fadeIn: 1000,
             fadeOut: 1000,
-        }
+        },
+
+        responsive: false,
+        toggleMode: false
     }
 
     // 点击了左下角封面
     const onClickCover = (isWillClose) => {
-        if (playerWindowMode === 'mini') {
-            Bus.emit("openMusicDetail", !isWillClose)
-            playerRef.current?.onShowDetail(!isWillClose)
-            options.theme = isWillClose ? "light" : "dark"
-            const title = document.body.getElementsByClassName('audio-lists-panel-header-title')
-            playerRef.current?.updateParams({theme: options.theme})
-            const spans = [...title[0].getElementsByTagName('span')]
-            spans.map(item => {
-                item.style.color = isWillClose ? '#000000' : '#ffffff'
-            })
-            isOpenMusicDialog = !isWillClose
-        }
+        Bus.emit("openMusicDetail", !isWillClose)
+        playerRef.current?.onShowDetail(!isWillClose)
+        options.theme = isWillClose ? "light" : "dark"
+        const title = document.body.getElementsByClassName('audio-lists-panel-header-title')
+        playerRef.current?.updateParams({theme: options.theme})
+        const spans = [...title[0].getElementsByTagName('span')]
+        spans.map(item => {
+            item.style.color = isWillClose ? '#000000' : '#ffffff'
+        })
+        isOpenMusicDialog = !isWillClose
     }
 
     // 点击了左下角封面回调
@@ -525,7 +524,6 @@ function App({dispatch}) {
                 onClickLyric={status => onClickLyric(status)}
                 onClickCover={_ => onClickCover(isOpenMusicDialog)}
                 onAudioTimeChange={onAudioTimeChange}
-                onPlayerModeChange={mode => setPlayerWindowMode(mode)}
                 onClearAudioList={_ => {
                     document.getElementsByClassName('audio-lists-panel-header-close-btn')[0].click()
                     if (isOpenMusicDialog) {

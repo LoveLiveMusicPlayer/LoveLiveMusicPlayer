@@ -175,7 +175,7 @@ class AudioPlayer extends React.PureComponent {
                         onMouseOut={() => this.setState({onHover: false})}
                     />
                 </Dropdown>
-                <div style={{width: 10}}/>
+                <div style={{width: 15}}/>
                 <img
                     src={this.state.lyricShow ? Images.ICON_LRC_OPEN : Images.ICON_LRC_CLOSE}
                     width={25}
@@ -244,7 +244,6 @@ class AudioPlayer extends React.PureComponent {
                     {...params}
                     onModeChange={(mode) => {
                         this.updateParams({mode})
-                        this.r.props.onPlayerModeChange(mode)
                     }}
                     onPlayModeChange={(playMode) => {
                         Store.set('playMode', playMode)
