@@ -128,19 +128,24 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
             <div className={'selectContainer'} style={{margin: 0, background: 'transparent'}}>
                 <p className={'customTitleText'}>我的音乐</p>
             </div>
-            <div className={chooseItem === -2 ? 'selectContainer' : 'unselectContainer'}
-                 onClick={() => onChooseItem(-2)}>
+            <div className={chooseItem === -3 ? 'selectContainer' : 'unselectContainer'}
+                 onClick={() => onChooseItem(-3)}>
                 <img className={'customPic'} src={Images.ICON_FUNC_MUSIC}/>
                 <p className={'customText'} style={{paddingLeft: '10px'}}>音乐馆</p>
             </div>
-            <div className={chooseItem === -1 ? 'selectContainer' : 'unselectContainer'}
-                 onClick={() => onChooseItem(-1)}>
+            <div className={chooseItem === -2 ? 'selectContainer' : 'unselectContainer'}
+                 onClick={() => onChooseItem(-2)}>
                 <img className={'customPic'} src={Images.ICON_FUNC_LOVE}/>
                 <p className={'customText'} style={{paddingLeft: '10px'}}>我喜欢</p>
             </div>
-            <div className={chooseItem === 0 ? 'selectContainer' : 'unselectContainer'} onClick={() => onChooseItem(0)}>
+            <div className={chooseItem === -1 ? 'selectContainer' : 'unselectContainer'}
+                 onClick={() => onChooseItem(-1)}>
                 <img className={'customPic'} src={Images.ICON_FUNC_HISTORY}/>
                 <p className={'customText'} style={{paddingLeft: '10px'}}>最近播放</p>
+            </div>
+            <div className={chooseItem === 0 ? 'selectContainer' : 'unselectContainer'} onClick={() => onChooseItem(0)}>
+                <img className={'customPic'} src={Images.ICON_FUNC_HISTORY}/>
+                <p className={'customText'} style={{paddingLeft: '10px'}}>歌曲传输</p>
             </div>
 
             <div style={{marginTop: '30px'}}/>

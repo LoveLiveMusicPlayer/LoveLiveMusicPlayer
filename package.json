@@ -249,13 +249,18 @@
         "electron-log": "^4.4.4",
         "electron-store": "^8.0.1",
         "electron-updater": "^4.6.1",
+        "faye-websocket": "^0.11.4",
+        "flac-bindings": "^2.7.0",
         "http-server": "^14.0.0",
+        "ip": "^1.1.5",
         "js-export-xlsx": "^1.0.9",
         "lodash": "^4.17.21",
         "moment": "^2.29.1",
         "music-metadata": "^7.11.4",
         "nedb": "^1.8.0",
         "node-machine-id": "^1.1.12",
+        "p-queue": "^7.2.0",
+        "qrcode": "^1.5.0",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-jinke-music-player": "^4.24.2",
@@ -270,7 +275,8 @@
         "redux-persist": "^6.0.0",
         "redux-thunk": "^2.4.1",
         "regenerator-runtime": "^0.13.9",
-        "styled-components": "^5.3.1"
+        "styled-components": "^5.3.1",
+        "wav": "^1.0.2"
     },
     "devEngines": {
         "node": ">=14.x",
@@ -291,6 +297,10 @@
             }
         ],
         "singleQuote": true
+    },
+    "optionalDependencies": {
+        "bufferutil": "^4.0.6",
+        "utf-8-validate": "^5.0.8"
     },
     "husky": {
         "hooks": {

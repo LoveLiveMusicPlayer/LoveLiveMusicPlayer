@@ -24,6 +24,7 @@ import {WorkUtils} from "./utils/WorkUtils";
 import {WindowButton} from "./component/WindowButton";
 import {appAction} from "./actions/app";
 import {parse as parseLrc} from 'clrc';
+import Transfer from "./pages/Transfer";
 
 const {ipcRenderer} = require('electron')
 const os = require("os").platform();
@@ -308,6 +309,7 @@ function App({dispatch}) {
                         <Route path="/album/:id" element={<Album/>}/>
                         <Route path="/menu/:id" element={<Menu/>}/>
                         <Route path="/love" element={<Love/>}/>
+                        <Route path="/transfer" element={<Transfer/>}/>
                     </Routes>
                 </div>
             )
@@ -318,15 +320,19 @@ function App({dispatch}) {
     const onMenuChange = (index) => {
         setChooseItem(index)
         switch (index) {
-            case -2:
+            case -3:
                 setShowRouter(false)
                 navigate('/home', {replace: true})
                 break
-            case -1:
+            case -2:
                 setShowRouter(true)
                 navigate('/love', {replace: true})
                 break
+            case -1:
+                break
             case 0:
+                setShowRouter(true)
+                navigate('/transfer', {replace: true})
                 break
             default:
                 setShowRouter(true)

@@ -4,6 +4,8 @@ import * as mm from "music-metadata";
 import {WorkUtils} from "./WorkUtils";
 import moment from "moment";
 import {OSS_URL_HEAD} from "./URLHelper";
+import {FileDecoder} from "flac-bindings/lib/decoder";
+import wav from "wav";
 
 const {ipcRenderer} = require("electron")
 
@@ -283,6 +285,101 @@ export const AppUtils = {
         const deltaY = point.y - area.top
         return !(deltaX <= 0 || deltaX >= area.right - area.left || deltaY <= 0 || deltaY >= area.bottom - area.top);
     },
+
+    // 递归创建文件夹
+    mkdirsSync(dirname) {
+        if (fs.existsSync(dirname)) return true;
+        if (this.mkdirsSync(path.dirname(dirname))) {
+            fs.mkdirSync(dirname);
+            return true;
+        }
+    },
+
+    // 删除转换的 wav 文件
+    delWavFile(_path, reservePath) {
+        if (fs.existsSync(_path)) {
+            if (fs.statSync(_path).isDirectory()) {
+                let files = fs.readdirSync(_path);
+                files.forEach((file, index) => {
+                    let currentPath = _path + "/" + file;
+                    if (fs.statSync(currentPath).isDirectory()) {
+                        this.delWavFile(currentPath, reservePath);
+                    } else if (path.parse(currentPath).ext === "wav") {
+                        fs.unlinkSync(currentPath);
+                    }
+                });
+                if (_path !== reservePath) {
+                    fs.rmdirSync(_path);
+                }
+            } else if (path.parse(_path).ext === "wav") {
+                fs.unlinkSync(_path);
+            }
+        }
+    },
+
+    // 生成可中断的异步任务
+    makeCancelable(promise) {
+        let hasCanceled_ = false;
+        const wrappedPromise = new Promise((resolve, reject) => {
+            promise.then((val) =>
+                hasCanceled_ ? reject({isCanceled: true}) : resolve(val)
+            );
+            promise.catch((error) =>
+                hasCanceled_ ? reject({isCanceled: true}) : reject(error)
+            );
+        });
+        return {
+            promise: wrappedPromise,
+            cancel() {
+                hasCanceled_ = true;
+            },
+        };
+    },
+
+    // 处理文件
+    async transfer(pathDir, music, phoneSystem) {
+        let that = this
+        return new Promise(function (resolve, reject) {
+            if (phoneSystem === "ios") {
+                const source = (pathDir + music.musicPath).replace(".wav", ".flac")
+                that.flacToWav(source).then((name) => {
+                    console.log("转换完毕: " + name)
+                    resolve(music)
+                }).catch(e => reject(e))
+            } else {
+                resolve(music)
+            }
+        })
+    },
+
+    // flac 格式转换为 wav
+    flacToWav(musicPath) {
+        return new Promise(function (resolve, reject) {
+            const decoder = new FileDecoder({
+                file: musicPath,
+            })
+            decoder.once('data', (chunk) => {
+                const encoder = new wav.Writer({
+                    channels: decoder.getChannels(),
+                    bitDepth: decoder.getBitsPerSample(),
+                    sampleRate: decoder.getSampleRate(),
+                })
+
+                encoder.write(chunk)
+
+                decoder
+                    .pipe(encoder)
+                    .pipe(fs.createWriteStream(musicPath.replace(".flac", ".wav")))
+                    .on('error', (e) => {
+                        return reject(e.message)
+                    })
+            })
+
+            decoder.on('end', () => {
+                return resolve(path.parse(musicPath).name)
+            })
+        })
+    }
 }
 
 module.export = AppUtils
