@@ -6,7 +6,7 @@ const http = require('http');
 const server = http.createServer();
 let ws = null
 
-export const WS = React.forwardRef(({phoneSystem, downloading, downloadSuccess, downloadFail, finish}, ref) => {
+export const WS = React.forwardRef(({phoneSystem, ready, downloading, downloadSuccess, downloadFail, finish}, ref) => {
 
     React.useImperativeHandle(
         ref,
@@ -36,6 +36,9 @@ export const WS = React.forwardRef(({phoneSystem, downloading, downloadSuccess, 
                                 body: httpServer.port + ""
                             }
                             ws.send(JSON.stringify(message))
+                            break
+                        case "musicList":
+                            ready(JSON.parse(command["body"]))
                             break
                         case "downloading":
                             let args = command["body"].split(" === ")

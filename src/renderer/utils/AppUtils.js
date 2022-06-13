@@ -337,17 +337,17 @@ export const AppUtils = {
     },
 
     // 处理文件
-    async transfer(pathDir, music, phoneSystem) {
+    async transfer(pathDir, music, phoneSystem, runningTag) {
         let that = this
         return new Promise(function (resolve, reject) {
             if (phoneSystem === "ios") {
                 const source = (pathDir + music.musicPath).replace(".wav", ".flac")
                 that.flacToWav(source).then((name) => {
                     console.log("转换完毕: " + name)
-                    resolve(music)
+                    resolve({music: music, oldRunningTag: runningTag})
                 }).catch(e => reject(e))
             } else {
-                resolve(music)
+                resolve({music: music, oldRunningTag: runningTag})
             }
         })
     },
