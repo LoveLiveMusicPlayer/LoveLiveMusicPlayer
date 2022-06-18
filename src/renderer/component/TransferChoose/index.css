@@ -1,5 +1,14 @@
 #albumContainer {
-    height: calc(100% - 150px);
+    height: calc(100% - 210px);
     overflow: auto;
+    padding: 0 16px;
+}
+
+.funcContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
     padding: 0 16px;
 }

@@ -134,14 +134,28 @@ export const TransferChoose = forwardRef(({btnOk}, ref) => {
     }
 
     return (
-        <div id={"albumContainer"}>
+        <>
+            <div id={"albumContainer"}>
+                <List
+                    loading={loading}
+                    dataSource={data}
+                    renderItem={(item, index) => {
+                        const url = Store.get('url') + item["cover_path"][0]
+                        return (
+                            <div key={"div" + item._id}
+                                 style={{display: 'flex', flexDirection: 'row', paddingTop: 12, paddingBottom: 12}}>
+                                <img src={url} style={{width: 150, height: 150, marginTop: 6}}/>
+                                <div style={{flex: 1, display: 'flex', flexDirection: 'column', marginLeft: 40}}>
+                                    <p style={{fontSize: 20, color: 'white', fontWeight: '500'}}>{item.name}</p>
+                                    {renderChildren(item, index)}
+                                </div>
+                            </div>
+                        )
+                    }}
+                />
+            </div>
             {loading === false ?
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                }}>
+                <div className={"funcContainer"}>
                     <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
                         <Checkbox
                             indeterminate={indeterminate}
@@ -152,25 +166,8 @@ export const TransferChoose = forwardRef(({btnOk}, ref) => {
                         </Checkbox>
                         <Button type="primary" disabled={disableNext} onClick={clickOk}>选好了</Button>
                     </div>
-                    <p style={{color: 'gray', fontSize: 12}}>请先选择歌曲，点击按钮后进行配对传输</p>
+                    <p style={{color: 'white', fontSize: 12}}>请先选择歌曲，点击按钮后进行配对传输</p>
                 </div> : null}
-            <List
-                loading={loading}
-                dataSource={data}
-                renderItem={(item, index) => {
-                    const url = Store.get('url') + item["cover_path"][0]
-                    return (
-                        <div key={"div" + item._id}
-                             style={{display: 'flex', flexDirection: 'row', paddingTop: 12, paddingBottom: 12}}>
-                            <img src={url} style={{width: 150, height: 150, marginTop: 6}}/>
-                            <div style={{flex: 1, display: 'flex', flexDirection: 'column', marginLeft: 40}}>
-                                <p style={{fontSize: 20, color: 'white', fontWeight: '500'}}>{item.name}</p>
-                                {renderChildren(item, index)}
-                            </div>
-                        </div>
-                    )
-                }}
-            />
-        </div>
+        </>
     );
 });
