@@ -62,8 +62,8 @@ function App({dispatch}) {
     let navigate = useNavigate()
     let location = useLocation()
 
-    // 音乐馆: -2; 我喜欢: -1; 最近播放: 0; 歌单: 1 ~ n
-    const [chooseItem, setChooseItem] = useState(-2)
+    // 音乐馆: -3; 我喜欢: -2; 最近播放: -1; 歌曲传输: 0 歌单: 1 ~ n
+    const [chooseItem, setChooseItem] = useState(-3)
     // 显示团组的 modal
     const [showMenu, setShowMenu] = useState(false)
     // 显示团组的图片

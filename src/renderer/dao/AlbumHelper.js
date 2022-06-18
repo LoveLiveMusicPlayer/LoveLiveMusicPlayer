@@ -35,6 +35,10 @@ export const AlbumHelper = {
         return db.findAll({group: group})
     },
 
+    findAlbumsFromIndexByLimit(index, limit) {
+        return db.find(index, limit)
+    },
+
     // 根据唯一id获取专辑信息
     findOneAlbumByUniqueId(id) {
         return db.findOne({_id: id})

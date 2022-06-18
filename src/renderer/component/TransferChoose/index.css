@@ -1,0 +1,5 @@
+#albumContainer {
+    height: calc(100% - 150px);
+    overflow: auto;
+    padding: 0 16px;
+}

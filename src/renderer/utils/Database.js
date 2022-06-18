@@ -33,6 +33,22 @@ DB.prototype.findOne = function (query, select, sort) {
 }
 
 /**
+ * 从${index}开始查询${limit}条数据
+ * @param index
+ * @param limit
+ */
+DB.prototype.find = function (index, limit) {
+    return new Promise((resolve, reject) => {
+        this.db.find().skip(index).limit(limit).sort({_id: 1}).exec((err, doc) => {
+            if (err) {
+                return reject(err)
+            }
+            resolve(doc)
+        })
+    })
+}
+
+/**
  * 查找多条
  * @param query object 条件
  * @param select object 过滤结果

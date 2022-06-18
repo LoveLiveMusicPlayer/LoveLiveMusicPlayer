@@ -144,7 +144,7 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
                 <p className={'customText'} style={{paddingLeft: '10px'}}>最近播放</p>
             </div>
             <div className={chooseItem === 0 ? 'selectContainer' : 'unselectContainer'} onClick={() => onChooseItem(0)}>
-                <img className={'customPic'} src={Images.ICON_FUNC_HISTORY}/>
+                <img className={'customPic'} src={Images.ICON_FUNC_WIFI}/>
                 <p className={'customText'} style={{paddingLeft: '10px'}}>歌曲传输</p>
             </div>
 

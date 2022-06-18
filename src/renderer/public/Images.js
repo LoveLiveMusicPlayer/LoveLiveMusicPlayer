@@ -32,6 +32,7 @@ import icon_lrc_close from '../../../assets/image/icon_lrc_close.png'
 import icon_func_music from '../../../assets/image/icon_func_music.png'
 import icon_func_love from '../../../assets/image/icon_func_love.png'
 import icon_func_history from '../../../assets/image/icon_func_history.png'
+import icon_func_wifi from '../../../assets/image/icon_wifi.png'
 import icon_menu_add_select from '../../../assets/image/icon_menu_add_select.png'
 import icon_menu_add_unselect from '../../../assets/image/icon_menu_add_unselect.png'
 
@@ -88,6 +89,7 @@ export const ICON_LRC_CLOSE = icon_lrc_close
 export const ICON_FUNC_MUSIC = icon_func_music
 export const ICON_FUNC_LOVE = icon_func_love
 export const ICON_FUNC_HISTORY = icon_func_history
+export const ICON_FUNC_WIFI = icon_func_wifi
 export const ICON_MENU_ADD_SELECT = icon_menu_add_select
 export const ICON_MENU_ADD_UNSELECT = icon_menu_add_unselect
 

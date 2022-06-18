@@ -379,6 +379,16 @@ export const AppUtils = {
                 return resolve(path.parse(musicPath).name)
             })
         })
+    },
+
+    isStrInArray(str, arr) {
+        let n = arr.length;
+        for (let i = 0; i < n; i++) {
+            if (arr[i] === str) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

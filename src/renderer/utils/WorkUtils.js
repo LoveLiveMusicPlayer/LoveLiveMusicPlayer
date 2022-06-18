@@ -553,5 +553,30 @@ export const WorkUtils = {
         }
 
         return null
+    },
+
+    /**
+     * 判断全选checkbox状态
+     * @param data
+     * @returns -1: 一个都没选 0: 选了但不完全 1: 全部都选择
+     */
+    checkBoxStatus(data) {
+        // 循环检查次数
+        let cycleNum = 0
+        // 已选中的个数
+        let checkNum = 0
+        data.forEach(album => {
+            album.music.forEach(music => {
+                cycleNum++
+                if (music.choose) {
+                    checkNum++
+                }
+            })
+        })
+        if (checkNum === 0) {
+            return -1
+        } else if (cycleNum === checkNum) {
+            return 1
+        } else return 0
     }
 }
