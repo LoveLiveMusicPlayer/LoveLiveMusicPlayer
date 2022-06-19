@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import {connect} from "react-redux";
 import {MusicHelper} from "../../dao/MusicHelper";
 import {AlbumHelper} from "../../dao/AlbumHelper";
@@ -8,6 +8,8 @@ import {AppUtils} from "../../utils/AppUtils";
 import {DBHelper} from "../../dao/DBHelper";
 import {TransferChoose} from "../../component/TransferChoose";
 import {QRDialog} from "../../component/QRDialog";
+import Store from "../../utils/Store";
+import {DownloadDialog} from "../../component/DownloadDialog";
 
 let musicIds = []
 let musicList = []
@@ -18,16 +20,14 @@ let needAllTrans = false;
 
 const Transfer = () => {
     const [qrShow, setQrShow] = useState(false)
-    const [progress, setProgress] = useState(0)
-    const [song, setSong] = useState("")
+    const [downloadShow, setDownloadShow] = useState(false)
     const wsRef = useRef(null)
-    const [phoneSystem, setPhoneSystem] = useState('android')
-    const [button, setButton] = useState(0)
-    const chooserRef = useRef(null)
+    const downloadRef = useRef(null)
 
     const mQueue = new PQueue({concurrency: 1});
 
-    useEffect(() => {
+    const genList = (phoneSystem) => {
+        Store.set("phoneSystem", phoneSystem)
         const task = []
         musicList.length = 0
 
@@ -66,10 +66,20 @@ const Transfer = () => {
             })
             console.log("musicList created")
             setQrShow(false)
+            prepareTask()
         })
-    }, [phoneSystem])
+    }
 
-    function toggle() {
+    function prepareTask() {
+        runningTag = Date.now()
+        const message = {
+            cmd: "prepare",
+            body: JSON.stringify(musicList) + " === " + needAllTrans
+        }
+        wsRef.current?.send(JSON.stringify(message))
+    }
+
+    function stopTask() {
         if (runningTag !== 0) {
             runningTag = 0
             if (task !== null) {
@@ -77,25 +87,15 @@ const Transfer = () => {
                 task = null
             }
             mQueue.clear()
-            pushQueue(musicList)
             const message = {
                 cmd: "stop",
                 body: ""
             }
-            wsRef.current.send(JSON.stringify(message))
-            setButton(0)
-            return
+            wsRef.current?.send(JSON.stringify(message))
         }
-        runningTag = Date.now()
-        const message = {
-            cmd: "prepare",
-            body: JSON.stringify(musicList) + " === " + needAllTrans
-        }
-        wsRef.current.send(JSON.stringify(message))
-        setButton(1)
     }
 
-    async function pushQueue(musicList) {
+    async function pushQueue(musicList, phoneSystem) {
         if (runningTag === 0) {
             return
         }
@@ -119,7 +119,7 @@ const Transfer = () => {
                                     cmd: "download",
                                     body: obj.music.musicUId + " === " + isLast
                                 }
-                                wsRef.current.send(JSON.stringify(message))
+                                wsRef.current?.send(JSON.stringify(message))
                             }
                         }).catch(err => {
                             console.log(err)
@@ -147,14 +147,18 @@ const Transfer = () => {
                     musicIds = [...uIdList]
                     setQrShow(true)
                 }}
-                ref={chooserRef}
+                disable={qrShow || downloadShow}
                 changeSwitch={(checked) => needAllTrans = checked}
+                progress
             />
             <QRDialog isShow={qrShow} close={() => setQrShow(false)}/>
+            <DownloadDialog isShow={downloadShow} onClose={() => {
+                setDownloadShow(false)
+                stopTask()
+            }} ref={downloadRef}/>
             <WS
-                // key={"websocket"}
                 ref={wsRef}
-                phoneSystem={setPhoneSystem}
+                phoneSystem={genList}
                 ready={(transIdList) => {
                     let tempList = []
                     if (needAllTrans) {
@@ -163,7 +167,6 @@ const Transfer = () => {
                         })
                     } else {
                         if (transIdList.length === 0) {
-                            setButton(0)
                             alert("没有任务需要传输")
                             return
                         }
@@ -178,7 +181,6 @@ const Transfer = () => {
                     }
 
                     if (tempList.length === 0) {
-                        setButton(0)
                         alert("没有任务需要传输")
                         return
                     }
@@ -187,15 +189,22 @@ const Transfer = () => {
                         cmd: "ready",
                         body: JSON.stringify(tempList)
                     }
-                    wsRef.current.send(JSON.stringify(message))
-                    pushQueue(tempList)
+                    downloadRef.current?.setList(tempList)
+                    setDownloadShow(true)
+                    wsRef.current?.send(JSON.stringify(message))
+                    pushQueue(tempList, Store.get("phoneSystem", "android"))
                 }}
                 downloading={(musicId, progress) => {
-                    setSong(musicList.find(item => item.musicUId === musicId).musicName)
-                    setProgress(progress)
+                    downloadRef.current?.setProgress({
+                        musicId: musicId,
+                        progress: progress
+                    })
                 }}
                 downloadSuccess={(musicId) => {
-                    setProgress(100)
+                    downloadRef.current?.setProgress({
+                        musicId: musicId,
+                        progress: 100
+                    })
                 }}
                 downloadFail={(musicId) => {
                     if (runningTag === 0) {
@@ -205,7 +214,8 @@ const Transfer = () => {
                 }}
                 finish={() => {
                     console.log(Date.now() - startTime);
-                    setButton(0)
+                    stopTask()
+                    setDownloadShow(false)
                 }}
             />
         </div>

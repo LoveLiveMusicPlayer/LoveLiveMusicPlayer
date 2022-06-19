@@ -1,9 +1,6 @@
 import React, {useEffect} from "react";
 import {DBHelper} from "../dao/DBHelper";
 
-const WebSocket = require('faye-websocket')
-const http = require('http');
-const server = http.createServer();
 let ws = null
 
 export const WS = React.forwardRef(({phoneSystem, ready, downloading, downloadSuccess, downloadFail, finish}, ref) => {
@@ -20,11 +17,13 @@ export const WS = React.forwardRef(({phoneSystem, ready, downloading, downloadSu
     }
 
     useEffect(() => {
+        const WebSocket = require('faye-websocket')
+        const server = require('http').createServer();
         server.on('upgrade', function (request, socket, body) {
             if (WebSocket.isWebSocket(request)) {
                 ws = new WebSocket(request, socket, body);
 
-                ws.on('message', function (event) {
+                ws?.on('message', function (event) {
                     let command = JSON.parse(event.data)
                     switch (command["cmd"]) {
                         case "system":
@@ -35,7 +34,7 @@ export const WS = React.forwardRef(({phoneSystem, ready, downloading, downloadSu
                                 cmd: "port",
                                 body: httpServer.port + ""
                             }
-                            ws.send(JSON.stringify(message))
+                            ws?.send(JSON.stringify(message))
                             break
                         case "musicList":
                             ready(JSON.parse(command["body"]))
@@ -56,9 +55,9 @@ export const WS = React.forwardRef(({phoneSystem, ready, downloading, downloadSu
                     }
                 });
 
-                ws.on('close', function (event) {
+                ws?.on('close', function (event) {
                     console.log('close', event.code, event.reason);
-                    ws = null;
+                    // ws = null;
                 });
             }
         });

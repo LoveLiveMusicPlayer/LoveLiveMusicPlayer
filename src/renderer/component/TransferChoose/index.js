@@ -1,5 +1,5 @@
 import {Button, Checkbox, List, Switch} from 'antd';
-import React, {forwardRef, useEffect, useImperativeHandle, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {AlbumHelper} from "../../dao/AlbumHelper";
 import Store from "../../utils/Store";
 import './index.css'
@@ -9,18 +9,12 @@ import {WorkUtils} from "../../utils/WorkUtils";
 
 const CheckboxGroup = Checkbox.Group;
 
-export const TransferChoose = forwardRef(({btnOk, changeSwitch}, ref) => {
+export const TransferChoose = ({btnOk, changeSwitch, disable}) => {
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState([])
     const [indeterminate, setIndeterminate] = useState(false)
     const [checkAll, setCheckAll] = useState(false)
     const [disableNext, setDisableNext] = useState(true)
-
-    useImperativeHandle(ref, () => ({
-        loading: (needLoad) => {
-            setLoading(needLoad)
-        }
-    }))
 
     const onChange = (albumUId, musicUidList) => {
         for (let i = 0; i < data.length; i++) {
@@ -86,7 +80,7 @@ export const TransferChoose = forwardRef(({btnOk, changeSwitch}, ref) => {
         }
     }, []);
 
-    const renderChildren = (item, index) => {
+    const renderChildren = (item) => {
         const plainOptions = []
         item.music.forEach(music => {
             plainOptions.push({
@@ -95,32 +89,37 @@ export const TransferChoose = forwardRef(({btnOk, changeSwitch}, ref) => {
                 style: {color: 'white'}
             })
         })
-        return <CheckboxGroup
-            className={"checkBoxContainer"}
-            options={plainOptions}
-            value={() => {
-                const arr = []
-                const albumList = data.filter(it => it._id === item._id)
-                if (albumList.length > 0) {
-                    albumList[0].music.forEach(music => {
-                        if (music.choose) {
-                            arr.push(music._id)
+        return (
+            <div style={{display: 'flex', flexDirection: 'row'}}>
+                <CheckboxGroup
+                    className={"checkBoxContainer"}
+                    options={plainOptions}
+                    disabled={disable}
+                    value={() => {
+                        const arr = []
+                        const albumList = data.filter(it => it._id === item._id)
+                        if (albumList.length > 0) {
+                            albumList[0].music.forEach(music => {
+                                if (music.choose) {
+                                    arr.push(music._id)
+                                }
+                            })
                         }
-                    })
-                }
-                return arr
-            }}
-            onChange={(chooseList) => {
-                const arr = []
-                item.music.forEach(music => {
-                    chooseList.forEach(musicUId => {
-                        if (musicUId === music._id) {
-                            arr.push(music._id)
-                        }
-                    })
-                })
-                onChange(item._id, arr)
-            }}/>
+                        return arr
+                    }}
+                    onChange={(chooseList) => {
+                        const arr = []
+                        item.music.forEach(music => {
+                            chooseList.forEach(musicUId => {
+                                if (musicUId === music._id) {
+                                    arr.push(music._id)
+                                }
+                            })
+                        })
+                        onChange(item._id, arr)
+                    }}/>
+            </div>
+        )
     }
 
     const clickOk = () => {
@@ -143,14 +142,14 @@ export const TransferChoose = forwardRef(({btnOk, changeSwitch}, ref) => {
                 <List
                     loading={loading}
                     dataSource={data}
-                    renderItem={(item, index) => {
+                    renderItem={(item) => {
                         const url = Store.get('url') + item["cover_path"][0]
                         return (
                             <div key={"div" + item._id} className={"albumItemContainer"}>
                                 <img className={"albumCover"} src={url}/>
                                 <div className={"albumChildren"}>
                                     <p className={"albumName"}>{item.name}</p>
-                                    {renderChildren(item, index)}
+                                    {renderChildren(item)}
                                 </div>
                             </div>
                         )
@@ -161,6 +160,7 @@ export const TransferChoose = forwardRef(({btnOk, changeSwitch}, ref) => {
                 <div className={"funcContainer"}>
                     <div className={"funcLeftContainer"}>
                         <Checkbox
+                            disabled={disable}
                             indeterminate={indeterminate}
                             onChange={onCheckAllChange}
                             checked={checkAll}
@@ -177,4 +177,4 @@ export const TransferChoose = forwardRef(({btnOk, changeSwitch}, ref) => {
                 </div> : null}
         </>
     );
-});
+};
