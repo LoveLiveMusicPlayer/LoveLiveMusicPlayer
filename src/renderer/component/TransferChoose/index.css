@@ -12,3 +12,47 @@
     margin-top: 12px;
     padding: 0 16px;
 }
+
+.checkBoxContainer {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.albumItemContainer {
+    display: flex;
+    flex-direction: row;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.albumCover {
+    width: 150px;
+    height: 150px;
+    margin-top: 6px;
+}
+
+.albumChildren {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-left: 40px
+}
+
+.albumName {
+    font-size: 20px;
+    color: white;
+    font-weight: 500
+}
+
+.funcLeftContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center
+}
+
+.funcRightText {
+    color: white;
+    font-size: 12px
+}

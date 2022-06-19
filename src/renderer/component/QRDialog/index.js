@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react';
-import {Button, Space} from "antd";
+import React from 'react';
+import {Space} from "antd";
 import Modal from "react-modal";
-import QRCode from "qrcode";
 import ip from "ip";
+import QRCodeCanvas from "qrcode.react";
 
 export const QRDialog = ({isShow, close}) => {
 
@@ -17,7 +17,7 @@ export const QRDialog = ({isShow, close}) => {
         },
         content: {
             width: 300,
-            height: 150,
+            height: 300,
             top: '50%',
             left: '50%',
             right: 'auto',
@@ -32,13 +32,6 @@ export const QRDialog = ({isShow, close}) => {
         },
     };
 
-    useEffect(() => {
-        const canvas = document.getElementById('canvas');
-        QRCode.toCanvas(canvas, ip.address(), {version: 3, width: 300}, function (error) {
-            if (error) console.error(error)
-        })
-    }, [])
-
     return (
         <Modal
             appElement={document.body}
@@ -48,8 +41,13 @@ export const QRDialog = ({isShow, close}) => {
             style={qrStyles}>
             <p style={{fontWeight: 'bold'}}>请使用手机APP扫码进行歌曲传输</p>
             <Space>
-                <canvas id="canvas"/>
-                <Button type="primary" onClick={close}>关闭</Button>
+                <QRCodeCanvas
+                    value={ip.address()}
+                    size={150}
+                    bgColor={"#ffffff"}
+                    fgColor={"#000000"}
+                    level={"L"}
+                    includeMargin={false}/>
             </Space>
         </Modal>
     )

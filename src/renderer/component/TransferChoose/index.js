@@ -1,4 +1,4 @@
-import {Button, Checkbox, List} from 'antd';
+import {Button, Checkbox, List, Switch} from 'antd';
 import React, {forwardRef, useEffect, useImperativeHandle, useState} from 'react';
 import {AlbumHelper} from "../../dao/AlbumHelper";
 import Store from "../../utils/Store";
@@ -9,7 +9,7 @@ import {WorkUtils} from "../../utils/WorkUtils";
 
 const CheckboxGroup = Checkbox.Group;
 
-export const TransferChoose = forwardRef(({btnOk}, ref) => {
+export const TransferChoose = forwardRef(({btnOk, changeSwitch}, ref) => {
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState([])
     const [indeterminate, setIndeterminate] = useState(false)
@@ -55,6 +55,8 @@ export const TransferChoose = forwardRef(({btnOk}, ref) => {
         }
 
         setLoading(true)
+        // 加载保存的传输列表
+        const chooseMusicList = JSON.parse(Store.get('transMusic', '[]'))
         try {
             const tempAlbumList = []
             const tempMusicList = []
@@ -64,6 +66,7 @@ export const TransferChoose = forwardRef(({btnOk}, ref) => {
                 const musicList = await MusicHelper.findAllMusicByAlbumId(album.group, album.id)
                 musicList.forEach(music => {
                     if (music.export) {
+                        music.choose = AppUtils.isStrInArray(music._id, chooseMusicList)
                         tempMusicList.push(music)
                     }
                 })
@@ -72,6 +75,10 @@ export const TransferChoose = forwardRef(({btnOk}, ref) => {
                     tempAlbumList.push(album)
                 }
             }
+            let status = WorkUtils.checkBoxStatus(tempAlbumList)
+            setIndeterminate(status === 0)
+            setCheckAll(status === 1);
+            setDisableNext(status === -1)
             setData([...tempAlbumList])
             setLoading(false)
         } catch (e) {
@@ -89,13 +96,8 @@ export const TransferChoose = forwardRef(({btnOk}, ref) => {
             })
         })
         return <CheckboxGroup
+            className={"checkBoxContainer"}
             options={plainOptions}
-            style={{
-                padding: 0,
-                margin: 0,
-                display: 'flex',
-                flexDirection: 'column'
-            }}
             value={() => {
                 const arr = []
                 const albumList = data.filter(it => it._id === item._id)
@@ -130,6 +132,8 @@ export const TransferChoose = forwardRef(({btnOk}, ref) => {
                 }
             })
         })
+        // 选好后保存传输列表，以备下次进入时恢复
+        Store.set('transMusic', JSON.stringify(uIdList))
         btnOk(uIdList)
     }
 
@@ -142,11 +146,10 @@ export const TransferChoose = forwardRef(({btnOk}, ref) => {
                     renderItem={(item, index) => {
                         const url = Store.get('url') + item["cover_path"][0]
                         return (
-                            <div key={"div" + item._id}
-                                 style={{display: 'flex', flexDirection: 'row', paddingTop: 12, paddingBottom: 12}}>
-                                <img src={url} style={{width: 150, height: 150, marginTop: 6}}/>
-                                <div style={{flex: 1, display: 'flex', flexDirection: 'column', marginLeft: 40}}>
-                                    <p style={{fontSize: 20, color: 'white', fontWeight: '500'}}>{item.name}</p>
+                            <div key={"div" + item._id} className={"albumItemContainer"}>
+                                <img className={"albumCover"} src={url}/>
+                                <div className={"albumChildren"}>
+                                    <p className={"albumName"}>{item.name}</p>
                                     {renderChildren(item, index)}
                                 </div>
                             </div>
@@ -156,7 +159,7 @@ export const TransferChoose = forwardRef(({btnOk}, ref) => {
             </div>
             {loading === false ?
                 <div className={"funcContainer"}>
-                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                    <div className={"funcLeftContainer"}>
                         <Checkbox
                             indeterminate={indeterminate}
                             onChange={onCheckAllChange}
@@ -165,8 +168,12 @@ export const TransferChoose = forwardRef(({btnOk}, ref) => {
                             {checkAll ? "反选" : "全选"}
                         </Checkbox>
                         <Button type="primary" disabled={disableNext} onClick={clickOk}>选好了</Button>
+                        <div style={{marginLeft: 20, display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                            <Switch style={{width: 25}} onChange={changeSwitch}/>
+                            <p style={{marginLeft: 10, color: "white"}}>是否覆盖传输？</p>
+                        </div>
                     </div>
-                    <p style={{color: 'white', fontSize: 12}}>请先选择歌曲，点击按钮后进行配对传输</p>
+                    <p className={"funcRightText"}>请先选择歌曲，点击按钮后进行配对传输</p>
                 </div> : null}
         </>
     );

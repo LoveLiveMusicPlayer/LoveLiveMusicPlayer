@@ -65,6 +65,7 @@ const Transfer = () => {
                 musicList.push(item.value)
             })
             console.log("musicList created")
+            setQrShow(false)
         })
     }, [phoneSystem])
 
@@ -140,13 +141,18 @@ const Transfer = () => {
 
     return (
         <div style={{width: "100%", height: '100%'}}>
-            <TransferChoose btnOk={(uIdList) => {
-                musicIds.length = 0
-                musicIds = [...uIdList]
-            }} ref={chooserRef}/>
+            <TransferChoose
+                btnOk={(uIdList) => {
+                    musicIds.length = 0
+                    musicIds = [...uIdList]
+                    setQrShow(true)
+                }}
+                ref={chooserRef}
+                changeSwitch={(checked) => needAllTrans = checked}
+            />
             <QRDialog isShow={qrShow} close={() => setQrShow(false)}/>
             <WS
-                key={"websocket"}
+                // key={"websocket"}
                 ref={wsRef}
                 phoneSystem={setPhoneSystem}
                 ready={(transIdList) => {
@@ -203,22 +209,6 @@ const Transfer = () => {
                 }}
             />
         </div>
-        // <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around'}}>
-        //     <canvas id="canvas"/>
-        //     <div>
-        //         <div style={{display: 'flex', justifyContent: 'space-around'}}>
-        //             <button style={{width: 100, height: 80}} onClick={toggle}>{button === 0 ? "开始" : "停止"}</button>
-        //         </div>
-        //         <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-around', marginTop: 20}}>
-        //             <p style={{textAlign: 'center'}}>{song}</p>
-        //             <p style={{textAlign: 'center'}}>{progress}</p>
-        //         </div>
-        //         <div style={{marginTop: 20, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-        //             <p>是否覆盖传输？</p>
-        //             <Switch style={{width: 30}} onChange={(checked) => needAllTrans = checked}/>
-        //         </div>
-        //     </div>
-        // </div>
     )
 }
 
