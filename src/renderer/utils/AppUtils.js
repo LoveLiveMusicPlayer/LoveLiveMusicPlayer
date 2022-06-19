@@ -7,6 +7,7 @@ import {OSS_URL_HEAD} from "./URLHelper";
 import {FileDecoder} from "flac-bindings/lib/decoder";
 import wav from "wav";
 
+const os = require("os").platform();
 const {ipcRenderer} = require("electron")
 
 const coverArr = []
@@ -341,7 +342,7 @@ export const AppUtils = {
         let that = this
         return new Promise(function (resolve, reject) {
             if (phoneSystem === "ios") {
-                const source = (pathDir + music.musicPath).replace(".wav", ".flac")
+                const source = (pathDir + music.musicPath.replace("/", File.separator).replace(".wav", ".flac"))
                 that.flacToWav(source).then((name) => {
                     console.log("转换完毕: " + name)
                     resolve({music: music, oldRunningTag: runningTag})
