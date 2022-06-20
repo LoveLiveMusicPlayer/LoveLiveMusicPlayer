@@ -40,3 +40,4 @@ yarn.lock
 /release/build-linux/
 /release/build-mac/
 /release/build/
+/release/flac-bindings.node
