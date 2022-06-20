@@ -342,7 +342,7 @@ export const AppUtils = {
         let that = this
         return new Promise(function (resolve, reject) {
             if (phoneSystem === "ios") {
-                const source = (pathDir + music.musicPath.replace("/", File.separator).replace(".wav", ".flac"))
+                const source = (pathDir + music.musicPath.replace("/", path.sep).replace(".wav", ".flac"))
                 that.flacToWav(source).then((name) => {
                     console.log("转换完毕: " + name)
                     resolve({music: music, oldRunningTag: runningTag})
