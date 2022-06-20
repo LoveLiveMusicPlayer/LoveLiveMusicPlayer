@@ -2,7 +2,6 @@ import React, {useRef, useState} from "react";
 import {connect} from "react-redux";
 import {MusicHelper} from "../../dao/MusicHelper";
 import {AlbumHelper} from "../../dao/AlbumHelper";
-import PQueue, {AbortError} from 'p-queue';
 import {WS} from "../../utils/Websocket";
 import {AppUtils} from "../../utils/AppUtils";
 import {DBHelper} from "../../dao/DBHelper";
@@ -23,8 +22,6 @@ const Transfer = () => {
     const [downloadShow, setDownloadShow] = useState(false)
     const wsRef = useRef(null)
     const downloadRef = useRef(null)
-
-    const mQueue = new PQueue({concurrency: 1});
 
     const genList = (phoneSystem) => {
         Store.set("phoneSystem", phoneSystem)
@@ -86,7 +83,6 @@ const Transfer = () => {
                 task.cancel()
                 task = null
             }
-            mQueue.clear()
             const message = {
                 cmd: "stop",
                 body: ""
@@ -95,48 +91,39 @@ const Transfer = () => {
         }
     }
 
-    async function pushQueue(musicList, phoneSystem) {
+    function pushQueue(musicList, phoneSystem) {
         if (runningTag === 0) {
             return
         }
         const pathDir = DBHelper.getHttpServer().path;
         startTime = Date.now()
         console.log('queue start');
+        doTask(pathDir, musicList, phoneSystem)
+    }
 
-        for (let music in musicList) {
-            try {
-                if (runningTag === 0) {
-                    break
-                }
-                await mQueue.add(async () => {
-                    task = AppUtils.makeCancelable(AppUtils.transfer(pathDir, musicList[music], phoneSystem, runningTag))
-
-                    try {
-                        return task.promise.then(obj => {
-                            if (runningTag === obj.oldRunningTag) {
-                                const isLast = parseInt(music) === (musicList.length - 1)
-                                const message = {
-                                    cmd: "download",
-                                    body: obj.music.musicUId + " === " + isLast
-                                }
-                                wsRef.current?.send(JSON.stringify(message))
-                            }
-                        }).catch(err => {
-                            console.log(err)
-                        })
-                    } catch (error) {
-                        return Promise.reject(error)
-                    }
-                });
-            } catch (error) {
-                if (!(error instanceof AbortError)) {
-                    return Promise.reject(error)
-                }
-            }
+    function doTask(pathDir, musicList, phoneSystem) {
+        if (musicList.length <= 0 || runningTag === 0) {
+            console.log('queue completed');
+            return
         }
+        task = AppUtils.makeCancelable(AppUtils.transfer(pathDir, musicList[0], phoneSystem, runningTag))
 
-        await mQueue.onIdle()
-        console.log('queue completed');
+        task.promise.then(obj => {
+            if (runningTag === obj.oldRunningTag) {
+                const isLast = musicList.length === 1
+                const message = {
+                    cmd: "download",
+                    body: obj.music.musicUId + " === " + isLast
+                }
+                wsRef.current?.send(JSON.stringify(message))
+                musicList.shift()
+                doTask(pathDir, musicList, phoneSystem)
+            }
+        }).catch(err => {
+            console.log(err)
+            musicList.shift()
+            doTask(pathDir, musicList, phoneSystem)
+        })
     }
 
     return (

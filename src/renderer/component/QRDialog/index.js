@@ -19,7 +19,7 @@ export const QRDialog = ({isShow, close}) => {
         for (const inter in interfaces) {
             if (inter.indexOf("VMware") === -1) {
                 const address = ip.address(inter)
-                if (address !== "127.0.0.1") {
+                if (address !== undefined && address !== "127.0.0.1") {
                     netList.push(address)
                 }
             }
