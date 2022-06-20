@@ -340,21 +340,16 @@ export const AppUtils = {
     // 处理文件
     async transfer(pathDir, music, phoneSystem, runningTag) {
         let that = this
-        return new Promise(function (resolve, reject) {
-            if (phoneSystem === "ios") {
-                const source = (pathDir + music.musicPath.replaceAll("/", path.sep).replace(".wav", ".flac"))
-                that.flacToWav(source).then((name) => {
-                    console.log("转换完毕: " + name)
-                    resolve({music: music, oldRunningTag: runningTag})
-                }).catch(e => reject(e))
-            } else {
-                resolve({music: music, oldRunningTag: runningTag})
-            }
-        })
+        if (phoneSystem === "ios") {
+            const source = (pathDir + music.musicPath.replaceAll("/", path.sep).replace(".wav", ".flac"))
+            return that.flacToWav(source, runningTag)
+        } else {
+            return Promise.resolve({music: music, oldRunningTag: runningTag})
+        }
     },
 
     // flac 格式转换为 wav
-    flacToWav(musicPath) {
+    flacToWav(musicPath, runningTag) {
         return new Promise(function (resolve, reject) {
             const decoder = new FileDecoder({
                 file: musicPath,
@@ -377,7 +372,9 @@ export const AppUtils = {
             })
 
             decoder.on('end', () => {
-                return resolve(path.parse(musicPath).name)
+                const name = path.parse(musicPath).name
+                console.log("转换完毕: " + name)
+                return resolve({music: name, oldRunningTag: runningTag})
             })
         })
     },
