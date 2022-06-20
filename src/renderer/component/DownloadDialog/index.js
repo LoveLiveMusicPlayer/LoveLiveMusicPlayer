@@ -44,7 +44,11 @@ export const DownloadDialog = forwardRef(({isShow, onClose}, ref) => {
 
     const renderChildren = (item) => {
         if (progress.musicId !== undefined && item.musicUId === progress.musicId) {
-            item.progress = progress.progress
+            if (progress.progress === -1) {
+                item.progress = "下载失败"
+            } else {
+                item.progress = progress.progress
+            }
         }
         return (
             <div style={{
@@ -66,7 +70,6 @@ export const DownloadDialog = forwardRef(({isShow, onClose}, ref) => {
         <Modal
             appElement={document.body}
             isOpen={isShow}
-
             onAfterOpen={null}
             style={downloadStyles}>
             <p style={{fontWeight: 'bold'}}>传输进度</p>

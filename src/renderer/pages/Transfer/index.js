@@ -1,19 +1,20 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {connect} from "react-redux";
 import {MusicHelper} from "../../dao/MusicHelper";
 import {AlbumHelper} from "../../dao/AlbumHelper";
 import {WS} from "../../utils/Websocket";
-import {AppUtils} from "../../utils/AppUtils";
 import {DBHelper} from "../../dao/DBHelper";
 import {TransferChoose} from "../../component/TransferChoose";
 import {QRDialog} from "../../component/QRDialog";
 import Store from "../../utils/Store";
 import {DownloadDialog} from "../../component/DownloadDialog";
+import {ipcRenderer} from "electron";
+import fs from "fs";
+import path from 'path'
 
 let musicIds = []
 let musicList = []
 let startTime = 0
-let task = null;
 let runningTag = 0;
 let needAllTrans = false;
 
@@ -31,41 +32,56 @@ const Transfer = () => {
         musicIds.map(item => {
             task.push(new Promise((resolve, reject) => {
                 MusicHelper.findOneMusicByUniqueId(item).then(mMusic => {
-                    AlbumHelper.findOneAlbumByAlbumId(mMusic.group, mMusic.album).then(mAlbum => {
-                        resolve({
-                            albumUId: mAlbum._id,
-                            albumId: mAlbum.id,
-                            albumName: mAlbum.name,
-                            coverPath: mMusic.cover_path,
-                            date: mAlbum.date,
-                            category: mAlbum.category,
-                            group: mAlbum.group,
+                    const endUrl = mMusic.music_path.replaceAll('/', path.sep)
+                    const url = DBHelper.getHttpServer().path + endUrl
+                    if (fs.existsSync(url)) {
+                        AlbumHelper.findOneAlbumByAlbumId(mMusic.group, mMusic.album).then(mAlbum => {
+                            resolve({
+                                albumUId: mAlbum._id,
+                                albumId: mAlbum.id,
+                                albumName: mAlbum.name,
+                                coverPath: mMusic.cover_path,
+                                date: mAlbum.date,
+                                category: mAlbum.category,
+                                group: mAlbum.group,
 
-                            musicUId: mMusic._id,
-                            musicId: mMusic.id,
-                            musicName: mMusic.name,
-                            musicPath: phoneSystem === "ios" ? mMusic.music_path.replace(".flac", ".wav") : mMusic.music_path,
-                            artist: mMusic.artist,
-                            artistBin: mMusic.artist_bin,
-                            totalTime: mMusic.time,
-                            jpUrl: mMusic.lyric,
-                            zhUrl: mMusic.trans,
-                            romaUrl: mMusic.roma
+                                musicUId: mMusic._id,
+                                musicId: mMusic.id,
+                                musicName: mMusic.name,
+                                musicPath: phoneSystem === "ios" ? endUrl.replace(".flac", ".wav") : endUrl,
+                                artist: mMusic.artist,
+                                artistBin: mMusic.artist_bin,
+                                totalTime: mMusic.time,
+                                jpUrl: mMusic.lyric,
+                                zhUrl: mMusic.trans,
+                                romaUrl: mMusic.roma
+                            })
                         })
-                    })
+                    } else {
+                        resolve(undefined)
+                    }
                 })
             }))
         })
 
         Promise.allSettled(task).then(result => {
             result.map(item => {
-                musicList.push(item.value)
+                // 去掉本地没有的文件
+                if (item.value !== undefined) {
+                    musicList.push(item.value)
+                }
             })
             console.log("musicList created")
             setQrShow(false)
             prepareTask()
         })
     }
+
+    useEffect(() => {
+        ipcRenderer.on('convertOver', (event, args) => {
+            wsRef.current?.send(args)
+        })
+    }, [])
 
     function prepareTask() {
         runningTag = Date.now()
@@ -79,10 +95,7 @@ const Transfer = () => {
     function stopTask() {
         if (runningTag !== 0) {
             runningTag = 0
-            if (task !== null) {
-                task.cancel()
-                task = null
-            }
+            ipcRenderer.send('stopConvert')
             const message = {
                 cmd: "stop",
                 body: ""
@@ -98,32 +111,8 @@ const Transfer = () => {
         const pathDir = DBHelper.getHttpServer().path;
         startTime = Date.now()
         console.log('queue start');
-        doTask(pathDir, musicList, phoneSystem)
-    }
-
-    function doTask(pathDir, musicList, phoneSystem) {
-        if (musicList.length <= 0 || runningTag === 0) {
-            console.log('queue completed');
-            return
-        }
-        task = AppUtils.makeCancelable(AppUtils.transfer(pathDir, musicList[0], phoneSystem, runningTag))
-
-        task.promise.then(obj => {
-            if (runningTag === obj.oldRunningTag) {
-                const isLast = musicList.length === 1
-                const message = {
-                    cmd: "download",
-                    body: obj.music.musicUId + " === " + isLast
-                }
-                wsRef.current?.send(JSON.stringify(message))
-                musicList.shift()
-                doTask(pathDir, musicList, phoneSystem)
-            }
-        }).catch(err => {
-            console.log(err)
-            musicList.shift()
-            doTask(pathDir, musicList, phoneSystem)
-        })
+        const message = {pathDir, musicList, phoneSystem, runningTag}
+        ipcRenderer.send('doConvert', JSON.stringify(message))
     }
 
     return (
@@ -197,6 +186,10 @@ const Transfer = () => {
                     if (runningTag === 0) {
                         return
                     }
+                    downloadRef.current?.setProgress({
+                        musicId: musicId,
+                        progress: -1
+                    })
                     console.log("下载失败: " + musicId)
                 }}
                 finish={() => {

@@ -3,8 +3,13 @@ import {URL} from 'url';
 import path from 'path';
 import * as Sentry from "@sentry/electron";
 import {app} from "electron";
+import {FileDecoder} from "flac-bindings/lib/decoder";
+import wav from "wav";
+import fs from "fs";
 
 const net = require('net')
+
+let task: any = null
 
 export let resolveHtmlPath: (htmlFileName: string) => string;
 
@@ -13,8 +18,8 @@ if (process.env.NODE_ENV === 'development') {
     resolveHtmlPath = (htmlFileName: string) => {
         const url = new URL(`http://localhost:${port}`);
         url.pathname = htmlFileName;
-      return url.href;
-  };
+        return url.href;
+    };
 } else {
     resolveHtmlPath = (htmlFileName: string) => {
         return `file://${path.resolve(__dirname, '../renderer/', htmlFileName)}`;
@@ -98,5 +103,106 @@ export function upReportPlaySong(reportInfo: any) {
         scope.setTag("t-count", reportInfo.count)
         scope.setTag("t-during", reportInfo.during)
         Sentry.captureMessage("play-song-info")
+    })
+}
+
+
+export function doTask(pathDir: string, musicList: Array<any>, phoneSystem: string, runningTag: number, callback?: (message: string) => {}) {
+    if (musicList.length <= 0 || runningTag === 0) {
+        console.log('queue completed');
+        return
+    }
+    task = makeCancelable(transfer(pathDir, musicList[0], phoneSystem, runningTag))
+    const isLast = musicList.length === 1
+    task.promise.then((obj: any) => {
+        if (obj != undefined && runningTag === obj.oldRunningTag) {
+            const message = {
+                cmd: "download",
+                body: obj.music.musicUId + " === " + isLast
+            }
+            if (callback != null) {
+                callback!(JSON.stringify(message))
+            }
+
+            musicList.shift()
+            if (!isLast) {
+                doTask(pathDir, musicList, phoneSystem, runningTag, callback)
+            }
+        }
+    }).catch(() => {
+        musicList.shift()
+        if (!isLast) {
+            doTask(pathDir, musicList, phoneSystem, runningTag, callback)
+        }
+    })
+}
+
+export function stopTask() {
+    if (task !== null) {
+        task.cancel()
+        task = null
+    }
+}
+
+// 生成可中断的异步任务
+export function makeCancelable(promise: Promise<any>) {
+    let hasCanceled_ = false;
+    const wrappedPromise = new Promise((resolve, reject) => {
+        promise.then((val: any) =>
+            hasCanceled_ ? reject({isCanceled: true}) : resolve(val)
+        );
+        promise.catch((error: any) =>
+            hasCanceled_ ? reject({isCanceled: true}) : reject(error)
+        );
+    });
+    return {
+        promise: wrappedPromise,
+        cancel() {
+            hasCanceled_ = true;
+        },
+    };
+}
+
+// 处理文件
+export function transfer(pathDir: string, music: any, phoneSystem: string, runningTag: number) {
+    if (phoneSystem === "ios") {
+        const source = (pathDir + music.musicPath.replace(".wav", ".flac"))
+        if (fs.existsSync(source)) {
+            return flacToWav(source, runningTag, music)
+        }
+        return Promise.resolve(undefined)
+    } else {
+        return Promise.resolve({music: music, oldRunningTag: runningTag})
+    }
+}
+
+// flac 格式转换为 wav
+export function flacToWav(musicPath: string, runningTag: number, music: any) {
+    return new Promise(function (resolve, reject) {
+        const decoder = new FileDecoder({
+            file: musicPath,
+        })
+        decoder.once('data', (chunk) => {
+            const encoder = new wav.Writer({
+                channels: decoder.getChannels(),
+                bitDepth: decoder.getBitsPerSample(),
+                sampleRate: decoder.getSampleRate(),
+            })
+
+            encoder.write(chunk)
+
+            decoder
+                .pipe(encoder)
+                .pipe(fs.createWriteStream(musicPath.replace(".flac", ".wav")))
+                .on('error', (e: any) => {
+                    return reject(e)
+                })
+        })
+
+        decoder.on('end', () => {
+            const name = path.parse(musicPath).name
+            console.log("转换完毕: " + name)
+            return resolve({music: music, oldRunningTag: runningTag})
+        })
     })
 }

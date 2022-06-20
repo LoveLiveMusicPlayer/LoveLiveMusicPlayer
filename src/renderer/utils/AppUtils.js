@@ -4,7 +4,6 @@ import * as mm from "music-metadata";
 import {WorkUtils} from "./WorkUtils";
 import moment from "moment";
 import {OSS_URL_HEAD} from "./URLHelper";
-import {FileDecoder} from "flac-bindings/lib/decoder";
 import wav from "wav";
 
 const os = require("os").platform();
@@ -335,48 +334,6 @@ export const AppUtils = {
                 hasCanceled_ = true;
             },
         };
-    },
-
-    // 处理文件
-    async transfer(pathDir, music, phoneSystem, runningTag) {
-        let that = this
-        if (phoneSystem === "ios") {
-            const source = (pathDir + music.musicPath.replaceAll("/", path.sep).replace(".wav", ".flac"))
-            return that.flacToWav(source, runningTag)
-        } else {
-            return Promise.resolve({music: music, oldRunningTag: runningTag})
-        }
-    },
-
-    // flac 格式转换为 wav
-    flacToWav(musicPath, runningTag) {
-        return new Promise(function (resolve, reject) {
-            const decoder = new FileDecoder({
-                file: musicPath,
-            })
-            decoder.once('data', (chunk) => {
-                const encoder = new wav.Writer({
-                    channels: decoder.getChannels(),
-                    bitDepth: decoder.getBitsPerSample(),
-                    sampleRate: decoder.getSampleRate(),
-                })
-
-                encoder.write(chunk)
-
-                decoder
-                    .pipe(encoder)
-                    .pipe(fs.createWriteStream(musicPath.replace(".flac", ".wav")))
-                    .on('error', (e) => {
-                        return reject(e.message)
-                    })
-            })
-
-            decoder.on('end', () => {
-                const name = path.parse(musicPath).name
-                console.log("转换完毕: " + name)
-                return resolve({music: name, oldRunningTag: runningTag})
-            })
-        })
     },
 
     isStrInArray(str, arr) {

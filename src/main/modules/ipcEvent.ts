@@ -1,6 +1,6 @@
 // @ts-nocheck
 import {app, dialog, ipcMain, nativeImage} from "electron";
-import {portIsOccupied, upReportPlaySong} from "../util";
+import {doTask, portIsOccupied, stopTask, upReportPlaySong} from "../util";
 import update from "./update";
 import {thumbarButtons} from "./dockAndTray";
 import path from "path";
@@ -80,6 +80,17 @@ export default function () {
             global?.mainWindow?.webContents.send("playMusic");
         }
         global?.mainWindow?.setThumbarButtons(thumbarButtons);
+    })
+
+    ipcMain.on('doConvert', (event, args) => {
+        const {pathDir, musicList, phoneSystem, runningTag} = JSON.parse(args)
+        doTask(pathDir, musicList, phoneSystem, runningTag, (message) => {
+            global?.mainWindow?.webContents.send("convertOver", message);
+        })
+    })
+
+    ipcMain.on('stopConvert', function () {
+        stopTask()
     })
 
     // 窗口最小化
