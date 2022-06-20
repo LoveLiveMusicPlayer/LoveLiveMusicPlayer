@@ -14,7 +14,8 @@
         "start:main": "cross-env NODE_ENV=development electron -r ts-node/register/transpile-only ./src/main/main.ts",
         "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
         "test": "jest",
-        "windows": "yarn package -w",
+        "win32": "yarn package --win --ia32",
+        "win64": "yarn package -w",
         "mac": "yarn package -m",
         "linux": "yarn package -l"
     },
