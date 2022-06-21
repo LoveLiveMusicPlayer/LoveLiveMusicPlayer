@@ -60,7 +60,7 @@ export const QRDialog = ({isShow, close}) => {
         const viewList = []
         netArr.forEach((address, index) => {
             console.log(address)
-            viewList.push(<Option value={index}>{address}</Option>)
+            viewList.push(<Option key={index} value={index}>{address}</Option>)
         })
         return viewList
     }
@@ -76,7 +76,8 @@ export const QRDialog = ({isShow, close}) => {
             <Space style={{display: 'flex', flexDirection: 'column', marginBottom: 20}}>
                 {
                     domain === "暂无网络" ?
-                        <img src={Images.LOADING} width={180} height={180}/> : <QRCodeCanvas
+                        <img src={Images.LOADING} width={180} height={180}/> :
+                        <QRCodeCanvas
                             value={domain}
                             size={180}
                             bgColor={"#ffffff"}
@@ -89,7 +90,7 @@ export const QRDialog = ({isShow, close}) => {
                     style={{width: 150}}
                     bordered={false}
                     disabled={netArr.length <= 1}
-                    onChange={(address) => setDomain(address)}
+                    onChange={(address) => setDomain(netArr[address])}
                 >
                     {renderChildren()}
                 </Select>
