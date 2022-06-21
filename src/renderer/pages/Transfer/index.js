@@ -11,6 +11,7 @@ import {DownloadDialog} from "../../component/DownloadDialog";
 import {ipcRenderer} from "electron";
 import fs from "fs";
 import path from 'path'
+import qs from "qs";
 
 let musicIds = []
 let musicList = []
@@ -18,7 +19,7 @@ let startTime = 0
 let runningTag = 0;
 let needAllTrans = false;
 
-const Transfer = () => {
+const Transfer = uri => {
     const [qrShow, setQrShow] = useState(false)
     const [downloadShow, setDownloadShow] = useState(false)
     const wsRef = useRef(null)
@@ -32,8 +33,8 @@ const Transfer = () => {
         musicIds.map(item => {
             task.push(new Promise((resolve, reject) => {
                 MusicHelper.findOneMusicByUniqueId(item).then(mMusic => {
-                    const endUrl = mMusic.music_path.replaceAll('/', path.sep)
-                    const url = DBHelper.getHttpServer().path + endUrl
+                    const convertPath = mMusic.music_path.replaceAll('/', path.sep)
+                    const url = DBHelper.getHttpServer().path + convertPath
                     if (fs.existsSync(url)) {
                         AlbumHelper.findOneAlbumByAlbumId(mMusic.group, mMusic.album).then(mAlbum => {
                             resolve({
@@ -48,7 +49,8 @@ const Transfer = () => {
                                 musicUId: mMusic._id,
                                 musicId: mMusic.id,
                                 musicName: mMusic.name,
-                                musicPath: phoneSystem === "ios" ? endUrl.replace(".flac", ".wav") : endUrl,
+                                convertPath: convertPath,
+                                musicPath: phoneSystem === "ios" ? mMusic.music_path.replace(".flac", ".wav") : mMusic.music_path,
                                 artist: mMusic.artist,
                                 artistBin: mMusic.artist_bin,
                                 totalTime: mMusic.time,
@@ -79,7 +81,15 @@ const Transfer = () => {
 
     useEffect(() => {
         ipcRenderer.on('convertOver', (event, args) => {
-            wsRef.current?.send(args)
+            const message = JSON.parse(args)
+            if (message.cmd === "download") {
+                wsRef.current?.send(args)
+            } else {
+                downloadRef.current?.setProgress({
+                    musicId: message.body,
+                    progress: message.cmd
+                })
+            }
         })
     }, [])
 
