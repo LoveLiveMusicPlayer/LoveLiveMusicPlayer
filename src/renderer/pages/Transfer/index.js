@@ -11,7 +11,6 @@ import {DownloadDialog} from "../../component/DownloadDialog";
 import {ipcRenderer} from "electron";
 import fs from "fs";
 import path from 'path'
-import qs from "qs";
 
 let musicIds = []
 let musicList = []
@@ -19,7 +18,7 @@ let startTime = 0
 let runningTag = 0;
 let needAllTrans = false;
 
-const Transfer = uri => {
+const Transfer = () => {
     const [qrShow, setQrShow] = useState(false)
     const [downloadShow, setDownloadShow] = useState(false)
     const wsRef = useRef(null)

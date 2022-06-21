@@ -174,11 +174,7 @@ export function transfer(pathDir: string, music: any, phoneSystem: string, runni
     if (phoneSystem === "ios") {
         const source = (pathDir + music.convertPath.replace(".wav", ".flac"))
         if (fs.existsSync(source)) {
-            if (process.platform === "win32") {
-                return flacToWav2(source, runningTag, music)
-            } else {
-                return flacToWav(source, runningTag, music)
-            }
+            return flacToWav(source, runningTag, music, process.platform === "win32")
         }
         return Promise.resolve({music: music, oldRunningTag: runningTag, reason: "文件不存在"})
     } else {
@@ -187,13 +183,21 @@ export function transfer(pathDir: string, music: any, phoneSystem: string, runni
 }
 
 // flac 格式转换为 wav
-export function flacToWav(musicPath: string, runningTag: number, music: any) {
+export function flacToWav(musicPath: string, runningTag: number, music: any, isWindows: boolean) {
     return new Promise(function (resolve, _) {
         console.log(musicPath)
-        const decoder = new FileDecoder({
-            file: musicPath,
-        })
-        decoder.once('data', (chunk) => {
+        let decoder: any
+        if (isWindows) {
+            const inputStream = fs.createReadStream(musicPath)
+            decoder = new StreamDecoder({})
+            inputStream.pipe(decoder)
+        } else {
+            decoder = new FileDecoder({
+                file: musicPath,
+            })
+        }
+
+        decoder.once('data', (chunk: any) => {
             const encoder = new wav.Writer({
                 channels: decoder.getChannels(),
                 bitDepth: decoder.getBitsPerSample(),
@@ -206,38 +210,6 @@ export function flacToWav(musicPath: string, runningTag: number, music: any) {
                 .pipe(encoder)
                 .pipe(fs.createWriteStream(musicPath.replace(".flac", ".wav")))
                 .on('error', (e: any) => {
-                    console.log(e)
-                    return Promise.resolve({music: music, oldRunningTag: runningTag, reason: "转换失败"})
-                })
-        })
-
-        decoder.on('end', () => {
-            const name = path.parse(musicPath).name
-            console.log("转换完毕: " + name)
-            return resolve({music: music, oldRunningTag: runningTag, reason: undefined})
-        })
-    })
-}
-
-export function flacToWav2(musicPath: string, runningTag: number, music: any) {
-    return new Promise(function (resolve, _) {
-        console.log(musicPath)
-        const inputStream = fs.createReadStream(musicPath)
-        const decoder = new StreamDecoder({})
-        inputStream.pipe(decoder)
-        decoder.once('data', (chunk) => {
-            const encoder = new wav.Writer({
-                channels: decoder.getChannels(),
-                bitDepth: decoder.getBitsPerSample(),
-                sampleRate: decoder.getSampleRate(),
-            })
-
-            encoder.write(chunk)
-
-            decoder
-                .pipe(encoder)
-                .pipe(fs.createWriteStream(musicPath.replace(".flac", ".wav")))
-                .on('error', (e) => {
                     console.log(e)
                     return Promise.resolve({music: music, oldRunningTag: runningTag, reason: "转换失败"})
                 })
