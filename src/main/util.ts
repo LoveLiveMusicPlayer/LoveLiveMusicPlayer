@@ -174,7 +174,11 @@ export function transfer(pathDir: string, music: any, phoneSystem: string, runni
     if (phoneSystem === "ios") {
         const source = (pathDir + music.convertPath.replace(".wav", ".flac"))
         if (fs.existsSync(source)) {
-            return flacToWav2(source, runningTag, music)
+            if (process.platform === "win32") {
+                return flacToWav2(source, runningTag, music)
+            } else {
+                return flacToWav(source, runningTag, music)
+            }
         }
         return Promise.resolve({music: music, oldRunningTag: runningTag, reason: "文件不存在"})
     } else {
