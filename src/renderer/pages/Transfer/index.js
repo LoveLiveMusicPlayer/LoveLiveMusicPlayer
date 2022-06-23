@@ -206,6 +206,10 @@ const Transfer = () => {
                     stopTask()
                     setDownloadShow(false)
                 }}
+                stop={() => {
+                    stopTask()
+                    setDownloadShow(false)
+                }}
             />
         </div>
     )

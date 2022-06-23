@@ -106,7 +106,7 @@ export function upReportPlaySong(reportInfo: any) {
     })
 }
 
-
+// 执行转换任务
 export function doTask(pathDir: string, musicList: Array<any>, phoneSystem: string, runningTag: number, callback?: (message: string) => {}) {
     if (musicList.length <= 0 || runningTag === 0) {
         console.log('queue completed');
@@ -136,13 +136,16 @@ export function doTask(pathDir: string, musicList: Array<any>, phoneSystem: stri
             doTask(pathDir, musicList, phoneSystem, runningTag, callback)
         }
     }).catch(() => {
-        musicList.shift()
-        if (!isLast) {
-            doTask(pathDir, musicList, phoneSystem, runningTag, callback)
+        if (task != null) {
+            musicList.shift()
+            if (!isLast) {
+                doTask(pathDir, musicList, phoneSystem, runningTag, callback)
+            }
         }
     })
 }
 
+// 停止转换任务
 export function stopTask() {
     if (task !== null) {
         task.cancel()
