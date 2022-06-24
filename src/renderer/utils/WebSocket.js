@@ -41,7 +41,7 @@ export const WS = React.forwardRef(({phoneSystem, ready, downloading, downloadSu
                             break
                         case "downloading":
                             let args = command["body"].split(" === ")
-                            downloading(args[0], args[1])
+                            // downloading(args[0], args[1])
                             break
                         case "download success":
                             downloadSuccess(command["body"])

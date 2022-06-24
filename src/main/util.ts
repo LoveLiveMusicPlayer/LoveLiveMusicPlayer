@@ -188,7 +188,6 @@ export function transfer(pathDir: string, music: any, phoneSystem: string, runni
 // flac 格式转换为 wav
 export function flacToWav(musicPath: string, runningTag: number, music: any, isWindows: boolean) {
     return new Promise(function (resolve, _) {
-        console.log(musicPath)
         let decoder: any
         if (isWindows) {
             const inputStream = fs.createReadStream(musicPath)
@@ -212,9 +211,8 @@ export function flacToWav(musicPath: string, runningTag: number, music: any, isW
             decoder
                 .pipe(encoder)
                 .pipe(fs.createWriteStream(musicPath.replace(".flac", ".wav")))
-                .on('error', (e: any) => {
-                    console.log(e)
-                    return Promise.resolve({music: music, oldRunningTag: runningTag, reason: "转换失败"})
+                .on('error', () => {
+                    return resolve({music: music, oldRunningTag: runningTag, reason: "转换失败"})
                 })
         })
 
