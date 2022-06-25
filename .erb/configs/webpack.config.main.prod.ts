@@ -82,4 +82,16 @@ export default merge(baseConfig, {
         __dirname: false,
         __filename: false,
     },
+    module: {
+        rules: [
+            {
+                test: /\.node$/,
+                // @ts-ignore
+                loader: "native-ext-loader",
+                options: {
+                    rewritePath: webpackPaths.srcMainPath
+                }
+            }
+        ],
+    },
 });
