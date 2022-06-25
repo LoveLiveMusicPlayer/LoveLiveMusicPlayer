@@ -3,9 +3,7 @@ import {URL} from 'url';
 import path from 'path';
 import * as Sentry from "@sentry/electron";
 import {app} from "electron";
-import {FileDecoder, StreamDecoder} from "flac-bindings/lib/decoder";
-// @ts-ignore
-// import {FileDecoder, StreamDecoder} from "./flac-bindings.node";
+import {FileDecoder, StreamDecoder} from "flac-bindings";
 import wav from "wav";
 import fs from "fs";
 

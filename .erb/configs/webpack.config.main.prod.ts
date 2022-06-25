@@ -23,6 +23,19 @@ const devtoolsConfig =
         }
         : {};
 
+const os = require('os');
+const targetPlatform = (function () {
+    let target = os.platform();
+    for (let i = 0; i < process.argv.length; i++) {
+        if (process.argv[i].includes('--target_platform=')) {
+            target = process.argv[i].replace('--target_platform=', '');
+            break;
+        }
+    }
+    if (!['win32', 'darwin'].includes) target = os.platform();
+    return target;
+})();
+
 
 export default merge(baseConfig, {
     ...devtoolsConfig,
@@ -89,7 +102,7 @@ export default merge(baseConfig, {
                 // @ts-ignore
                 loader: "native-ext-loader",
                 options: {
-                    rewritePath: webpackPaths.srcMainPath
+                    rewritePath: targetPlatform == 'win32' ? './resources' : './Resources'
                 }
             }
         ],
