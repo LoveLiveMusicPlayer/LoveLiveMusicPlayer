@@ -44,11 +44,7 @@ export const DownloadDialog = forwardRef(({isShow, onClose}, ref) => {
 
     const renderChildren = (item) => {
         if (progress.musicId !== undefined && item.musicUId === progress.musicId) {
-            if (progress.progress === -1) {
-                item.progress = "下载失败"
-            } else {
-                item.progress = progress.progress
-            }
+            item.progress = progress.progress
         }
         return (
             <div style={{

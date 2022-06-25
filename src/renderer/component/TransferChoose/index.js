@@ -170,7 +170,7 @@ export const TransferChoose = ({btnOk, changeSwitch, disable}) => {
                         <Button type="primary" disabled={disableNext} onClick={clickOk}>选好了</Button>
                         <div style={{marginLeft: 20, display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
                             <Switch style={{width: 25}} onChange={changeSwitch}/>
-                            <p style={{marginLeft: 10, color: "white"}}>是否覆盖传输？</p>
+                            <p style={{marginLeft: 10, color: "white"}}>是否覆盖传输？(谨慎选择)</p>
                         </div>
                     </div>
                     <p className={"funcRightText"}>请先选择歌曲，点击按钮后进行配对传输</p>

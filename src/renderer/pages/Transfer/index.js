@@ -179,16 +179,16 @@ const Transfer = () => {
                     wsRef.current?.send(JSON.stringify(message))
                     pushQueue(tempList, Store.get("phoneSystem", "android"))
                 }}
-                downloading={(musicId, progress) => {
+                downloading={(musicId) => {
                     downloadRef.current?.setProgress({
                         musicId: musicId,
-                        progress: progress
+                        progress: "下载中"
                     })
                 }}
                 downloadSuccess={(musicId) => {
                     downloadRef.current?.setProgress({
                         musicId: musicId,
-                        progress: 100
+                        progress: "下载完成"
                     })
                 }}
                 downloadFail={(musicId) => {
@@ -197,7 +197,7 @@ const Transfer = () => {
                     }
                     downloadRef.current?.setProgress({
                         musicId: musicId,
-                        progress: -1
+                        progress: "下载失败"
                     })
                     console.log("下载失败: " + musicId)
                 }}
