@@ -15,9 +15,10 @@
         "start:main": "cross-env NODE_ENV=development electron -r ts-node/register/transpile-only ./src/main/main.ts",
         "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
         "test": "jest",
-        "win32": "yarn package --win --ia32",
-        "win64": "yarn package -w",
-        "mac": "yarn package -m",
+        "win32": "yarn package -w --ia32",
+        "win64": "yarn package -w --x64",
+        "macarm": "mkdirp release/app/build && cp release/app/flac-bindings/mac-arm/* release/app/build && yarn package -m --arm64",
+        "mac64": "mkdirp release/app/build && cp release/app/flac-bindings/mac-arm/* release/app/build && yarn package -m --x64",
         "linux": "yarn package -l"
     },
     "lint-staged": {
@@ -42,28 +43,19 @@
         "files": [
             "dist",
             "node_modules",
-            "package.json"
+            "package.json",
+            "build"
         ],
         "afterSign": ".erb/scripts/notarize.js",
         "mac": {
             "target": {
-                "target": "default",
-                "arch": [
-                    "arm64",
-                    "x64"
-                ]
+                "target": "default"
             },
             "type": "distribution",
             "hardenedRuntime": true,
             "entitlements": "assets/entitlements.mac.plist",
             "entitlementsInherit": "assets/entitlements.mac.plist",
-            "gatekeeperAssess": false,
-            "extraFiles": [
-                {
-                    "from": "node_modules/flac-bindings/build/Release/flac-bindings.node",
-                    "to": "./Resources"
-                }
-            ]
+            "gatekeeperAssess": false
         },
         "dmg": {
             "contents": [
@@ -83,12 +75,13 @@
             "target": [
                 "nsis"
             ],
-            "extraFiles": [
-                {
-                    "from": "node_modules/flac-bindings/build/Release/flac-bindings.node",
-                    "to": "./resources"
-                }
-            ]
+            "files": [
+                "dist",
+                "node_modules",
+                "package.json",
+                "build/win"
+            ],
+            "requestedExecutionLevel": "highestAvailable"
         },
         "nsis": {
             "oneClick": false,

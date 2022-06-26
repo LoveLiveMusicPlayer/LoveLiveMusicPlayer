@@ -100,10 +100,7 @@ export default merge(baseConfig, {
             {
                 test: /\.node$/,
                 // @ts-ignore
-                loader: "native-ext-loader",
-                options: {
-                    rewritePath: targetPlatform == 'win32' ? './resources' : './Resources'
-                }
+                loader: "native-ext-loader"
             }
         ],
     },
