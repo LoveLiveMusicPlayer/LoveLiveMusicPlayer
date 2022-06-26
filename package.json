@@ -15,11 +15,12 @@
         "start:main": "cross-env NODE_ENV=development electron -r ts-node/register/transpile-only ./src/main/main.ts",
         "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
         "test": "jest",
-        "win32": "mkdirp release/app/build && xcopy release\\app\\flac-bindings\\win\\* release\\app\\build /y && yarn package -w --ia32",
-        "win64": "mkdirp release\\app\\build && xcopy release\\app\\flac-bindings\\win\\* release\\app\\build /y && yarn package -w",
+        "win32": "mkdirp release\\app\\build && xcopy release\\app\\flac-bindings\\win-x86\\* release\\app\\build /y && yarn package -w --ia32",
+        "win64": "mkdirp release\\app\\build && xcopy release\\app\\flac-bindings\\win-x64\\* release\\app\\build /y && yarn package -w",
         "macarm": "mkdirp release/app/build && cp release/app/flac-bindings/mac-arm/* release/app/build && yarn package -m --arm64",
         "mac64": "mkdirp release/app/build && cp release/app/flac-bindings/mac-x64/* release/app/build && yarn package -m --x64",
-        "linux": "yarn package -l"
+        "linuxarm": "mkdirp release/app/build && cp release/app/flac-bindings/linux-arm64/* release/app/build && yarn package -l --arm64",
+        "linux64": "mkdirp release/app/build && cp release/app/flac-bindings/linux-x64/* release/app/build && yarn package -l --x64"
     },
     "lint-staged": {
         "*.{js,jsx,ts,tsx}": [
@@ -39,7 +40,7 @@
         "productName": "LoveLive音乐播放器",
         "appId": "com.zhushenwudi.LoveLiveMusicPlayer",
         "asar": true,
-        "asarUnpack": "**\\*.{node,dll}",
+        "asarUnpack": "**\\*.{dll}",
         "files": [
             "dist",
             "node_modules",
