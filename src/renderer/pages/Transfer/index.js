@@ -146,12 +146,17 @@ const Transfer = () => {
                 phoneSystem={genList}
                 ready={(transIdList) => {
                     let tempList = []
+                    let message = {
+                        cmd: "back",
+                        body: ""
+                    }
                     if (needAllTrans) {
                         musicList.forEach(music => {
                             tempList.push(music)
                         })
                     } else {
                         if (transIdList.length === 0) {
+                            wsRef.current?.send(JSON.stringify(message))
                             alert("没有任务需要传输")
                             return
                         }
@@ -166,11 +171,12 @@ const Transfer = () => {
                     }
 
                     if (tempList.length === 0) {
+                        wsRef.current?.send(JSON.stringify(message))
                         alert("没有任务需要传输")
                         return
                     }
 
-                    const message = {
+                    message = {
                         cmd: "ready",
                         body: JSON.stringify(tempList)
                     }
