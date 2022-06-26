@@ -18,7 +18,7 @@
         "win32": "yarn package -w --ia32",
         "win64": "yarn package -w --x64",
         "macarm": "mkdirp release/app/build && cp release/app/flac-bindings/mac-arm/* release/app/build && yarn package -m --arm64",
-        "mac64": "mkdirp release/app/build && cp release/app/flac-bindings/mac-arm/* release/app/build && yarn package -m --x64",
+        "mac64": "mkdirp release/app/build && cp release/app/flac-bindings/mac-x64/* release/app/build && yarn package -m --x64",
         "linux": "yarn package -l"
     },
     "lint-staged": {
