@@ -15,8 +15,8 @@
         "start:main": "cross-env NODE_ENV=development electron -r ts-node/register/transpile-only ./src/main/main.ts",
         "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
         "test": "jest",
-        "win32": "yarn package -w --ia32",
-        "win64": "yarn package -w --x64",
+        "win32": "mkdirp release/app/build && xcopy release\\app\\flac-bindings\\win\\* release\\app\\build /y && yarn package -w --ia32",
+        "win64": "mkdirp release\\app\\build && xcopy release\\app\\flac-bindings\\win\\* release\\app\\build /y && yarn package -w",
         "macarm": "mkdirp release/app/build && cp release/app/flac-bindings/mac-arm/* release/app/build && yarn package -m --arm64",
         "mac64": "mkdirp release/app/build && cp release/app/flac-bindings/mac-x64/* release/app/build && yarn package -m --x64",
         "linux": "yarn package -l"

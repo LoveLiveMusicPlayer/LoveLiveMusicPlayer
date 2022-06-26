@@ -3,7 +3,7 @@ import {URL} from 'url';
 import path from 'path';
 import * as Sentry from "@sentry/electron";
 import {app} from "electron";
-import {FileDecoder, StreamDecoder} from "flac-bindings";
+import {FileDecoder} from "flac-bindings";
 import wav from "wav";
 import fs from "fs";
 
@@ -177,7 +177,7 @@ export function transfer(pathDir: string, music: any, phoneSystem: string, runni
     if (phoneSystem === "ios") {
         const source = (pathDir + music.convertPath.replace(".wav", ".flac"))
         if (fs.existsSync(source)) {
-            return flacToWav(source, runningTag, music, process.platform === "win32")
+            return flacToWav(source, runningTag, music)
         }
         return Promise.resolve({music: music, oldRunningTag: runningTag, reason: "文件不存在"})
     } else {
@@ -186,18 +186,11 @@ export function transfer(pathDir: string, music: any, phoneSystem: string, runni
 }
 
 // flac 格式转换为 wav
-export function flacToWav(musicPath: string, runningTag: number, music: any, isWindows: boolean) {
+export function flacToWav(musicPath: string, runningTag: number, music: any) {
     return new Promise(function (resolve, _) {
-        let decoder: any
-        if (isWindows) {
-            const inputStream = fs.createReadStream(musicPath)
-            decoder = new StreamDecoder({})
-            inputStream.pipe(decoder)
-        } else {
-            decoder = new FileDecoder({
-                file: musicPath,
-            })
-        }
+        let decoder = new FileDecoder({
+            file: musicPath,
+        })
 
         decoder.once('data', (chunk: any) => {
             const encoder = new wav.Writer({
