@@ -15,6 +15,7 @@ export const TransferChoose = ({btnOk, changeSwitch, disable}) => {
     const [indeterminate, setIndeterminate] = useState(false)
     const [checkAll, setCheckAll] = useState(false)
     const [disableNext, setDisableNext] = useState(true)
+    const [chooseCount, setChooseCount] = useState(0)
 
     const onChange = (albumUId, musicUidList) => {
         for (let i = 0; i < data.length; i++) {
@@ -38,10 +39,23 @@ export const TransferChoose = ({btnOk, changeSwitch, disable}) => {
                 music.choose = e.target.checked
             })
         })
+        setData((data) => [...data])
         setIndeterminate(false)
         setCheckAll(e.target.checked)
         setDisableNext(!e.target.checked)
     };
+
+    useEffect(() => {
+        let count = 0
+        data.forEach(album => {
+            album.music.forEach(music => {
+                if (music.choose) {
+                    count++
+                }
+            })
+        })
+        setChooseCount(count)
+    }, [data])
 
     useEffect(async () => {
         if (loading) {
@@ -167,7 +181,9 @@ export const TransferChoose = ({btnOk, changeSwitch, disable}) => {
                             style={{color: 'white'}}>
                             {checkAll ? "反选" : "全选"}
                         </Checkbox>
-                        <Button type="primary" disabled={disableNext} onClick={clickOk}>选好了</Button>
+                        <p style={{color: 'white'}}>(已选:{chooseCount})</p>
+                        <Button type="primary" disabled={disableNext} onClick={clickOk}
+                                style={{marginLeft: 12}}>选好了</Button>
                         <div style={{marginLeft: 20, display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
                             <Switch style={{width: 25}} onChange={changeSwitch}/>
                             <p style={{marginLeft: 10, color: "white"}}>是否覆盖传输？(谨慎选择)</p>
