@@ -1,4 +1,5 @@
 import {execSync} from 'child_process';
+import fs from 'fs';
 
 const node_win32 = "https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/LLMP/flac-bindings/win-x86/flac-bindings-v2.7.1-napi-v8-win32-x86.tar.gz"
 const node_win64 = "https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/LLMP/flac-bindings/win-x64/flac-bindings-v2.7.1-napi-v8-win32-x64.tar.gz"
@@ -21,6 +22,8 @@ for (const item of process.argv) {
 handle(platform, arch)
 
 function handle(platform, arch) {
+    // 删除上一次安装包目录
+    removeDir('release/build')
     // 创建目标目录
     exec('mkdirp release/app/build')
     // 创建node文件目录
@@ -28,12 +31,22 @@ function handle(platform, arch) {
     // 下载node文件
     downloadNode(platform, arch)
     // 解压flac-bindings包
-    exec('tar -zxvf release/app/flac-bindings/*')
+    const cmd_unzip = 'tar -zxvf release/app/flac-bindings/flac-bindings.tar.gz'
+    exec(process.platform === "win32" ? "powershell " + cmd_unzip : cmd_unzip)
     // 复制解压文件到指定目录
-    exec('cp build/Release/* release/app/build')
+    const cmd_copy = 'cp build/Release/flac-bindings.node release/app/build'
+    exec(process.platform === "win32" ? "powershell " + cmd_copy : cmd_copy)
     // 清理文件
-    exec('rm -rf build')
-    exec('rm -rf release/app/flac-bindings')
+    removeDir('build')
+    removeDir('release/app/flac-bindings')
+}
+
+function removeDir(path) {
+    if (fs.existsSync(path)) {
+        const cmd_rm_dir = 'rm -rf ' + path
+        const cmd_win_rm_dir = 'powershell rmdir ' + path + ' -Force -Recurse'
+        exec(process.platform === "win32" ? cmd_win_rm_dir : cmd_rm_dir)
+    }
 }
 
 function downloadNode(platform, arch) {
@@ -58,7 +71,9 @@ function downloadNode(platform, arch) {
         }
     }
     if (url !== undefined) {
-        exec("wget " + url + " -O release/app/flac-bindings/flac-bindings.tar.gz")
+        const cmd_download = "wget " + url + " -O release/app/flac-bindings/flac-bindings.tar.gz"
+        const cmd_win = "powershell " + cmd_download
+        execSync(process.platform === "win32" ? cmd_win : cmd_download)
     }
 }
 
