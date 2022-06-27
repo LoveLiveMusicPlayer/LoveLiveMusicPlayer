@@ -32,13 +32,14 @@ PS：由于无损音频涉及版权无法开源，请加入QQ群获取音频文�
 - [桌面歌词] √
 - [win系统托盘 + mac dock功能项] √
 - [播放数据上报] √
+- [歌曲快传] √
 - [专辑与歌曲分类] x
 - [歌曲与艺术家索引] x
 - [未完待续...] x
 
 **--Project_by [朱神无敌](https://space.bilibili.com/4367965)**
 
-# 交流
+# 交流 (Communication)
 
 <img src="assets/up_face.jpg" width="100" height="100">
 
@@ -46,7 +47,7 @@ QQ粉丝交流群：[724934644](https://jq.qq.com/?_wv=1027&k=FZkFfkP5)
 
 B站空间：<https://space.bilibili.com/4367965>
 
-# 发电
+# 发电 (Give a reward)
 
 欢迎来py，大家的支持就是我继续开发的动力！
 
@@ -55,7 +56,7 @@ B站空间：<https://space.bilibili.com/4367965>
 <img src="assets/up_wx.png" width="300" height="400">
 <img src="assets/up_zfb.png" width="300" height="400">
 
-## 歌词校对
+## 校对歌词 (Proofread the lyrics)
 
 | 昵称         | 链接                              | 参与项             |
 | -------------- | ----------------------------------- | --------------------- |
@@ -95,17 +96,20 @@ B站空间：<https://space.bilibili.com/4367965>
 | 朱神无敌   | QQ:<a>404288461</a>                        | 1/6 μ's  |
 | 中须霞保护协会 | <https://github.com/KasuminDESU>      | 1/2 μ's + Aqours + 虹咲学园 + Liella!  |
 
-## 特别鸣谢
+## 特别鸣谢 (Special Thanks)
 
-依然洳雪：<https://space.bilibili.com/13184888>
+- 依然洳雪：<https://space.bilibili.com/13184888>
 
-虹之咲字幕组：<https://space.bilibili.com/238547115>
+- 虹之咲字幕组：<https://space.bilibili.com/238547115>
 
-No.10字幕组：<https://space.bilibili.com/565597249>
+- No.10字幕组：<https://space.bilibili.com/565597249>
 
-其他个人翻译作者
+- 其他个人翻译作者
 
-## 鸣谢
+- flac转wav组件 [node-flac-bindings](https://github.com/melchor629/node-flac-bindings) (Thank you repository owner for your
+  great support)
+
+## 鸣谢 (Thanks)
 
 - 播放器组件 [react-music-player](https://github.com/lijinke666/react-music-player)
 - HTTP文件服务 [http-server](https://github.com/http-party/http-server)
@@ -114,13 +118,15 @@ No.10字幕组：<https://space.bilibili.com/565597249>
 - 萌娘百科 <https://zh.moegirl.org.cn>
 - LLWiki <https://llwiki.org>
 
-## 开发
+## 开发 (Develop)
 
-- npm run prebuild
-- 由于 flac-bindings 库需要编译二进制文件，请按照 /node_modules/flac-bindings/readme.md 查看编译方法。
-  主要步骤大概是：1.下载flac编解码器；2.安装cmake; 3.进入 /node_modules/flac-bindings/build 通过make命令编译
-  得到 ./Release 目录下的flac-bindings.node文件，并放入 /release 目录下
+- 依赖安装：yarn install
+- windows运行：yarn run win-start
+- mac/linux运行：yarn run start
+- windows打包：yarn run win32 / yarn run win64
+- linux打包：yarn run linuxarm / yarn run linux64
+- mac打包：yarn run macarm / yarn run mac64
 
-## 许可证
+## 许可证 (License)
 
 [MIT](https://github.com/zhushenwudi/LoveLiveMusicPlayer/blob/master/LICENSE)
