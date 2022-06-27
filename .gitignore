@@ -40,5 +40,5 @@ yarn.lock
 /release/build-linux/
 /release/build-mac/
 /release/build/
-/release/app/flac-bindings/mac-arm/flac-bindings.node
-/release/app/build/flac-bindings.node
+/release/app/flac-bindings/*
+/release/app/build/*

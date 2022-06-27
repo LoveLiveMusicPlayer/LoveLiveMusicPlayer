@@ -15,12 +15,12 @@
         "start:main": "cross-env NODE_ENV=development electron -r ts-node/register/transpile-only ./src/main/main.ts",
         "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
         "test": "jest",
-        "win32": "mkdirp release\\app\\build && xcopy release\\app\\flac-bindings\\win-x86\\* release\\app\\build /y && yarn package -w --ia32",
-        "win64": "mkdirp release\\app\\build && xcopy release\\app\\flac-bindings\\win-x64\\* release\\app\\build /y && yarn package -w",
-        "macarm": "mkdirp release/app/build && cp release/app/flac-bindings/mac-arm/* release/app/build && yarn package -m --arm64",
-        "mac64": "mkdirp release/app/build && cp release/app/flac-bindings/mac-x64/* release/app/build && yarn package -m --x64",
-        "linuxarm": "mkdirp release/app/build && cp release/app/flac-bindings/linux-arm64/* release/app/build && yarn package -l --arm64",
-        "linux64": "mkdirp release/app/build && cp release/app/flac-bindings/linux-x64/* release/app/build && yarn package -l --x64"
+        "win32": "ts-node .erb/scripts/prebuild.js platfrom='win' arch='x86' && yarn package -w --ia32",
+        "win64": "ts-node .erb/scripts/prebuild.js platfrom='win' arch='x64' && yarn package -w",
+        "linuxarm": "ts-node .erb/scripts/prebuild.js platfrom='linux' arch='arm64' && yarn package -l --arm64",
+        "linux64": "ts-node .erb/scripts/prebuild.js platfrom='linux' arch='x64' && yarn package -l --x64",
+        "macarm": "ts-node .erb/scripts/prebuild.js platfrom='darwin' arch='arm64' && yarn package -m --arm64",
+        "mac64": "ts-node .erb/scripts/prebuild.js platfrom='darwin' arch='x64' && yarn package -m --x64"
     },
     "lint-staged": {
         "*.{js,jsx,ts,tsx}": [
