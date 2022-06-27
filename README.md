@@ -116,7 +116,7 @@ No.10字幕组：<https://space.bilibili.com/565597249>
 
 ## 开发
 
-- 将 assets/image/loading.gif.zip 解压到同级目录
+- npm run prebuild
 - 由于 flac-bindings 库需要编译二进制文件，请按照 /node_modules/flac-bindings/readme.md 查看编译方法。
   主要步骤大概是：1.下载flac编解码器；2.安装cmake; 3.进入 /node_modules/flac-bindings/build 通过make命令编译
   得到 ./Release 目录下的flac-bindings.node文件，并放入 /release 目录下
