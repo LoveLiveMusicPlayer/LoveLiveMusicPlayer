@@ -15,6 +15,8 @@ if (!exists("assets/image/loading.gif")) {
     execSync(process.platform === 'win32' ? cmd_win : cmd_download)
 }
 
+exec("mkdirp node_modules/flac-bindings/build/Release")
+
 if (!exists("node_modules/flac-bindings/build/Release/flac-bindings.node")) {
     // 创建node文件目录
     exec('mkdirp release/app/flac-bindings')
