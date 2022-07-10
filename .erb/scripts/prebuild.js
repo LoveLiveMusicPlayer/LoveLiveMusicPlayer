@@ -1,12 +1,13 @@
 import {execSync} from 'child_process';
 import fs from 'fs';
 
-const node_win32 = "https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/LLMP/flac-bindings/win-x86/flac-bindings-v2.7.1-napi-v8-win32-x86.tar.gz"
-const node_win64 = "https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/LLMP/flac-bindings/win-x64/flac-bindings-v2.7.1-napi-v8-win32-x64.tar.gz"
-const node_linux_arm = "https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/LLMP/flac-bindings/linux-arm64/flac-bindings-v2.7.1-napi-v8-linux-arm64.tar.gz"
-const node_linux64 = "https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/LLMP/flac-bindings/linux-x64/flac-bindings-v2.7.1-napi-v8-linux-x64.tar.gz"
-const node_mac_arm = "https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/LLMP/flac-bindings/darwin-arm64/flac-bindings-v2.7.1-napi-v8-darwin-arm64.tar.gz"
-const node_mac64 = "https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/LLMP/flac-bindings/darwin-x64/flac-bindings-v2.7.1-napi-v8-darwin-x64.tar.gz"
+const flac_binding_version = "2.7.2"
+const node_win32 = "https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/LLMP/flac-bindings/win-x86/flac-bindings-v" + flac_binding_version + "-napi-v8-win32-x86.tar.gz"
+const node_win64 = "https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/LLMP/flac-bindings/win-x64/flac-bindings-v" + flac_binding_version + "-napi-v8-win32-x64.tar.gz"
+const node_linux_arm = "https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/LLMP/flac-bindings/linux-arm64/flac-bindings-v" + flac_binding_version + "-napi-v8-linux-arm64.tar.gz"
+const node_linux64 = "https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/LLMP/flac-bindings/linux-x64/flac-bindings-v" + flac_binding_version + "-napi-v8-linux-x64.tar.gz"
+const node_mac_arm = "https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/LLMP/flac-bindings/darwin-arm64/flac-bindings-v" + flac_binding_version + "-napi-v8-darwin-arm64.tar.gz"
+const node_mac64 = "https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/LLMP/flac-bindings/darwin-x64/flac-bindings-v" + flac_binding_version + "-napi-v8-darwin-x64.tar.gz"
 
 if (!exists("assets/image/loading.gif")) {
     const cmd_download = "wget https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/LLMP/loading.gif -O assets/image/loading.gif"
