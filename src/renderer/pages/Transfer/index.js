@@ -74,6 +74,7 @@ const Transfer = () => {
             })
             console.log("musicList created")
             setQrShow(false)
+            // onlyTransJsonData()
             prepareTask()
         })
     }
@@ -91,6 +92,17 @@ const Transfer = () => {
             }
         })
     }, [])
+
+    /**
+     * 仅对设备传输json数据，不传输歌曲
+     */
+    function onlyTransJsonData() {
+        const message = {
+            cmd: "test",
+            body: JSON.stringify(musicList)
+        }
+        wsRef.current?.send(JSON.stringify(message))
+    }
 
     function prepareTask() {
         runningTag = Date.now()
