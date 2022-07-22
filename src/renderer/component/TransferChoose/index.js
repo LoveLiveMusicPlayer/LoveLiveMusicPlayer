@@ -9,7 +9,7 @@ import {WorkUtils} from "../../utils/WorkUtils";
 
 const CheckboxGroup = Checkbox.Group;
 
-export const TransferChoose = ({btnOk, changeSwitch, disable}) => {
+export const TransferChoose = ({btnOk, changeSwitch, disable, useLocalMusic}) => {
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState([])
     const [indeterminate, setIndeterminate] = useState(false)
@@ -184,12 +184,15 @@ export const TransferChoose = ({btnOk, changeSwitch, disable}) => {
                         <p style={{color: 'white'}}>(已选:{chooseCount})</p>
                         <Button type="primary" disabled={disableNext} onClick={clickOk}
                                 style={{marginLeft: 12}}>选好了</Button>
-                        <div style={{marginLeft: 20, display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-                            <Switch style={{width: 25}} onChange={changeSwitch}/>
-                            <p style={{marginLeft: 10, color: "white"}}>是否覆盖传输？(谨慎选择)</p>
+                        <div style={{marginLeft: 12, display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                            <Switch style={{width: 20}} onChange={useLocalMusic}/>
+                            <p style={{marginLeft: 8, color: "white"}}>使用手机曲包，无传输？</p>
+                        </div>
+                        <div style={{marginLeft: 12, display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                            <Switch style={{width: 20}} onChange={changeSwitch}/>
+                            <p style={{marginLeft: 8, color: "white"}}>是否覆盖传输？(谨慎选择)</p>
                         </div>
                     </div>
-                    <p className={"funcRightText"}>请先选择歌曲，点击按钮后进行配对传输</p>
                 </div> : null}
         </>
     );

@@ -11,12 +11,16 @@ import {DownloadDialog} from "../../component/DownloadDialog";
 import {ipcRenderer} from "electron";
 import fs from "fs";
 import path from 'path'
+import {AppUtils} from "../../utils/AppUtils";
+import checkDiskSpace from 'check-disk-space'
+import {notification} from 'antd';
 
 let musicIds = []
 let musicList = []
 let startTime = 0
 let runningTag = 0;
 let needAllTrans = false;
+let useLocalMusic = false;
 
 const Transfer = () => {
     const [qrShow, setQrShow] = useState(false)
@@ -74,12 +78,26 @@ const Transfer = () => {
             })
             console.log("musicList created")
             setQrShow(false)
-            // onlyTransJsonData()
-            prepareTask()
+            if (useLocalMusic) {
+                onlyTransJsonData()
+            } else {
+                prepareTask()
+            }
         })
     }
 
     useEffect(() => {
+        checkDiskSpace(DBHelper.getHttpServer().path).then((diskSpace) => {
+            const mb = diskSpace.free / 1024 / 1024;
+            if (mb <= 50) {
+                notification.open({
+                    message: '请注意',
+                    description: '目前歌曲包所在硬盘的剩余空间不足50M，如果使用IOS设备进行歌曲传输，可能会存在失败的可能性',
+                    duration: 0
+                });
+            }
+        });
+
         ipcRenderer.on('convertOver', (event, args) => {
             const message = JSON.parse(args)
             if (message.cmd === "download") {
@@ -98,7 +116,7 @@ const Transfer = () => {
      */
     function onlyTransJsonData() {
         const message = {
-            cmd: "test",
+            cmd: "noTrans",
             body: JSON.stringify(musicList)
         }
         wsRef.current?.send(JSON.stringify(message))
@@ -146,6 +164,7 @@ const Transfer = () => {
                 }}
                 disable={qrShow || downloadShow}
                 changeSwitch={(checked) => needAllTrans = checked}
+                useLocalMusic={(checked) => useLocalMusic = checked}
                 progress
             />
             <QRDialog isShow={qrShow} close={() => setQrShow(false)}/>
@@ -208,6 +227,12 @@ const Transfer = () => {
                         musicId: musicId,
                         progress: "下载完成"
                     })
+                    if (Store.get("phoneSystem", "android") === "ios") {
+                        let musicList = downloadRef.current?.getList().filter(item => item.musicUId === musicId)
+                        if (musicList.length > 0) {
+                            AppUtils.delFile(DBHelper.getHttpServer().path + musicList[0].musicPath)
+                        }
+                    }
                 }}
                 downloadFail={(musicId) => {
                     if (runningTag === 0) {

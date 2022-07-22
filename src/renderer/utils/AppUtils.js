@@ -317,6 +317,13 @@ export const AppUtils = {
         }
     },
 
+    // 删除文件
+    delFile(path) {
+        if (fs.existsSync(path)) {
+            fs.unlinkSync(path);
+        }
+    },
+
     // 生成可中断的异步任务
     makeCancelable(promise) {
         let hasCanceled_ = false;

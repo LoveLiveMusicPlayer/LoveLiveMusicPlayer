@@ -13,6 +13,9 @@ export const DownloadDialog = forwardRef(({isShow, onClose}, ref) => {
         },
         setProgress: (kv) => {
             setProgress(kv)
+        },
+        getList: () => {
+            return downloadList;
         }
     }))
 
