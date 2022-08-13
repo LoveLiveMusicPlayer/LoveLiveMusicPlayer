@@ -131,15 +131,17 @@ const Transfer = () => {
         wsRef.current?.send(JSON.stringify(message))
     }
 
-    function stopTask() {
+    function stopTask(needSend = true) {
         if (runningTag !== 0) {
             runningTag = 0
             ipcRenderer.send('stopConvert')
-            const message = {
-                cmd: "stop",
-                body: ""
+            if (needSend) {
+                const message = {
+                    cmd: "stop",
+                    body: ""
+                }
+                wsRef.current?.send(JSON.stringify(message))
             }
-            wsRef.current?.send(JSON.stringify(message))
         }
     }
 
@@ -250,7 +252,7 @@ const Transfer = () => {
                     setDownloadShow(false)
                 }}
                 stop={() => {
-                    stopTask()
+                    stopTask(false)
                     setDownloadShow(false)
                 }}
             />
