@@ -43,7 +43,7 @@ const openNotification = (message) => {
 
 let currentLrcStatus = 'jp' // jp: 前后均日; zh: 前日后中; roma: 前日后罗马;
 
-function App({dispatch}) {
+function App({dispatch, appVersion}) {
     // 播放器控件 引用
     let playerRef = useRef()
     // 歌词页 引用
@@ -361,7 +361,7 @@ function App({dispatch}) {
 
     // 获取最新的数据版本，比较并提示
     const fetchLatestVersionHint = () => {
-        WorkUtils.fetchLatestVersionHint().then(resp => {
+        WorkUtils.fetchLatestVersionHint(appVersion).then(resp => {
             if (!AppUtils.isNull(resp)) {
                 const array = []
                 const currentDataVersion = Store.get('dataVersion') || 0

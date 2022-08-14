@@ -40,9 +40,8 @@ export default class update {
 
     checkUpdate(callback: Function) {
         this.callback = callback
-        const url = VersionUtils.refreshDataUrl()
         // 这里先拉取更新信息，在对话框中显示版本的更新内容
-        const req = https.request(url, req => {
+        const req = https.request(VersionUtils.getVersionInfo(), req => {
             let message = ''
             req.setEncoding('utf-8')
             req.on('data', chunk => {

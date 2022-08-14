@@ -36,7 +36,7 @@ const Transfer = () => {
         musicIds.map(item => {
             task.push(new Promise((resolve, reject) => {
                 MusicHelper.findOneMusicByUniqueId(item).then(mMusic => {
-                    const convertPath = mMusic.music_path.replaceAll('/', path.sep)
+                    const convertPath = (mMusic.base_url + mMusic.music_path).replaceAll('/', path.sep)
                     const url = DBHelper.getHttpServer().path + convertPath
                     if (fs.existsSync(url)) {
                         AlbumHelper.findOneAlbumByAlbumId(mMusic.group, mMusic.album).then(mAlbum => {
@@ -57,9 +57,7 @@ const Transfer = () => {
                                 artist: mMusic.artist,
                                 artistBin: mMusic.artist_bin,
                                 totalTime: mMusic.time,
-                                jpUrl: mMusic.lyric,
-                                zhUrl: mMusic.trans,
-                                romaUrl: mMusic.roma
+                                baseUrl: mMusic.base_url
                             })
                         })
                     } else {

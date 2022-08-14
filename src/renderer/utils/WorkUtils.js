@@ -8,7 +8,7 @@ import Bus from "./Event";
 import {MusicHelper} from "../dao/MusicHelper";
 import Store from "./Store";
 import {VersionUtils} from "./VersionUtils";
-import {INIT_CHECK_FILE, REQUEST_LATEST_VERSION_URL} from "./URLHelper";
+import {INIT_CHECK_FILE, OSS_URL_HEAD, REQUEST_LATEST_VERSION_FILE, OWNER_OSS_URL_HEAD} from "./URLHelper";
 import {parse as parseLrc} from "clrc";
 import {SongMenuHelper} from "../dao/SongMenuHelper";
 import {LoveHelper} from "../dao/LoveHelper";
@@ -61,11 +61,23 @@ export const WorkUtils = {
         if (infoList) {
             for (let i = 0; i < infoList.length; i++) {
                 const music = infoList[i]
-                const obj = [i + 1, music.title, music.album, music.artist, music.date, music.path, music.pic, music.lyric, music.time, music.trans, music.roma]
+                const baseUrl = music.pic.split("Cover")[0]
+                const coverName = music.pic.replace(baseUrl, "")
+                const fileName = music.path.replace(baseUrl, "")
+                const obj = [
+                    i + 1,
+                    music.title,
+                    music.album,
+                    music.artist,
+                    music.date,
+                    fileName,
+                    coverName,
+                    music.time,
+                    baseUrl
+                ]
                 arr.push(obj)
             }
             EXCEL.outPut({
-                header: ['id', '歌曲名称', '专辑名称', '艺术家', '发售日期', '文件路径', '封面路径', '日文歌词', '时长', '中文歌词', '罗马歌词'],
                 data: arr,
                 name: 'music'
             });
@@ -116,10 +128,11 @@ export const WorkUtils = {
         return result
     },
 
-    async fetchLatestVersionHint() {
+    async fetchLatestVersionHint(appVersion) {
         let result = null
         try {
-            const response = await Network.get(REQUEST_LATEST_VERSION_URL)
+            const versionPath = OWNER_OSS_URL_HEAD + appVersion + "/" + REQUEST_LATEST_VERSION_FILE
+            const response = await Network.get(versionPath)
             result = response.data
         } catch (error) {
             console.error(error);
@@ -128,19 +141,7 @@ export const WorkUtils = {
     },
 
     // 获取数据更新的地址
-    async requestUrl() {
-        let result = null
-        try {
-            const response = await Network.get(VersionUtils.refreshDataUrl())
-            result = response.data.data
-        } catch (error) {
-            console.error(error);
-        }
-        return result
-    },
-
-    // 获取更新数据信息
-    async requestData(url) {
+    async requestUrl(url) {
         let result = null
         try {
             const response = await Network.get(url)
@@ -193,17 +194,19 @@ export const WorkUtils = {
             const audioList = []
             res.map(item => {
                 if (item.value != null) {
+                    const baseUrl = item.value["base_url"]
+                    const lyricPath = baseUrl + item.value["music_path"].replace("flac", "lrc")
                     audioList.push({
                         _id: item.value._id,
                         name: item.value.name,
                         singer: item.value.artist,
                         album: item.value.album,
-                        lyric: item.value.lyric,
-                        trans: item.value.trans,
-                        roma: item.value.roma,
+                        lyric: OSS_URL_HEAD + "JP/" + lyricPath,
+                        trans: OSS_URL_HEAD + "ZH/" + lyricPath,
+                        roma: OSS_URL_HEAD + "ROMA/" + lyricPath,
                         playIndex: playIndex ? playIndex : 0,
-                        cover: AppUtils.encodeURL(URL + item.value["cover_path"]),
-                        musicSrc: AppUtils.encodeURL(URL + item.value["music_path"]),
+                        cover: AppUtils.encodeURL(URL + baseUrl + item.value["cover_path"]),
+                        musicSrc: AppUtils.encodeURL(URL + baseUrl + item.value["music_path"]),
                     })
                 } else {
                     isLoaded = false
@@ -277,15 +280,15 @@ export const WorkUtils = {
     },
 
     // 下载数据更新
-    async updateJsonData(onStart, onProgress, onAlbumEnd, onMusicEnd) {
-        const dataUrl = await this.requestUrl()
-        if (dataUrl == null) {
-            AppUtils.openMsgDialog("error", "服务繁忙，请稍候再试")
+    async updateJsonData(appVersion, onStart, onProgress, onAlbumEnd, onMusicEnd) {
+        const bridgeUrl = await this.requestUrl(VersionUtils.getBridgeUrl(appVersion))
+        if (bridgeUrl == null) {
+            AppUtils.openMsgDialog("error", "获取连接桥失败，请稍候再试")
             return
         }
-        const data = await this.requestData(dataUrl)
+        const data = await this.requestUrl(VersionUtils.getRefreshDataUrl(bridgeUrl, appVersion))
         if (data == null) {
-            AppUtils.openMsgDialog("error", "服务繁忙，请稍候再试")
+            AppUtils.openMsgDialog("error", "获取更新数据失败，请稍候再试")
             return
         }
         const version = Store.get("dataVersion")

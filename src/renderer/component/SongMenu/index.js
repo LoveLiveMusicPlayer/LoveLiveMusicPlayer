@@ -143,10 +143,10 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
                 <img className={'customPic'} src={Images.ICON_FUNC_HISTORY}/>
                 <p className={'customText'} style={{paddingLeft: '10px'}}>最近播放</p>
             </div>
-            <div className={chooseItem === 0 ? 'selectContainer' : 'unselectContainer'} onClick={() => onChooseItem(0)}>
-                <img className={'customPic'} src={Images.ICON_FUNC_WIFI}/>
-                <p className={'customText'} style={{paddingLeft: '10px'}}>歌曲传输</p>
-            </div>
+            {/*<div className={chooseItem === 0 ? 'selectContainer' : 'unselectContainer'} onClick={() => onChooseItem(0)}>*/}
+            {/*    <img className={'customPic'} src={Images.ICON_FUNC_WIFI}/>*/}
+            {/*    <p className={'customText'} style={{paddingLeft: '10px'}}>歌曲传输</p>*/}
+            {/*</div>*/}
 
             <div style={{marginTop: '30px'}}/>
             <div className={'addMenuContainer'}>

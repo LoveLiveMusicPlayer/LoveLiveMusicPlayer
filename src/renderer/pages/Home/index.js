@@ -160,6 +160,7 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
     // 更新数据
     const refreshData = () => {
         WorkUtils.updateJsonData(
+            appVersion,
             () => loadingRef.current?.show("导入专辑中.."),
             (progress) => loadingRef.current?.setProgress(progress),
             () => loadingRef.current?.setTitle("导入歌曲中.."),

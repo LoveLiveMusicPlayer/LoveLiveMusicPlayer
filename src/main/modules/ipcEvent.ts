@@ -6,7 +6,6 @@ import {thumbarButtons} from "./dockAndTray";
 import path from "path";
 import {RESOURCES_PATH} from "./inital";
 import Dialog from "./dialog";
-import qs from "qs";
 
 const httpserver = require('http-server');
 const autoUpdater = new update()
