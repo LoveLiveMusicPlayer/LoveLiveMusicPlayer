@@ -136,7 +136,7 @@ export default function () {
     }
 
     const moveWindow = () => {
-        ipcRenderer.send('windowMoving', { mouseX, mouseY });
+        ipcRenderer.send('windowMoving', {mouseX, mouseY});
         animationId = requestAnimationFrame(moveWindow);
     }
 

@@ -1,4 +1,4 @@
 export const MODE = {
-  FULL: 'full',
-  MINI: 'mini',
+    FULL: 'full',
+    MINI: 'mini',
 }

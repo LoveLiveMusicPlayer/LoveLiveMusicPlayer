@@ -123,8 +123,8 @@ class TypeWriterEffect extends Component {
         // unsubscribe from timeouts and events
         this.props.scrollArea && typeof this.props.scrollArea == 'object'
             ? this.props.scrollArea.removeEventListener(
-            'scroll',
-            this.animateOnScroll
+                'scroll',
+                this.animateOnScroll
             )
             : document.removeEventListener('scroll', this.animateOnScroll);
         this.state.startDelay && this.state.startDelay.cancel();

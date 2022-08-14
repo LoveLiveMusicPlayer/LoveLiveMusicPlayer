@@ -37,7 +37,7 @@ export default function () {
         productName: "LoveLiveMusicPlayer",
         companyName: "zhushenwudi",
         submitURL: "http://139.224.116.225:9000/api/6/minidump/?sentry_key=1d2d5d17044544e8b37e78182a2f1c77",
-        extra:{
+        extra: {
             "isDev": isDevelopment ? 'yes' : 'no',
             "version": app.getVersion()
         }

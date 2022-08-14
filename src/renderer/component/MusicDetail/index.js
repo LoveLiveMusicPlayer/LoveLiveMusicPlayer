@@ -211,7 +211,8 @@ export const MusicDetail = forwardRef(({
             onRequestClose={null}
             style={musicDetailStyles}>
             <div className={"blackArea"} style={{borderRadius: isFullScreen ? 0 : 12}}/>
-            <img className={"gauss"} src={mCover} style={{top: isFullScreen ? '0%' : '5%', height: isFullScreen ? '100%' : '90%'}}/>
+            <img className={"gauss"} src={mCover}
+                 style={{top: isFullScreen ? '0%' : '5%', height: isFullScreen ? '100%' : '90%'}}/>
 
             <div>
                 <div className={'musicDetailContainer'}>

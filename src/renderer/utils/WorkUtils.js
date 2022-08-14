@@ -8,7 +8,7 @@ import Bus from "./Event";
 import {MusicHelper} from "../dao/MusicHelper";
 import Store from "./Store";
 import {VersionUtils} from "./VersionUtils";
-import {INIT_CHECK_FILE, OSS_URL_HEAD, REQUEST_LATEST_VERSION_FILE, OWNER_OSS_URL_HEAD} from "./URLHelper";
+import {INIT_CHECK_FILE, OSS_URL_HEAD, OWNER_OSS_URL_HEAD, REQUEST_LATEST_VERSION_FILE} from "./URLHelper";
 import {parse as parseLrc} from "clrc";
 import {SongMenuHelper} from "../dao/SongMenuHelper";
 import {LoveHelper} from "../dao/LoveHelper";

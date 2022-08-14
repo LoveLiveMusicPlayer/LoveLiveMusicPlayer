@@ -55,7 +55,7 @@ const createLyricWindow = function (BrowserWindow: any) {
             clientY = lyricWindow.getSize()[1]
         }
 
-        const { x, y } = screen.getCursorScreenPoint()
+        const {x, y} = screen.getCursorScreenPoint()
         lyricWindow.setBounds({
             width: clientX,
             height: clientY,

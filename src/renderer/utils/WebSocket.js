@@ -3,7 +3,15 @@ import {DBHelper} from "../dao/DBHelper";
 
 let ws = null
 
-export const WS = React.forwardRef(({phoneSystem, ready, downloading, downloadSuccess, downloadFail, finish, stop}, ref) => {
+export const WS = React.forwardRef(({
+                                        phoneSystem,
+                                        ready,
+                                        downloading,
+                                        downloadSuccess,
+                                        downloadFail,
+                                        finish,
+                                        stop
+                                    }, ref) => {
 
     React.useImperativeHandle(
         ref,
