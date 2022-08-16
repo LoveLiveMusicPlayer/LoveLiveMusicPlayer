@@ -25,6 +25,7 @@ import {WindowButton} from "./component/WindowButton";
 import {appAction} from "./actions/app";
 import {parse as parseLrc} from 'clrc';
 import Transfer from "./pages/Transfer";
+import {VersionUtils} from "./utils/VersionUtils";
 
 const {ipcRenderer} = require('electron')
 const os = require("os").platform();
@@ -386,22 +387,19 @@ function App({dispatch, appVersion}) {
         }
         // 判断本次版本是否是强制恢复版本
         ipcRenderer.on('getAppVersion', (event, version) => {
-            const initedVersion = Store.get('appInitedVersion')
             dispatch(appAction.appVersion(version))
-            if (AppUtils.isNull(initedVersion) || version !== initedVersion) {
-                WorkUtils.requestNeedInit(version).then(status => {
-                    switch (status) {
-                        case 1: // 删除音乐数据
-                            DBHelper.removeMusicDB().then(finish)
-                            break
-                        case 2: // 删除全部数据
-                            DBHelper.removeAllDB().then(finish)
-                            break
-                        default:
-                            break
-                    }
-                }).catch(_ => {
-                })
+            const obj = VersionUtils.getIsNeedInit()
+            if (obj.needInit) {
+                switch (obj.status) {
+                    case 1: // 删除音乐数据
+                        DBHelper.removeMusicDB().then(finish)
+                        break
+                    case 2: // 删除全部数据
+                        DBHelper.removeAllDB().then(finish)
+                        break
+                    default:
+                        break
+                }
             }
         })
         ipcRenderer.send('getAppVersion')
