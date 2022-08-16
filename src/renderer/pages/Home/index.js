@@ -174,21 +174,21 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
 
     const onDelUserData = (isDel) => {
         if (isDel) {
-            DBHelper.removeUserDB()
+            DBHelper.removeUserDB(appVersion)
             clearDialog.current?.forceClose()
             restart()
         }
     }
 
     const deleteMusicData = () => {
-        DBHelper.removeMusicDB().then(_ => {
+        DBHelper.removeMusicDB(appVersion).then(_ => {
             clearDialog.current?.forceClose()
             restart()
         })
     }
 
     const deleteDIYData = () => {
-        DBHelper.removeDIYDB().then(_ => {
+        DBHelper.removeDIYDB(appVersion).then(_ => {
             clearDialog.current?.forceClose()
             restart()
         })

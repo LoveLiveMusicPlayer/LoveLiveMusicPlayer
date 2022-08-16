@@ -8,8 +8,8 @@ import {
 
 // 是否是预发环境
 const isPre = true
-// 是否需要清空某些数据表? 0: 不需要 1: 删除歌库 2: 删除全部
-const isNeedInit = {needInit: true, status: 0}
+// 是否需要清空歌曲库
+const isNeedInit = true
 
 export const VersionUtils = {
     // 获取连接桥跳板

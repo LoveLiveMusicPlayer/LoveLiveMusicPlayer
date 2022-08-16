@@ -387,21 +387,11 @@ function App({dispatch, appVersion}) {
         }
         // 判断本次版本是否是强制恢复版本
         ipcRenderer.on('getAppVersion', (event, version) => {
-            const initedVersion = Store.get('appInitedVersion')
+            const forceRemoveVersion = Store.get('forceRemoveVersion' + version)
             dispatch(appAction.appVersion(version))
-            if (AppUtils.isNull(initedVersion) || version !== initedVersion) {
-                const obj = VersionUtils.getIsNeedInit()
-                if (obj.needInit) {
-                    switch (obj.status) {
-                        case 1: // 删除音乐数据
-                            DBHelper.removeMusicDB().then(finish)
-                            break
-                        case 2: // 删除全部数据
-                            DBHelper.removeAllDB().then(finish)
-                            break
-                        default:
-                            break
-                    }
+            if (AppUtils.isNull(forceRemoveVersion) || version !== forceRemoveVersion) {
+                if (VersionUtils.getIsNeedInit()) {
+                    DBHelper.removeMusicDB(version).then(finish)
                 }
             }
         })

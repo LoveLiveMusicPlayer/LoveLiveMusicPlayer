@@ -39,16 +39,16 @@ export const DBHelper = {
     },
 
     // 删除用户数据
-    removeUserDB() {
+    removeUserDB(version) {
         const dataVersion = Store.get('dataVersion')
-        this.clearStore()
+        this.clearStore(version)
         Store.set('dataVersion', dataVersion)
     },
 
     // 删除自建数据
-    async removeDIYDB() {
+    async removeDIYDB(version) {
         const promiseArr = []
-        this.clearStore()
+        this.clearStore(version)
         promiseArr.push(LoveHelper.removeAllILove())
         promiseArr.push(SongMenuHelper.removeAllMenu())
         return Promise.allSettled(promiseArr)
@@ -66,20 +66,19 @@ export const DBHelper = {
     },
 
     // 删除音乐数据
-    async removeMusicDB() {
+    async removeMusicDB(version) {
         const promiseArr = []
-        this.clearStore()
+        this.clearStore(version)
         promiseArr.push(AlbumHelper.removeAllAlbum())
         promiseArr.push(MusicHelper.removeAllMusic())
         return Promise.allSettled(promiseArr)
     },
 
-    // 清除 store 前先保存 appInitedVersion版本
-    clearStore() {
-        const initedVersion = Store.get('appInitedVersion')
+    // 清除 store
+    clearStore(appVersion) {
         Store.clear()
-        if (!AppUtils.isEmpty(initedVersion)) {
-            Store.set('appInitedVersion', initedVersion)
+        if (!AppUtils.isEmpty(appVersion)) {
+            Store.set('forceRemoveVersion' + appVersion, appVersion)
         }
     }
 }
