@@ -1,36 +1,39 @@
 import {
     OWNER_OSS_URL_HEAD,
-    PRE_BRIDGE_URL,
-    PRE_DATA_FILE,
-    PRE_VERSION_FILE,
-    PROD_BRIDGE_URL,
-    PROD_DATA_FILE,
-    PROD_VERSION_FILE
+    BRIDGE_URL,
+    DATA_FILE,
+    VERSION_FILE,
+    REQUEST_LATEST_VERSION_FILE
 } from "./URLHelper";
 
 // 是否是预发环境
 const isPre = true
-// 是否需要初始化
-const isNeedInit = {needInit: true, status: 1}
+// 是否需要清空某些数据表? 0: 不需要 1: 删除歌库 2: 删除全部
+const isNeedInit = {needInit: true, status: 0}
 
 export const VersionUtils = {
     // 获取连接桥跳板
     getBridgeUrl(appVersion) {
-        return OWNER_OSS_URL_HEAD + appVersion + "/" + (isPre ? PRE_BRIDGE_URL : PROD_BRIDGE_URL)
+        return OWNER_OSS_URL_HEAD + appVersion + isPre ? "/pre/" : "/prod/" + BRIDGE_URL
     },
 
     // 更新数据的地址
     getRefreshDataUrl(bridgeUrl, appVersion) {
-        return bridgeUrl + appVersion + "/" + (isPre ? PRE_DATA_FILE : PROD_DATA_FILE)
+        return bridgeUrl + appVersion + isPre ? "/pre/" : "/prod/" + DATA_FILE
     },
 
     // 更新版本的地址
     getVersionInfo() {
-        return OWNER_OSS_URL_HEAD + (isPre ? PRE_VERSION_FILE : PROD_VERSION_FILE)
+        return OWNER_OSS_URL_HEAD + isPre ? "version/pre/" : "version/prod/" + VERSION_FILE
     },
 
     // 获取版本初始化模式
     getIsNeedInit() {
         return isNeedInit
+    },
+
+    // 获取开屏提醒的地址
+    getVersionHintUrl(appVersion) {
+        return OWNER_OSS_URL_HEAD + appVersion + isPre ? "/pre/" : "/prod/" + REQUEST_LATEST_VERSION_FILE
     }
 }

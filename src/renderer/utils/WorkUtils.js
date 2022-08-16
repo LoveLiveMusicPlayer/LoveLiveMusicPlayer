@@ -8,7 +8,7 @@ import Bus from "./Event";
 import {MusicHelper} from "../dao/MusicHelper";
 import Store from "./Store";
 import {VersionUtils} from "./VersionUtils";
-import {INIT_CHECK_FILE, OSS_URL_HEAD, OWNER_OSS_URL_HEAD, REQUEST_LATEST_VERSION_FILE} from "./URLHelper";
+import {INIT_CHECK_FILE, OSS_URL_HEAD} from "./URLHelper";
 import {parse as parseLrc} from "clrc";
 import {SongMenuHelper} from "../dao/SongMenuHelper";
 import {LoveHelper} from "../dao/LoveHelper";
@@ -110,29 +110,10 @@ export const WorkUtils = {
         return result
     },
 
-    // 获取该版本是否需要强制恢复初始状态
-    async requestNeedInit(version) {
-        let result = 0
-        try {
-            const response = await Network.get(INIT_CHECK_FILE)
-            response.data.map(item => {
-                if (item.version === version) {
-                    result = item.status
-                }
-            })
-        } catch (error) {
-            return new Promise((resolve, reject) => {
-                reject()
-            })
-        }
-        return result
-    },
-
     async fetchLatestVersionHint(appVersion) {
         let result = null
         try {
-            const versionPath = OWNER_OSS_URL_HEAD + appVersion + "/" + REQUEST_LATEST_VERSION_FILE
-            const response = await Network.get(versionPath)
+            const response = await Network.get(VersionUtils.getVersionHintUrl(appVersion))
             result = response.data
         } catch (error) {
             console.error(error);
