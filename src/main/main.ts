@@ -16,6 +16,7 @@ if (!gotTheLock) {
 
 global.isInit = true
 global.startTime = new Date().getTime()
+global.willQuitApp = false
 
 init()
 
