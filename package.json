@@ -16,12 +16,13 @@
         "prebuild": "ts-node .erb/scripts/prebuild.js",
         "win-start": "chcp 65001 && ts-node ./.erb/scripts/check-port-in-use.js && ts-node ./.erb/scripts/prebuild.js && npm run start:renderer",
         "start": "ts-node ./.erb/scripts/check-port-in-use.js && ts-node ./.erb/scripts/prebuild.js && npm run start:renderer",
-        "win32": "chcp 65001 && ts-node .erb/scripts/prepack.js platfrom=win arch=x86 && yarn package -w --ia32",
-        "win64": "chcp 65001 && ts-node .erb/scripts/prepack.js platfrom=win arch=x64 && yarn package -w",
-        "linuxarm": "ts-node .erb/scripts/prepack.js platfrom=linux arch=arm64 && yarn package -l --arm64",
-        "linux64": "ts-node .erb/scripts/prepack.js platfrom=linux arch=x64 && yarn package -l --x64",
-        "macarm": "ts-node .erb/scripts/prepack.js platfrom=darwin arch=arm64 && yarn package -m --arm64",
-        "mac64": "ts-node .erb/scripts/prepack.js platfrom=darwin arch=x64 && yarn package -m --x64"
+        "win-x32": "ts-node .erb/scripts/prepack.js platfrom=win arch=x86 && yarn package -w --ia32",
+        "win-x64": "ts-node .erb/scripts/prepack.js platfrom=win arch=x64 && yarn package -w --x64",
+        "win-arm64": "chcp 65001 && ts-node .erb/scripts/prepack.js platfrom=win arch=x64 && yarn package -w --arm64",
+        "linux-arm64": "ts-node .erb/scripts/prepack.js platfrom=linux arch=arm64 && yarn package -l --arm64",
+        "linux-x64": "ts-node .erb/scripts/prepack.js platfrom=linux arch=x64 && yarn package -l --x64",
+        "mac-arm64": "ts-node .erb/scripts/prepack.js platfrom=darwin arch=arm64 && yarn package -m --arm64",
+        "mac-x64": "ts-node .erb/scripts/prepack.js platfrom=darwin arch=x64 && yarn package -m --x64"
     },
     "lint-staged": {
         "*.{js,jsx,ts,tsx}": [
@@ -195,7 +196,7 @@
         "css-loader": "^6.4.0",
         "css-minimizer-webpack-plugin": "^3.3.1",
         "detect-port": "^1.3.0",
-        "electron": "^16.2.8",
+        "electron": "16.2.8",
         "electron-builder": "^23.1.0",
         "electron-devtools-installer": "^3.2.0",
         "electron-notarize": "^1.1.1",
