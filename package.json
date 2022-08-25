@@ -40,7 +40,7 @@
     },
     "build": {
         "productName": "LoveLive音乐播放器",
-        "appId": "com.zhushenwudi.LoveLiveMusicPlayer",
+        "appId": "com.zhushenwudi.lovelivemusicplayer",
         "asar": true,
         "asarUnpack": "**\\*.{dll}",
         "files": [
