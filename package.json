@@ -52,12 +52,14 @@
         "afterSign": ".erb/scripts/notarize.js",
         "mac": {
             "target": {
-                "target": "default"
+                "target": "mas"
             },
             "type": "distribution",
             "hardenedRuntime": true,
+            "icon": "assets/icon.icns",
             "entitlements": "assets/entitlements.mac.plist",
             "entitlementsInherit": "assets/entitlements.mac.plist",
+            "provisioningProfile": "assets/LLMP.provisionprofile",
             "gatekeeperAssess": false
         },
         "dmg": {
