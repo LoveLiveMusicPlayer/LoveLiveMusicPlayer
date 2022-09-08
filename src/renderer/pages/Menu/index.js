@@ -112,7 +112,7 @@ const Menu = ({playId}) => {
                 const url = Store.get('url')
                 const set = new Set()
                 info.music.map((item, index) => {
-                    const path = url + item['cover_path']
+                    const path = url + item['base_url'] + item['cover_path']
                     set.add(path)
                 })
                 Array.from(set).map((item, index) => {

@@ -26,6 +26,8 @@ import {appAction} from "./actions/app";
 import {parse as parseLrc} from 'clrc';
 import Transfer from "./pages/Transfer";
 import {VersionUtils} from "./utils/VersionUtils";
+import TransferMusic from "./pages/Transfer/TransferMusic";
+import TransferData from "./pages/Transfer/TransferData";
 
 const {ipcRenderer} = require('electron')
 const os = require("os").platform();
@@ -63,7 +65,7 @@ function App({dispatch, appVersion}) {
     let navigate = useNavigate()
     let location = useLocation()
 
-    // 音乐馆: -3; 我喜欢: -2; 最近播放: -1; 歌曲传输: 0 歌单: 1 ~ n
+    // 音乐馆: -3; 我喜欢: -2; 最近播放: -1; 传输: 0 歌单: 1 ~ n
     const [chooseItem, setChooseItem] = useState(-3)
     // 显示团组的 modal
     const [showMenu, setShowMenu] = useState(false)
@@ -311,6 +313,8 @@ function App({dispatch, appVersion}) {
                         <Route path="/menu/:id" element={<Menu/>}/>
                         <Route path="/love" element={<Love/>}/>
                         <Route path="/transfer" element={<Transfer/>}/>
+                        <Route path="/transferMusic" element={<TransferMusic/>}/>
+                        <Route path="/transferData" element={<TransferData/>}/>
                     </Routes>
                 </div>
             )

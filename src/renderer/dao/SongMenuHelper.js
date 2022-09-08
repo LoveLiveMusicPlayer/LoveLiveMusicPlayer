@@ -22,6 +22,18 @@ export const SongMenuHelper = {
         } else return new Promise()
     },
 
+    insertPhoneMenu(json) {
+        return db.insert(json)
+    },
+
+    findPcMenu() {
+        return db.findAll({
+            $where: function () {
+                return this.id < 100
+            }
+        })
+    },
+
     // 歌单填满
     pushAll() {
         const arr = []
@@ -89,6 +101,15 @@ export const SongMenuHelper = {
     // 删除知道 id 的歌单
     deleteMenu(id) {
         return db.remove(id ? {id: id} : null, {multi: true})
+    },
+
+    // 清空所有手机歌单
+    deletePhoneMenu() {
+        return db.remove({
+            $where: function () {
+                return this.id > 100
+            }
+        }, {multi: true})
     },
 
     // 删除全部歌单

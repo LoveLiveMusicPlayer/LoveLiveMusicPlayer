@@ -1,0 +1,28 @@
+.transferContainer {
+    width: 100%;
+    height: 100%;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 165px;
+    overflow: auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 120px;
+}
+
+.transferItemContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.itemImage {
+    border-radius: 50%;
+}
+
+.itemText {
+    color: white;
+    font-size: 22px;
+    margin-top: 20px;
+}

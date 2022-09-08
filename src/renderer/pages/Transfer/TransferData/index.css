@@ -1,0 +1,23 @@
+.transferDataContainer {
+    width: 100%;
+    height: 100%;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 165px;
+    overflow: auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 120px;
+}
+
+.innerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.btnTrans {
+    width: 200px;
+    margin-top: 30px;
+}

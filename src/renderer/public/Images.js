@@ -55,6 +55,11 @@ import lrc_language_chinese_untouch from '../../../assets/image/lrc_language_chi
 import lrc_language_roma_touch from '../../../assets/image/lrc_language_roma_touch.png'
 import lrc_language_roma_untouch from '../../../assets/image/lrc_language_roma_untouch.png'
 
+import icon_trans_music from '../../../assets/image/icon_trans_music.jpg'
+import icon_trans_music_hover from '../../../assets/image/icon_trans_music_hover.png'
+import icon_trans_data from '../../../assets/image/icon_trans_data.jpg'
+import icon_trans_data_hover from '../../../assets/image/icon_trans_data_hover.png'
+
 export const ICON_HEAD = icon_head
 export const ICON_MENU = icon_menu
 export const ICON_TILE = icon_tile
@@ -111,3 +116,8 @@ export const LRC_LANGUAGE_CHINESE_TOUCH = lrc_language_chinese_touch
 export const LRC_LANGUAGE_CHINESE_UNTOUCH = lrc_language_chinese_untouch
 export const LRC_LANGUAGE_ROMA_TOUCH = lrc_language_roma_touch
 export const LRC_LANGUAGE_ROMA_UNTOUCH = lrc_language_roma_untouch
+
+export const TRANSPORT_MUSIC = icon_trans_music
+export const TRANSPORT_MUSIC_HOVER = icon_trans_music_hover
+export const TRANSPORT_DATA = icon_trans_data
+export const TRANSPORT_DATA_HOVER = icon_trans_data_hover

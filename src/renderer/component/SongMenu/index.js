@@ -29,8 +29,15 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
         const onClickBody = () => {
             setNodeDisplay(false)
         }
+        const onMenuDataChanged = () => {
+            setRefreshMenu(new Date().getTime())
+        }
         Bus.addListener('onClickBody', onClickBody)
-        return () => Bus.removeListener('onClickBody', onClickBody)
+        Bus.addListener('onMenuDataChanged', onMenuDataChanged)
+        return () => {
+            Bus.removeListener('onClickBody', onClickBody)
+            Bus.removeListener('onMenuDataChanged', onMenuDataChanged)
+        }
     }, [])
 
     useEffect(() => {
@@ -45,7 +52,14 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
             container.push(
                 <div
                     className={chooseItem === index + 1 ? 'selectContainer' : 'unselectContainer'}
-                    onClick={() => onChooseItem(index + 1)}
+                    onClick={() => {
+                        const chooseIndex = index + 1;
+                        if (chooseIndex > 0) {
+                            onChooseItem(menuList[index].id)
+                        } else {
+                            onChooseItem(chooseIndex)
+                        }
+                    }}
                     key={index}
                     onContextMenu={event => onRightClick(event, item)}
                 >
@@ -145,7 +159,7 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
             </div>
             <div className={chooseItem === 0 ? 'selectContainer' : 'unselectContainer'} onClick={() => onChooseItem(0)}>
                 <img className={'customPic'} src={Images.ICON_FUNC_WIFI}/>
-                <p className={'customText'} style={{paddingLeft: '10px'}}>歌曲传输</p>
+                <p className={'customText'} style={{paddingLeft: '10px'}}>传输</p>
             </div>
 
             <div style={{marginTop: '30px'}}/>

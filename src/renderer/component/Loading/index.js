@@ -65,7 +65,7 @@ export const Loading = forwardRef((props, ref) => {
             style={customStyles}>
             <img src={Images.LOADING} style={{width: 150, height: 150}}/>
             <p style={{color: 'black'}}>{title}</p>
-            <p style={{color: 'black'}}>进度：{progress}%</p>
+            {progress === -1 ? null : <p style={{color: 'black'}}>进度：{progress}%</p>}
         </Modal>
     )
 })
