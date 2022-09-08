@@ -131,7 +131,7 @@ class AudioPlayer extends React.PureComponent {
                 <Menu.Item key={"addTo"}>
                     <a onClick={async () => {
                         if (!AppUtils.isEmpty(currentMusicUniqueId)) {
-                            SongMenuHelper.findAllMenu().then(menu => {
+                            SongMenuHelper.findPcMenu().then(menu => {
                                 if (menu.length > 0) {
                                     this.setState({
                                         addListDisplay: true,

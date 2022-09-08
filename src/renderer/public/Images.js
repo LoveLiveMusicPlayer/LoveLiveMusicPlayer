@@ -35,6 +35,8 @@ import icon_func_history from '../../../assets/image/icon_func_history.png'
 import icon_func_wifi from '../../../assets/image/icon_wifi.png'
 import icon_menu_add_select from '../../../assets/image/icon_menu_add_select.png'
 import icon_menu_add_unselect from '../../../assets/image/icon_menu_add_unselect.png'
+import icon_menu_phone from '../../../assets/image/icon_menu_phone.png'
+import icon_menu_computer from '../../../assets/image/icon_menu_computer.png'
 
 import lrc_close_touch from '../../../assets/image/lrc_close_touch.png'
 import lrc_close_untouch from '../../../assets/image/lrc_close_untouch.png'
@@ -97,6 +99,8 @@ export const ICON_FUNC_HISTORY = icon_func_history
 export const ICON_FUNC_WIFI = icon_func_wifi
 export const ICON_MENU_ADD_SELECT = icon_menu_add_select
 export const ICON_MENU_ADD_UNSELECT = icon_menu_add_unselect
+export const ICON_MENU_PHONE = icon_menu_phone
+export const ICON_MENU_COMPUTER = icon_menu_computer
 
 export const LRC_CLOSE_TOUCH = lrc_close_touch
 export const LRC_CLOSE_UNTOUCH = lrc_close_untouch

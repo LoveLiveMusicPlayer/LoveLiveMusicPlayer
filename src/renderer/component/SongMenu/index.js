@@ -49,6 +49,7 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
     const renderMenuList = () => {
         const container = []
         menuList.map((item, index) => {
+            const pic = item.id <= 100 ? Images.ICON_MENU_COMPUTER : Images.ICON_MENU_PHONE
             container.push(
                 <div
                     className={chooseItem === index + 1 ? 'selectContainer' : 'unselectContainer'}
@@ -63,7 +64,8 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
                     key={index}
                     onContextMenu={event => onRightClick(event, item)}
                 >
-                    <p className={'customText'}>{item.name}</p>
+                    <img className={'customPic'} src={pic}/>
+                    <p className={'customText'} style={{marginLeft: '10px'}}>{item.name}</p>
                 </div>
             )
         })

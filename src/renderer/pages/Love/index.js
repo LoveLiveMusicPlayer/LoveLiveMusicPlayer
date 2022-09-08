@@ -176,7 +176,7 @@ const Love = ({playId}) => {
     }
 
     const addList = (music) => {
-        SongMenuHelper.findAllMenu().then(res => {
+        SongMenuHelper.findPcMenu().then(res => {
             if (res.length > 0) {
                 setAddListDisplay(true)
                 setWillAddListMusic(music.music)

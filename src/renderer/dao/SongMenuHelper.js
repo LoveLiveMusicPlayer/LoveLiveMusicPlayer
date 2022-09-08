@@ -29,7 +29,7 @@ export const SongMenuHelper = {
     findPcMenu() {
         return db.findAll({
             $where: function () {
-                return this.id < 100
+                return this.id <= 100
             }
         })
     },
