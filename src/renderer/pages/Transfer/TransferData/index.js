@@ -31,15 +31,20 @@ const TransferData = () => {
         const tempList = [];
         for (const menu of menuList) {
             const musicId = [];
-            menu.music.forEach((music) => {
-                musicId.push(music._id)
-            })
-            tempList.push({
-                menuId: menu.id,
-                name: menu.name,
-                musicList: musicId,
-                date: menu.date
-            })
+            for (const music of menu.music) {
+                const mMusic = await MusicHelper.findOneMusicByUniqueId(music._id);
+                if (mMusic.export) {
+                    musicId.push(music._id)
+                }
+            }
+            if (musicId.length !== 0) {
+                tempList.push({
+                    menuId: menu.id,
+                    name: menu.name,
+                    musicList: musicId,
+                    date: menu.date
+                })
+            }
         }
         await mergeLoveList("pc2phone", loveList, tempList)
     }

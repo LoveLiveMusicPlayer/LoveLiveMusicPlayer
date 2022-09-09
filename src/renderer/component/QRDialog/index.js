@@ -20,7 +20,12 @@ export const QRDialog = ({isShow, close}) => {
             if (inter.indexOf("VMware") === -1) {
                 const address = ip.address(inter)
                 if (address !== undefined && address !== "127.0.0.1") {
-                    netList.push(address)
+                    if (address.indexOf("192.168") !== -1) {
+                        // 将192.168段的ip放在前面
+                        netList.splice(0, 0, address)
+                    } else {
+                        netList.push(address)
+                    }
                 }
             }
         }
