@@ -8,6 +8,7 @@ import wav from "wav";
 import fs from "fs";
 import Dialog from "./modules/dialog";
 import {AppUtils} from "../renderer/utils/AppUtils";
+import {Platform} from "electron-builder";
 
 const net = require('net')
 
@@ -176,7 +177,7 @@ export function makeCancelable(promise: Promise<any>) {
 
 // 处理文件
 export function transfer(pathDir: string, music: any, phoneSystem: string, runningTag: number) {
-    const srcPath = pathDir + music.convertPath;
+    const srcPath = pathDir + Platform.WINDOWS ? "" : path.sep + music.convertPath;
     let destPath = null;
     if (music.destDir !== null) {
         destPath = music.destDir + music.musicPath;
