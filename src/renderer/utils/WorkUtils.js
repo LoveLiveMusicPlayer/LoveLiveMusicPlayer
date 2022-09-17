@@ -14,6 +14,10 @@ import {SongMenuHelper} from "../dao/SongMenuHelper";
 import {LoveHelper} from "../dao/LoveHelper";
 import * as _ from 'lodash'
 
+const {promisify} = require('util');
+const stat = promisify(fs.stat)
+const readdir = promisify(fs.readdir)
+
 const path = require('path');
 
 export const WorkUtils = {
@@ -562,5 +566,75 @@ export const WorkUtils = {
         } else if (cycleNum === checkNum) {
             return 1
         } else return 0
+    },
+
+    calcSizeSync(dirPath, cb) {
+        let fileSize = 0
+        let error = null
+
+        function calc(dirPath, cb1) {
+            const statObj = fs.statSync(dirPath)
+            if (statObj.isDirectory()) {
+                try {
+                    const files = fs.readdirSync(dirPath)
+                    let dirs = files.map(item => {
+                        return path.join(dirPath, item)
+                    })
+                    let index = 0
+
+                    function next() {
+                        if (index < dirs.length) return cb1 && cb1()
+                        let current = dirs[index++]
+                        calc(current, next)
+                    }
+
+                    next()
+                } catch (err) {
+                    error = err
+                }
+
+            } else {
+                fileSize += statObj.size
+                cb1 && cb1()
+            }
+        }
+
+        calc(dirPath)
+        cb(error, fileSize)
+    },
+
+    async calcSize(dirPath, cb) {
+        let fileSize = 0;
+        let error = null
+
+        async function calc(dirPath) {
+            try {
+                const statObj = await stat(dirPath)
+                if (statObj.isDirectory()) {
+                    const files = await readdir(dirPath)
+                    let dirs = files.map(item => {
+                        return path.join(dirPath, item)
+                    })
+                    let index = 0
+
+                    async function next() {
+                        if (index < dirs.length) {
+                            let current = dirs[index++]
+                            await calc(current)
+                            await next()
+                        }
+                    }
+
+                    return await next()
+                } else {
+                    fileSize += statObj.size
+                }
+            } catch (err) {
+                error = err
+            }
+        }
+
+        await calc(dirPath)
+        cb(error, fileSize)
     }
 }

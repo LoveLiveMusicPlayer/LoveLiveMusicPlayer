@@ -6,6 +6,7 @@ import {app} from "electron";
 import {FileDecoder} from "flac-bindings";
 import wav from "wav";
 import fs from "fs";
+import Dialog from "./modules/dialog";
 
 const net = require('net')
 
@@ -204,7 +205,9 @@ export function flacToWav(musicPath: string, runningTag: number, music: any) {
             decoder
                 .pipe(encoder)
                 .pipe(fs.createWriteStream(musicPath.replace(".flac", ".wav")))
-                .on('error', () => {
+                .on('error', (e: Error) => {
+                    Dialog({type: 'error', message: e.message ?? ""})
+                    Dialog({type: 'error', message: e.stack ?? ""})
                     return resolve({music: music, oldRunningTag: runningTag, reason: "转换失败"})
                 })
         })

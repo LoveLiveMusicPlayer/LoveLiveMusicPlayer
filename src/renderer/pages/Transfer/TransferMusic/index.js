@@ -14,12 +14,14 @@ import path from 'path'
 import {AppUtils} from "../../../utils/AppUtils";
 import checkDiskSpace from 'check-disk-space'
 import {notification} from 'antd';
+import {WorkUtils} from "../../../utils/WorkUtils";
 
 let musicIds = []
 let musicList = []
 let startTime = 0
 let runningTag = 0;
 let needAllTrans = false;
+let choosePlatform = null;
 let useLocalMusic = false;
 
 const TransferMusic = () => {
@@ -78,14 +80,14 @@ const TransferMusic = () => {
             setQrShow(false)
             if (useLocalMusic) {
                 onlyTransJsonData()
-            } else {
-                prepareTask()
+                return;
             }
+            prepareTask()
         })
     }
 
     useEffect(() => {
-        checkDiskSpace(DBHelper.getHttpServer().path).then((diskSpace) => {
+        checkDiskSpace(DBHelper.getHttpServer().path).then(diskSpace => {
             const mb = diskSpace.free / 1024 / 1024;
             if (mb <= 50) {
                 notification.open({
@@ -95,6 +97,16 @@ const TransferMusic = () => {
                 });
             }
         });
+
+        ipcRenderer.on('directoryDialog', (event, result) => {
+            checkDiskSpace(result[0]).then(diskSpace => {
+                const destPath = result[0] + path.sep + "output"
+                if (!fs.existsSync(destPath)) {
+                    fs.mkdirSync(destPath)
+                }
+                onlyExportMusic(destPath, diskSpace.free)
+            })
+        })
 
         ipcRenderer.on('convertOver', (event, args) => {
             const message = JSON.parse(args)
@@ -118,6 +130,63 @@ const TransferMusic = () => {
             body: JSON.stringify(musicList)
         }
         wsRef.current?.send(JSON.stringify(message))
+    }
+
+    async function onlyExportMusic(dest, freeRom) {
+        const readyToTransferMusicPath = new Set()
+        let totalSize = 0;
+        let errorMsg = null;
+        for (let i = 0; i < musicIds.length; i++) {
+            if (totalSize > freeRom) {
+                errorMsg = "可用磁盘空间不足"
+                break
+            }
+            if (errorMsg != null) {
+                break
+            }
+
+            const music = await MusicHelper.findOneMusicByUniqueId(musicIds[i]);
+            const musicPath = (music.base_url + music.music_path).replaceAll('/', path.sep)
+            let url = DBHelper.getHttpServer().path + musicPath
+            if (fs.existsSync(url)) {
+                WorkUtils.calcSizeSync(url, (err, size) => {
+                    if (err) {
+                        errorMsg = err.message
+                    } else {
+                        readyToTransferMusicPath.add(url)
+                        totalSize += size
+                    }
+                })
+            }
+            const musicCoverPath = (music.base_url + music.cover_path).replaceAll('/', path.sep)
+            url = DBHelper.getHttpServer().path + musicCoverPath
+            if (fs.existsSync(url)) {
+                WorkUtils.calcSizeSync(url, (err, size) => {
+                    if (err) {
+                        errorMsg = err.message
+                    } else {
+                        readyToTransferMusicPath.add(url)
+                        totalSize += (size * choosePlatform === "android" ? 1 : 1.5)
+                    }
+                })
+            }
+        }
+        if (errorMsg != null) {
+            AppUtils.openMsgDialog("error", errorMsg)
+            return
+        }
+        if (choosePlatform === "android") {
+            readyToTransferMusicPath.map(srcPath => {
+                let destPath = dest + path.sep + "LoveLive" +
+                    AppUtils.getFileDirectory(srcPath).split('LoveLive')[1]
+                if (AppUtils.mkdirsSync(destPath)) {
+                    destPath = destPath + AppUtils.getFileName(srcPath)
+                    fs.copyFileSync(srcPath, destPath)
+                }
+            })
+        } else {
+
+        }
     }
 
     function prepareTask() {
@@ -160,11 +229,18 @@ const TransferMusic = () => {
                 btnOk={(uIdList) => {
                     musicIds.length = 0
                     musicIds = [...uIdList]
+                    choosePlatform = null
                     setQrShow(true)
                 }}
                 disable={qrShow || downloadShow}
                 changeSwitch={(checked) => needAllTrans = checked}
-                useLocalMusic={(checked) => useLocalMusic = checked}
+                // useLocalMusic={(checked) => useLocalMusic = checked}
+                btnUSB={(uIdList, platform) => {
+                    musicIds.length = 0
+                    musicIds = [...uIdList]
+                    choosePlatform = platform
+                    ipcRenderer.invoke('directoryDialog')
+                }}
                 progress
             />
             <QRDialog isShow={qrShow} close={() => setQrShow(false)}/>

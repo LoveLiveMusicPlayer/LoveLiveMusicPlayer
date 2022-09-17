@@ -64,8 +64,23 @@ export default function () {
     })
 
     // 打开一个获取文件的窗口
-    ipcMain.handle("fileDialog", (_event, _args) => {
-        dialog.showOpenDialogSync({properties: ['openFile', 'multiSelections']})
+    ipcMain.handle("fileDialog", (event, _args) => {
+        let path = dialog.showOpenDialogSync(global?.mainWindow, {
+            title: "请选择文件",
+            filters: [{name: 'flac', extensions: ['flac']}],
+            properties: ['openFile', 'multiSelections']
+        })
+        event.sender.send('fileDialog', path)
+    })
+
+    // 打开一个获取文件夹的窗口
+    ipcMain.handle("directoryDialog", (event, _args) => {
+        let path = dialog.showOpenDialogSync(global?.mainWindow, {
+            title: "请选择文件夹",
+            filters: [{name: 'flac', extensions: ['flac']}],
+            properties: ['openDirectory']
+        })
+        event.sender.send('directoryDialog', path)
     })
 
     // 获取当前播放歌曲的名字
@@ -118,8 +133,10 @@ export default function () {
     ipcMain.on('toggle-desktop-lyric', (event, args) => {
         if (args) {
             global?.lyricWindow?.showInactive()
+            global?.mainWindow.webContents.openDevTools({mode: 'right'})
         } else {
             global?.lyricWindow?.hide()
+            global?.mainWindow.webContents.closeDevTools()
         }
         global?.mainWindow?.webContents.send('toggle-desktop-lyric-reply')
     })

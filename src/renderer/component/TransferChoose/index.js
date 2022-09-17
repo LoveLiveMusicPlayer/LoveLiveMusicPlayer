@@ -9,7 +9,7 @@ import {WorkUtils} from "../../utils/WorkUtils";
 
 const CheckboxGroup = Checkbox.Group;
 
-export const TransferChoose = ({btnOk, changeSwitch, disable, useLocalMusic}) => {
+export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState([])
     const [indeterminate, setIndeterminate] = useState(false)
@@ -136,7 +136,7 @@ export const TransferChoose = ({btnOk, changeSwitch, disable, useLocalMusic}) =>
         )
     }
 
-    const clickOk = () => {
+    const saveChoice = () => {
         const uIdList = []
         data.forEach(album => {
             album.music.forEach(music => {
@@ -147,7 +147,15 @@ export const TransferChoose = ({btnOk, changeSwitch, disable, useLocalMusic}) =>
         })
         // 选好后保存传输列表，以备下次进入时恢复
         Store.set('transMusic', JSON.stringify(uIdList))
-        btnOk(uIdList)
+        return uIdList
+    }
+
+    const clickOk = () => {
+        btnWIFI(saveChoice())
+    }
+
+    const clickUSB = (platform) => {
+        btnUSB(saveChoice(), platform)
     }
 
     return (
@@ -182,16 +190,19 @@ export const TransferChoose = ({btnOk, changeSwitch, disable, useLocalMusic}) =>
                             {checkAll ? "反选" : "全选"}
                         </Checkbox>
                         <p style={{color: 'white'}}>(已选:{chooseCount})</p>
-                        <Button type="primary" disabled={disableNext} onClick={clickOk}
-                                style={{marginLeft: 12}}>选好了</Button>
-                        <div style={{marginLeft: 12, display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-                            <Switch style={{width: 20}} onChange={useLocalMusic}/>
-                            <p style={{marginLeft: 8, color: "white"}}>使用手机曲包，无传输？</p>
-                        </div>
                         <div style={{marginLeft: 12, display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
                             <Switch style={{width: 20}} onChange={changeSwitch}/>
                             <p style={{marginLeft: 8, color: "white"}}>是否覆盖传输？(谨慎选择)</p>
                         </div>
+
+                        <Button type="primary" disabled={disableNext} onClick={clickOk}
+                                style={{marginLeft: 12}}>WIFI传输</Button>
+
+                        <Button type="primary" disabled={disableNext} onClick={() => clickUSB("android")}
+                                style={{marginLeft: 12}}>仅导出Android歌曲</Button>
+
+                        <Button type="primary" disabled={disableNext} onClick={() => clickUSB("ios")}
+                                style={{marginLeft: 12}}>仅导出IOS歌曲</Button>
                     </div>
                 </div> : null}
         </>

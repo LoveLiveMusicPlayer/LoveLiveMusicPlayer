@@ -280,6 +280,31 @@ export const AppUtils = {
         return !(deltaX <= 0 || deltaX >= area.right - area.left || deltaY <= 0 || deltaY >= area.bottom - area.top);
     },
 
+    isFile(path) {
+        const statObj = fs.statSync(path)
+        return statObj.isFile()
+    },
+
+    getFileDirectory(path) {
+        if (fs.existsSync(path)) {
+            if (this.isFile(path)) {
+                path = path.substring(0, path.lastIndexOf('/') + 1)
+            }
+            return path
+        }
+        return null
+    },
+
+    getFileName(path) {
+        if (fs.existsSync(path)) {
+            if (this.isFile(path)) {
+                path = path.substring(path.lastIndexOf('/') + 1, path.length)
+            }
+            return path
+        }
+        return null
+    },
+
     // 递归创建文件夹
     mkdirsSync(dirname) {
         if (fs.existsSync(dirname)) return true;

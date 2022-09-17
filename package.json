@@ -42,7 +42,9 @@
         "productName": "LoveLive音乐播放器",
         "appId": "com.zhushenwudi.lovelivemusicplayer",
         "asar": true,
-        "asarUnpack": "**\\*.{dll}",
+        "asarUnpack": [
+            "**\\*.{node,dll}"
+        ],
         "files": [
             "dist",
             "node_modules",
