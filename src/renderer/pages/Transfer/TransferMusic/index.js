@@ -150,12 +150,12 @@ const TransferMusic = () => {
             }
         }
 
-        ipcRenderer.on('directoryDialog', directoryListener)
+        ipcRenderer.on('directoryTransferDialog', directoryListener)
 
         ipcRenderer.on('convertOver', convertListener)
 
         return () => {
-            ipcRenderer.removeListener("directoryDialog", directoryListener)
+            ipcRenderer.removeListener("directoryTransferDialog", directoryListener)
             ipcRenderer.removeListener("convertOver", convertListener)
         }
     }, [])
@@ -264,7 +264,7 @@ const TransferMusic = () => {
                     musicIds.length = 0
                     musicIds = [...uIdList]
                     choosePlatform = platform
-                    ipcRenderer.invoke('directoryDialog')
+                    ipcRenderer.invoke('directoryTransferDialog')
                 }}
                 progress
             />

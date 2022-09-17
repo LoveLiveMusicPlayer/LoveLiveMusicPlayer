@@ -23,6 +23,15 @@ let updateCallback = (progressObj) => {
     }
 }
 
+let openDirectory = (event, channel) => {
+    let path = dialog.showOpenDialogSync(global?.mainWindow, {
+        title: "请选择文件夹",
+        // filters: [{name: 'flac', extensions: ['flac']}],
+        properties: ['openDirectory']
+    })
+    event.sender.send(channel, path)
+}
+
 export default function () {
     // 开启HTTP服务 或 切换端口重启服务
     ipcMain.handle('openHttp', async (event, path, port) => {
@@ -74,13 +83,12 @@ export default function () {
     })
 
     // 打开一个获取文件夹的窗口
-    ipcMain.handle("directoryDialog", (event, _args) => {
-        let path = dialog.showOpenDialogSync(global?.mainWindow, {
-            title: "请选择文件夹",
-            filters: [{name: 'flac', extensions: ['flac']}],
-            properties: ['openDirectory']
-        })
-        event.sender.send('directoryDialog', path)
+    ipcMain.handle("directoryTransferDialog", (event, _args) => {
+        openDirectory(event, "directoryTransferDialog")
+    })
+
+    ipcMain.handle("directoryHomeDialog", (event, _args) => {
+        openDirectory(event, "directoryHomeDialog")
     })
 
     // 获取当前播放歌曲的名字

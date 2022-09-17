@@ -86,7 +86,7 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
             setRefresh(new Date().getTime())
         })
 
-        ipcRenderer.on("directoryDialog", (event, result) => {
+        ipcRenderer.on("directoryHomeDialog", (event, result) => {
             if (result !== undefined) {
                 const dir = result[0]
                 if (dir.indexOf("LoveLive") !== -1) {
@@ -110,7 +110,6 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
             // 生命周期结束后将监听器移除
             window.removeEventListener("resize", listener)
             removeEventListener("onTapLogo", onTapLogoListener)
-            ipcRenderer.removeAllListeners("directoryDialog")
         }
     }, [])
 
@@ -259,7 +258,7 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
                 </Content>
 
                 <TinyStar
-                    selectDirectory={() => ipcRenderer.invoke("directoryDialog")}
+                    selectDirectory={() => ipcRenderer.invoke("directoryHomeDialog")}
                     playAll={playAll}
                     changeColor={() => colorPickerRef.current?.open(DBHelper.getBGColor())}
                     checkUpdate={() => ipcRenderer.invoke('checkUpdate')}

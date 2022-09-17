@@ -8,7 +8,6 @@ import wav from "wav";
 import fs from "fs";
 import Dialog from "./modules/dialog";
 import {AppUtils} from "../renderer/utils/AppUtils";
-import {Platform} from "electron-builder";
 
 const net = require('net')
 
@@ -177,7 +176,7 @@ export function makeCancelable(promise: Promise<any>) {
 
 // 处理文件
 export function transfer(pathDir: string, music: any, phoneSystem: string, runningTag: number) {
-    const srcPath = pathDir + Platform.WINDOWS ? "" : path.sep + music.convertPath;
+    const srcPath = pathDir + (process.platform == 'win32' ? "" : path.sep) + music.convertPath;
     let destPath = null;
     if (music.destDir !== null) {
         destPath = music.destDir + music.musicPath;
@@ -189,10 +188,9 @@ export function transfer(pathDir: string, music: any, phoneSystem: string, runni
     }
 
     if (phoneSystem === "ios") {
-        const source = (pathDir + music.convertPath)
-        if (fs.existsSync(source)) {
-            destPath = destPath === null ? pathDir + music.convertPath : destPath
-            return flacToWav(pathDir + music.convertPath, destPath.replace(".flac", ".wav"), runningTag, music)
+        if (fs.existsSync(srcPath)) {
+            destPath = destPath === null ? srcPath : destPath
+            return flacToWav(srcPath, destPath.replace(".flac", ".wav"), runningTag, music)
         }
         return Promise.resolve({music: music, oldRunningTag: runningTag, reason: "文件不存在"})
     } else {
