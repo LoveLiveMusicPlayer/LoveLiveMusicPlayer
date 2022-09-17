@@ -42,7 +42,7 @@ const TransferMusic = () => {
             task.push(new Promise((resolve, reject) => {
                 MusicHelper.findOneMusicByUniqueId(item).then(mMusic => {
                     const convertPath = (mMusic.base_url + mMusic.music_path).replaceAll('/', path.sep)
-                    const url = DBHelper.getHttpServer().path + convertPath
+                    const url = DBHelper.getHttpServer().path + path.sep + convertPath
                     if (fs.existsSync(url)) {
                         AlbumHelper.findOneAlbumByAlbumId(mMusic.group, mMusic.album).then(mAlbum => {
                             let destDir = null
