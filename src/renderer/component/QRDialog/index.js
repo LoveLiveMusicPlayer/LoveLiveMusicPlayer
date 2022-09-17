@@ -64,7 +64,6 @@ export const QRDialog = ({isShow, close}) => {
     const renderChildren = () => {
         const viewList = []
         netArr.forEach((address, index) => {
-            console.log(address)
             viewList.push(<Option key={index} value={index}>{address}</Option>)
         })
         return viewList

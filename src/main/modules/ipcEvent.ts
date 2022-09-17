@@ -133,10 +133,10 @@ export default function () {
     ipcMain.on('toggle-desktop-lyric', (event, args) => {
         if (args) {
             global?.lyricWindow?.showInactive()
-            global?.mainWindow.webContents.openDevTools({mode: 'right'})
+            // global?.mainWindow.webContents.openDevTools({mode: 'right'})
         } else {
             global?.lyricWindow?.hide()
-            global?.mainWindow.webContents.closeDevTools()
+            // global?.mainWindow.webContents.closeDevTools()
         }
         global?.mainWindow?.webContents.send('toggle-desktop-lyric-reply')
     })

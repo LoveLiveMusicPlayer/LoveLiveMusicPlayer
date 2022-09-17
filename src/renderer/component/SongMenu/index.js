@@ -52,11 +52,11 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
             const pic = item.id <= 100 ? Images.ICON_MENU_COMPUTER : Images.ICON_MENU_PHONE
             container.push(
                 <div
-                    className={chooseItem === index + 1 ? 'selectContainer' : 'unselectContainer'}
+                    className={chooseItem === item.id ? 'selectContainer' : 'unselectContainer'}
                     onClick={() => {
                         const chooseIndex = index + 1;
                         if (chooseIndex > 0) {
-                            onChooseItem(menuList[index].id)
+                            onChooseItem(item.id)
                         } else {
                             onChooseItem(chooseIndex)
                         }

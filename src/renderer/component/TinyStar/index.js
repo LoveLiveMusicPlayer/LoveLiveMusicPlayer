@@ -4,10 +4,14 @@ import * as Images from "../../public/Images";
 import Bus from "../../utils/Event";
 import './index.css'
 
-export const TinyStar = ({playAll, refreshData, deleteData, changeColor, checkUpdate}) => {
+export const TinyStar = ({selectDirectory, playAll, refreshData, deleteData, changeColor, checkUpdate}) => {
 
     const menu = (
         <Menu>
+            <Menu.Item key={"directory"}>
+                <a onClick={selectDirectory}>选择曲库</a>
+            </Menu.Item>
+            <Menu.Divider/>
             <Menu.Item key={"port"}>
                 <a onClick={() => Bus.emit("onTapLogo")}>设置端口</a>
             </Menu.Item>

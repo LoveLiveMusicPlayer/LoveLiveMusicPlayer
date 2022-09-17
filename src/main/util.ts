@@ -7,6 +7,7 @@ import {FileDecoder} from "flac-bindings";
 import wav from "wav";
 import fs from "fs";
 import Dialog from "./modules/dialog";
+import {AppUtils} from "../renderer/utils/AppUtils";
 
 const net = require('net')
 
@@ -175,22 +176,37 @@ export function makeCancelable(promise: Promise<any>) {
 
 // 处理文件
 export function transfer(pathDir: string, music: any, phoneSystem: string, runningTag: number) {
+    const srcPath = pathDir + music.convertPath;
+    let destPath = null;
+    if (music.destDir !== null) {
+        destPath = music.destDir + music.musicPath;
+    }
+    if (destPath !== null && srcPath !== destPath) {
+        if (!AppUtils.mkdirsSync(music.destDir)) {
+            return Promise.resolve({music: music, oldRunningTag: runningTag, reason: "创建文件夹失败"})
+        }
+    }
+
     if (phoneSystem === "ios") {
-        const source = (pathDir + music.convertPath.replace(".wav", ".flac"))
+        const source = (pathDir + music.convertPath)
         if (fs.existsSync(source)) {
-            return flacToWav(source, runningTag, music)
+            destPath = destPath === null ? pathDir + music.convertPath : destPath
+            return flacToWav(pathDir + music.convertPath, destPath.replace(".flac", ".wav"), runningTag, music)
         }
         return Promise.resolve({music: music, oldRunningTag: runningTag, reason: "文件不存在"})
     } else {
+        if (destPath != null) {
+            fs.copyFileSync(srcPath, destPath)
+        }
         return Promise.resolve({music: music, oldRunningTag: runningTag, reason: undefined})
     }
 }
 
 // flac 格式转换为 wav
-export function flacToWav(musicPath: string, runningTag: number, music: any) {
+export function flacToWav(srcPath: string, destPath: string, runningTag: number, music: any) {
     return new Promise(function (resolve, _) {
         let decoder = new FileDecoder({
-            file: musicPath,
+            file: srcPath,
         })
 
         decoder.once('data', (chunk: any) => {
@@ -204,7 +220,7 @@ export function flacToWav(musicPath: string, runningTag: number, music: any) {
 
             decoder
                 .pipe(encoder)
-                .pipe(fs.createWriteStream(musicPath.replace(".flac", ".wav")))
+                .pipe(fs.createWriteStream(destPath))
                 .on('error', (e: Error) => {
                     Dialog({type: 'error', message: e.message ?? ""})
                     Dialog({type: 'error', message: e.stack ?? ""})
@@ -213,7 +229,7 @@ export function flacToWav(musicPath: string, runningTag: number, music: any) {
         })
 
         decoder.on('end', () => {
-            const name = path.parse(musicPath).name
+            const name = path.parse(srcPath).name
             console.log("转换完毕: " + name)
             return resolve({music: music, oldRunningTag: runningTag, reason: undefined})
         })

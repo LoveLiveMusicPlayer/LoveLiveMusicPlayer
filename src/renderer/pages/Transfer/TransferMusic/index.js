@@ -24,13 +24,16 @@ let needAllTrans = false;
 let choosePlatform = null;
 let useLocalMusic = false;
 
+let directoryListener;
+let convertListener;
+
 const TransferMusic = () => {
     const [qrShow, setQrShow] = useState(false)
     const [downloadShow, setDownloadShow] = useState(false)
     const wsRef = useRef(null)
     const downloadRef = useRef(null)
 
-    const genList = (phoneSystem) => {
+    const genList = (phoneSystem, dest) => {
         Store.set("phoneSystem", phoneSystem)
         const task = []
         musicList.length = 0
@@ -42,6 +45,12 @@ const TransferMusic = () => {
                     const url = DBHelper.getHttpServer().path + convertPath
                     if (fs.existsSync(url)) {
                         AlbumHelper.findOneAlbumByAlbumId(mMusic.group, mMusic.album).then(mAlbum => {
+                            let destDir = null
+                            if (dest !== undefined) {
+                                destDir = dest + path.sep + "LoveLive" +
+                                    AppUtils.getFileDirectory(url).split('LoveLive')[1].replaceAll('/', path.sep)
+                            }
+
                             resolve({
                                 albumUId: mAlbum._id,
                                 albumId: mAlbum.id,
@@ -55,7 +64,8 @@ const TransferMusic = () => {
                                 musicId: mMusic.id,
                                 musicName: mMusic.name,
                                 convertPath: convertPath,
-                                musicPath: phoneSystem === "ios" ? mMusic.music_path.replace(".flac", ".wav") : mMusic.music_path,
+                                musicPath: mMusic.music_path,
+                                destDir: destDir,
                                 artist: mMusic.artist,
                                 artistBin: mMusic.artist_bin,
                                 totalTime: mMusic.time,
@@ -82,7 +92,14 @@ const TransferMusic = () => {
                 onlyTransJsonData()
                 return;
             }
-            prepareTask()
+            if (choosePlatform == null) {
+                prepareTask()
+                return;
+            }
+            runningTag = Date.now()
+            downloadRef.current?.setList(musicList)
+            setDownloadShow(true)
+            pushQueue(musicList, choosePlatform)
         })
     }
 
@@ -98,27 +115,49 @@ const TransferMusic = () => {
             }
         });
 
-        ipcRenderer.on('directoryDialog', (event, result) => {
-            checkDiskSpace(result[0]).then(diskSpace => {
-                const destPath = result[0] + path.sep + "output"
-                if (!fs.existsSync(destPath)) {
-                    fs.mkdirSync(destPath)
-                }
-                onlyExportMusic(destPath, diskSpace.free)
-            })
-        })
+        directoryListener = (event, result) => {
+            if (result !== undefined) {
+                checkDiskSpace(result[0]).then(diskSpace => {
+                    const destPath = result[0] + path.sep + "output"
+                    if (!fs.existsSync(destPath)) {
+                        fs.mkdirSync(destPath)
+                    }
+                    onlyExportMusic(destPath, diskSpace.free)
+                })
+            }
+        }
 
-        ipcRenderer.on('convertOver', (event, args) => {
+        convertListener = (event, args) => {
             const message = JSON.parse(args)
             if (message.cmd === "download") {
-                wsRef.current?.send(args)
+                if (choosePlatform == null) {
+                    wsRef.current?.send(args)
+                } else if (message.body.indexOf(" === ") !== -1) {
+                    const splitArr = message.body.split(" === ")
+                    downloadRef.current?.setProgress({
+                        musicId: splitArr[0],
+                        progress: choosePlatform === "ios" ? "转换完成" : "复制完成"
+                    })
+                    if (splitArr[1] === "true") {
+                        setDownloadShow(false)
+                    }
+                }
             } else {
                 downloadRef.current?.setProgress({
                     musicId: message.body,
                     progress: message.cmd
                 })
             }
-        })
+        }
+
+        ipcRenderer.on('directoryDialog', directoryListener)
+
+        ipcRenderer.on('convertOver', convertListener)
+
+        return () => {
+            ipcRenderer.removeListener("directoryDialog", directoryListener)
+            ipcRenderer.removeListener("convertOver", convertListener)
+        }
     }, [])
 
     /**
@@ -133,7 +172,6 @@ const TransferMusic = () => {
     }
 
     async function onlyExportMusic(dest, freeRom) {
-        const readyToTransferMusicPath = new Set()
         let totalSize = 0;
         let errorMsg = null;
         for (let i = 0; i < musicIds.length; i++) {
@@ -153,7 +191,6 @@ const TransferMusic = () => {
                     if (err) {
                         errorMsg = err.message
                     } else {
-                        readyToTransferMusicPath.add(url)
                         totalSize += size
                     }
                 })
@@ -165,7 +202,6 @@ const TransferMusic = () => {
                     if (err) {
                         errorMsg = err.message
                     } else {
-                        readyToTransferMusicPath.add(url)
                         totalSize += (size * choosePlatform === "android" ? 1 : 1.5)
                     }
                 })
@@ -175,18 +211,7 @@ const TransferMusic = () => {
             AppUtils.openMsgDialog("error", errorMsg)
             return
         }
-        if (choosePlatform === "android") {
-            readyToTransferMusicPath.map(srcPath => {
-                let destPath = dest + path.sep + "LoveLive" +
-                    AppUtils.getFileDirectory(srcPath).split('LoveLive')[1]
-                if (AppUtils.mkdirsSync(destPath)) {
-                    destPath = destPath + AppUtils.getFileName(srcPath)
-                    fs.copyFileSync(srcPath, destPath)
-                }
-            })
-        } else {
-
-        }
+        genList(choosePlatform, dest)
     }
 
     function prepareTask() {
@@ -226,7 +251,7 @@ const TransferMusic = () => {
     return (
         <div style={{width: "100%", height: '100%'}}>
             <TransferChoose
-                btnOk={(uIdList) => {
+                btnWIFI={(uIdList) => {
                     musicIds.length = 0
                     musicIds = [...uIdList]
                     choosePlatform = null
@@ -306,7 +331,7 @@ const TransferMusic = () => {
                     if (Store.get("phoneSystem", "android") === "ios") {
                         let musicList = downloadRef.current?.getList().filter(item => item.musicUId === musicId)
                         if (musicList.length > 0) {
-                            AppUtils.delFile(DBHelper.getHttpServer().path + musicList[0].musicPath)
+                            AppUtils.delFile(DBHelper.getHttpServer().path + musicList[0].baseUrl + musicList[0].musicPath.replace(".flac", ".wav"))
                         }
                     }
                 }}

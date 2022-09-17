@@ -280,8 +280,8 @@ const Menu = ({playId}) => {
                 <div className={'albumTopRightContainer'}>
                     <p className={'albumName'}>{info && info.name ? info.name : ''}</p>
                     <p className={'albumText'}>{info && "创建日期: " + AppUtils.showValue(info.date)}</p>
-                    <p className={'albumText'}>{info && "歌曲标签: " + AppUtils.arrToString(category)}</p>
-                    <p className={'albumText'}>{info && "所属团组: " + AppUtils.arrToString(group)}</p>
+                    <p className={'albumText'}>{info && "歌曲标签: " + WorkUtils.arrToString(category)}</p>
+                    <p className={'albumText'}>{info && "所属团组: " + WorkUtils.arrToString(group)}</p>
                     <Button
                         type="primary"
                         shape="round"

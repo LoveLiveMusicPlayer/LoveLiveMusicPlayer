@@ -1,7 +1,6 @@
 import fs from "fs";
 import path from "path";
 import * as mm from "music-metadata";
-import {WorkUtils} from "./WorkUtils";
 import moment from "moment";
 import wav from "wav";
 
@@ -251,19 +250,6 @@ export const AppUtils = {
             }
         }
         return result
-    },
-
-    // 将 set 集合打印成 str
-    arrToString(set) {
-        let str = ''
-        const arr = Array.from(set)
-        arr.map((item, index) => {
-            if (index !== arr.length - 1) {
-                str += WorkUtils.parseGroupName(item)
-                str += '、'
-            } else str += WorkUtils.parseGroupName(item)
-        })
-        return AppUtils.isEmpty(str) ? '-' : str
     },
 
     // 颜色取反

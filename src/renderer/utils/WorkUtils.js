@@ -568,6 +568,19 @@ export const WorkUtils = {
         } else return 0
     },
 
+    // 将 set 集合打印成 str
+    arrToString(set) {
+        let str = ''
+        const arr = Array.from(set)
+        arr.map((item, index) => {
+            if (index !== arr.length - 1) {
+                str += this.parseGroupName(item)
+                str += '、'
+            } else str += this.parseGroupName(item)
+        })
+        return AppUtils.isEmpty(str) ? '-' : str
+    },
+
     calcSizeSync(dirPath, cb) {
         let fileSize = 0
         let error = null

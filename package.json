@@ -87,7 +87,8 @@
                 "node_modules",
                 "package.json",
                 "build/win"
-            ]
+            ],
+            "requestedExecutionLevel": "highestAvailable"
         },
         "nsis": {
             "oneClick": false,

@@ -3,8 +3,7 @@ import './index.css'
 import "animate.css"
 import {Layout} from 'antd';
 import {AppUtils} from "../../utils/AppUtils";
-import fs from "fs";
-import FileDrop from '../../component/DragAndDrop'
+import path from 'path'
 import {musicAction} from "../../actions/music";
 import Bus from "../../utils/Event"
 import {Loading} from "../../component/Loading";
@@ -87,6 +86,20 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
             setRefresh(new Date().getTime())
         })
 
+        ipcRenderer.on("directoryDialog", (event, result) => {
+            if (result !== undefined) {
+                const dir = result[0]
+                if (dir.indexOf("LoveLive") !== -1) {
+                    const rootDir = dir.replace(path.sep + "LoveLive", "")
+                    setHttpServer({path: rootDir, port: port})
+                    AppUtils.openMsgDialog("info", "导入歌曲库成功")
+                    // await WorkUtils.exportToExcel(path, rootDir)
+                } else {
+                    AppUtils.openMsgDialog("error", "请拖入名为LoveLive的文件夹")
+                }
+            }
+        })
+
         // 添加窗口大小变化监听器
         window.addEventListener("resize", listener)
 
@@ -97,6 +110,7 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
             // 生命周期结束后将监听器移除
             window.removeEventListener("resize", listener)
             removeEventListener("onTapLogo", onTapLogoListener)
+            ipcRenderer.removeAllListeners("directoryDialog")
         }
     }, [])
 
@@ -123,24 +137,24 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
      * @param file
      * @returns {Promise<void>}
      */
-    const onUpload = async (file) => {
-        const name = file[0].name
-        const path = file[0].path
-        if (name === "LoveLive" && fs.lstatSync(path).isDirectory()) {
-            const rootDir = AppUtils.delLastSameString(path, name)
-            setHttpServer({path: rootDir, port: port})
-            AppUtils.openMsgDialog("info", "导入歌曲库成功")
-            // await WorkUtils.exportToExcel(path, rootDir)
-        } else {
-            AppUtils.openMsgDialog("error", "请拖入名为LoveLive的文件夹")
-        }
-    }
+        // const onUpload = async (file) => {
+        //     const name = file[0].name
+        //     const path = file[0].path
+        //     if (name === "LoveLive" && fs.lstatSync(path).isDirectory()) {
+        //         const rootDir = AppUtils.delLastSameString(path, name)
+        //         setHttpServer({path: rootDir, port: port})
+        //         AppUtils.openMsgDialog("info", "导入歌曲库成功")
+        //         // await WorkUtils.exportToExcel(path, rootDir)
+        //     } else {
+        //         AppUtils.openMsgDialog("error", "请拖入名为LoveLive的文件夹")
+        //     }
+        // }
 
-    // 显示专辑详情
+        // 显示专辑详情
     const showAlbumInfo = (id) => {
-        showAlbum()
-        navigate(`/album/${id}`)
-    }
+            showAlbum()
+            navigate(`/album/${id}`)
+        }
 
     // 播放团内全部专辑
     const playGroup = () => {
@@ -226,25 +240,26 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
 
     return (
         <div className={'homeContainer'} style={{visibility: isRoot ? 'visible' : 'hidden'}}>
-            <FileDrop
-                onUpload={onUpload}
-                count={1}
-                formats={['']}
-            >
-                {refreshAlbum(chooseGroup)}
+            {/*<FileDrop*/}
+            {/*    onUpload={onUpload}*/}
+            {/*    count={1}*/}
+            {/*    formats={['']}*/}
+            {/*>*/}
+            {refreshAlbum(chooseGroup)}
 
-                <Content className="container">
-                    <MusicGallery
-                        ref={musicGalleryRef}
-                        albumList={albumList}
-                        width={width}
-                        showAlbumInfo={showAlbumInfo}
-                        playAll={playAllByAlbum}
-                    />
+            <Content className="container">
+                <MusicGallery
+                    ref={musicGalleryRef}
+                    albumList={albumList}
+                    width={width}
+                    showAlbumInfo={showAlbumInfo}
+                    playAll={playAllByAlbum}
+                />
                     <Loading ref={loadingRef}/>
                 </Content>
 
                 <TinyStar
+                    selectDirectory={() => ipcRenderer.invoke("directoryDialog")}
                     playAll={playAll}
                     changeColor={() => colorPickerRef.current?.open(DBHelper.getBGColor())}
                     checkUpdate={() => ipcRenderer.invoke('checkUpdate')}
@@ -284,7 +299,7 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
                     fourthButton={{text: '删除自建数据', callback: () => deleteDIYData()}}
                     bottomContainer={renderClearDialogBottom}
                 />
-            </FileDrop>
+            {/*</FileDrop>*/}
         </div>
     );
 }
