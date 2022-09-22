@@ -249,7 +249,8 @@
         "webpack-bundle-analyzer": "^4.5.0",
         "webpack-cli": "^4.9.1",
         "webpack-dev-server": "^4.7.2",
-        "webpack-merge": "^5.8.0"
+        "webpack-merge": "^5.8.0",
+        "glasstron": "^0.1.1"
     },
     "dependencies": {
         "@ant-design/pro-layout": "^6.32.2",
@@ -292,8 +293,7 @@
         "redux-thunk": "^2.4.1",
         "regenerator-runtime": "^0.13.9",
         "styled-components": "^5.3.1",
-        "wav": "^1.0.2",
-        "glasstron": "git+https://github.com/NyaomiDEV/Glasstron"
+        "wav": "^1.0.2"
     },
     "devEngines": {
         "node": ">=14.x",

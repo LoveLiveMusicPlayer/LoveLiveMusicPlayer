@@ -198,8 +198,9 @@ export const AppUtils = {
     },
 
     setBodyColor(colors) {
-        const first = this.hexToRgba(colors.color1, 0.9)
-        const second = this.hexToRgba(colors.color2, 0.9)
+        const alpha = process.platform === "win32" ? 0.8 : 0.9
+        const first = this.hexToRgba(colors.color1, alpha)
+        const second = this.hexToRgba(colors.color2, alpha)
 
         const container = document.getElementsByClassName('outer_container')[0]
         container.style.background = 'linear-gradient(' + 200.96 + 'deg, ' + first.rgba + ', ' + second.rgba + ')';
@@ -272,7 +273,7 @@ export const AppUtils = {
         if (fs.existsSync(_path)) {
             if (fs.statSync(_path).isDirectory()) {
                 let files = fs.readdirSync(_path);
-                files.forEach((file, index) => {
+                files.forEach((file) => {
                     let currentPath = _path + "/" + file;
                     if (fs.statSync(currentPath).isDirectory()) {
                         this.delWavFile(currentPath, reservePath);

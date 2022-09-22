@@ -16,6 +16,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "glasstron": "git+https://github.com/NyaomiDEV/Glasstron"
+    "glasstron": "^0.1.1"
   }
 }

@@ -255,50 +255,50 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
                     showAlbumInfo={showAlbumInfo}
                     playAll={playAllByAlbum}
                 />
-                    <Loading ref={loadingRef}/>
-                </Content>
+                <Loading ref={loadingRef}/>
+            </Content>
 
-                <TinyStar
-                    selectDirectory={() => ipcRenderer.invoke("directoryHomeDialog")}
-                    playAll={playAll}
-                    changeColor={() => colorPickerRef.current?.open(DBHelper.getBGColor())}
-                    checkUpdate={() => ipcRenderer.invoke('checkUpdate')}
-                    refreshData={refreshData}
-                    deleteData={() => setClearDialogVisible(true)}
-                />
+            <TinyStar
+                selectDirectory={() => ipcRenderer.invoke("directoryHomeDialog")}
+                playAll={playAll}
+                changeColor={() => colorPickerRef.current?.open(DBHelper.getBGColor())}
+                checkUpdate={() => ipcRenderer.invoke('checkUpdate')}
+                refreshData={refreshData}
+                deleteData={() => setClearDialogVisible(true)}
+            />
 
-                <img
-                    className={'btnPlay'}
-                    src={btnPlay}
-                    onClick={playGroup}
-                    onMouseOver={() => setBtnPlay(Images.ICON_PLAY_SELECT)}
-                    onMouseOut={() => setBtnPlay(Images.ICON_PLAY_UNSELECT)}
-                />
+            <img
+                className={'btnPlay'}
+                src={btnPlay}
+                onClick={playGroup}
+                onMouseOver={() => setBtnPlay(Images.ICON_PLAY_SELECT)}
+                onMouseOut={() => setBtnPlay(Images.ICON_PLAY_UNSELECT)}
+            />
 
-                <p className={'version'}>版本号: {appVersion}</p>
+            <p className={'version'}>版本号: {appVersion}</p>
 
-                <ColorPicker ref={colorPickerRef} onChangeColor={onColorPickerChange}/>
+            <ColorPicker ref={colorPickerRef} onChangeColor={onColorPickerChange}/>
 
-                <PortDialog
-                    isShow={portInputVisible}
-                    rootDir={rootDir}
-                    port={port}
-                    close={() => setPortInputVisible(false)}
-                    setHttpServer={() => setHttpServer({path: rootDir, port: port})}
-                    setPort={setPort}
-                />
+            <PortDialog
+                isShow={portInputVisible}
+                rootDir={rootDir}
+                port={port}
+                close={() => setPortInputVisible(false)}
+                setHttpServer={() => setHttpServer({path: rootDir, port: port})}
+                setPort={setPort}
+            />
 
-                <CustomDialog
-                    ref={clearDialog}
-                    isShow={clearDialogVisible}
-                    close={() => setClearDialogVisible(false)}
-                    hint={'请选择要清理的数据'}
-                    confirmText={'删除用户数据'}
-                    result={onDelUserData}
-                    thirdButton={{text: '删除歌曲数据', callback: () => deleteMusicData()}}
-                    fourthButton={{text: '删除自建数据', callback: () => deleteDIYData()}}
-                    bottomContainer={renderClearDialogBottom}
-                />
+            <CustomDialog
+                ref={clearDialog}
+                isShow={clearDialogVisible}
+                close={() => setClearDialogVisible(false)}
+                hint={'请选择要清理的数据'}
+                confirmText={'删除用户数据'}
+                result={onDelUserData}
+                thirdButton={{text: '删除歌曲数据', callback: () => deleteMusicData()}}
+                fourthButton={{text: '删除自建数据', callback: () => deleteDIYData()}}
+                bottomContainer={renderClearDialogBottom}
+            />
             {/*</FileDrop>*/}
         </div>
     );

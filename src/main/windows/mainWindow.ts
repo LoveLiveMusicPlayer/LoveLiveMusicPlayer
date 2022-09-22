@@ -14,7 +14,7 @@ const framelessPlugin = require('../modules/framelessPlugin')
 
 let timer = null
 
-const createMainWindow = function (blurType: string) {
+const createMainWindow = function () {
     const option = {
         show: false,
         width: 1250,
@@ -25,8 +25,6 @@ const createMainWindow = function (blurType: string) {
         frame: false,
         minWidth: 1024,
         minHeight: 728,
-        blur: true,
-        blurType: blurType,
         backgroundColor: '#00000000',
         icon: path.join(RESOURCES_PATH, 'icon.png'),
         webPreferences: {
