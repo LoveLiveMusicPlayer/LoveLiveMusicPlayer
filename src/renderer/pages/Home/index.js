@@ -89,8 +89,9 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
         ipcRenderer.on("directoryHomeDialog", (event, result) => {
             if (result !== undefined) {
                 const dir = result[0]
-                if (dir.indexOf("LoveLive") !== -1) {
-                    const rootDir = dir.replace(path.sep + "LoveLive", "")
+                if (dir.endsWith(path.sep + "LoveLive")) {
+                    const rootDir = dir.substring(0, dir.length - 9)
+                    console.log(rootDir)
                     setHttpServer({path: rootDir, port: port})
                     AppUtils.openMsgDialog("info", "导入歌曲库成功")
                     // await WorkUtils.exportToExcel(path, rootDir)

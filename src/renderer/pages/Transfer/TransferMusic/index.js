@@ -47,8 +47,8 @@ const TransferMusic = () => {
                         AlbumHelper.findOneAlbumByAlbumId(mMusic.group, mMusic.album).then(mAlbum => {
                             let destDir = null
                             if (dest !== undefined) {
-                                destDir = dest + path.sep + "LoveLive" +
-                                    AppUtils.getFileDirectory(url).split('LoveLive')[1].replaceAll('/', path.sep)
+                                const srcDirArr = AppUtils.getFileDirectory(url).split('LoveLive')
+                                destDir = dest + path.sep + "LoveLive" + srcDirArr[srcDirArr.length - 1].replaceAll('/', path.sep)
                             }
 
                             resolve({
@@ -241,7 +241,7 @@ const TransferMusic = () => {
         if (runningTag === 0) {
             return
         }
-        const pathDir = DBHelper.getHttpServer().path;
+        const pathDir = DBHelper.getHttpServer().path + path.sep;
         startTime = Date.now()
         console.log('queue start');
         const message = {pathDir, musicList, phoneSystem, runningTag}
