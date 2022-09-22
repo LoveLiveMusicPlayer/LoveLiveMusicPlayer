@@ -6,6 +6,7 @@ import {RESOURCES_PATH} from "../modules/inital";
 import {clearTimeout} from "timers";
 import {globalShortcut} from "electron";
 import {upReportOpenTime} from "../util";
+import glasstron from '../../../release/app/node_modules/glasstron';
 
 const {resolveHtmlPath} = require("../util");
 const {shell} = require("electron");
@@ -24,18 +25,22 @@ const createMainWindow = function (BrowserWindow: any) {
         frame: false,
         minWidth: 1024,
         minHeight: 728,
+        backgroundColor: '#00000000',
         icon: path.join(RESOURCES_PATH, 'icon.png'),
         webPreferences: {
+            experimentalFeatures: true,
             nodeIntegration: true,
             nodeIntegrationInWorker: false,
             enableRemoteModule: true,
             contextIsolation: false,
             webSecurity: false,
-            devTools: true
+            devTools: false
         }
     }
 
-    let mainWindow = new BrowserWindow(option);
+    let mainWindow = new glasstron.BrowserWindow(option);
+    mainWindow.blurType = "blurbehind"
+    mainWindow.setBlur(true)
 
     // 修复透明窗口缩放窗口异常
     framelessPlugin.plugin({

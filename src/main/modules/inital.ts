@@ -20,6 +20,7 @@ export default function () {
     Sentry.setTag("s-env", process.env.NODE_ENV)
     app.commandLine.appendSwitch("--disable-http-cache")
     app.commandLine.appendSwitch('wm-window-animations-disabled')
+    app.commandLine.appendSwitch("enable-transparent-visuals");
 
     if (process.env.NODE_ENV === 'production') {
         const sourceMapSupport = require('source-map-support');

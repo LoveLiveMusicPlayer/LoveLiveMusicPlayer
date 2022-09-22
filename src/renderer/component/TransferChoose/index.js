@@ -164,6 +164,7 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
         <>
             <div id={"albumContainer"}>
                 <List
+                    className={"listView"}
                     loading={loading}
                     dataSource={data}
                     renderItem={(item) => {
