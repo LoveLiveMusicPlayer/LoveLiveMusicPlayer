@@ -269,7 +269,15 @@ const TransferMusic = () => {
                 }}
                 progress
             />
-            <QRDialog isShow={qrShow} close={() => setQrShow(false)} isSuccess={scanSuccess}/>
+            <QRDialog isShow={qrShow} close={() => {
+                const message = {
+                    cmd: "stop",
+                    body: ""
+                }
+                wsRef.current?.send(JSON.stringify(message))
+                setQrShow(false)
+                setScanSuccess(false)
+            }} isSuccess={scanSuccess}/>
             <DownloadDialog isShow={downloadShow} onClose={() => {
                 setDownloadShow(false)
                 stopTask()
@@ -281,6 +289,7 @@ const TransferMusic = () => {
                     genList(system)
                 }}
                 ready={(transIdList) => {
+                    setScanSuccess(false)
                     let tempList = []
                     let message = {
                         cmd: "back",

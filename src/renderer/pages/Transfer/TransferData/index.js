@@ -18,6 +18,7 @@ const TransferData = () => {
 
     async function phone2pc(loveList, menuList) {
         setQrShow(false)
+        setScanSuccess(false)
         loadingRef.current?.setProgress(-1)
         loadingRef.current?.show("导入中..")
         await replaceMenuList(menuList)
@@ -26,6 +27,7 @@ const TransferData = () => {
 
     async function pc2phone(loveList) {
         setQrShow(false)
+        setScanSuccess(false)
         loadingRef.current?.setProgress(-1)
         loadingRef.current?.show("导入中..")
         const menuList = await SongMenuHelper.findPcMenu()
@@ -103,12 +105,20 @@ const TransferData = () => {
     return (
         <div className={'transferDataContainer'}>
             <div className={'innerContainer'}>
-                <p style={{alignSelf: 'flex-start'}}>数据同步的意义在于同步我喜欢和歌单</p>
-                <p style={{alignSelf: 'flex-start'}}>我喜欢：手机和电脑端相互共存，会融合双端数据</p>
-                <p style={{alignSelf: 'flex-start'}}>歌单：手机和电脑端相互独立，导入端原有数据将被清空再保存导出端最新的数据</p>
+                <p className={'tvHint'}>重要事项：数据同步的意义在于同步我喜欢和歌单</p>
+                <p className={'tvHint'}>我喜欢：手机和电脑端相互共存，会融合双端数据</p>
+                <p className={'tvHint'}>歌单：手机和电脑端相互独立，导入端原有数据将被清空再保存导出端最新的数据</p>
                 <Button className={'btnTrans'} type="primary" onClick={() => setQrShow(true)}>我已知晓，开始传输</Button>
             </div>
-            <QRDialog isShow={qrShow} close={() => setQrShow(false)} isSuccess={scanSuccess} type={"data"}/>
+            <QRDialog isShow={qrShow} close={() => {
+                const message = {
+                    cmd: "back",
+                    body: ""
+                }
+                wsRef.current?.send(JSON.stringify(message))
+                setQrShow(false)
+                setScanSuccess(false)
+            }} isSuccess={scanSuccess} type={"data"}/>
             <Loading ref={loadingRef}/>
             <WS_Data
                 ref={wsRef}

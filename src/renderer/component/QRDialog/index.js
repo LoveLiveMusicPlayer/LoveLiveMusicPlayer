@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Select, Space} from "antd";
+import {Button, Select, Space} from "antd";
 import Modal from "react-modal";
 import ip from "ip";
 import QRCodeCanvas from "qrcode.react";
@@ -71,7 +71,7 @@ export const QRDialog = ({isShow, isSuccess, type, close}) => {
 
     const renderIP = () => {
         if (isSuccess) {
-            return <></>
+            return null
         } else return <Select
             defaultValue={domain}
             style={{width: 150}}
@@ -88,7 +88,7 @@ export const QRDialog = ({isShow, isSuccess, type, close}) => {
             appElement={document.body}
             isOpen={isShow}
             onAfterOpen={null}
-            onRequestClose={close}
+            onRequestClose={null}
             style={qrStyles}>
             <p style={{fontWeight: 'bold'}}>请使用手机APP扫码进行歌曲传输</p>
             <Space style={{display: 'flex', flexDirection: 'column', marginBottom: 20}}>
@@ -120,6 +120,7 @@ export const QRDialog = ({isShow, isSuccess, type, close}) => {
                         </div>
                 }
                 {renderIP()}
+                <Button type="primary" onClick={close} style={{marginTop: isSuccess ? 20 : 0}}>中断操作</Button>
             </Space>
         </Modal>
     )
