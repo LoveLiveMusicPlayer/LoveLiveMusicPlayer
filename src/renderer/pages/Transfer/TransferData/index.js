@@ -12,6 +12,7 @@ import {SongMenuHelper} from "../../../dao/SongMenuHelper";
 
 const TransferData = () => {
     const [qrShow, setQrShow] = useState(false)
+    const [scanSuccess, setScanSuccess] = useState(false)
     const wsRef = useRef(null)
     const loadingRef = useRef(null)
 
@@ -107,10 +108,11 @@ const TransferData = () => {
                 <p style={{alignSelf: 'flex-start'}}>歌单：手机和电脑端相互独立，导入端原有数据将被清空再保存导出端最新的数据</p>
                 <Button className={'btnTrans'} type="primary" onClick={() => setQrShow(true)}>我已知晓，开始传输</Button>
             </div>
-            <QRDialog isShow={qrShow} close={() => setQrShow(false)}/>
+            <QRDialog isShow={qrShow} close={() => setQrShow(false)} isSuccess={scanSuccess} type={"data"}/>
             <Loading ref={loadingRef}/>
             <WS_Data
                 ref={wsRef}
+                connected={() => setScanSuccess(true)}
                 phone2pc={phone2pc}
                 pc2phone={pc2phone}
                 finish={() => {

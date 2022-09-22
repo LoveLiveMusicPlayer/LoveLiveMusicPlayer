@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 
 let ws = null
 
-export const WS_Data = React.forwardRef(({phone2pc, pc2phone, finish, stop}, ref) => {
+export const WS_Data = React.forwardRef(({connected, phone2pc, pc2phone, finish, stop}, ref) => {
 
     React.useImperativeHandle(
         ref,
@@ -25,6 +25,9 @@ export const WS_Data = React.forwardRef(({phone2pc, pc2phone, finish, stop}, ref
                 ws?.on('message', function (event) {
                     let command = JSON.parse(event.data)
                     switch (command["cmd"]) {
+                        case "connected":
+                            connected()
+                            break
                         case "phone2pc":
                             const json1 = JSON.parse(command["body"])
                             phone2pc(json1["love"], json1["menu"])

@@ -29,6 +29,7 @@ let convertListener;
 
 const TransferMusic = () => {
     const [qrShow, setQrShow] = useState(false)
+    const [scanSuccess, setScanSuccess] = useState(false)
     const [downloadShow, setDownloadShow] = useState(false)
     const wsRef = useRef(null)
     const downloadRef = useRef(null)
@@ -268,14 +269,17 @@ const TransferMusic = () => {
                 }}
                 progress
             />
-            <QRDialog isShow={qrShow} close={() => setQrShow(false)}/>
+            <QRDialog isShow={qrShow} close={() => setQrShow(false)} isSuccess={scanSuccess}/>
             <DownloadDialog isShow={downloadShow} onClose={() => {
                 setDownloadShow(false)
                 stopTask()
             }} ref={downloadRef}/>
             <WS_Music
                 ref={wsRef}
-                phoneSystem={genList}
+                phoneSystem={(system) => {
+                    setScanSuccess(true)
+                    genList(system)
+                }}
                 ready={(transIdList) => {
                     let tempList = []
                     let message = {

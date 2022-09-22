@@ -61,6 +61,7 @@ import icon_trans_music from '../../../assets/image/icon_trans_music.jpg'
 import icon_trans_music_hover from '../../../assets/image/icon_trans_music_hover.png'
 import icon_trans_data from '../../../assets/image/icon_trans_data.jpg'
 import icon_trans_data_hover from '../../../assets/image/icon_trans_data_hover.png'
+import icon_trans_scan_success from '../../../assets/image/icon_scan_success.png'
 
 export const ICON_HEAD = icon_head
 export const ICON_MENU = icon_menu
@@ -125,3 +126,4 @@ export const TRANSPORT_MUSIC = icon_trans_music
 export const TRANSPORT_MUSIC_HOVER = icon_trans_music_hover
 export const TRANSPORT_DATA = icon_trans_data
 export const TRANSPORT_DATA_HOVER = icon_trans_data_hover
+export const TRANSPORT_SCAN_SUCCESS = icon_trans_scan_success

@@ -31,6 +31,8 @@
     width: 150px;
     height: 150px;
     margin-top: 6px;
+    border-radius: 8px;
+    border-width: 10px;
 }
 
 .albumChildren {

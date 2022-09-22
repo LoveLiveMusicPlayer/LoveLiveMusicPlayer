@@ -6,6 +6,8 @@ import './index.css'
 import {MusicHelper} from "../../dao/MusicHelper";
 import {AppUtils} from "../../utils/AppUtils";
 import {WorkUtils} from "../../utils/WorkUtils";
+import * as Images from "../../public/Images";
+import {Img} from "../Pagin/styled-components/index";
 
 const CheckboxGroup = Checkbox.Group;
 
@@ -168,7 +170,14 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
                         const url = Store.get('url') + item["cover_path"][0]
                         return (
                             <div key={"div" + item._id} className={"albumItemContainer"}>
-                                <img className={"albumCover"} src={url}/>
+                                <Img
+                                    className={"albumCover"}
+                                    src={decodeURI(url)}
+                                    onError={(e) => {
+                                        e.target.onerror = null
+                                        e.target.src = Images.ICON_EMPTY
+                                    }}
+                                />
                                 <div className={"albumChildren"}>
                                     <p className={"albumName"}>{item.name}</p>
                                     {renderChildren(item)}
