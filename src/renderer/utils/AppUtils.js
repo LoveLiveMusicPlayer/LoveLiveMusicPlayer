@@ -198,45 +198,12 @@ export const AppUtils = {
     },
 
     setBodyColor(colors) {
-        const parseColor = function (hexStr) {
-            return hexStr.length === 4 ? hexStr.substr(1).split('').map(function (s) {
-                return 0x11 * parseInt(s, 16);
-            }) : [hexStr.substr(1, 2), hexStr.substr(3, 2), hexStr.substr(5, 2)].map(function (s) {
-                return parseInt(s, 16);
-            })
-        };
-
-        const pad = function (s) {
-            return (s.length === 1) ? '0' + s : s;
-        };
-
-        const gradientColors = function (start, end, steps, gamma) {
-            let i, j, ms, me, output = [], so = [];
-            gamma = gamma || 1;
-            const normalize = function (channel) {
-                return Math.pow(channel / 255, gamma);
-            };
-            start = parseColor(start).map(normalize);
-            end = parseColor(end).map(normalize);
-            for (i = 0; i < steps; i++) {
-                ms = i / (steps - 1);
-                me = 1 - ms;
-                for (j = 0; j < 3; j++) {
-                    so[j] = pad(Math.round(Math.pow(start[j] * me + end[j] * ms, 1 / gamma) * 255).toString(16));
-                }
-                output.push('#' + so.join(''));
-            }
-            return output;
-        };
+        const first = this.hexToRgba(colors.color1, 0.9)
+        const second = this.hexToRgba(colors.color2, 0.9)
 
         const container = document.getElementsByClassName('outer_container')[0]
-        container.style.background = 'linear-gradient(\n' +
-            '                200.96deg,\n' +
-            `                ${colors.color1} -49.09%,\n` +
-            `                ${gradientColors(colors.color1, colors.color2, 2)[0]} 10.77%,\n` +
-            `                ${colors.color2} 129.35%\n` +
-            `            )`
-        document.body.style.background = 'transparent'
+        container.style.background = 'linear-gradient(' + 200.96 + 'deg, ' + first.rgba + ', ' + second.rgba + ')';
+        document.body.style.background = '#1a000000'
     },
 
     // 返回1..100中，数组内不存在的最小值
@@ -356,6 +323,27 @@ export const AppUtils = {
             }
         }
         return false;
+    },
+
+    // 将rgb颜色转成hex
+    colorRGB2Hex(color) {
+        const rgb = color.split(',');
+        const r = parseInt(rgb[0].split('(')[1]);
+        const g = parseInt(rgb[1]);
+        const b = parseInt(rgb[2].split(')')[0]);
+
+        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    },
+
+    // 将hex颜色转成rgb
+    hexToRgba(hex, opacity) {
+        const RGBA = "rgba(" + parseInt("0x" + hex.slice(1, 3)) + "," + parseInt("0x" + hex.slice(3, 5)) + "," + parseInt("0x" + hex.slice(5, 7)) + "," + opacity + ")";
+        return {
+            red: parseInt("0x" + hex.slice(1, 3)),
+            green: parseInt("0x" + hex.slice(3, 5)),
+            blue: parseInt("0x" + hex.slice(5, 7)),
+            rgba: RGBA
+        }
     }
 }
 

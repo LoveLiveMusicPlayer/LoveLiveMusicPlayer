@@ -292,7 +292,8 @@
         "redux-thunk": "^2.4.1",
         "regenerator-runtime": "^0.13.9",
         "styled-components": "^5.3.1",
-        "wav": "^1.0.2"
+        "wav": "^1.0.2",
+        "glasstron": "git+https://github.com/NyaomiDEV/Glasstron"
     },
     "devEngines": {
         "node": ">=14.x",

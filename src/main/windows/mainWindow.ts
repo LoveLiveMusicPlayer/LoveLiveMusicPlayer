@@ -6,7 +6,7 @@ import {RESOURCES_PATH} from "../modules/inital";
 import {clearTimeout} from "timers";
 import {globalShortcut} from "electron";
 import {upReportOpenTime} from "../util";
-import glasstron from '../../../release/app/node_modules/glasstron';
+import glasstron from 'glasstron';
 
 const {resolveHtmlPath} = require("../util");
 const {shell} = require("electron");
@@ -14,7 +14,7 @@ const framelessPlugin = require('../modules/framelessPlugin')
 
 let timer = null
 
-const createMainWindow = function (BrowserWindow: any) {
+const createMainWindow = function (blurType: string) {
     const option = {
         show: false,
         width: 1250,
@@ -25,6 +25,8 @@ const createMainWindow = function (BrowserWindow: any) {
         frame: false,
         minWidth: 1024,
         minHeight: 728,
+        blur: true,
+        blurType: blurType,
         backgroundColor: '#00000000',
         icon: path.join(RESOURCES_PATH, 'icon.png'),
         webPreferences: {
@@ -34,7 +36,7 @@ const createMainWindow = function (BrowserWindow: any) {
             enableRemoteModule: true,
             contextIsolation: false,
             webSecurity: false,
-            devTools: false
+            devTools: true
         }
     }
 

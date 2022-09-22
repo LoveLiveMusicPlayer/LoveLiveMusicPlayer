@@ -25,7 +25,16 @@ app.on('ready', async () => {
         global.mainWindow?.webContents.send('playMusic')
     })
     createFuncBtn()
-    global.mainWindow = createMainWindow(BrowserWindow)
+    if (process.platform == 'darwin') {
+        global.mainWindow = createMainWindow("vibrancy")
+    } else if (process.platform == 'win32') {
+        global.mainWindow = createMainWindow("acrylic")
+        global.windowFrame = 'false'
+    } else {
+        global.mainWindow = createMainWindow("blurbehind")
+        global.windowFrame = 'true'
+    }
+
     global.lyricWindow = createLyricWindow(BrowserWindow)
     if (process.platform === "win32") {
         // 设置底部任务栏按钮和缩略图
