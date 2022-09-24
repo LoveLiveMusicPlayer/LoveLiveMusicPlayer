@@ -27,6 +27,7 @@ const createMainWindow = function () {
         minHeight: 728,
         backgroundColor: '#00000000',
         icon: path.join(RESOURCES_PATH, 'icon.png'),
+        vibrancy: 'fullscreen-ui',
         webPreferences: {
             experimentalFeatures: true,
             nodeIntegration: true,

@@ -198,13 +198,13 @@ export const AppUtils = {
     },
 
     setBodyColor(colors) {
-        const alpha = process.platform === "win32" ? 0.8 : 0.9
+        const alpha = process.platform === "darwin" ? 0.5 : 0.8
         const first = this.hexToRgba(colors.color1, alpha)
         const second = this.hexToRgba(colors.color2, alpha)
 
         const container = document.getElementsByClassName('outer_container')[0]
         container.style.background = 'linear-gradient(' + 200.96 + 'deg, ' + first.rgba + ', ' + second.rgba + ')';
-        document.body.style.background = '#1a000000'
+        document.body.style.background = process.platform === "darwin" ? '#00000000' : '#1a000000'
     },
 
     // 返回1..100中，数组内不存在的最小值

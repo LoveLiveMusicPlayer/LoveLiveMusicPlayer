@@ -24,7 +24,7 @@ const devtoolsConfig =
         : {};
 
 const os = require('os');
-const targetPlatform = (function () {
+(function () {
     let target = os.platform();
     for (let i = 0; i < process.argv.length; i++) {
         if (process.argv[i].includes('--target_platform=')) {
@@ -35,8 +35,6 @@ const targetPlatform = (function () {
     if (!['win32', 'darwin'].includes) target = os.platform();
     return target;
 })();
-
-
 export default merge(baseConfig, {
     ...devtoolsConfig,
 
