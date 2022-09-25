@@ -26,12 +26,14 @@ app.on('ready', async () => {
     })
     createFuncBtn()
 
-    global.mainWindow = createMainWindow()
+    setTimeout(() => {
+        global.mainWindow = createMainWindow()
+        if (process.platform === "win32") {
+            // 设置底部任务栏按钮和缩略图
+            global.mainWindow.setThumbarButtons(thumbarButtons);
+        }
+    }, process.platform == "linux" ? 1000 : 0)
     global.lyricWindow = createLyricWindow(BrowserWindow)
-    if (process.platform === "win32") {
-        // 设置底部任务栏按钮和缩略图
-        global.mainWindow.setThumbarButtons(thumbarButtons);
-    }
 })
 
 app.on('activate', () => {
