@@ -8,6 +8,7 @@ import {AppUtils} from "../../utils/AppUtils";
 import {WorkUtils} from "../../utils/WorkUtils";
 import * as Images from "../../public/Images";
 import {Img} from "../Pagin/styled-components/index";
+import {Const} from "../../public/Const";
 
 const CheckboxGroup = Checkbox.Group;
 
@@ -70,7 +71,12 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
         try {
             const tempAlbumList = []
             const tempMusicList = []
-            const albumList = await AlbumHelper.findAllAlbums()
+            let albumList = []
+            albumList = albumList.concat(await AlbumHelper.findAllAlbumsByGroup(Const.us.key))
+            albumList = albumList.concat(await AlbumHelper.findAllAlbumsByGroup(Const.aqours.key))
+            albumList = albumList.concat(await AlbumHelper.findAllAlbumsByGroup(Const.saki.key))
+            albumList = albumList.concat(await AlbumHelper.findAllAlbumsByGroup(Const.liella.key))
+            albumList = albumList.concat(await AlbumHelper.findAllAlbumsByGroup(Const.combine.key))
             for (const album of albumList) {
                 tempMusicList.length = 0
                 const musicList = await MusicHelper.findAllMusicByAlbumId(album.group, album.id)
