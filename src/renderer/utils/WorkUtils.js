@@ -48,7 +48,6 @@ export const WorkUtils = {
 
     /**
      * 递归导出目录中全部歌曲的音乐信息为Excel
-     * @param path 音乐文件夹根目录
      * @param rootDir 要去掉的目录前面的字符串
      * @returns {Promise<void>}
      *
@@ -56,7 +55,8 @@ export const WorkUtils = {
      *      rootDir: /Users/xxx/Desktop/
      *      fileList[0]: LoveLive/...
      */
-    async exportToExcel(path, rootDir) {
+    async exportToExcel(rootDir) {
+        const path = rootDir + path.sep + "LoveLive" + path.sep;
         const filesList = [];
         await AppUtils.readFileList(path, filesList, rootDir)
         const infoList = await AppUtils.parseMusicInfo(filesList, rootDir)

@@ -91,10 +91,11 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
                 const dir = result[0]
                 if (dir.endsWith(path.sep + "LoveLive")) {
                     const rootDir = dir.substring(0, dir.length - 9)
+
                     console.log(rootDir)
                     setHttpServer({path: rootDir, port: port})
                     AppUtils.openMsgDialog("info", "导入歌曲库成功")
-                    // await WorkUtils.exportToExcel(path, rootDir)
+                    // WorkUtils.exportToExcel(rootDir)
                 } else {
                     AppUtils.openMsgDialog("error", "请拖入名为LoveLive的文件夹")
                 }
