@@ -24,7 +24,7 @@ export const GroupModal = ({showCategory, showMenu, chooseGroup}) => {
                         <div className={["hvr-grow", "menu_category"].join(' ')}>
                             <img src={Images.MENU_NIJI} width={'170px'} height={'250px'}
                                  onClick={() => chooseGroup(Const.saki.key)}/>
-                            <span className={"menu_category_span"}>${Const.saki.value}</span>
+                            <span className={"menu_category_span"}>{Const.saki.value}</span>
                         </div>
                         <div className={["hvr-grow", "menu_category"].join(' ')}>
                             <img src={Images.MENU_MIUSI} width={'170px'} height={'250px'}
