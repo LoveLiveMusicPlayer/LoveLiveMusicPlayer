@@ -347,7 +347,7 @@ const TransferMusic = () => {
                     if (Store.get("phoneSystem", "android") === "ios") {
                         let musicList = downloadRef.current?.getList().filter(item => item.musicUId === musicId)
                         if (musicList.length > 0) {
-                            AppUtils.delFile(DBHelper.getHttpServer().path + musicList[0].baseUrl + musicList[0].musicPath.replace(".flac", ".wav"))
+                            AppUtils.delFile(DBHelper.getHttpServer().path + path.sep + musicList[0].baseUrl + musicList[0].musicPath.replace(".flac", ".wav"))
                         }
                     }
                 }}

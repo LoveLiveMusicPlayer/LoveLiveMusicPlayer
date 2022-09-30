@@ -176,7 +176,7 @@ export function makeCancelable(promise: Promise<any>) {
 
 // 处理文件
 export function transfer(pathDir: string, music: any, phoneSystem: string, runningTag: number) {
-    const srcPath = pathDir + music.convertPath;
+    const srcPath = pathDir + music.baseUrl + music.musicPath;
     let destPath = null;
     if (music.destDir !== null) {
         const fileNameArr = music.musicPath.split("/")
