@@ -179,7 +179,8 @@ export function transfer(pathDir: string, music: any, phoneSystem: string, runni
     const srcPath = pathDir + music.convertPath;
     let destPath = null;
     if (music.destDir !== null) {
-        destPath = music.destDir + music.musicPath;
+        const fileNameArr = music.musicPath.split("/")
+        destPath = music.destDir + fileNameArr[fileNameArr.length - 1]
     }
     if (destPath !== null && srcPath !== destPath) {
         if (!AppUtils.mkdirsSync(music.destDir)) {
@@ -195,7 +196,14 @@ export function transfer(pathDir: string, music: any, phoneSystem: string, runni
         return Promise.resolve({music: music, oldRunningTag: runningTag, reason: "文件不存在"})
     } else {
         if (destPath != null) {
-            fs.copyFileSync(srcPath, destPath)
+            try {
+                if (fs.existsSync(destPath)) {
+                    AppUtils.delFile(destPath)
+                }
+                fs.copyFileSync(srcPath, destPath)
+            } catch (e) {
+                return Promise.resolve({music: music, oldRunningTag: runningTag, reason: "复制失败"})
+            }
         }
         return Promise.resolve({music: music, oldRunningTag: runningTag, reason: undefined})
     }

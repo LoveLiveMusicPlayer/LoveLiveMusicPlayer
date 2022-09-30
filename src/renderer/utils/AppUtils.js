@@ -204,7 +204,7 @@ export const AppUtils = {
 
         const container = document.getElementsByClassName('outer_container')[0]
         container.style.background = 'linear-gradient(' + 200.96 + 'deg, ' + first.rgba + ', ' + second.rgba + ')';
-        document.body.style.background = process.platform === "darwin" ? '#00000000' : '#1a000000'
+        document.body.style.background = '#00000000'
     },
 
     // 返回1..100中，数组内不存在的最小值

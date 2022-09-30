@@ -6,7 +6,7 @@ import {RESOURCES_PATH} from "../modules/inital";
 import {clearTimeout} from "timers";
 import {globalShortcut} from "electron";
 import {upReportOpenTime} from "../util";
-import glasstron from 'glasstron';
+const glasstron = require('glasstron-clarity');
 
 const {resolveHtmlPath} = require("../util");
 const {shell} = require("electron");
@@ -20,12 +20,12 @@ const createMainWindow = function () {
         width: 1250,
         height: 728,
         titleBarStyle: 'customButtonsOnHover',
-        transparent: true,
+        transparent: process.platform !== 'win32',
         maximizable: process.platform === 'darwin',
         frame: false,
         minWidth: 1024,
         minHeight: 728,
-        backgroundColor: '#00000000',
+        roundedCorners: true,
         icon: path.join(RESOURCES_PATH, 'icon.png'),
         vibrancy: 'fullscreen-ui',
         webPreferences: {
