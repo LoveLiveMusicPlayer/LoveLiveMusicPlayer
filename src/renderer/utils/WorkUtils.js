@@ -13,6 +13,7 @@ import {parse as parseLrc} from "clrc";
 import {SongMenuHelper} from "../dao/SongMenuHelper";
 import {LoveHelper} from "../dao/LoveHelper";
 import * as _ from 'lodash'
+import {Const} from "../public/Const";
 
 const {promisify} = require('util');
 const stat = promisify(fs.stat)
@@ -294,8 +295,8 @@ export const WorkUtils = {
     },
 
     parseGroupName(name) {
-        if (name === 'Nijigasaki') {
-            return '虹咲学园'
+        if (name === Const.saki.key) {
+            return Const.saki.value
         } else return name
     },
 

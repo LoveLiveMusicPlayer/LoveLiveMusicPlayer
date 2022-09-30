@@ -1,7 +1,8 @@
 import * as TYPES from './types';
+import {Const} from "../public/Const";
 
 const initialState = {
-    chooseGroup: "μ's",
+    chooseGroup: Const.us.key,
     playId: '',
     albumId: ''
 }

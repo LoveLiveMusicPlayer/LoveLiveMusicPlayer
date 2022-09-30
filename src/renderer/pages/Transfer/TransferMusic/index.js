@@ -42,8 +42,11 @@ const TransferMusic = () => {
         musicIds.map(item => {
             task.push(new Promise((resolve, reject) => {
                 MusicHelper.findOneMusicByUniqueId(item).then(mMusic => {
-                    const convertPath = (mMusic.base_url + mMusic.music_path).replaceAll('/', path.sep)
+                    let convertPath = (mMusic.base_url + mMusic.music_path).replaceAll('/', path.sep)
                     const url = DBHelper.getHttpServer().path + path.sep + convertPath
+                    if (phoneSystem === "ios") {
+                        convertPath = convertPath.replace(".flac", ".wav")
+                    }
                     if (fs.existsSync(url)) {
                         AlbumHelper.findOneAlbumByAlbumId(mMusic.group, mMusic.album).then(mAlbum => {
                             let destDir = null
