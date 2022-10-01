@@ -9,9 +9,17 @@ import createMainWindow from "./windows/mainWindow";
 import {upReportOpenTime} from "./util";
 
 // 阻止应用多开
-const gotTheLock = app.requestSingleInstanceLock()
-if (!gotTheLock) {
+const isAppInstance = app.requestSingleInstanceLock()
+if (!isAppInstance) {
     app.exit(0)
+} else {
+    app.on('second-instance', (event, argv, workingDirectory, additionalData, ackCallback) => {
+        if (global.mainWindow?.isMinimized()) {
+            global.mainWindow?.restore()
+        }
+        global.mainWindow?.focus()
+        global.mainWindow?.show()
+    })
 }
 
 global.isInit = true
