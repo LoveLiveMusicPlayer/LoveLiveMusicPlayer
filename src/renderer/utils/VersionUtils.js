@@ -6,6 +6,11 @@ const isPre = true
 const isNeedInit = false
 
 export const VersionUtils = {
+    // 获取是否是预发环境
+    getIsPreEnv() {
+        return isPre
+    },
+
     // 获取连接桥跳板
     getBridgeUrl(appVersion) {
         return OWNER_OSS_URL_HEAD + appVersion + (isPre ? "/pre/" : "/prod/") + BRIDGE_URL

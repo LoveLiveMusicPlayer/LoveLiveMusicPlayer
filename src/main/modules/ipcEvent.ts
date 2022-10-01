@@ -6,6 +6,7 @@ import {thumbarButtons} from "./dockAndTray";
 import path from "path";
 import {RESOURCES_PATH} from "./inital";
 import Dialog from "./dialog";
+import {VersionUtils} from "../../renderer/utils/VersionUtils";
 
 const httpserver = require('http-server');
 const autoUpdater = new update()
@@ -34,7 +35,7 @@ let openDirectory = (event, channel) => {
 
 export default function () {
     // 开启HTTP服务 或 切换端口重启服务
-    ipcMain.handle('openHttp', async (event, path, port) => {
+    ipcMain.handle('openHttp', async (event, mPath, port) => {
         // 获取可用端口号
         portIsOccupied(port).then(port => {
             // 服务已被打开的话要先释放再开启
@@ -43,10 +44,14 @@ export default function () {
             }
             console.log(`start http-server at ${port}`)
             // 创建HTTP服务(禁用缓存)
-            mServer = httpserver.createServer({root: path, cache: -1})
+            if (process.platform === 'win32' && mPath.endsWith(":")) {
+                mServer = httpserver.createServer({root: mPath + path.sep, cache: -1})
+            } else {
+                mServer = httpserver.createServer({root: mPath, cache: -1})
+            }
             mServer.listen(port)
             isHttpServerOpen = true
-            event.sender.send("openHttpReply", path, port)
+            event.sender.send("openHttpReply", mPath, port)
         })
     })
 
@@ -141,10 +146,14 @@ export default function () {
     ipcMain.on('toggle-desktop-lyric', (event, args) => {
         if (args) {
             global?.lyricWindow?.showInactive()
-            // global?.mainWindow.webContents.openDevTools({mode: 'right'})
+            if (VersionUtils.getIsPreEnv()) {
+                global?.mainWindow.webContents.openDevTools({mode: 'right'})
+            }
         } else {
             global?.lyricWindow?.hide()
-            // global?.mainWindow.webContents.closeDevTools()
+            if (VersionUtils.getIsPreEnv()) {
+                global?.mainWindow.webContents.closeDevTools()
+            }
         }
         global?.mainWindow?.webContents.send('toggle-desktop-lyric-reply')
     })
