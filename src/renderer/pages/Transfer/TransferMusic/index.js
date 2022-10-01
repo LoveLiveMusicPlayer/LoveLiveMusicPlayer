@@ -51,8 +51,9 @@ const TransferMusic = () => {
                         AlbumHelper.findOneAlbumByAlbumId(mMusic.group, mMusic.album).then(mAlbum => {
                             let destDir = null
                             if (dest !== undefined) {
-                                const srcDirArr = AppUtils.getFileDirectory(url).split('LoveLive')
-                                destDir = dest + path.sep + "LoveLive" + srcDirArr[srcDirArr.length - 1].replaceAll('/', path.sep)
+                                const srcDirArr = AppUtils.getFileDirectory(url).split(path.sep + 'LoveLive' + path.sep)
+                                console.log(srcDirArr)
+                                destDir = dest + path.sep + "LoveLive" + path.sep + srcDirArr[srcDirArr.length - 1].replaceAll('/', path.sep)
                             }
 
                             resolve({
