@@ -268,6 +268,5 @@ export function judgeWinVersion() {
     if (isWin10) {
         return 1;
     }
-    Dialog({type: 'error', message: versionArr[0] + " - " + versionArr[1] + " - " + versionArr[2] + " - " + process.getSystemVersion()})
     return 0;
 }

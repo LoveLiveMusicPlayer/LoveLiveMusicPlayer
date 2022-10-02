@@ -7,7 +7,6 @@ import {clearTimeout} from "timers";
 import {globalShortcut} from "electron";
 import {upReportOpenTime} from "../util";
 import {VersionUtils} from "../../renderer/utils/VersionUtils";
-import Dialog from "../modules/dialog";
 
 const {resolveHtmlPath} = require("../util");
 const {shell} = require("electron");
@@ -45,7 +44,7 @@ const createMainWindow = function (BrowserWindow: any) {
     if (BrowserWindow == null) {
         const glasstron = require('glasstron-clarity')
         mainWindow = new glasstron.BrowserWindow(option)
-        mainWindow.blurType = process.platform === 'win32' ? "acrylic" : "blurbehind"
+        mainWindow.blurType = "blurbehind"
     } else {
         mainWindow = new BrowserWindow(option)
     }
@@ -68,8 +67,8 @@ const createMainWindow = function (BrowserWindow: any) {
         }
         if (global.isInit) {
             global.isInit = false
-            // win10 需要为了模糊和圆角首次并存，需要关闭再打开
-            if (global.winVersion == 1) {
+            // windows 需要为了模糊和圆角首次并存，需要关闭再打开
+            if (process.platform == "win32") {
                 mainWindow.show()
                 mainWindow.focus();
                 mainWindow.close();
