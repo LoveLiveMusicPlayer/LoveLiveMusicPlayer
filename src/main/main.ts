@@ -7,6 +7,7 @@ import init from "./modules/inital";
 import createLyricWindow from "./windows/desktopLyricWindow";
 import createMainWindow from "./windows/mainWindow";
 import {judgeWinVersion, upReportOpenTime} from "./util";
+import Dialog from "./modules/dialog";
 
 // 阻止应用多开
 const isAppInstance = app.requestSingleInstanceLock()
@@ -27,10 +28,7 @@ global.startTime = new Date().getTime()
 global.willQuitApp = false
 
 const isWin = process.platform === "win32"
-let winVersion = 0
-if (isWin) {
-    winVersion = judgeWinVersion()
-}
+global.winVersion = 0
 
 init()
 
@@ -40,7 +38,10 @@ app.on('ready', async () => {
     })
     createFuncBtn()
     setTimeout(() => {
-        global.mainWindow = createMainWindow((!isWin || winVersion > 0) ? null : BrowserWindow, winVersion)
+        if (isWin) {
+            global.winVersion = judgeWinVersion()
+        }
+        global.mainWindow = createMainWindow((!isWin || global.winVersion > 0) ? null : BrowserWindow)
 
         if (isWin) {
             // 设置底部任务栏按钮和缩略图
@@ -52,7 +53,7 @@ app.on('ready', async () => {
 
 app.on('activate', () => {
     // 在macOS上，当单击dock图标且没有其他窗口打开时，通常会在应用程序中重新创建一个窗口。
-    if (global.mainWindow === null) createMainWindow((!isWin || winVersion > 0) ? null : BrowserWindow, winVersion)
+    if (global.mainWindow === null) createMainWindow((!isWin || global.winVersion > 0) ? null : BrowserWindow)
     else if (!global.mainWindow?.isVisible()) {
         global.mainWindow?.show()
         global.mainWindow?.focus()

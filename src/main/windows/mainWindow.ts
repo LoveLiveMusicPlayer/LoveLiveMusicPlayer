@@ -7,6 +7,7 @@ import {clearTimeout} from "timers";
 import {globalShortcut} from "electron";
 import {upReportOpenTime} from "../util";
 import {VersionUtils} from "../../renderer/utils/VersionUtils";
+import Dialog from "../modules/dialog";
 
 const {resolveHtmlPath} = require("../util");
 const {shell} = require("electron");
@@ -14,13 +15,13 @@ const framelessPlugin = require('../modules/framelessPlugin')
 
 let timer = null
 
-const createMainWindow = function (BrowserWindow: any, winVersion: number) {
+const createMainWindow = function (BrowserWindow: any) {
     const option = {
         show: false,
         width: 1250,
         height: 728,
         titleBarStyle: 'customButtonsOnHover',
-        transparent: winVersion == 0,
+        transparent: global.winVersion == 0,
         maximizable: process.platform === 'darwin',
         frame: false,
         minWidth: 1024,
@@ -67,11 +68,11 @@ const createMainWindow = function (BrowserWindow: any, winVersion: number) {
         }
         if (global.isInit) {
             global.isInit = false
-            // win10 需要为了模糊和圆角首次并存，需要最小化再展开
-            if (winVersion == 1) {
+            // win10 需要为了模糊和圆角首次并存，需要关闭再打开
+            if (global.winVersion == 1) {
                 mainWindow.show()
                 mainWindow.focus();
-                mainWindow.minimize();
+                mainWindow.close();
             }
         }
         if (process.env.START_MINIMIZED) {
