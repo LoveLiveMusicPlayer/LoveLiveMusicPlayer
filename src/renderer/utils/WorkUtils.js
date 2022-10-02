@@ -283,10 +283,12 @@ export const WorkUtils = {
             return
         }
         onStart && onStart()
+        await AlbumHelper.removeAllAlbum()
         await AlbumHelper.insertOrUpdateAlbum(JSON.stringify(data.album), function (progress) {
             onProgress && onProgress(progress)
         })
         onAlbumEnd && onAlbumEnd(data)
+        await MusicHelper.removeAllMusic()
         await MusicHelper.insertOrUpdateMusic(JSON.stringify(data.music), function (progress) {
             onProgress && onProgress(progress)
         })
