@@ -7,6 +7,7 @@ import init from "./modules/inital";
 import createLyricWindow from "./windows/desktopLyricWindow";
 import createMainWindow from "./windows/mainWindow";
 import {upReportOpenTime} from "./util";
+const os = require('os')
 
 // 阻止应用多开
 const isAppInstance = app.requestSingleInstanceLock()
@@ -35,7 +36,11 @@ app.on('ready', async () => {
     createFuncBtn()
 
     setTimeout(() => {
-        global.mainWindow = createMainWindow()
+        const versionArr = os.release().split(".")
+        const version = Number(versionArr[0] + versionArr[1])
+        const isWindowsAndUnderWin10 = process.platform === "win32" && version < 100
+        global.mainWindow = createMainWindow(isWindowsAndUnderWin10 ? BrowserWindow : null)
+
         if (process.platform === "win32") {
             // 设置底部任务栏按钮和缩略图
             global.mainWindow.setThumbarButtons(thumbarButtons);

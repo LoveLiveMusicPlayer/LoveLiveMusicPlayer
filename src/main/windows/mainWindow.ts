@@ -6,7 +6,6 @@ import {RESOURCES_PATH} from "../modules/inital";
 import {clearTimeout} from "timers";
 import {globalShortcut} from "electron";
 import {upReportOpenTime} from "../util";
-const glasstron = require('glasstron-clarity');
 
 const {resolveHtmlPath} = require("../util");
 const {shell} = require("electron");
@@ -14,13 +13,13 @@ const framelessPlugin = require('../modules/framelessPlugin')
 
 let timer = null
 
-const createMainWindow = function () {
+const createMainWindow = function (BrowserWindow: any) {
     const option = {
         show: false,
         width: 1250,
         height: 728,
         titleBarStyle: 'customButtonsOnHover',
-        transparent: process.platform !== 'win32',
+        transparent: BrowserWindow == null,
         maximizable: process.platform === 'darwin',
         frame: false,
         minWidth: 1024,
@@ -39,9 +38,17 @@ const createMainWindow = function () {
         }
     }
 
-    let mainWindow = new glasstron.BrowserWindow(option);
-    mainWindow.blurType = "blurbehind"
-    mainWindow.setBlur(true)
+    let mainWindow = null
+
+    if (BrowserWindow == null) {
+        const glasstron = require('glasstron-clarity')
+        mainWindow = new glasstron.BrowserWindow(option)
+        mainWindow.blurType = "blurbehind"
+        mainWindow.setBlur(true)
+    } else {
+        mainWindow = new BrowserWindow(option)
+        mainWindow.backgroundColor = "#00000000"
+    }
 
     // 修复透明窗口缩放窗口异常
     framelessPlugin.plugin({
