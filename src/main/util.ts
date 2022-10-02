@@ -8,6 +8,7 @@ import wav from "wav";
 import fs from "fs";
 import Dialog from "./modules/dialog";
 import {AppUtils} from "../renderer/utils/AppUtils";
+import os from "os";
 
 const net = require('net')
 
@@ -241,4 +242,31 @@ export function flacToWav(srcPath: string, destPath: string, runningTag: number,
             return resolve({music: music, oldRunningTag: runningTag, reason: undefined})
         })
     })
+}
+
+function checkIsWin10(majorVersion: number, buildNumber: number) {
+    return majorVersion == 10 && buildNumber < 22000;
+}
+
+function checkIsWin11(majorVersion: number, buildNumber: number) {
+    if (majorVersion == 10 && buildNumber >= 22000) {
+        return true;
+    } else return majorVersion == 11;
+}
+
+/**
+ * 判断windows阵营的软件系统版本
+ * @return 0: win8及以下; 1: win10; 2: win11
+ */
+export function judgeWinVersion() {
+    const versionArr = os.release().split(".")
+    const isWin11 = checkIsWin11(Number(versionArr[0]), Number(versionArr[2]))
+    if (isWin11) {
+        return 2;
+    }
+    const isWin10 = checkIsWin10(Number(versionArr[0]), Number(versionArr[2]))
+    if (isWin10) {
+        return 1;
+    }
+    return 0;
 }

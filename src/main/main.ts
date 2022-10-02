@@ -6,8 +6,7 @@ import createFuncBtn, {thumbarButtons} from "./modules/dockAndTray";
 import init from "./modules/inital";
 import createLyricWindow from "./windows/desktopLyricWindow";
 import createMainWindow from "./windows/mainWindow";
-import {upReportOpenTime} from "./util";
-const os = require('os')
+import {judgeWinVersion, upReportOpenTime} from "./util";
 
 // 阻止应用多开
 const isAppInstance = app.requestSingleInstanceLock()
@@ -27,6 +26,12 @@ global.isInit = true
 global.startTime = new Date().getTime()
 global.willQuitApp = false
 
+const isWin = process.platform === "win32"
+let winVersion = 0
+if (isWin) {
+    winVersion = judgeWinVersion()
+}
+
 init()
 
 app.on('ready', async () => {
@@ -34,24 +39,20 @@ app.on('ready', async () => {
         global.mainWindow?.webContents.send('playMusic')
     })
     createFuncBtn()
-
     setTimeout(() => {
-        const versionArr = os.release().split(".")
-        const version = Number(versionArr[0] + versionArr[1])
-        const isWindowsAndUnderWin10 = process.platform === "win32" && version < 100
-        global.mainWindow = createMainWindow(isWindowsAndUnderWin10 ? BrowserWindow : null)
+        global.mainWindow = createMainWindow((!isWin || winVersion > 0) ? null : BrowserWindow, winVersion)
 
-        if (process.platform === "win32") {
+        if (isWin) {
             // 设置底部任务栏按钮和缩略图
             global.mainWindow.setThumbarButtons(thumbarButtons);
         }
-    }, process.platform == "linux" ? 1000 : 0)
+    }, 200)
     global.lyricWindow = createLyricWindow(BrowserWindow)
 })
 
 app.on('activate', () => {
     // 在macOS上，当单击dock图标且没有其他窗口打开时，通常会在应用程序中重新创建一个窗口。
-    if (global.mainWindow === null) createMainWindow()
+    if (global.mainWindow === null) createMainWindow((!isWin || winVersion > 0) ? null : BrowserWindow, winVersion)
     else if (!global.mainWindow?.isVisible()) {
         global.mainWindow?.show()
         global.mainWindow?.focus()

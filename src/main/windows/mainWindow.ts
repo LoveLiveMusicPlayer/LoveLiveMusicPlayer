@@ -6,6 +6,7 @@ import {RESOURCES_PATH} from "../modules/inital";
 import {clearTimeout} from "timers";
 import {globalShortcut} from "electron";
 import {upReportOpenTime} from "../util";
+import {VersionUtils} from "../../renderer/utils/VersionUtils";
 
 const {resolveHtmlPath} = require("../util");
 const {shell} = require("electron");
@@ -13,28 +14,28 @@ const framelessPlugin = require('../modules/framelessPlugin')
 
 let timer = null
 
-const createMainWindow = function (BrowserWindow: any) {
+const createMainWindow = function (BrowserWindow: any, winVersion: number) {
     const option = {
         show: false,
         width: 1250,
         height: 728,
         titleBarStyle: 'customButtonsOnHover',
-        transparent: BrowserWindow == null,
+        transparent: winVersion == 0,
         maximizable: process.platform === 'darwin',
         frame: false,
         minWidth: 1024,
         minHeight: 728,
-        roundedCorners: true,
+        blur: true,
         icon: path.join(RESOURCES_PATH, 'icon.png'),
         vibrancy: 'fullscreen-ui',
+        paintWhenInitiallyHidden: false,
         webPreferences: {
-            experimentalFeatures: true,
             nodeIntegration: true,
             nodeIntegrationInWorker: false,
             enableRemoteModule: true,
             contextIsolation: false,
             webSecurity: false,
-            devTools: true
+            devTools: VersionUtils.getIsPreEnv()
         }
     }
 
@@ -43,11 +44,9 @@ const createMainWindow = function (BrowserWindow: any) {
     if (BrowserWindow == null) {
         const glasstron = require('glasstron-clarity')
         mainWindow = new glasstron.BrowserWindow(option)
-        mainWindow.blurType = "blurbehind"
-        mainWindow.setBlur(true)
+        mainWindow.blurType = process.platform === 'win32' ? "acrylic" : "blurbehind"
     } else {
         mainWindow = new BrowserWindow(option)
-        mainWindow.backgroundColor = "#00000000"
     }
 
     // 修复透明窗口缩放窗口异常
@@ -62,14 +61,18 @@ const createMainWindow = function (BrowserWindow: any) {
 
     mainWindow.loadURL(resolveHtmlPath('index.html'));
 
-    mainWindow.on('ready-to-show', () => {
-        global.isInit = false
-        mainWindow.show()
-    })
-
     mainWindow.webContents.on('did-finish-load', () => {
         if (!mainWindow) {
             throw new Error('"mainWindow" is not defined');
+        }
+        if (global.isInit) {
+            global.isInit = false
+            // win10 需要为了模糊和圆角首次并存，需要最小化再展开
+            if (winVersion == 1) {
+                mainWindow.show()
+                mainWindow.focus();
+                mainWindow.minimize();
+            }
         }
         if (process.env.START_MINIMIZED) {
             mainWindow.minimize();
