@@ -1,0 +1,23 @@
+.historyContainer {
+    width: 100%;
+    height: 100%;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 165px;
+    overflow: auto;
+}
+
+historyTopContainer {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+}
+
+historyTopRightContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-left: 24px;
+    padding-bottom: 10px;
+}

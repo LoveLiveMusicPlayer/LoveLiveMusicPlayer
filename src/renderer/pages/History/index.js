@@ -1,45 +1,35 @@
 import React, {useRef, useState} from 'react';
 import './index.css'
 import * as Images from '../../public/Images'
-import {Button, Tabs} from "antd";
-import Bus from "../../utils/Event";
-import {CustomDialog} from "../../component/CustomDialog";
-import {LoveHelper} from "../../dao/LoveHelper";
+import {Button} from "antd";
 import {MusicRowList} from "../../component/MusicRowList";
+import {CustomDialog} from "../../component/CustomDialog";
+import {MusicHelper} from "../../dao/MusicHelper";
 import {WorkUtils} from "../../utils/WorkUtils";
 
 const {connect} = require('react-redux')
-const {TabPane} = Tabs;
 
-const Love = ({playId}) => {
+const History = ({playId}) => {
 
     const musicRowListRef = useRef()
-    const [showDialogAndHandleMusic, setShowDialogAndHandleMusic] = useState({"show": false, "music": null})
-
-    const tabCallback = (key) => {
-        console.log(key)
-    }
-
-    const renderTabs = () => (
-        <Tabs defaultActiveKey="1" onChange={tabCallback} tabBarStyle={{color: 'white'}}>
-            <TabPane tab="歌曲" key="1"/>
-            <TabPane tab="专辑" key="2"/>
-            <TabPane tab="歌单" key="3"/>
-        </Tabs>
-    )
+    const [showDialogAndHandleMusic, setShowDialogAndHandleMusic] = useState({
+        "show": false,
+        "music": null,
+        "state": "disLove"
+    })
 
     return (
-        <div className={'loveContainer'} onClick={() => musicRowListRef.current?.closeNode()}>
-            <div className={'loveTopContainer'}>
-                <div className={'loveTopRightContainer'}>
-                    <p className={'loveName'}>我喜欢</p>
-                    {renderTabs()}
+        <div className={'historyContainer'}>
+            <div className={'historyTopContainer'}>
+                <div className={'historyTopRightContainer'}>
+                    <p className={'loveName'}>最近播放</p>
                     <Button
                         type="primary"
                         shape="round"
-                        style={{width: '110px'}}
+                        style={{width: '110px', marginTop: '10px'}}
                         icon={<img src={Images.ICON_DIS_PLAY} style={{marginRight: '6px', marginBottom: '3px'}}/>}
-                        onClick={() => musicRowListRef.current?.playFirst()}
+                        onClick={() => {
+                        }}
                     >
                         播放全部
                     </Button>
@@ -48,29 +38,30 @@ const Love = ({playId}) => {
             <MusicRowList
                 ref={musicRowListRef}
                 playId={playId}
-                onRefreshData={() =>
-                    WorkUtils.findLoveList(table => musicRowListRef.current?.setData(table))
-                }
+                onRefreshData={() => {
+                    WorkUtils.findHistoryList((table) => musicRowListRef.current?.setData(table))
+                }}
                 onDisLove={(music) => {
+                    console.log(music)
                     showDialogAndHandleMusic.show = true
                     showDialogAndHandleMusic.music = music.music
+                    showDialogAndHandleMusic.state = "disLove"
                     setShowDialogAndHandleMusic({...showDialogAndHandleMusic})
                 }}
                 onDelSong={(music) => {
                     showDialogAndHandleMusic.show = true
                     showDialogAndHandleMusic.music = music.music
+                    showDialogAndHandleMusic.state = "deleteMusic"
                     setShowDialogAndHandleMusic({...showDialogAndHandleMusic})
                 }}
             />
             <CustomDialog
                 isShow={showDialogAndHandleMusic.show}
-                hint={'取消喜欢歌曲？'}
+                hint={showDialogAndHandleMusic.state === "deleteMusic" ? "确认删除歌曲？" : '取消喜欢歌曲？'}
                 result={(isDel) => {
                     if (isDel) {
-                        LoveHelper.deleteSong(showDialogAndHandleMusic.music).then(_ => {
+                        MusicHelper.refreshMusicTimestamp(showDialogAndHandleMusic.music._id, 0).then(_ => {
                             musicRowListRef.current?.refresh()
-                        }).catch(err => {
-                            Bus.emit('onNotification', err)
                         })
                     }
                 }}
@@ -83,10 +74,11 @@ const Love = ({playId}) => {
     )
 }
 
+
 function select(store) {
     return {
         playId: store.music.playId
     };
 }
 
-export default connect(select)(Love);
+export default connect(select)(History);

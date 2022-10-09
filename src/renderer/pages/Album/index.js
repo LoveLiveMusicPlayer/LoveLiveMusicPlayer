@@ -1,117 +1,25 @@
-import React, {useEffect, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {useParams} from "react-router-dom";
 import './index.css'
 import Store from '../../utils/Store'
 import ImagePagination from "../../component/Pagin/index";
-import {Button, Table} from 'antd'
+import {Button} from 'antd'
 import {WorkUtils} from "../../utils/WorkUtils";
 import * as Images from '../../public/Images'
-import {SongMenuHelper} from "../../dao/SongMenuHelper";
-import {SelectDialog} from "../../component/SelectDialog";
 import Bus from "../../utils/Event";
 import {LoveHelper} from "../../dao/LoveHelper";
+import {MusicRowList} from "../../component/MusicRowList";
+import {CustomDialog} from "../../component/CustomDialog";
 
 const {connect} = require('react-redux');
 
-const Album = ({dispatch, chooseGroup, playId}) => {
+const Album = ({chooseGroup, playId}) => {
     let params = useParams()
-
-    // 三个功能按钮图片
-    const [btnFuncPic1, setBtnFuncPic1] = useState(Images.ICON_DIS_PLAY)
-    const [btnFuncPic2, setBtnFuncPic2] = useState(Images.ICON_DIS_COLLECT)
-    const [btnFuncPic3, setBtnFuncPic3] = useState(Images.ICON_DIS_LOVE)
+    const musicRowListRef = useRef()
 
     // 专辑信息详情
     const [info, setInfo] = useState()
-    // 专辑列表数据
-    const [tableData, setTableData] = useState()
-    const [nodeTree, setNodeTree] = useState({
-        pageX: 0,
-        pageY: 0,
-        music: '',
-    })
-    const [nodeDisplay, setNodeDisplay] = useState(false)
-    const [rowHover, setRowHover] = useState()
-    const [addListDisplay, setAddListDisplay] = useState(false)
-    const [willAddListMusic, setWillAddListMusic] = useState()
-    const [menu, setMenu] = useState([])
-    const [refreshAlbum, setRefreshAlbum] = useState()
-
-    useEffect(() => {
-        const onClickBody = () => {
-            setNodeDisplay(false)
-        }
-        Bus.addListener('onClickBody', onClickBody)
-        return () => Bus.removeListener('onClickBody', onClickBody)
-    }, [])
-
-    // 查询当前专辑全部的歌曲信息
-    const findAlbumList = () => {
-        WorkUtils.findAlbumList(
-            params.id,
-            chooseGroup,
-            (info) => setInfo(info),
-            (table) => setTableData(table)
-        )
-    }
-
-    useEffect(() => {
-        findAlbumList()
-    }, [refreshAlbum, params])
-
-    const columns = [
-        {
-            title: `歌曲${tableData && tableData ? tableData.length : '1'}`,
-            dataIndex: 'song',
-            key: 'song',
-            render: (text, record, index) => {
-                const active = index === rowHover
-                const isCurrentPlay = record.music._id === playId
-                return (
-                    <div style={{display: 'flex', flexDirection: 'row'}}>
-                        {
-                            isCurrentPlay ?
-                                <img src={Images.ICON_PLAY} width={20} height={20} style={{marginRight: 10}}/> : null
-                        }
-                        <p style={{margin: 0, fontWeight: isCurrentPlay ? 800 : 400}}>{text}</p>
-                        <div className={'btnFuncContainer'} style={{visibility: active ? 'visible' : 'hidden'}}>
-                            <img
-                                className={'btnFunc'}
-                                src={btnFuncPic1}
-                                onMouseOver={() => setBtnFuncPic1(Images.ICON_PLAY)}
-                                onMouseOut={() => setBtnFuncPic1(Images.ICON_DIS_PLAY)}
-                                onClick={() => playMusic(record, index)}
-                            />
-                            <img
-                                className={'btnFunc'}
-                                src={btnFuncPic2}
-                                onMouseOver={() => setBtnFuncPic2(Images.ICON_COLLECT)}
-                                onMouseOut={() => setBtnFuncPic2(Images.ICON_DIS_COLLECT)}
-                                onClick={() => addList(record)}
-                            />
-                            <img
-                                className={'btnFunc'}
-                                src={btnFuncPic3}
-                                onMouseOver={() => setBtnFuncPic3(Images.ICON_LOVE)}
-                                onMouseOut={() => setBtnFuncPic3(Images.ICON_DIS_LOVE)}
-                                onClick={() => iLove(record)}
-                            />
-                        </div>
-                    </div>
-                )
-            }
-        },
-        {
-            title: '艺术家',
-            dataIndex: 'artist',
-            key: 'artist',
-        },
-        {
-            title: '时长',
-            dataIndex: 'time',
-            key: 'time',
-        }
-    ];
+    const [showDialogAndHandleMusic, setShowDialogAndHandleMusic] = useState({"show": false, "music": null})
 
     const renderCover = () => {
         if (info) {
@@ -136,102 +44,8 @@ const Album = ({dispatch, chooseGroup, playId}) => {
         } else return null
     }
 
-    const onRowSelect = (record, index) => {
-        return {
-            onDoubleClick: () => {
-                playMusic(record, index)
-            },
-            onContextMenu: event => {
-                event.preventDefault()
-                setNodeTree({
-                    pageX: event.pageX,
-                    pageY: WorkUtils.calcRightClickPosition(event, 3),
-                    music: record,
-                    playIndex: index
-                })
-                setNodeDisplay(true)
-            },
-            onMouseEnter: () => {
-                const key = record.key
-                if (rowHover !== key) {
-                    setRowHover(key)
-                }
-            },
-            onMouseLeave: () => {
-                const key = record.key
-                if (rowHover === key) {
-                    setRowHover(null)
-                }
-            },
-        }
-    }
-
-    const renderMusicList = () => {
-        return (
-            <Table
-                columns={columns}
-                dataSource={tableData}
-                pagination={false}
-                onRow={onRowSelect}
-            />
-        )
-    }
-
-    const renderRightClick = () => {
-        const {pageX, pageY, music, playIndex} = nodeTree
-        const style = {
-            width: '100px',
-            position: 'absolute',
-            left: `${pageX - 250}px`,
-            top: `${pageY - 80}px`,
-            display: nodeDisplay ? 'flex' : 'none',
-            flexDirection: 'column',
-            backgroundColor: '#fff',
-            borderRadius: '8px'
-        }
-        const menu = (
-            <div style={style}>
-                <a className={'link'} onClick={() => playMusic(music, playIndex)}>播放</a>
-                <a className={'link'} onClick={() => addList(music)}>添加到</a>
-                <a className={'link'} onClick={() => iLove(music)}>我喜欢</a>
-            </div>
-        )
-        return nodeTree ? menu : null;
-    }
-
-    const playMusic = (music, playIndex) => {
-        WorkUtils.playAlbumByAlbumId(chooseGroup, music.music.album, playIndex)
-    }
-
-    const iLove = (music) => {
-        // 插入我喜欢列表
-        LoveHelper.insertSongToLove(music.music).then(_ => {
-            setRefreshAlbum(new Date().getTime())
-            Bus.emit('onNotification', '已添加到我喜欢')
-        })
-    }
-
-    const addList = (music) => {
-        SongMenuHelper.findPcMenu().then(res => {
-            if (res.length > 0) {
-                setAddListDisplay(true)
-                setWillAddListMusic(music.music)
-                setMenu(res)
-            } else {
-                Bus.emit('onNotification', '请先新增歌单')
-            }
-        })
-    }
-
-    // 添加到歌单
-    const addToList = (id) => {
-        SongMenuHelper.insertSongToMenu(id, willAddListMusic).then(_ => {
-            Bus.emit('onNotification', '已添加到歌单')
-        })
-    }
-
     return (
-        <div className={'albumContainer'} onClick={() => setNodeDisplay(false)}>
+        <div className={'albumContainer'} onClick={() => musicRowListRef.current?.closeNode()}>
             <div className={'albumTopContainer'}>
                 {renderCover()}
                 <div className={'albumTopRightContainer'}>
@@ -250,14 +64,44 @@ const Album = ({dispatch, chooseGroup, playId}) => {
                     </Button>
                 </div>
             </div>
-            {renderMusicList()}
-            {renderRightClick()}
-            <SelectDialog
-                hint={'请选择要添加的歌单'}
-                isShow={addListDisplay}
-                result={addToList}
-                list={menu}
-                close={() => setAddListDisplay(false)}
+            <MusicRowList
+                ref={musicRowListRef}
+                playId={playId}
+                onRefreshData={() =>
+                    WorkUtils.findAlbumList(
+                        params.id,
+                        chooseGroup,
+                        (info) => setInfo(info),
+                        (table) => musicRowListRef.current?.setData(table)
+                    )
+                }
+                onDisLove={(music) => {
+                    showDialogAndHandleMusic.show = true
+                    showDialogAndHandleMusic.music = music.music
+                    setShowDialogAndHandleMusic({...showDialogAndHandleMusic})
+                }}
+                onDelSong={(music) => {
+                    showDialogAndHandleMusic.show = true
+                    showDialogAndHandleMusic.music = music.music
+                    setShowDialogAndHandleMusic({...showDialogAndHandleMusic})
+                }}
+            />
+            <CustomDialog
+                isShow={showDialogAndHandleMusic.show}
+                hint={'取消喜欢歌曲？'}
+                result={(isDel) => {
+                    if (isDel) {
+                        LoveHelper.deleteSong(showDialogAndHandleMusic.music).then(_ => {
+                            musicRowListRef.current?.refresh()
+                        }).catch(err => {
+                            Bus.emit('onNotification', err)
+                        })
+                    }
+                }}
+                close={() => {
+                    showDialogAndHandleMusic.show = false
+                    setShowDialogAndHandleMusic({...showDialogAndHandleMusic})
+                }}
             />
         </div>
     )

@@ -48,6 +48,29 @@ export const MusicHelper = {
         return db.findAll({group: group, album: albumId})
     },
 
+    findAllMusicRecentlyByLimit() {
+        return db.findAll({
+            $where: function () {
+                const time = this.timestamp
+                return time !== undefined && time > 0
+            }
+        }, {}, {timestamp: -1}, 100)
+    },
+
+    // 更新歌曲播放时间戳
+    async refreshMusicTimestamp(uid, timestamp) {
+        const music = await this.findOneMusicByUniqueId(uid)
+        if (music == null) {
+            return -1
+        }
+        if (timestamp === undefined) {
+            music.timestamp = new Date().getTime()
+        } else {
+            music.timestamp = timestamp
+        }
+        return db.update({_id: uid}, music)
+    },
+
     // 删除全部音乐
     removeAllMusic() {
         return db.remove(null, {multi: true})

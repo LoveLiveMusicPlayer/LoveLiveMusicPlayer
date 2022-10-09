@@ -28,6 +28,7 @@ import Transfer from "./pages/Transfer";
 import {VersionUtils} from "./utils/VersionUtils";
 import TransferMusic from "./pages/Transfer/TransferMusic";
 import TransferData from "./pages/Transfer/TransferData";
+import History from "./pages/History";
 
 const {ipcRenderer} = require('electron')
 const os = require("os").platform();
@@ -312,6 +313,7 @@ function App({dispatch, appVersion}) {
                         <Route path="/album/:id" element={<Album/>}/>
                         <Route path="/menu/:id" element={<Menu/>}/>
                         <Route path="/love" element={<Love/>}/>
+                        <Route path="/history" element={<History/>}/>
                         <Route path="/transfer" element={<Transfer/>}/>
                         <Route path="/transferMusic" element={<TransferMusic/>}/>
                         <Route path="/transferData" element={<TransferData/>}/>
@@ -334,6 +336,8 @@ function App({dispatch, appVersion}) {
                 navigate('/love', {replace: true})
                 break
             case -1:
+                setShowRouter(true)
+                navigate('/history', {replace: true})
                 break
             case 0:
                 setShowRouter(true)

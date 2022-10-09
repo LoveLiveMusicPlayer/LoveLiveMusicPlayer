@@ -423,12 +423,12 @@ export const WorkUtils = {
                 }
             })
             albumList.push(AlbumHelper.findOneAlbumByAlbumId(item.group, item.album))
+            item.isLove = isLove
             music.push({
                 key: index,
                 song: item.name,
                 artist: item.artist,
                 time: item.time,
-                isLove: isLove,
                 music: item
             })
         })
@@ -461,12 +461,53 @@ export const WorkUtils = {
                     isLove = true
                 }
             })
+            music.isLove = isLove
             tableData.push({
                 key: index,
                 song: music.name,
                 artist: music.artist,
                 time: music.time,
-                isLove: isLove,
+                music: music
+            })
+        })
+        setTableData && setTableData(tableData)
+    },
+
+    // 获取 我喜欢 歌曲列表
+    async findLoveList(setTableData) {
+        const loveList = await LoveHelper.findAllLove()
+        const tableData = []
+        loveList.map((music, index) => {
+            music.isLove = true
+            tableData.push({
+                key: index,
+                song: music.name,
+                artist: music.artist,
+                time: music.time,
+                music: music
+            })
+        })
+        setTableData && setTableData(tableData)
+    },
+
+    // 获取 最近播放 歌曲列表
+    async findHistoryList(setTableData) {
+        const musicList = await MusicHelper.findAllMusicRecentlyByLimit()
+        const loveList = await LoveHelper.findAllLove()
+        const tableData = []
+        musicList.map((music, index) => {
+            let isLove = false
+            loveList && loveList.map(item => {
+                if (music._id === item._id) {
+                    isLove = true
+                }
+            })
+            music.isLove = isLove
+            tableData.push({
+                key: index,
+                song: music.name,
+                artist: music.artist,
+                time: music.time,
                 music: music
             })
         })

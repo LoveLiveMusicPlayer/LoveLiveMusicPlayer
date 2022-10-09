@@ -303,6 +303,7 @@ class AudioPlayer extends React.PureComponent {
                             AlbumHelper.findOneAlbumByAlbumId(this.props.chooseGroup, audioInfo.album).then(res => {
                                 res && res._id && this.props.dispatch(musicAction.albumId(res._id))
                             })
+                            await MusicHelper.refreshMusicTimestamp(audioInfo._id)
                             ipcRenderer.send('musicName', "当前播放:\n" + audioInfo.name)
                             ipcRenderer.send('setPlaying', true)
                             currentMusicName = audioInfo.name

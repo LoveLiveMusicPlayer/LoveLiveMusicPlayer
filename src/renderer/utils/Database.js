@@ -53,8 +53,9 @@ DB.prototype.find = function (index, limit) {
  * @param query object 条件
  * @param select object 过滤结果
  * @param sort object 排序规则
+ * @param limit number 查询条数
  **/
-DB.prototype.findAll = function (query, select, sort) {
+DB.prototype.findAll = function (query, select, sort, limit) {
     return new Promise((resolve, reject) => {
         let stmt = this.db.find(query || {});
         if (sort !== undefined) {
@@ -62,6 +63,9 @@ DB.prototype.findAll = function (query, select, sort) {
         }
         if (select !== undefined) {
             stmt.projection(select || {});
+        }
+        if (limit !== undefined) {
+            stmt.limit(limit || 9999)
         }
         stmt.exec((err, doc) => {
             if (err) {
