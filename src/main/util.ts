@@ -9,6 +9,7 @@ import fs from "fs";
 import Dialog from "./modules/dialog";
 import {AppUtils} from "../renderer/utils/AppUtils";
 import os from "os";
+import {copyFile} from "fs/promises";
 
 const net = require('net')
 
@@ -176,7 +177,7 @@ export function makeCancelable(promise: Promise<any>) {
 }
 
 // 处理文件
-export function transfer(pathDir: string, music: any, phoneSystem: string, runningTag: number) {
+export async function transfer(pathDir: string, music: any, phoneSystem: string, runningTag: number) {
     const srcPath = pathDir + music.baseUrl + music.musicPath;
     let destPath = null;
     if (music.destDir !== null) {
@@ -201,7 +202,8 @@ export function transfer(pathDir: string, music: any, phoneSystem: string, runni
                 if (fs.existsSync(destPath)) {
                     AppUtils.delFile(destPath)
                 }
-                fs.copyFileSync(srcPath, destPath)
+                await copyFile(srcPath, destPath)
+                // fs.copyFileSync(srcPath, destPath)
             } catch (e) {
                 return Promise.resolve({music: music, oldRunningTag: runningTag, reason: "复制失败"})
             }
