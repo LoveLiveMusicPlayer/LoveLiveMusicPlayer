@@ -3,7 +3,6 @@ import {URL} from 'url';
 import path from 'path';
 import * as Sentry from "@sentry/electron";
 import {app} from "electron";
-import {FileDecoder} from "flac-bindings";
 import wav from "wav";
 import fs from "fs";
 import Dialog from "./modules/dialog";
@@ -214,7 +213,8 @@ export async function transfer(pathDir: string, music: any, phoneSystem: string,
 
 // flac 格式转换为 wav
 export function flacToWav(srcPath: string, destPath: string, runningTag: number, music: any) {
-    return new Promise(function (resolve, _) {
+    return new Promise(async function (resolve, _) {
+        const {FileDecoder} = await import("flac-bindings")
         let decoder = new FileDecoder({
             file: srcPath,
         })
