@@ -9,6 +9,9 @@ import {WorkUtils} from "../../utils/WorkUtils";
 import * as Images from "../../public/Images";
 import {Img} from "../Pagin/styled-components/index";
 import {Const} from "../../public/Const";
+import fs from "fs";
+import {DBHelper} from "../../dao/DBHelper";
+import path from "path";
 
 const CheckboxGroup = Checkbox.Group;
 
@@ -81,7 +84,9 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
                 tempMusicList.length = 0
                 const musicList = await MusicHelper.findAllMusicByAlbumId(album.group, album.id)
                 musicList.forEach(music => {
-                    if (music.export) {
+                    const musicPath = DBHelper.getHttpServer().path + path.sep + music["base_url"] + music["music_path"]
+                    const isExist = fs.existsSync(musicPath)
+                    if (isExist && music.export) {
                         music.choose = AppUtils.isStrInArray(music._id, chooseMusicList)
                         tempMusicList.push(music)
                     }
@@ -174,12 +179,20 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
                     loading={loading}
                     dataSource={data}
                     renderItem={(item) => {
-                        const url = Store.get('url') + item["cover_path"][0]
+                        console.log(item)
+                        const firstMusicCoverPath = item["music"][0]["cover_path"]
+                        let coverUrl = null
+                        for (let i = 0; i < item["cover_path"].length; i++) {
+                            if (item["cover_path"][i].indexOf(firstMusicCoverPath) > 0) {
+                                coverUrl = Store.get('url') + item["cover_path"][i]
+                                break
+                            }
+                        }
                         return (
                             <div key={"div" + item._id} className={"albumItemContainer"}>
                                 <Img
                                     className={"albumCover"}
-                                    src={decodeURI(url)}
+                                    src={decodeURI(coverUrl)}
                                     onError={(e) => {
                                         e.target.onerror = null
                                         e.target.src = Images.ICON_EMPTY
