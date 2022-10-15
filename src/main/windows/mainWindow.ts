@@ -110,8 +110,8 @@ const createMainWindow = function (BrowserWindow: any) {
     })
 
     mainWindow.on('closed', () => {
+        global.lyricWindow = null
         mainWindow = null
-        global?.lyricWindow = null
     });
 
     mainWindow.on('will-resize', () => {

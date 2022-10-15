@@ -297,25 +297,6 @@ export const AppUtils = {
         }
     },
 
-    // 生成可中断的异步任务
-    makeCancelable(promise) {
-        let hasCanceled_ = false;
-        const wrappedPromise = new Promise((resolve, reject) => {
-            promise.then((val) =>
-                hasCanceled_ ? reject({isCanceled: true}) : resolve(val)
-            );
-            promise.catch((error) =>
-                hasCanceled_ ? reject({isCanceled: true}) : reject(error)
-            );
-        });
-        return {
-            promise: wrappedPromise,
-            cancel() {
-                hasCanceled_ = true;
-            },
-        };
-    },
-
     isStrInArray(str, arr) {
         let n = arr.length;
         for (let i = 0; i < n; i++) {
