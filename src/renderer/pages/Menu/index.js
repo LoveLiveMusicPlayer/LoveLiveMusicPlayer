@@ -11,6 +11,7 @@ import {CustomDialog} from "../../component/CustomDialog";
 import {LoveHelper} from "../../dao/LoveHelper";
 import {useLocation, useParams} from "react-router-dom";
 import {MusicRowList} from "../../component/MusicRowList";
+import {SongMenuHelper} from "../../dao/SongMenuHelper";
 
 const {connect} = require('react-redux');
 let currentMenuName = null
@@ -24,8 +25,13 @@ const Menu = ({playId}) => {
 
     const [group, setGroup] = useState([])
     const [category, setCategory] = useState([])
+    const [chooseSong, setChooseSong] = useState()
 
-    const [showDialogAndHandleMusic, setShowDialogAndHandleMusic] = useState({"show": false, "music": null})
+    const [showDialogAndHandleMusic, setShowDialogAndHandleMusic] = useState({
+        "show": false,
+        "music": null,
+        "state": ""
+    })
 
     let location = useLocation();
     let params = useParams();
@@ -106,24 +112,35 @@ const Menu = ({playId}) => {
                 onDisLove={(music) => {
                     showDialogAndHandleMusic.show = true
                     showDialogAndHandleMusic.music = music.music
+                    showDialogAndHandleMusic.state = "disLove"
                     setShowDialogAndHandleMusic({...showDialogAndHandleMusic})
                 }}
-                onDelSong={(music) => {
+                onDelSong={(music, playIndex) => {
+                    setChooseSong(playIndex)
                     showDialogAndHandleMusic.show = true
                     showDialogAndHandleMusic.music = music.music
+                    showDialogAndHandleMusic.state = "deleteMusic"
                     setShowDialogAndHandleMusic({...showDialogAndHandleMusic})
                 }}
             />
             <CustomDialog
                 isShow={showDialogAndHandleMusic.show}
-                hint={'取消喜欢歌曲？'}
+                hint={showDialogAndHandleMusic.state === "deleteMusic" ? "确认删除歌曲？" : '取消喜欢歌曲？'}
                 result={(isDel) => {
                     if (isDel) {
-                        LoveHelper.deleteSong(showDialogAndHandleMusic.music).then(_ => {
-                            musicRowListRef.current?.refresh()
-                        }).catch(err => {
-                            Bus.emit('onNotification', err)
-                        })
+                        if (showDialogAndHandleMusic.state === "deleteMusic") {
+                            SongMenuHelper.deleteSong(info.id, chooseSong).then(_ => {
+                                musicRowListRef.current?.refresh()
+                            }).catch(err => {
+                                Bus.emit('onNotification', err)
+                            })
+                        } else {
+                            LoveHelper.deleteSong(showDialogAndHandleMusic.music).then(_ => {
+                                musicRowListRef.current?.refresh()
+                            }).catch(err => {
+                                Bus.emit('onNotification', err)
+                            })
+                        }
                     }
                 }}
                 close={() => {

@@ -6,6 +6,8 @@ import {MusicRowList} from "../../component/MusicRowList";
 import {CustomDialog} from "../../component/CustomDialog";
 import {MusicHelper} from "../../dao/MusicHelper";
 import {WorkUtils} from "../../utils/WorkUtils";
+import {LoveHelper} from "../../dao/LoveHelper";
+import Bus from "../../utils/Event";
 
 const {connect} = require('react-redux')
 
@@ -60,9 +62,17 @@ const History = ({playId}) => {
                 hint={showDialogAndHandleMusic.state === "deleteMusic" ? "确认删除歌曲？" : '取消喜欢歌曲？'}
                 result={(isDel) => {
                     if (isDel) {
-                        MusicHelper.refreshMusicTimestamp(showDialogAndHandleMusic.music._id, 0).then(_ => {
-                            musicRowListRef.current?.refresh()
-                        })
+                        if (showDialogAndHandleMusic.state === "deleteMusic") {
+                            MusicHelper.refreshMusicTimestamp(showDialogAndHandleMusic.music._id, 0).then(_ => {
+                                musicRowListRef.current?.refresh()
+                            })
+                        } else {
+                            LoveHelper.deleteSong(showDialogAndHandleMusic.music).then(_ => {
+                                musicRowListRef.current?.refresh()
+                            }).catch(err => {
+                                Bus.emit('onNotification', err)
+                            })
+                        }
                     }
                 }}
                 close={() => {

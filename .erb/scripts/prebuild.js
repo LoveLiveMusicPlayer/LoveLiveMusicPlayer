@@ -1,7 +1,7 @@
 import {execSync} from 'child_process';
 import fs from 'fs';
 
-const flac_binding_version = "2.7.2"
+const flac_binding_version = "3.0.0"
 const node_win32 = "https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/LLMP/flac-bindings/win-x86/flac-bindings-v" + flac_binding_version + "-napi-v8-win32-x86.tar.gz"
 const node_win64 = "https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/LLMP/flac-bindings/win-x64/flac-bindings-v" + flac_binding_version + "-napi-v8-win32-x64.tar.gz"
 const node_linux_arm = "https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/LLMP/flac-bindings/linux-arm64/flac-bindings-v" + flac_binding_version + "-napi-v8-linux-arm64.tar.gz"

@@ -150,7 +150,7 @@ export const MusicRowList = forwardRef(({playId, onRefreshData, onDisLove, onDel
             <div style={style}>
                 <a className={'link'} onClick={() => playMusic(playIndex)}>播放</a>
                 <a className={'link'} onClick={() => addList(music)}>添加到</a>
-                <a className={'link'} onClick={() => onDelSong(music)}>移除</a>
+                <a className={'link'} onClick={() => onDelSong(music, playIndex)}>移除</a>
             </div>
         )
         return nodeTree ? menu : null;
