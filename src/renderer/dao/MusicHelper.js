@@ -7,12 +7,8 @@ export const MusicHelper = {
         const requests = []
         for (let key in obj) {
             if (obj.hasOwnProperty(key)) {
-                obj[key].map(async item => {
-                    const music = await MusicHelper.findOneMusicByUniqueId(item._id)
+                obj[key].map(item => {
                     item.group = key
-                    if (music != null && music.hasOwnProperty('timestamp')) {
-                        item.timestamp = music.timestamp
-                    }
                     requests.push(db.insertOrUpdate({_id: item._id}, item))
                 })
             }

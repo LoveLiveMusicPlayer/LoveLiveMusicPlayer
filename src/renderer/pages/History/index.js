@@ -24,7 +24,7 @@ const History = ({playId}) => {
         <div className={'historyContainer'}>
             <div className={'historyTopContainer'}>
                 <div className={'historyTopRightContainer'}>
-                    <p className={'loveName'}>最近播放</p>
+                    <p className={'historyName'}>最近播放</p>
                     <Button
                         type="primary"
                         shape="round"

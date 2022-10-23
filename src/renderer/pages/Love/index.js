@@ -33,11 +33,11 @@ const Love = ({playId}) => {
             <div className={'loveTopContainer'}>
                 <div className={'loveTopRightContainer'}>
                     <p className={'loveName'}>我喜欢</p>
-                    {renderTabs()}
+                    {/*{renderTabs()}*/}
                     <Button
                         type="primary"
                         shape="round"
-                        style={{width: '110px'}}
+                        style={{width: '110px', marginTop: '10px'}}
                         icon={<img src={Images.ICON_DIS_PLAY} style={{marginRight: '6px', marginBottom: '3px'}}/>}
                         onClick={() => musicRowListRef.current?.playFirst()}
                     >

@@ -14,7 +14,15 @@ historyTopContainer {
     flex-direction: row;
 }
 
-historyTopRightContainer {
+.historyName {
+    color: #ffffff;
+    font-size: 32px;
+    font-weight: bold;
+    language: 'jp';
+    margin: 0;
+}
+
+.historyTopRightContainer {
     flex: 1;
     display: flex;
     flex-direction: column;
