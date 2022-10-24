@@ -43,7 +43,7 @@
         "appId": "com.zhushenwudi.LoveLiveMusicPlayer",
         "asar": true,
         "asarUnpack": [
-            "**\\*.{node,dll}"
+            "**\\*.{node,dll,exp,lib}"
         ],
         "files": [
             "dist",

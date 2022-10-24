@@ -55,7 +55,7 @@ if (!exists("node_modules/flac-bindings/build/Release/flac-bindings.node")) {
     const cmd_unzip = 'tar -zxvf release/app/flac-bindings/flac-bindings.tar.gz'
     exec(process.platform === "win32" ? "powershell " + cmd_unzip : cmd_unzip)
     // 复制解压文件到指定目录
-    const cmd_copy = 'cp build/Release/flac-bindings.node node_modules/flac-bindings/build/Release'
+    const cmd_copy = 'cp build/Release/* node_modules/flac-bindings/build/Release'
     exec(process.platform === "win32" ? "powershell " + cmd_copy : cmd_copy)
     // 清理文件
     removeDir('build')

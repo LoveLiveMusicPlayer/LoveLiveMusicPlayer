@@ -35,7 +35,7 @@ function handle(platform, arch) {
     const cmd_unzip = 'tar -zxvf release/app/flac-bindings/flac-bindings.tar.gz'
     exec(process.platform === "win32" ? "powershell " + cmd_unzip : cmd_unzip)
     // 复制解压文件到指定目录
-    const cmd_copy = 'cp build/Release/flac-bindings.node release/app/build'
+    const cmd_copy = 'cp build/Release/* release/app/build'
     exec(process.platform === "win32" ? "powershell " + cmd_copy : cmd_copy)
     // 清理文件
     removeDir('build')
