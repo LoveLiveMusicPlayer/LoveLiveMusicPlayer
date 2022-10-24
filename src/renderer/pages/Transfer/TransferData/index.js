@@ -52,22 +52,19 @@ const TransferData = () => {
         await mergeLoveList("pc2phone", loveList, tempList)
     }
 
-    function concat(arr1, arr2) {
-        const arr = arr1.concat();
-        for (let i = 0; i < arr2.length; i++) {
-            arr.indexOf(arr2[i]) === -1 ? arr.push(arr2[i]) : 0;
-        }
-        return arr;
-    }
-
     async function mergeLoveList(cmd, loveList, menuList) {
         const allLoveList = await LoveHelper.findAllLove()
         const localList = []
-        allLoveList.forEach((music) => localList.push(music._id))
-        const finalList = concat(loveList, localList)
+        allLoveList.forEach((love) => {
+            localList.push({
+                musicId: love._id,
+                timestamp: love.timestamp
+            })
+        })
+        const finalList = Object.assign(loveList, localList)
         await LoveHelper.removeAllILove();
-        for (const id of finalList) {
-            const music = await MusicHelper.findOneMusicByUniqueId(id)
+        for (const item of finalList) {
+            const music = await MusicHelper.findOneMusicByUniqueId(item.musicId)
             await LoveHelper.insertSongToLove(music)
         }
         const message = {

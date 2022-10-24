@@ -7,7 +7,6 @@ import init from "./modules/inital";
 import createLyricWindow from "./windows/desktopLyricWindow";
 import createMainWindow from "./windows/mainWindow";
 import {judgeWinVersion, upReportOpenTime} from "./util";
-import Dialog from "./modules/dialog";
 
 // 阻止应用多开
 const isAppInstance = app.requestSingleInstanceLock()
