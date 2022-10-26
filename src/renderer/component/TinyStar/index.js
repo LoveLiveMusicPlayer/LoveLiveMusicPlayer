@@ -1,10 +1,33 @@
 import React from 'react';
 import {Dropdown, Menu} from "antd";
 import * as Images from "../../public/Images";
-import Bus from "../../utils/Event";
 import './index.css'
+import {VersionUtils} from "../../utils/VersionUtils";
 
-export const TinyStar = ({selectDirectory, playAll, refreshData, deleteData, changeColor, checkUpdate}) => {
+export const TinyStar = ({
+                             selectDirectory,
+                             onSetPort,
+                             onSetHttpUrl,
+                             playAll,
+                             refreshData,
+                             deleteData,
+                             changeColor,
+                             checkUpdate
+                         }) => {
+
+    const renderDevPortMenu = () => {
+        if (VersionUtils.getIsPreEnv()) {
+            return (
+                <>
+                    <Menu.Item key={"httpUrl"}>
+                        <a onClick={onSetHttpUrl}>设置网络地址</a>
+                    </Menu.Item>
+                    <Menu.Divider/>
+                </>
+            )
+        }
+        return null
+    }
 
     const menu = (
         <Menu>
@@ -13,9 +36,10 @@ export const TinyStar = ({selectDirectory, playAll, refreshData, deleteData, cha
             </Menu.Item>
             <Menu.Divider/>
             <Menu.Item key={"port"}>
-                <a onClick={() => Bus.emit("onTapLogo")}>设置端口</a>
+                <a onClick={onSetPort}>设置端口</a>
             </Menu.Item>
             <Menu.Divider/>
+            {renderDevPortMenu()}
             <Menu.Item key={"theme"}>
                 <a onClick={changeColor}>设置主题</a>
             </Menu.Item>

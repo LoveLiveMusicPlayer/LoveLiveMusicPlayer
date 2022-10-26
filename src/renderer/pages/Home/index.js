@@ -17,6 +17,7 @@ import {PortDialog} from "../../component/PortDialog";
 import Store from '../../utils/Store'
 import * as Images from '../../public/Images'
 import {CustomDialog} from "../../component/CustomDialog";
+import {HttpUrlDialog} from "../../component/HttpUrlDialog";
 
 const {ipcRenderer} = require("electron")
 const {connect} = require('react-redux')
@@ -43,6 +44,7 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
     const [refresh, setRefresh] = useState()
     // 显示HTTP端口输入框
     const [portInputVisible, setPortInputVisible] = useState(false)
+    const [httpUrlInputVisible, setHttpUrlInputVisible] = useState(false)
     // HTTP服务的端口号
     const [port, setPort] = useState(10000)
     // HTTP服务要加载的目录
@@ -64,16 +66,12 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
         setWidth(width)
     }
 
-    const onTapLogoListener = function () {
-        setPortInputVisible(true)
-    }
-
     useEffect(() => {
         listener()
 
         // 如果之前有保存http服务地址，直接载入
         const httpServer = DBHelper.getHttpServer()
-        if (httpServer) {
+        if (httpServer && httpServer.path) {
             setHttpServer(httpServer)
         }
 
@@ -105,13 +103,9 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
         // 添加窗口大小变化监听器
         window.addEventListener("resize", listener)
 
-        // 添加触摸Logo监听器
-        Bus.addListener("onTapLogo", onTapLogoListener)
-
         return () => {
             // 生命周期结束后将监听器移除
             window.removeEventListener("resize", listener)
-            removeEventListener("onTapLogo", onTapLogoListener)
         }
     }, [])
 
@@ -133,29 +127,11 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
         ipcRenderer.invoke('openHttp', info.path, info.port)
     }
 
-    /**
-     * 导入LoveLive文件夹
-     * @param file
-     * @returns {Promise<void>}
-     */
-        // const onUpload = async (file) => {
-        //     const name = file[0].name
-        //     const path = file[0].path
-        //     if (name === "LoveLive" && fs.lstatSync(path).isDirectory()) {
-        //         const rootDir = AppUtils.delLastSameString(path, name)
-        //         setHttpServer({path: rootDir, port: port})
-        //         AppUtils.openMsgDialog("info", "导入歌曲库成功")
-        //         // await WorkUtils.exportToExcel(path, rootDir)
-        //     } else {
-        //         AppUtils.openMsgDialog("error", "请拖入名为LoveLive的文件夹")
-        //     }
-        // }
-
-        // 显示专辑详情
+    // 显示专辑详情
     const showAlbumInfo = (id) => {
-            showAlbum()
-            navigate(`/album/${id}`)
-        }
+        showAlbum()
+        navigate(`/album/${id}`)
+    }
 
     // 播放团内全部专辑
     const playGroup = () => {
@@ -241,11 +217,6 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
 
     return (
         <div className={'homeContainer'} style={{visibility: isRoot ? 'visible' : 'hidden'}}>
-            {/*<FileDrop*/}
-            {/*    onUpload={onUpload}*/}
-            {/*    count={1}*/}
-            {/*    formats={['']}*/}
-            {/*>*/}
             {refreshAlbum(chooseGroup)}
 
             <Content className="container">
@@ -261,6 +232,8 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
 
             <TinyStar
                 selectDirectory={() => ipcRenderer.invoke("directoryHomeDialog")}
+                onSetPort={() => setPortInputVisible(true)}
+                onSetHttpUrl={() => setHttpUrlInputVisible(true)}
                 playAll={playAll}
                 changeColor={() => colorPickerRef.current?.open(DBHelper.getBGColor())}
                 checkUpdate={() => ipcRenderer.invoke('checkUpdate')}
@@ -287,6 +260,16 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
                 close={() => setPortInputVisible(false)}
                 setHttpServer={() => setHttpServer({path: rootDir, port: port})}
                 setPort={setPort}
+                refreshUI={() => setRefresh(new Date().getTime())}
+            />
+
+            <HttpUrlDialog
+                isShow={httpUrlInputVisible}
+                close={() => {
+                    DBHelper.setHttpServer({path: null, port: 10000})
+                    setHttpUrlInputVisible(false)
+                    setRefresh(new Date().getTime())
+                }}
             />
 
             <CustomDialog
@@ -300,7 +283,6 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
                 fourthButton={{text: '删除自建数据', callback: () => deleteDIYData()}}
                 bottomContainer={renderClearDialogBottom}
             />
-            {/*</FileDrop>*/}
         </div>
     );
 }

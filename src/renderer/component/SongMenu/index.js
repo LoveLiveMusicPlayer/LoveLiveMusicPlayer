@@ -7,6 +7,7 @@ import Bus from '../../utils/Event'
 import {WorkUtils} from "../../utils/WorkUtils";
 import {CustomDialog} from "../CustomDialog";
 import {AppUtils} from "../../utils/AppUtils";
+import Store from "../../utils/Store";
 
 export const SongMenu = ({chooseItem, onChooseItem}) => {
 
@@ -159,7 +160,15 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
                 <img className={'customPic'} src={Images.ICON_FUNC_HISTORY}/>
                 <p className={'customText'} style={{paddingLeft: '10px'}}>最近播放</p>
             </div>
-            <div className={chooseItem === 0 ? 'selectContainer' : 'unselectContainer'} onClick={() => onChooseItem(0)}>
+            <div className={chooseItem === 0 ? 'selectContainer' : 'unselectContainer'} onClick={() => {
+                const url = Store.get('url')
+                console.log(url)
+                if (url.indexOf("localhost") > 0) {
+                    onChooseItem(0)
+                } else {
+                    Bus.emit("onNotification", "正在使用HTTP播放歌曲，无法传输")
+                }
+            }}>
                 <img className={'customPic'} src={Images.ICON_FUNC_WIFI}/>
                 <p className={'customText'} style={{paddingLeft: '10px'}}>传输</p>
             </div>
