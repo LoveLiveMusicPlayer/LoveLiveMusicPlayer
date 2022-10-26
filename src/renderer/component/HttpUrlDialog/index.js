@@ -50,7 +50,7 @@ export const HttpUrlDialog = ({isShow, close}) => {
             <p style={{fontWeight: 'bold'}}>配置网络地址</p>
             <Space>
                 <Input
-                    placeholder={"IP HOST"}
+                    placeholder={"网络IP地址"}
                     addonBefore="http://"
                     onChange={(e) => setIp(e.target.value)}
                 />

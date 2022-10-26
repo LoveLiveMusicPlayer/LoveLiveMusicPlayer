@@ -166,7 +166,7 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
                 if (url.indexOf("localhost") > 0) {
                     onChooseItem(0)
                 } else {
-                    Bus.emit("onNotification", "正在使用HTTP播放歌曲，无法传输")
+                    Bus.emit("onNotification", "正在使用HTTP播放歌曲，无法传输，请重新选择曲库")
                 }
             }}>
                 <img className={'customPic'} src={Images.ICON_FUNC_WIFI}/>

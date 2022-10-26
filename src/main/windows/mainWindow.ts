@@ -23,7 +23,7 @@ const createMainWindow = function (BrowserWindow: any) {
         transparent: global.winVersion == 0,
         maximizable: process.platform === 'darwin',
         frame: false,
-        minWidth: 1024,
+        minWidth: 1025,
         minHeight: 728,
         blur: true,
         icon: path.join(RESOURCES_PATH, 'icon.png'),
