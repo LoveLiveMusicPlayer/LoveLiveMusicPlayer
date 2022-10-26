@@ -16,22 +16,76 @@ const TransferData = () => {
     const wsRef = useRef(null)
     const loadingRef = useRef(null)
 
-    async function phone2pc(loveList, menuList) {
+    async function phone2pc(loveList, menuList, isCover) {
         setQrShow(false)
         setScanSuccess(false)
         loadingRef.current?.setProgress(-1)
         loadingRef.current?.show("导入中..")
-        await replaceMenuList(menuList)
-        await mergeLoveList("phone2pc", loveList, [])
+        await phone2pcReplaceMenuList(menuList, isCover)
+        await mergeLoveList("phone2pc", loveList, menuList, isCover)
     }
 
-    async function pc2phone(loveList) {
+    async function pc2phone(loveList, isCover) {
         setQrShow(false)
         setScanSuccess(false)
         loadingRef.current?.setProgress(-1)
         loadingRef.current?.show("导入中..")
-        const menuList = await SongMenuHelper.findPcMenu()
-        const tempList = [];
+        const menuList = await pc2phoneReplaceMenuList(isCover)
+        await mergeLoveList("pc2phone", loveList, menuList, isCover)
+    }
+
+    async function mergeLoveList(cmd, loveList, menuList, isCover) {
+        const allLoveList = await LoveHelper.findAllLove()
+        const localList = []
+        allLoveList.forEach((love) => {
+            localList.push({
+                musicId: love._id,
+                timestamp: love.timestamp
+            })
+        })
+        const finalList = Object.assign(loveList, localList)
+        await LoveHelper.removeAllILove();
+        for (const item of finalList) {
+            const music = await MusicHelper.findOneMusicByUniqueId(item.musicId)
+            await LoveHelper.insertSongToLove(music)
+        }
+        const message = {
+            cmd: cmd,
+            body: generateJson(finalList, menuList, isCover)
+        }
+        wsRef.current?.send(JSON.stringify(message))
+        Bus.emit('onMenuDataChanged')
+    }
+
+    async function phone2pcReplaceMenuList(menuList, isCover) {
+        if (isCover) {
+            await SongMenuHelper.removeAllMenu()
+        } else {
+            await SongMenuHelper.deletePhoneMenu()
+        }
+        for (const menu of menuList) {
+            const musicList = []
+            for (const id of menu["musicList"]) {
+                const music = await MusicHelper.findOneMusicByUniqueId(id)
+                musicList.push(music)
+            }
+            await SongMenuHelper.insertPhoneMenu({
+                id: menu["menuId"],
+                name: menu["name"],
+                music: musicList,
+                date: menu["date"]
+            })
+        }
+    }
+
+    async function pc2phoneReplaceMenuList(isCover) {
+        let menuList
+        if (isCover) {
+            menuList = await SongMenuHelper.findAllMenu()
+        } else {
+            menuList = await SongMenuHelper.findPcMenu()
+        }
+        const tempList = []
         for (const menu of menuList) {
             const musicId = [];
             for (const music of menu.music) {
@@ -49,53 +103,14 @@ const TransferData = () => {
                 })
             }
         }
-        await mergeLoveList("pc2phone", loveList, tempList)
+        return tempList
     }
 
-    async function mergeLoveList(cmd, loveList, menuList) {
-        const allLoveList = await LoveHelper.findAllLove()
-        const localList = []
-        allLoveList.forEach((love) => {
-            localList.push({
-                musicId: love._id,
-                timestamp: love.timestamp
-            })
-        })
-        const finalList = Object.assign(loveList, localList)
-        await LoveHelper.removeAllILove();
-        for (const item of finalList) {
-            const music = await MusicHelper.findOneMusicByUniqueId(item.musicId)
-            await LoveHelper.insertSongToLove(music)
-        }
-        const message = {
-            cmd: cmd,
-            body: generateJson(finalList, menuList)
-        }
-        wsRef.current?.send(JSON.stringify(message))
-        Bus.emit('onMenuDataChanged')
-    }
-
-    async function replaceMenuList(menuList) {
-        await SongMenuHelper.deletePhoneMenu()
-        for (const menu of menuList) {
-            const musicList = []
-            for (const id of menu["musicList"]) {
-                const music = await MusicHelper.findOneMusicByUniqueId(id)
-                musicList.push(music)
-            }
-            await SongMenuHelper.insertPhoneMenu({
-                id: menu["menuId"],
-                name: menu["name"],
-                music: musicList,
-                date: menu["date"]
-            })
-        }
-    }
-
-    function generateJson(loveList, menuList) {
+    function generateJson(loveList, menuList, isCover) {
         let obj = {}
         obj["love"] = loveList
         obj["menu"] = menuList
+        obj["isCover"] = isCover
         return JSON.stringify(obj)
     }
 

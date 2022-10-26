@@ -30,11 +30,11 @@ export const WS_Data = React.forwardRef(({connected, phone2pc, pc2phone, finish,
                             break
                         case "phone2pc":
                             const json1 = JSON.parse(command["body"])
-                            phone2pc(json1["love"], json1["menu"])
+                            phone2pc(json1["love"], json1["menu"], json1["isCover"])
                             break
                         case "pc2phone":
                             const json2 = JSON.parse(command["body"])
-                            pc2phone(json2["love"])
+                            pc2phone(json2["love"], json2["isCover"])
                             break
                         case "finish":
                             finish()
