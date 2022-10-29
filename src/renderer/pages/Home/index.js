@@ -18,6 +18,7 @@ import Store from '../../utils/Store'
 import * as Images from '../../public/Images'
 import {CustomDialog} from "../../component/CustomDialog";
 import {HttpUrlDialog} from "../../component/HttpUrlDialog";
+import {VersionUtils} from "../../utils/VersionUtils";
 
 const {ipcRenderer} = require("electron")
 const {connect} = require('react-redux')
@@ -91,9 +92,12 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
                     const rootDir = dir.substring(0, dir.length - 9)
 
                     console.log(rootDir)
-                    setHttpServer({path: rootDir, port: port})
-                    AppUtils.openMsgDialog("info", "导入歌曲库成功")
-                    // WorkUtils.exportToExcel(rootDir)
+                    if (VersionUtils.getIsExportExcel()) {
+                        WorkUtils.exportToExcel(rootDir)
+                    } else {
+                        setHttpServer({path: rootDir, port: port})
+                        AppUtils.openMsgDialog("info", "导入歌曲库成功")
+                    }
                 } else {
                     AppUtils.openMsgDialog("error", "请拖入名为LoveLive的文件夹")
                 }

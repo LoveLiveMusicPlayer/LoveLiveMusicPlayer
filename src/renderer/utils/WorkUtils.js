@@ -57,9 +57,9 @@ export const WorkUtils = {
      *      fileList[0]: LoveLive/...
      */
     async exportToExcel(rootDir) {
-        const path = rootDir + path.sep + "LoveLive" + path.sep;
+        const mPath = rootDir + path.sep + "LoveLive" + path.sep;
         const filesList = [];
-        await AppUtils.readFileList(path, filesList, rootDir)
+        await AppUtils.readFileList(mPath, filesList, rootDir)
         const infoList = await AppUtils.parseMusicInfo(filesList, rootDir)
 
         const arr = []

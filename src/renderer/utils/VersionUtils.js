@@ -4,11 +4,17 @@ import {BRIDGE_URL, DATA_FILE, OWNER_OSS_URL_HEAD, REQUEST_LATEST_VERSION_FILE, 
 const isPre = true
 // 是否需要清空歌曲库
 const isNeedInit = false
+// 是否是要导出excel
+const isExportExcel = false
 
 export const VersionUtils = {
     // 获取是否是预发环境
     getIsPreEnv() {
         return isPre
+    },
+
+    getIsExportExcel() {
+        return isExportExcel
     },
 
     // 获取连接桥跳板
