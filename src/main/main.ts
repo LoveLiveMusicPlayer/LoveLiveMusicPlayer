@@ -7,6 +7,7 @@ import init from "./modules/inital";
 import createLyricWindow from "./windows/desktopLyricWindow";
 import createMainWindow from "./windows/mainWindow";
 import {judgeWinVersion, upReportOpenTime} from "./util";
+import Store from "../renderer/utils/Store";
 
 // 阻止应用多开
 const isAppInstance = app.requestSingleInstanceLock()
@@ -40,7 +41,12 @@ app.on('ready', async () => {
         if (isWin) {
             global.winVersion = judgeWinVersion()
         }
-        global.mainWindow = createMainWindow((!isWin || global.winVersion > 0) ? null : BrowserWindow)
+        const needGlasstron = Store.get('glasstron')
+        if (needGlasstron) {
+            global.mainWindow = createMainWindow((!isWin || global.winVersion > 0) ? null : BrowserWindow)
+        } else {
+            global.mainWindow = createMainWindow(BrowserWindow)
+        }
 
         if (isWin) {
             // 设置底部任务栏按钮和缩略图

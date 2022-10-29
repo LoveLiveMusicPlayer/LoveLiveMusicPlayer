@@ -42,10 +42,12 @@ const createMainWindow = function (BrowserWindow: any) {
     let mainWindow = null
 
     if (BrowserWindow == null) {
+        console.log("glasstron")
         const glasstron = require('glasstron-clarity')
         mainWindow = new glasstron.BrowserWindow(option)
         mainWindow.blurType = "blurbehind"
     } else {
+        console.log("not glasstron")
         mainWindow = new BrowserWindow(option)
     }
 

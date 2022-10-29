@@ -1,7 +1,9 @@
 import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import ReactColorPicker from '@super-effective/react-color-picker';
 import Modal from "react-modal";
-import {Button} from "antd";
+import {Button, Switch} from "antd";
+import Store from "../../utils/Store";
+import Bus from "../../utils/Event";
 
 export const ColorPicker = forwardRef((props, ref) => {
 
@@ -98,13 +100,31 @@ export const ColorPicker = forwardRef((props, ref) => {
                 {renderColorPicker2()}
             </div>
 
-            <Button
-                type="primary"
-                style={{marginTop: 20, marginLeft: 'auto'}}
-                onClick={onChooseColorFinish}
-            >
-                确定
-            </Button>
+            <div style={{
+                width: '100%',
+                height: '70px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'end'
+            }}>
+                <div style={{display: 'flex', flexDirection: 'row'}}>
+                    <Switch
+                        onChange={(checked) => {
+                            Store.set("glasstron", checked)
+                            Bus.emit('onNotification', '设置将在重启后生效')
+                        }}
+                        defaultChecked={Store.get("glasstron")}
+                    />
+                    <p style={{marginLeft: '12px'}}>启用窗口模糊？</p>
+                </div>
+
+                <Button
+                    type="primary"
+                    onClick={onChooseColorFinish}
+                >
+                    确定
+                </Button>
+            </div>
         </Modal>
     )
 })
