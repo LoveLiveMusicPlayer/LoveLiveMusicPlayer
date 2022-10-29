@@ -228,9 +228,7 @@ class AudioPlayer extends React.PureComponent {
                     }).join('\n')
                 }
             }
-        } catch (e) {
-            console.log(e)
-        }
+        } catch (e) {}
         return null
     }
 

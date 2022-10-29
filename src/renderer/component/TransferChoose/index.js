@@ -191,6 +191,26 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
                             <div key={"div" + item._id} className={"albumItemContainer"}>
                                 <Img
                                     className={"albumCover"}
+                                    onClick={() => {
+                                        const chooseArr = []
+                                        const unChooseArr = []
+                                        const albumList = data.filter(it => it._id === item._id)
+                                        if (albumList.length > 0) {
+                                            albumList[0].music.forEach(music => {
+                                                if (music.choose) {
+                                                    chooseArr.push(music._id)
+                                                } else {
+                                                    unChooseArr.push(music._id)
+                                                }
+                                            })
+                                            if (albumList[0].music.length > chooseArr.length) {
+                                                onChange(item._id, chooseArr.concat(unChooseArr))
+                                            } else {
+                                                onChange(item._id, [])
+                                            }
+                                        }
+
+                                    }}
                                     src={decodeURI(coverUrl)}
                                     onError={(e) => {
                                         e.target.onerror = null

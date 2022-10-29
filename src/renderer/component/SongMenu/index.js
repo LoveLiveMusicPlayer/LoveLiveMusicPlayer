@@ -162,7 +162,6 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
             </div>
             <div className={chooseItem === 0 ? 'selectContainer' : 'unselectContainer'} onClick={() => {
                 const url = Store.get('url')
-                console.log(url)
                 if (url.indexOf("localhost") > 0) {
                     onChooseItem(0)
                 } else {

@@ -49,6 +49,11 @@
     border-width: 10px;
 }
 
+.albumCover:hover {
+    opacity: 0.8;
+    background: #000;
+}
+
 .albumChildren {
     flex: 1;
     display: flex;
