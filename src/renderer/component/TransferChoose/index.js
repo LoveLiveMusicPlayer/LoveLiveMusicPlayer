@@ -179,7 +179,6 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
                     loading={loading}
                     dataSource={data}
                     renderItem={(item) => {
-                        console.log(item)
                         const firstMusicCoverPath = item["music"][0]["cover_path"]
                         let coverUrl = null
                         for (let i = 0; i < item["cover_path"].length; i++) {

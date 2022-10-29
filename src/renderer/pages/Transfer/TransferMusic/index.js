@@ -15,6 +15,7 @@ import {AppUtils} from "../../../utils/AppUtils";
 import checkDiskSpace from 'check-disk-space'
 import {notification} from 'antd';
 import {WorkUtils} from "../../../utils/WorkUtils";
+import {copyFile} from "fs/promises";
 
 let musicIds = []
 let musicList = []
@@ -34,7 +35,7 @@ const TransferMusic = () => {
     const wsRef = useRef(null)
     const downloadRef = useRef(null)
 
-    const genList = (phoneSystem, dest) => {
+    const genList = (phoneSystem, onlyExport, dest) => {
         Store.set("phoneSystem", phoneSystem)
         const task = []
         musicList.length = 0
@@ -48,12 +49,23 @@ const TransferMusic = () => {
                         convertPath = convertPath.replace(".flac", ".wav")
                     }
                     if (fs.existsSync(url)) {
-                        AlbumHelper.findOneAlbumByAlbumId(mMusic.group, mMusic.album).then(mAlbum => {
+                        AlbumHelper.findOneAlbumByAlbumId(mMusic.group, mMusic.album).then(async mAlbum => {
                             let destDir = null
                             if (dest !== undefined) {
                                 const srcDirArr = AppUtils.getFileDirectory(url).split(path.sep + 'LoveLive' + path.sep)
                                 console.log(srcDirArr)
                                 destDir = dest + path.sep + "LoveLive" + path.sep + srcDirArr[srcDirArr.length - 1].replaceAll('/', path.sep)
+                            }
+
+                            if (onlyExport) {
+                                if (AppUtils.mkdirsSync(destDir)) {
+                                    try {
+                                        const pathDir = DBHelper.getHttpServer().path + path.sep;
+                                        const srcPath = (pathDir + mMusic.base_url + mMusic.cover_path).replaceAll('/', path.sep);
+                                        const destPath = (destDir + mMusic.cover_path).replaceAll('/', path.sep);
+                                        await copyFile(srcPath, destPath)
+                                    } catch (e) {}
+                                }
                             }
 
                             resolve({
@@ -216,7 +228,7 @@ const TransferMusic = () => {
             AppUtils.openMsgDialog("error", errorMsg)
             return
         }
-        genList(choosePlatform, dest)
+        genList(choosePlatform, true, dest)
     }
 
     function prepareTask() {
@@ -290,7 +302,7 @@ const TransferMusic = () => {
                 ref={wsRef}
                 phoneSystem={(system) => {
                     setScanSuccess(true)
-                    genList(system)
+                    genList(system, false)
                 }}
                 ready={(transIdList) => {
                     setScanSuccess(false)

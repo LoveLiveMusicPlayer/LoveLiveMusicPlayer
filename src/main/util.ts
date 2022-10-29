@@ -188,21 +188,19 @@ export async function transfer(pathDir: string, music: any, phoneSystem: string,
             return Promise.resolve({music: music, oldRunningTag: runningTag, reason: "创建文件夹失败"})
         }
     }
-
+    if (fs.existsSync(destPath)) {
+        AppUtils.delFile(destPath)
+    }
     if (phoneSystem === "ios") {
         if (fs.existsSync(srcPath)) {
             destPath = destPath === null ? srcPath : destPath
-            return flacToWav(srcPath, destPath.replace(".flac", ".wav"), runningTag, music)
+            return await flacToWav(srcPath, destPath.replace(".flac", ".wav"), runningTag, music)
         }
         return Promise.resolve({music: music, oldRunningTag: runningTag, reason: "文件不存在"})
     } else {
         if (destPath != null) {
             try {
-                if (fs.existsSync(destPath)) {
-                    AppUtils.delFile(destPath)
-                }
                 await copyFile(srcPath, destPath)
-                // fs.copyFileSync(srcPath, destPath)
             } catch (e) {
                 return Promise.resolve({music: music, oldRunningTag: runningTag, reason: "复制失败"})
             }
