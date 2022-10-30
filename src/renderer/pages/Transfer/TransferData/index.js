@@ -35,15 +35,20 @@ const TransferData = () => {
     }
 
     async function mergeLoveList(cmd, loveList, menuList, isCover) {
-        const allLoveList = await LoveHelper.findAllLove()
-        const localList = []
-        allLoveList.forEach((love) => {
-            localList.push({
-                musicId: love._id,
-                timestamp: love.timestamp
+        let finalList
+        if (isCover) {
+            finalList = loveList
+        } else {
+            const allLoveList = await LoveHelper.findAllLove()
+            const localList = []
+            allLoveList.forEach((love) => {
+                localList.push({
+                    musicId: love._id,
+                    timestamp: love.timestamp
+                })
             })
-        })
-        const finalList = Object.assign(loveList, localList)
+            finalList = Object.assign(loveList, localList)
+        }
         await LoveHelper.removeAllILove();
         for (const item of finalList) {
             const music = await MusicHelper.findOneMusicByUniqueId(item.musicId)
