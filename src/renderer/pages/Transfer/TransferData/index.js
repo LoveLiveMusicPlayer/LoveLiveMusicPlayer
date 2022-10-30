@@ -37,7 +37,11 @@ const TransferData = () => {
     async function mergeLoveList(cmd, loveList, menuList, isCover) {
         let finalList
         if (isCover) {
-            finalList = loveList
+            if (cmd === "phone2pc") {
+                finalList = loveList
+            } else {
+                finalList = await LoveHelper.findAllLove()
+            }
         } else {
             const allLoveList = await LoveHelper.findAllLove()
             const localList = []
@@ -51,12 +55,22 @@ const TransferData = () => {
         }
         await LoveHelper.removeAllILove();
         for (const item of finalList) {
-            const music = await MusicHelper.findOneMusicByUniqueId(item.musicId)
+            const music = await MusicHelper.findOneMusicByUniqueId(item._id || item.musicId)
+            if (music === null) {
+                continue
+            }
             await LoveHelper.insertSongToLove(music)
         }
+        const transLoveList = []
+        finalList.forEach(love => {
+            transLoveList.push({
+                "musicId": love._id || love.musicId,
+                "timestamp": love.timestamp
+            })
+        })
         const message = {
             cmd: cmd,
-            body: generateJson(finalList, menuList, isCover)
+            body: generateJson(transLoveList, menuList, isCover)
         }
         wsRef.current?.send(JSON.stringify(message))
         Bus.emit('onMenuDataChanged')

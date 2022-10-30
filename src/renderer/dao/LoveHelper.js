@@ -12,8 +12,9 @@ export const LoveHelper = {
         if (!isHasCurrentMusic) {
             music.timestamp = new Date().getTime()
             return db.insert(music)
-        } else return new Promise(_ => {
+        } else return new Promise(function (resolve, reject) {
             Bus.emit('onNotification', '歌曲已经存在')
+            reject("添加失败")
         })
     },
 
@@ -32,9 +33,9 @@ export const LoveHelper = {
         const love = await db.findOne({_id: music._id})
         if (love) {
             return db.remove({_id: music._id})
-        } else return new Promise(((resolve, reject) => {
+        } else return new Promise(function (resolve, reject) {
             reject('删除失败')
-        }))
+        })
     },
 
     // 删除全部我喜欢
