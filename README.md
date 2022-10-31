@@ -17,7 +17,7 @@
 4. 本项目为开源项目，不接受任何的催单和索取行为
 5. 本人技术能力有限，职业是Android开发工程师，本项目旨在学习Electron开发
 
-PS：由于无损音频涉及版权无法开源，请加入QQ群获取音频文件（61G）
+PS：由于无损音频涉及版权无法开源，请加入QQ群获取音频文件（70G）
 
 计划目录 ：（√代表已完成，x代表正在施工...）
 
@@ -131,4 +131,4 @@ B站空间：<https://space.bilibili.com/4367965>
 
 ## 许可证 (License)
 
-[MIT](https://github.com/zhushenwudi/LoveLiveMusicPlayer/blob/master/LICENSE)
+[MIT](https://raw.githubusercontent.com/zhushenwudi/LoveLiveMusicPlayer/master/LICENSE)
