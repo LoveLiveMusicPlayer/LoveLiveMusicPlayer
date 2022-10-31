@@ -32,7 +32,9 @@ PS：由于无损音频涉及版权无法开源，请加入QQ群获取音频文�
 - [桌面歌词] √
 - [win系统托盘 + mac dock功能项] √
 - [播放数据上报] √
-- [歌曲快传] √
+- [歌曲快传 + 数据同步] √
+- [本地歌库 + HTTP远端歌库] √
+- [模糊窗口效果] √
 - [专辑与歌曲分类] x
 - [歌曲与艺术家索引] x
 - [未完待续...] x
@@ -123,9 +125,9 @@ B站空间：<https://space.bilibili.com/4367965>
 - 依赖安装：yarn install
 - windows运行：yarn run win-start
 - mac/linux运行：yarn run start
-- windows打包：yarn run win32 / yarn run win64
-- linux打包：yarn run linuxarm / yarn run linux64
-- mac打包：yarn run macarm / yarn run mac64
+- windows打包：yarn run win-x32 / yarn run win-x64
+- linux打包：yarn run linux-arm64 / yarn run linux-x64
+- mac打包：yarn run mac-arm64 / yarn run mac-x64
 
 ## 许可证 (License)
 
