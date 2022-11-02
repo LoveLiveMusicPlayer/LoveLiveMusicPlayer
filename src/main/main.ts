@@ -8,6 +8,8 @@ import createLyricWindow from "./windows/desktopLyricWindow";
 import createMainWindow from "./windows/mainWindow";
 import {judgeWinVersion, upReportOpenTime} from "./util";
 import Store from "../renderer/utils/Store";
+import {AppUtils} from "../renderer/utils/AppUtils";
+import fs from "fs";
 
 // 阻止应用多开
 const isAppInstance = app.requestSingleInstanceLock()
@@ -37,17 +39,27 @@ app.on('ready', async () => {
         global.mainWindow?.webContents.send('playMusic')
     })
     createFuncBtn()
+    const log = []
+    let needGlasstron = Store.get('glasstron')
+    log.push("needGlasstron: " + needGlasstron)
+    log.push("argv: " + process.argv)
+    if (process.argv.includes("noBlur")) {
+        log.push("noBlur: true")
+        needGlasstron = false
+    }
     setTimeout(() => {
         if (isWin) {
             global.winVersion = judgeWinVersion()
+            log.push("winVersion: " + global.winVersion)
         }
-        const needGlasstron = Store.get('glasstron')
         if (needGlasstron) {
+            log.push("into: 111")
             global.mainWindow = createMainWindow((!isWin || global.winVersion > 0) ? null : BrowserWindow)
         } else {
+            log.push("into: 222")
             global.mainWindow = createMainWindow(BrowserWindow)
         }
-
+        fs.writeFileSync("log.txt", JSON.stringify(log))
         if (isWin) {
             // 设置底部任务栏按钮和缩略图
             global.mainWindow.setThumbarButtons(thumbarButtons);
