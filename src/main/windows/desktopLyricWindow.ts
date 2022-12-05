@@ -22,11 +22,9 @@ const createLyricWindow = function (BrowserWindow: any) {
         frame: false,
         x: Math.floor(width / 2) - trulyWidth / 2,
         y: Math.floor(height) - 150,
-        fullscreenable: false,
         minimizable: false,
         maximizable: false,
         transparent: true,
-        alwaysOnTop: false,
         skipTaskbar: true, // 任务栏中不显示窗口
         closable: false,
         hasShadow: false,
@@ -41,7 +39,8 @@ const createLyricWindow = function (BrowserWindow: any) {
 
     let lyricWindow = new BrowserWindow(obj);
 
-    lyricWindow.setAlwaysOnTop(true, "floating", 999)
+    lyricWindow.setVisibleOnAllWorkspaces(true, {visibleOnFullScreen: true})
+    lyricWindow.setAlwaysOnTop(true, "screen-saver")
 
     lyricWindow.loadURL(resolveHtmlPath("desktop-lyric.html"));
 

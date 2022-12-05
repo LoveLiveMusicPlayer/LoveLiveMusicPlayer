@@ -122,8 +122,8 @@ const TransferMusic = () => {
 
     useEffect(() => {
         checkDiskSpace(DBHelper.getHttpServer().path).then(diskSpace => {
-            const mb = diskSpace.free / 1024 / 1024;
-            if (mb <= 50) {
+            const mb = diskSpace.free;
+            if (mb <= 52428800) {
                 notification.open({
                     message: '请注意',
                     description: '目前歌曲包所在硬盘的剩余空间不足50M，如果使用IOS设备进行歌曲传输，可能会存在失败的可能性',
