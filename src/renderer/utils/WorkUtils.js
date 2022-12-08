@@ -78,7 +78,7 @@ export const WorkUtils = {
                     fileName,
                     coverName,
                     music.time,
-                    baseUrl
+                    baseUrl.replace("/LoveLive/", "LoveLive/")
                 ]
                 arr.push(obj)
             }

@@ -5,7 +5,7 @@ const isPre = true
 // 是否需要清空歌曲库
 const isNeedInit = false
 // 是否是要导出excel
-const isExportExcel = false
+const isExportExcel = true
 
 export const VersionUtils = {
     // 获取是否是预发环境
