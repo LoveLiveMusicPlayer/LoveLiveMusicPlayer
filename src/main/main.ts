@@ -8,7 +8,6 @@ import createLyricWindow from "./windows/desktopLyricWindow";
 import createMainWindow from "./windows/mainWindow";
 import {judgeWinVersion, upReportOpenTime} from "./util";
 import Store from "../renderer/utils/Store";
-import {AppUtils} from "../renderer/utils/AppUtils";
 import fs from "fs";
 
 // 阻止应用多开
@@ -66,6 +65,7 @@ app.on('ready', async () => {
         }
     }, 200)
     global.lyricWindow = createLyricWindow(BrowserWindow)
+    await app.dock.show()
 })
 
 app.on('activate', () => {
