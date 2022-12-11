@@ -65,7 +65,9 @@ app.on('ready', async () => {
         }
     }, 200)
     global.lyricWindow = createLyricWindow(BrowserWindow)
-    await app.dock.show()
+    if (process.platform !== 'win32') {
+        await app.dock.show()
+    }
 })
 
 app.on('activate', () => {
