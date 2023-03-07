@@ -140,6 +140,16 @@ const TransferData = () => {
         return JSON.stringify(obj)
     }
 
+    function closeQR() {
+        const message = {
+            cmd: "back",
+            body: ""
+        }
+        wsRef.current?.send(JSON.stringify(message))
+        setQrShow(false)
+        setScanSuccess(false)
+    }
+
     return (
         <div className={'transferDataContainer'}>
             <div className={'innerContainer'}>
@@ -148,15 +158,7 @@ const TransferData = () => {
                 <p className={'tvHint'}>歌单：手机和电脑端相互独立，导入端原有数据将被清空再保存导出端最新的数据</p>
                 <Button className={'btnTrans'} type="primary" onClick={() => setQrShow(true)}>我已知晓，开始传输</Button>
             </div>
-            <QRDialog isShow={qrShow} close={() => {
-                const message = {
-                    cmd: "back",
-                    body: ""
-                }
-                wsRef.current?.send(JSON.stringify(message))
-                setQrShow(false)
-                setScanSuccess(false)
-            }} isSuccess={scanSuccess} type={"data"}/>
+            <QRDialog isShow={qrShow} close={closeQR} isSuccess={scanSuccess} type={"data"}/>
             <Loading ref={loadingRef}/>
             <WS_Data
                 ref={wsRef}
@@ -169,6 +171,7 @@ const TransferData = () => {
                 stop={() => {
                     loadingRef.current?.hide()
                 }}
+                closeQR={closeQR}
             />
         </div>
     )

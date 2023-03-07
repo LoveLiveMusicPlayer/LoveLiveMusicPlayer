@@ -43,3 +43,4 @@ yarn.lock
 /release/app/flac-bindings/*
 /release/app/build/*
 *.provisionprofile
+/log.txt

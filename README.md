@@ -122,6 +122,7 @@ B站空间：<https://space.bilibili.com/4367965>
 
 ## 开发 (Develop)
 
+- 所需环境：cmake
 - 依赖安装：yarn install
 - windows运行：yarn run win-start
 - mac/linux运行：yarn run start
