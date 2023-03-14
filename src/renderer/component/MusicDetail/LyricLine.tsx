@@ -6,54 +6,60 @@ const Single = styled.div<{
     active: boolean;
     position: string;
     lang: string;
+    scale: number;
 }>`
     padding: 4px 10px;
-    font-size: 16px;
-    ${({active, position, lang}) => css`
+    ${({active, position, lang, scale}) => css`
         color: ${active ? 'lightgreen' : '#999'};
         text-align: ${position == "center" ? 'center' : 'left'};
         lang: ${lang};
-  `}
+        font-size: ${scale}px;
+    `}
 `;
 
 const Double = styled.div<{
     active: boolean;
     position: string;
     lang: string;
+    scale: number;
 }>`
-    font-size: 16px;
-    ${({active, position, lang}) => css`
+    ${({active, position, lang, scale}) => css`
         color: ${active ? 'lightgreen' : '#999'};
         text-align: ${position == "center" ? 'center' : 'left'};
         lang: ${lang};
-  `}
+        font-size: ${scale}px;
+    `}
 `;
 
 export const LyricLine = ({
                               active,
                               content,
                               position,
-                              lang
+                              lang,
+                              scale
                           }: {
     active: boolean;
     content: string;
     position: string;
     lang: string;
-}) => <Single active={active} position={position} lang={lang}>{content}</Single>;
+    scale: number;
+}) => <Single active={active} position={position} lang={lang} scale={scale}>{content}</Single>;
 
 export const LyricDoubleLine = ({
                                     active,
                                     headContent,
                                     footContent,
-                                    position
+                                    position,
+                                    scale
                                 }: {
     active: boolean;
     headContent: string;
     footContent: string;
     position: string;
+    scale: number;
 }) => (
-    <div style={{marginTop: 10, marginBottom: 10}}>
-        <Double active={active} position={position} lang={'jp'}>{headContent}</Double>
-        <Double active={active} position={position} lang={'zh'}>{footContent}</Double>
+    <div style={{marginTop: 12, marginBottom: 12}}>
+        <Double active={active} position={position} lang={'jp'} scale={scale}>{headContent}</Double>
+        <Double active={active} position={position} lang={'zh'} scale={scale}>{footContent}</Double>
     </div>
 )

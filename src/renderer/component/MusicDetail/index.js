@@ -1,4 +1,4 @@
-import React, {forwardRef, useImperativeHandle, useMemo, useState} from 'react';
+import React, {forwardRef, useEffect, useImperativeHandle, useMemo, useState} from 'react';
 import './index.scss'
 import {Lrc} from 'react-lrc';
 import {LyricDoubleLine, LyricLine} from './LyricLine'
@@ -139,9 +139,34 @@ export const MusicDetail = forwardRef(({
         return ['', '']
     }, [musicInfo])
 
+    const [scaleFontSize, setScaleFontSize] = useState(16)
+
+    const listener = function () {
+        const ratio = window.innerWidth / 1250
+        if (ratio > 1.3) {
+            setScaleFontSize(ratio * 12)
+        } else if (ratio < 1) {
+            setScaleFontSize(16)
+        } else {
+            setScaleFontSize(ratio * 16)
+        }
+    }
+
+    useEffect(() => {
+        window.addEventListener("resize", listener)
+
+        return () => window.removeEventListener("resize", listener)
+    }, [])
+
     const renderItem = ({active, line}) => {
         if (lrcLanguage === 'jp') {
-            return <LyricLine content={line.content} active={active} position={lrcPosition} lang={lrcLanguage}/>
+            return <LyricLine
+                content={line.content}
+                active={active}
+                position={lrcPosition}
+                lang={lrcLanguage}
+                scale={scaleFontSize}
+            />
         } else {
             let content = ''
             timerLrc && timerLrc.map(item => {
@@ -150,8 +175,13 @@ export const MusicDetail = forwardRef(({
                 }
             })
 
-            return <LyricDoubleLine active={active} position={lrcPosition} headContent={line.content}
-                                    footContent={content}/>
+            return <LyricDoubleLine
+                active={active}
+                position={lrcPosition}
+                headContent={line.content}
+                footContent={content}
+                scale={scaleFontSize}
+            />
         }
     }
 
@@ -238,8 +268,8 @@ export const MusicDetail = forwardRef(({
                             <Lrc
                                 key={resetLrc}
                                 className="lrc"
-                                style={{overflow: 'hidden !important'}}
                                 lrc={lrc.jpLrc}
+                                verticalSpace
                                 intervalOfRecoveringAutoScrollAfterUserScroll={1000}
                                 topBlank={true}
                                 bottomBlank={true}
