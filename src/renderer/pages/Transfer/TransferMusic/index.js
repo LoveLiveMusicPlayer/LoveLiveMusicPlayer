@@ -52,9 +52,7 @@ const TransferMusic = () => {
                         AlbumHelper.findOneAlbumByAlbumId(mMusic.group, mMusic.album).then(async mAlbum => {
                             let destDir = null
                             if (dest !== undefined) {
-                                const srcDirArr = AppUtils.getFileDirectory(url).split(path.sep + 'LoveLive' + path.sep)
-                                console.log(srcDirArr)
-                                destDir = dest + path.sep + "LoveLive" + path.sep + srcDirArr[srcDirArr.length - 1].replaceAll('/', path.sep)
+                                destDir = dest + path.sep + mMusic.base_url.replaceAll('/', path.sep)
                             }
 
                             if (onlyExport) {

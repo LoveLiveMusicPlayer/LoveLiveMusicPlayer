@@ -179,12 +179,19 @@ export function makeCancelable(promise: Promise<any>) {
 export async function transfer(pathDir: string, music: any, phoneSystem: string, runningTag: number) {
     const srcPath = pathDir + music.baseUrl + music.musicPath;
     let destPath = null;
+    let destDir = null;
     if (music.destDir !== null) {
-        const fileNameArr = music.musicPath.split("/")
-        destPath = music.destDir + fileNameArr[fileNameArr.length - 1]
+        destPath = music.destDir + music.musicPath
+        if (music.musicPath.indexOf('/') == -1) {
+            destDir = music.destDir
+        } else {
+            const fileNameArr = music.musicPath.split("/")
+            fileNameArr.pop()
+            destDir = music.destDir + fileNameArr.join('/')
+        }
     }
-    if (destPath !== null && srcPath !== destPath) {
-        if (!AppUtils.mkdirsSync(music.destDir)) {
+    if (destDir !== null && srcPath !== destPath) {
+        if (!AppUtils.mkdirsSync(destDir)) {
             return Promise.resolve({music: music, oldRunningTag: runningTag, reason: "创建文件夹失败"})
         }
     }
