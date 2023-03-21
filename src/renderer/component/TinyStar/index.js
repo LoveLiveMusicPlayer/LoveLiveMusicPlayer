@@ -57,7 +57,7 @@ export const TinyStar = ({
             </div>
 
             <div className={"star_container"}>
-                <Dropdown menu={menu} placement="bottom">
+                <Dropdown overlay={menu} placement="bottom">
                     <img
                         className={"tiny_star"}
                         src={Images.ICON_SETTING}

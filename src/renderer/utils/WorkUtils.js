@@ -8,7 +8,6 @@ import Bus from "./Event";
 import {MusicHelper} from "../dao/MusicHelper";
 import Store from "./Store";
 import {VersionUtils} from "./VersionUtils";
-import {OSS_URL_HEAD} from "./URLHelper";
 import {parse as parseLrc} from "clrc";
 import {SongMenuHelper} from "../dao/SongMenuHelper";
 import {LoveHelper} from "../dao/LoveHelper";
@@ -187,9 +186,9 @@ export const WorkUtils = {
                         name: item.value.name,
                         singer: item.value.artist,
                         album: item.value.album,
-                        lyric: OSS_URL_HEAD + "JP/" + lyricPath,
-                        trans: OSS_URL_HEAD + "ZH/" + lyricPath,
-                        roma: OSS_URL_HEAD + "ROMA/" + lyricPath,
+                        lyric: "JP/" + lyricPath,
+                        trans: "ZH/" + lyricPath,
+                        roma: "ROMA/" + lyricPath,
                         playIndex: playIndex ? playIndex : 0,
                         cover: AppUtils.encodeURL(URL + baseUrl + item.value["cover_path"]),
                         musicSrc: AppUtils.encodeURL(URL + baseUrl + item.value["music_path"]),
