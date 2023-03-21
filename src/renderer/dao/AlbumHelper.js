@@ -32,7 +32,7 @@ export const AlbumHelper = {
 
     // 获取某个企划的全部专辑
     findAllAlbumsByGroup(group) {
-        return db.findAll({group: group})
+        return db.findAll({group: group}, null, {id: 1})
     },
 
     findAlbumsFromIndexByLimit(index, limit) {

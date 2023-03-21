@@ -399,7 +399,7 @@ function App({dispatch, appVersion}) {
             dispatch(appAction.appVersion(version))
             if (AppUtils.isNull(forceRemoveVersion) || version !== forceRemoveVersion) {
                 if (VersionUtils.getIsNeedInit()) {
-                    DBHelper.removeMusicDB(version).then(finish)
+                    DBHelper.removeAllDB(version).then(finish)
                 }
             }
         })

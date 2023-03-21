@@ -55,9 +55,9 @@ export const DBHelper = {
     },
 
     // 删除全部数据
-    async removeAllDB() {
+    async removeAllDB(version) {
         const promiseArr = []
-        this.clearStore()
+        this.clearStore(version)
         promiseArr.push(AlbumHelper.removeAllAlbum())
         promiseArr.push(LoveHelper.removeAllILove())
         promiseArr.push(MusicHelper.removeAllMusic())

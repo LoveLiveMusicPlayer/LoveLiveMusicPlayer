@@ -377,7 +377,6 @@ const TransferMusic = () => {
                     console.log("下载失败: " + musicId)
                 }}
                 finish={() => {
-                    console.log(Date.now() - startTime);
                     stopTask()
                     setDownloadShow(false)
                 }}
