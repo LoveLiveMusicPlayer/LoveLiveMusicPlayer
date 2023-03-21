@@ -18,5 +18,9 @@ export const Const = {
     liella: {
         key: "Liella!",
         value: "Liella!"
+    },
+    hasunosora: {
+        key: "Hasunosora",
+        value: "Hasunosora"
     }
 }

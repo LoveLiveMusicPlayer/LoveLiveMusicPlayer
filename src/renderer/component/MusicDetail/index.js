@@ -270,9 +270,6 @@ export const MusicDetail = forwardRef(({
                                 className="lrc"
                                 lrc={lrc.jpLrc}
                                 verticalSpace
-                                intervalOfRecoveringAutoScrollAfterUserScroll={1000}
-                                topBlank={true}
-                                bottomBlank={true}
                                 lineRenderer={renderItem}
                                 currentMillisecond={currentLrcTime}
                             />

@@ -80,6 +80,7 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
             albumList = albumList.concat(await AlbumHelper.findAllAlbumsByGroup(Const.saki.key))
             albumList = albumList.concat(await AlbumHelper.findAllAlbumsByGroup(Const.liella.key))
             albumList = albumList.concat(await AlbumHelper.findAllAlbumsByGroup(Const.combine.key))
+            albumList = albumList.concat(await AlbumHelper.findAllAlbumsByGroup(Const.hasunosora.key))
             for (const album of albumList) {
                 tempMusicList.length = 0
                 const musicList = await MusicHelper.findAllMusicByAlbumId(album.group, album.id)

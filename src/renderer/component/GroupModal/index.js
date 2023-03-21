@@ -31,9 +31,10 @@ export const GroupModal = ({showCategory, showMenu, chooseGroup}) => {
                                  onClick={() => chooseGroup(Const.us.key)}/>
                             <span className={"menu_category_span"}>{Const.us.value}</span>
                         </div>
-                        <div className={["hvr-grow", "menu_category"].join(' ')} style={{visibility: 'hidden'}}>
-                            <img src={Images.MENU_AQOURS} width={'170px'} height={'250px'}/>
-                            <span className={"menu_category_span"}>{Const.aqours.value}</span>
+                        <div className={["hvr-grow", "menu_category"].join(' ')}>
+                            <img src={Images.MENU_HASUNOSORA} width={'170px'} height={'250px'}
+                                 onClick={() => chooseGroup(Const.hasunosora.key)}/>
+                            <span className={"menu_category_span"}>{Const.hasunosora.value}</span>
                         </div>
                         <div className={["hvr-grow", "menu_category"].join(' ')}>
                             <img src={Images.MENU_LIELLA} width={'170px'} height={'250px'}

@@ -13,7 +13,7 @@ import {SongMenuHelper} from "../dao/SongMenuHelper";
 import {musicAction} from "../actions/music";
 import {AlbumHelper} from "../dao/AlbumHelper";
 import {WorkUtils} from "./WorkUtils";
-import {OSS_URL_HEAD} from "./URLHelper";
+import {LYRIC_URL_HEAD} from "./URLHelper";
 
 const {ipcRenderer} = require('electron')
 const {connect} = require('react-redux')
@@ -166,7 +166,7 @@ class AudioPlayer extends React.PureComponent {
     renderDIYButton = () => {
         return (
             <>
-                <Dropdown overlay={this.content()} placement="bottomCenter">
+                <Dropdown menu={this.content()} placement="bottom">
                     <img
                         src={Images.ICON_MORE}
                         width={25}
@@ -220,7 +220,7 @@ class AudioPlayer extends React.PureComponent {
     requestLrc = async (url) => {
         try {
             if (url) {
-                const encodeUrl = OSS_URL_HEAD + encodeURIComponent(url.replace(OSS_URL_HEAD, ""))
+                const encodeUrl = LYRIC_URL_HEAD + encodeURIComponent(url.replace(LYRIC_URL_HEAD, ""))
                 const resp = await WorkUtils.requestLyric(encodeUrl)
                 if (!AppUtils.isEmpty(resp)) {
                     return resp.split('\n').map(item => {
