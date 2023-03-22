@@ -33,6 +33,7 @@ export const WS_Music = React.forwardRef(({
         server.on('upgrade', function (request, socket, body) {
             if (WebSocket.isWebSocket(request)) {
                 ws = new WebSocket(request, socket, body);
+                let verified = false
 
                 ws?.on('message', function (event) {
                     let command = JSON.parse(event.data)
@@ -44,6 +45,7 @@ export const WS_Music = React.forwardRef(({
                             if (versionNotSame) {
                                 Bus.emit("onNotification", "PC与APP版本不匹配，请前往博客查看")
                             }
+                            verified = true;
                             const verMsg = {
                                 cmd: "version",
                                 body: transVer + ""
@@ -56,6 +58,10 @@ export const WS_Music = React.forwardRef(({
                             }
                             break
                         case "system":
+                            if (!verified) {
+                                Bus.emit("onNotification", "PC与APP版本不匹配，请前往博客查看")
+                                return
+                            }
                             phoneSystem(command["body"])
                             console.log("mobile system: " + command["body"])
                             const httpServer = DBHelper.getHttpServer()
