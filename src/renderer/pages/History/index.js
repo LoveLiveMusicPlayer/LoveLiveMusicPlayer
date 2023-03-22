@@ -44,7 +44,6 @@ const History = ({playId}) => {
                     WorkUtils.findHistoryList((table) => musicRowListRef.current?.setData(table))
                 }}
                 onDisLove={(music) => {
-                    console.log(music)
                     showDialogAndHandleMusic.show = true
                     showDialogAndHandleMusic.music = music.music
                     showDialogAndHandleMusic.state = "disLove"

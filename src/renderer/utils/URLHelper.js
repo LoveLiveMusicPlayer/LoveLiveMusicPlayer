@@ -1,5 +1,6 @@
 // oss url 前缀
-const OSS_URL_HEAD = "https://video-file-upload.oss-cn-hangzhou.aliyuncs.com/"
+const OSS_URL_HEAD = "https://picbed-cdn.zhushenwudi.top/llmp-oss/"
+const LYRIC_URL_HEAD = "https://llmp-oss.oss-cn-hongkong.aliyuncs.com/"
 const OWNER_OSS_URL_HEAD = "https://zhushenwudi1.oss-cn-hangzhou.aliyuncs.com/LLMP/"
 
 // 提示用户是否有数据需要更新
@@ -19,6 +20,7 @@ const VERSION_FILE = "version.json"
 
 module.exports = {
     OSS_URL_HEAD,
+    LYRIC_URL_HEAD,
     OWNER_OSS_URL_HEAD,
     REQUEST_LATEST_VERSION_FILE,
     SENTRY_URL,

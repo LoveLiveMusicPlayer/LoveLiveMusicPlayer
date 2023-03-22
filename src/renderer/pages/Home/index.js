@@ -99,7 +99,7 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
                         AppUtils.openMsgDialog("info", "导入歌曲库成功")
                     }
                 } else {
-                    AppUtils.openMsgDialog("error", "请拖入名为LoveLive的文件夹")
+                    AppUtils.openMsgDialog("error", "请选择名为LoveLive的文件夹")
                 }
             }
         })

@@ -52,9 +52,7 @@ const TransferMusic = () => {
                         AlbumHelper.findOneAlbumByAlbumId(mMusic.group, mMusic.album).then(async mAlbum => {
                             let destDir = null
                             if (dest !== undefined) {
-                                const srcDirArr = AppUtils.getFileDirectory(url).split(path.sep + 'LoveLive' + path.sep)
-                                console.log(srcDirArr)
-                                destDir = dest + path.sep + "LoveLive" + path.sep + srcDirArr[srcDirArr.length - 1].replaceAll('/', path.sep)
+                                destDir = dest + path.sep + mMusic.base_url.replaceAll('/', path.sep)
                             }
 
                             if (onlyExport) {
@@ -64,7 +62,8 @@ const TransferMusic = () => {
                                         const srcPath = (pathDir + mMusic.base_url + mMusic.cover_path).replaceAll('/', path.sep);
                                         const destPath = (destDir + mMusic.cover_path).replaceAll('/', path.sep);
                                         await copyFile(srcPath, destPath)
-                                    } catch (e) {}
+                                    } catch (e) {
+                                    }
                                 }
                             }
 
@@ -122,8 +121,8 @@ const TransferMusic = () => {
 
     useEffect(() => {
         checkDiskSpace(DBHelper.getHttpServer().path).then(diskSpace => {
-            const mb = diskSpace.free / 1024 / 1024;
-            if (mb <= 50) {
+            const mb = diskSpace.free;
+            if (mb <= 52428800) {
                 notification.open({
                     message: '请注意',
                     description: '目前歌曲包所在硬盘的剩余空间不足50M，如果使用IOS设备进行歌曲传输，可能会存在失败的可能性',
@@ -265,6 +264,16 @@ const TransferMusic = () => {
         ipcRenderer.send('doConvert', JSON.stringify(message))
     }
 
+    function closeQR() {
+        const message = {
+            cmd: "stop",
+            body: ""
+        }
+        wsRef.current?.send(JSON.stringify(message))
+        setQrShow(false)
+        setScanSuccess(false)
+    }
+
     return (
         <div style={{width: "100%", height: '100%'}}>
             <TransferChoose
@@ -285,15 +294,7 @@ const TransferMusic = () => {
                 }}
                 progress
             />
-            <QRDialog isShow={qrShow} close={() => {
-                const message = {
-                    cmd: "stop",
-                    body: ""
-                }
-                wsRef.current?.send(JSON.stringify(message))
-                setQrShow(false)
-                setScanSuccess(false)
-            }} isSuccess={scanSuccess}/>
+            <QRDialog isShow={qrShow} close={closeQR} isSuccess={scanSuccess}/>
             <DownloadDialog isShow={downloadShow} onClose={() => {
                 setDownloadShow(false)
                 stopTask()
@@ -376,7 +377,6 @@ const TransferMusic = () => {
                     console.log("下载失败: " + musicId)
                 }}
                 finish={() => {
-                    console.log(Date.now() - startTime);
                     stopTask()
                     setDownloadShow(false)
                 }}
@@ -384,6 +384,7 @@ const TransferMusic = () => {
                     stopTask(false)
                     setDownloadShow(false)
                 }}
+                closeQR={closeQR}
             />
         </div>
     )

@@ -1,131 +1,133 @@
 .musicDetailContainer {
-  width: 100%;
-  height: calc(100% - 80px);
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
+    width: 100%;
+    height: calc(100% - 80px);
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .lrcLeftContainer {
-  display: flex;
-  flex-direction: column;
-  position: relative;
+    display: flex;
+    flex-direction: column;
+    position: relative;
 }
 
 .cover {
-  width: 300px;
-  height: 300px;
+    width: 300px;
+    height: 300px;
 }
 
 .tools {
-  width: 300px;
-  height: 30px;
-  position: absolute;
-  display: flex;
-  justify-content: space-evenly;
-  flex-direction: row;
-  top: 335px;
+    width: 300px;
+    height: 30px;
+    position: absolute;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    top: 335px;
 }
 
 .lrcRightContainer {
-  width: 40vw;
-  height: 70vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  margin-left: 5vw;
+    width: 40vw;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-left: 5vw;
 }
 
 .title {
-  color: #fff;
-  font-size: 22px;
-  margin: 0;
-  text-align: center;
+    color: #fff;
+    font-size: 22px;
+    margin: 0;
+    text-align: center;
 }
 
 .artist {
-  color: #fff;
-  font-size: 16px;
-  margin: 1vh 0 0;
-  text-align: center;
+    color: #fff;
+    font-size: 16px;
+    margin: 1vh 0 0;
+    text-align: center;
 }
 
 .lrcContainer {
-  width: 100%;
-  height: 50vh;
-  display: flex;
-  margin-top: 5vh;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
+    width: 100%;
+    height: 50vh;
+    display: flex;
+    margin-top: 5vh;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
 }
 
 .lrc {
-  /* webkit */
-  &::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-  }
+    /* webkit */
+    &::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+    }
 
-  /* firefox */
-  scrollbar-width: none;
+    /* firefox */
+    scrollbar-width: none;
 
-  /* ie */
-  -ms-overflow-style: none;
+    /* ie */
+    -ms-overflow-style: none;
+
+    overflow: hidden !important
 }
 
 .position {
-  width: 50px;
-  height: 50px;
-  background-color: lightgreen
+    width: 50px;
+    height: 50px;
+    background-color: lightgreen
 }
 
 .music_detail_modal_in {
-  -webkit-animation: music_detail_modal_in 0.3s;
+    -webkit-animation: music_detail_modal_in 0.3s;
 }
 
 .music_detail_modal_out {
-  -webkit-animation: music_detail_modal_out 0.3s forwards;
+    -webkit-animation: music_detail_modal_out 0.3s forwards;
 }
 
 @-webkit-keyframes music_detail_modal_in {
-  0% {
-    -webkit-transform: translateY(100%);
-    opacity: 0;
-  }
+    0% {
+        -webkit-transform: translateY(100%);
+        opacity: 0;
+    }
 }
 
 @-webkit-keyframes music_detail_modal_out {
-  0% {
-    -webkit-transform: translateY(0);
-    opacity: 1;
-  }
-  100% {
-    -webkit-transform: translateY(100%);
-    opacity: 0;
-  }
+    0% {
+        -webkit-transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        -webkit-transform: translateY(100%);
+        opacity: 0;
+    }
 }
 
 .blackArea {
-  background-color: #000;
-  position: absolute;
-  top: 0;
-  left: 0;
-  border-width: 0;
-  width: 100%;
-  height: 100%;
+    background-color: #000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-width: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .gauss {
-  filter: blur(35px);
-  position: absolute;
-  left: 0;
-  width: 100%;
-  opacity: 0.3;
+    filter: blur(35px);
+    position: absolute;
+    left: 0;
+    width: 100%;
+    opacity: 0.3;
 }

@@ -1,8 +1,10 @@
 import React, {useEffect} from "react";
+import {VersionUtils} from "./VersionUtils";
+import Bus from "./Event";
 
 let ws = null
 
-export const WS_Data = React.forwardRef(({connected, phone2pc, pc2phone, finish, stop}, ref) => {
+export const WS_Data = React.forwardRef(({connected, phone2pc, pc2phone, finish, stop, closeQR}, ref) => {
 
     React.useImperativeHandle(
         ref,
@@ -21,11 +23,35 @@ export const WS_Data = React.forwardRef(({connected, phone2pc, pc2phone, finish,
         server.on('upgrade', function (request, socket, body) {
             if (WebSocket.isWebSocket(request)) {
                 ws = new WebSocket(request, socket, body);
+                let verified = false
 
                 ws?.on('message', function (event) {
                     let command = JSON.parse(event.data)
                     switch (command["cmd"]) {
+                        case "version":
+                            const transVer = VersionUtils.getTransVersion()
+                            // 此处为数字和字符串比较，不要用全等
+                            const versionNotSame = command["body"] != transVer
+                            if (versionNotSame) {
+                                Bus.emit("onNotification", "PC与APP版本不匹配，请前往博客查看")
+                            }
+                            verified = true;
+                            const verMsg = {
+                                cmd: "version",
+                                body: transVer + ""
+                            }
+                            ws?.send(JSON.stringify(verMsg))
+                            if (versionNotSame) {
+                                setTimeout(() => {
+                                    closeQR()
+                                }, 1000)
+                            }
+                            break
                         case "connected":
+                            if (!verified) {
+                                Bus.emit("onNotification", "PC与APP版本不匹配，请前往博客查看")
+                                return
+                            }
                             connected()
                             break
                         case "phone2pc":

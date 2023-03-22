@@ -1,11 +1,13 @@
 import {BRIDGE_URL, DATA_FILE, OWNER_OSS_URL_HEAD, REQUEST_LATEST_VERSION_FILE, VERSION_FILE} from "./URLHelper";
 
 // 是否是预发环境
-const isPre = false
+const isPre = true
 // 是否需要清空歌曲库
-const isNeedInit = false
+const isNeedInit = true
 // 是否是要导出excel
 const isExportExcel = false
+// 传输协议版本号
+const transVer = 1
 
 export const VersionUtils = {
     // 获取是否是预发环境
@@ -15,6 +17,10 @@ export const VersionUtils = {
 
     getIsExportExcel() {
         return isExportExcel
+    },
+
+    getTransVersion() {
+        return transVer
     },
 
     // 获取连接桥跳板

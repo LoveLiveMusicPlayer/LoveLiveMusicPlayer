@@ -13,7 +13,8 @@ import {SongMenuHelper} from "../dao/SongMenuHelper";
 import {musicAction} from "../actions/music";
 import {AlbumHelper} from "../dao/AlbumHelper";
 import {WorkUtils} from "./WorkUtils";
-import {OSS_URL_HEAD} from "./URLHelper";
+import {LYRIC_URL_HEAD} from "./URLHelper";
+import {LyricHelper} from "../dao/LyricHelper";
 
 const {ipcRenderer} = require('electron')
 const {connect} = require('react-redux')
@@ -166,7 +167,7 @@ class AudioPlayer extends React.PureComponent {
     renderDIYButton = () => {
         return (
             <>
-                <Dropdown overlay={this.content()} placement="bottomCenter">
+                <Dropdown overlay={this.content()} placement="bottom">
                     <img
                         src={Images.ICON_MORE}
                         width={25}
@@ -220,7 +221,7 @@ class AudioPlayer extends React.PureComponent {
     requestLrc = async (url) => {
         try {
             if (url) {
-                const encodeUrl = OSS_URL_HEAD + encodeURIComponent(url.replace(OSS_URL_HEAD, ""))
+                const encodeUrl = LYRIC_URL_HEAD + encodeURIComponent(url.replace(LYRIC_URL_HEAD, ""))
                 const resp = await WorkUtils.requestLyric(encodeUrl)
                 if (!AppUtils.isEmpty(resp)) {
                     return resp.split('\n').map(item => {
@@ -228,7 +229,8 @@ class AudioPlayer extends React.PureComponent {
                     }).join('\n')
                 }
             }
-        } catch (e) {}
+        } catch (e) {
+        }
         return null
     }
 
@@ -308,9 +310,37 @@ class AudioPlayer extends React.PureComponent {
                         } catch (e) {
                             console.log(e)
                         }
-                        lrc.jpLrc = await this.requestLrc(audioInfo.lyric)
-                        lrc.zhLrc = await this.requestLrc(audioInfo.trans)
-                        lrc.romaLrc = await this.requestLrc(audioInfo.roma)
+                        const lyric = await LyricHelper.findLyric(audioInfo._id)
+                        let count = 0
+                        if (lyric == null) {
+                            count++
+                            lrc.jpLrc = await this.requestLrc(audioInfo.lyric)
+                            lrc.zhLrc = await this.requestLrc(audioInfo.trans)
+                            lrc.romaLrc = await this.requestLrc(audioInfo.roma)
+                        } else {
+                            if (AppUtils.isEmpty(lyric.jpLrc)) {
+                                count++
+                                lrc.jpLrc = await this.requestLrc(audioInfo.lyric)
+                            } else {
+                                lrc.jpLrc = lyric.jpLrc
+                            }
+                            if (AppUtils.isEmpty(lyric.zhLrc)) {
+                                count++
+                                lrc.zhLrc = await this.requestLrc(audioInfo.trans)
+                            } else {
+                                lrc.zhLrc = lyric.zhLrc
+                            }
+                            if (AppUtils.isEmpty(lyric.romaLrc)) {
+                                count++
+                                lrc.romaLrc = await this.requestLrc(audioInfo.roma)
+                            } else {
+                                lrc.romaLrc = lyric.romaLrc
+                            }
+                        }
+                        if (count > 0) {
+                            lrc._id = audioInfo._id
+                            await LyricHelper.insertOrUpdateLyric(lrc)
+                        }
                     }}
                     onAudioVolumeChange={volume => {
                         Store.set('volume', Math.sqrt(volume))

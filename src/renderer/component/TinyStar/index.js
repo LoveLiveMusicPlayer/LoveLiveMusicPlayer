@@ -57,13 +57,13 @@ export const TinyStar = ({
             </div>
 
             <div className={"star_container"}>
-                <Dropdown overlay={menu} placement="bottomCenter">
+                <Dropdown overlay={menu} placement="bottom">
                     <img
                         className={"tiny_star"}
                         src={Images.ICON_SETTING}
                         width={"30rem"}
                         height={"30rem"}
-                    />
+                        alt={''}/>
                 </Dropdown>
             </div>
         </>
