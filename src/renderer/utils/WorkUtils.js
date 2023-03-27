@@ -114,10 +114,10 @@ export const WorkUtils = {
         return result
     },
 
-    async fetchLatestVersionHint(appVersion) {
+    async fetchLatestVersionHint() {
         let result = null
         try {
-            const response = await Network.get(VersionUtils.getVersionHintUrl(appVersion))
+            const response = await Network.get(VersionUtils.getVersionHintUrl())
             result = response.data
         } catch (error) {
             console.error(error);
@@ -265,19 +265,17 @@ export const WorkUtils = {
     },
 
     // 下载数据更新
-    async updateJsonData(appVersion, onStart, onProgress, onAlbumEnd, onMusicEnd) {
-        const bridgeUrl = await this.requestUrl(VersionUtils.getBridgeUrl(appVersion))
-        if (bridgeUrl == null) {
-            AppUtils.openMsgDialog("error", "获取连接桥失败，请稍候再试")
-            return
-        }
-        const data = await this.requestUrl(VersionUtils.getRefreshDataUrl(bridgeUrl, appVersion))
+    async updateJsonData(appVersion, onPrepare, onStart, onProgress, onAlbumEnd, onMusicEnd, onError) {
+        onPrepare && onPrepare()
+        const data = await this.requestUrl(VersionUtils.getDataUrl())
         if (data == null) {
+            onError && onError()
             AppUtils.openMsgDialog("error", "获取更新数据失败，请稍候再试")
             return
         }
         const version = Store.get("dataVersion")
         if (version && version >= data.version) {
+            onError && onError()
             AppUtils.openMsgDialog("info", "已是最新数据，无需更新")
             return
         }

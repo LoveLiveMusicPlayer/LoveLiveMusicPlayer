@@ -45,6 +45,7 @@ export const Loading = forwardRef((props, ref) => {
         },
 
         show: (title) => {
+            setProgress(0)
             if (!AppUtils.isEmpty(title)) {
                 setTitle(title)
             }
@@ -63,9 +64,9 @@ export const Loading = forwardRef((props, ref) => {
             onAfterOpen={null}
             onRequestClose={null}
             style={customStyles}>
-            <img src={Images.LOADING} style={{width: 150, height: 150}}/>
+            <img src={Images.LOADING} style={{width: 150, height: 150}} alt={''}/>
             <p style={{color: 'black'}}>{title}</p>
-            {progress === -1 ? null : <p style={{color: 'black'}}>进度：{progress}%</p>}
+            {progress <= 0 ? null : <p style={{color: 'black'}}>进度：{progress}%</p>}
         </Modal>
     )
 })

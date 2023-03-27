@@ -370,7 +370,7 @@ function App({dispatch, appVersion}) {
 
     // 获取最新的数据版本，比较并提示
     const fetchLatestVersionHint = () => {
-        WorkUtils.fetchLatestVersionHint(appVersion).then(resp => {
+        WorkUtils.fetchLatestVersionHint().then(resp => {
             if (!AppUtils.isNull(resp)) {
                 const array = []
                 const currentDataVersion = Store.get('dataVersion') || 0

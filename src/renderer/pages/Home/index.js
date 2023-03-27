@@ -156,10 +156,12 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
     const refreshData = () => {
         WorkUtils.updateJsonData(
             appVersion,
-            () => loadingRef.current?.show("导入专辑中.."),
+            () => loadingRef.current?.show("请稍候.."),
+            () => loadingRef.current?.setTitle("导入专辑中.."),
             (progress) => loadingRef.current?.setProgress(progress),
             () => loadingRef.current?.setTitle("导入歌曲中.."),
-            () => setRefresh(new Date().getTime())
+            () => setRefresh(new Date().getTime()),
+            () => loadingRef.current?.hide()
         ).then(_ => {
             setTimeout(() => {
                 loadingRef.current?.hide()

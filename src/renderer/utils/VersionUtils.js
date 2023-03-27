@@ -1,7 +1,10 @@
-import {BRIDGE_URL, DATA_FILE, OWNER_OSS_URL_HEAD, REQUEST_LATEST_VERSION_FILE, VERSION_FILE} from "./URLHelper";
+import {
+    DATA_OSS_URL_HEAD,
+    ROOT_OSS_URL_HEAD,
+} from "./URLHelper";
 
 // 是否是预发环境
-const isPre = true
+const isPre = false
 // 是否需要清空歌曲库
 const isNeedInit = true
 // 是否是要导出excel
@@ -23,28 +26,23 @@ export const VersionUtils = {
         return transVer
     },
 
-    // 获取连接桥跳板
-    getBridgeUrl(appVersion) {
-        return OWNER_OSS_URL_HEAD + appVersion + (isPre ? "/pre/" : "/prod/") + BRIDGE_URL
-    },
-
-    // 更新数据的地址
-    getRefreshDataUrl(bridgeUrl, appVersion) {
-        return bridgeUrl + appVersion + (isPre ? "/pre/" : "/prod/") + DATA_FILE
-    },
-
-    // 更新版本的地址
-    getVersionInfo() {
-        return OWNER_OSS_URL_HEAD + (isPre ? "version/pre/" : "version/prod/") + VERSION_FILE
-    },
-
     // 获取版本初始化模式
     getIsNeedInit() {
         return isNeedInit
     },
 
+    // 更新数据的地址
+    getDataUrl() {
+        return DATA_OSS_URL_HEAD + "data/" + (isPre ? "16.2.8/" : "v2/") + "data.json"
+    },
+
+    // 更新版本的地址
+    getVersionInfo() {
+        return ROOT_OSS_URL_HEAD + "version/" + (isPre ? "pre/" : "prod/") + "version.json"
+    },
+
     // 获取开屏提醒的地址
-    getVersionHintUrl(appVersion) {
-        return OWNER_OSS_URL_HEAD + appVersion + (isPre ? "/pre/" : "/prod/") + REQUEST_LATEST_VERSION_FILE
+    getVersionHintUrl() {
+        return ROOT_OSS_URL_HEAD + (isPre ? "16.2.8/" : "v2/") + "data-version.json"
     }
 }
