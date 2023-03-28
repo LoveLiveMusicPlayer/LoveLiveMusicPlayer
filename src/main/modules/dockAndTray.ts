@@ -97,12 +97,12 @@ export default function () {
         global.appTray = appTray = new Tray(path.join(RESOURCES_PATH, 'icons/16x16.png'));
 
         if (process.platform === 'linux') {
-            trayMenuTemplate = {
+            trayMenuTemplate = [{
                 label: '显示主界面',
                 click() {
                     global.mainWindow?.show()
                 }
-            }.concat(trayMenuTemplate)
+            }].concat(trayMenuTemplate)
         }
 
         //图标的上下文菜单
