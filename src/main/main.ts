@@ -65,7 +65,7 @@ app.on('ready', async () => {
         }
     }, 200)
     global.lyricWindow = createLyricWindow(BrowserWindow)
-    if (process.platform !== 'win32') {
+    if (process.platform === 'darwin') {
         await app.dock.show()
     }
 })

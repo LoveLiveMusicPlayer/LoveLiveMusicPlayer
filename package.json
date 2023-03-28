@@ -102,7 +102,7 @@
             "target": [
                 "AppImage"
             ],
-            "category": "Player"
+            "category": "AudioVideo"
         },
         "directories": {
             "app": "release/app",

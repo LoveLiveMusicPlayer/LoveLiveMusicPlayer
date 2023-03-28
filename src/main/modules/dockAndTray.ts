@@ -33,7 +33,7 @@ const dockMenu = Menu.buildFromTemplate([
 ])
 
 //系统托盘右键菜单
-const trayMenuTemplate = [
+let trayMenuTemplate = [
     {
         label: '播放/暂停',
         click() {
@@ -93,8 +93,17 @@ export const thumbarButtons = [
 export default function () {
     if (process.platform === 'darwin') {
         app.dock.setMenu(dockMenu)
-    } else if (process.platform === 'win32') {
+    } else {
         global.appTray = appTray = new Tray(path.join(RESOURCES_PATH, 'icons/16x16.png'));
+
+        if (process.platform === 'linux') {
+            trayMenuTemplate = {
+                label: '显示主界面',
+                click() {
+                    global.mainWindow?.show()
+                }
+            }.concat(trayMenuTemplate)
+        }
 
         //图标的上下文菜单
         const contextMenu = Menu.buildFromTemplate(trayMenuTemplate);

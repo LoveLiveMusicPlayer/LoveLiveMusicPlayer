@@ -21,6 +21,6 @@ export const Const = {
     },
     hasunosora: {
         key: "Hasunosora",
-        value: "Hasunosora"
+        value: "莲之空女学院"
     }
 }
