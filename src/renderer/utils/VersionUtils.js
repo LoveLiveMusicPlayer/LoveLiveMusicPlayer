@@ -4,9 +4,9 @@ import {
 } from "./URLHelper";
 
 // 是否是预发环境
-const isPre = false
+const isPre = true
 // 是否需要清空歌曲库
-const isNeedInit = true
+const isNeedInit = false
 // 是否是要导出excel
 const isExportExcel = false
 // 传输协议版本号
