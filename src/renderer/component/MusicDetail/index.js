@@ -7,9 +7,12 @@ import Modal from "react-modal";
 import Store from '../../utils/Store'
 import {parse as parseLrc} from "clrc";
 import {AppUtils} from "../../utils/AppUtils";
+import { ICON_SEARCH } from '../../public/Images';
+import { LyricHelper } from '../../dao/LyricHelper';
 
 let currentPlayId = 0
 let latest = {prevTime: 0, currentTime: 0, nextTime: 0}
+let callback
 
 let map = new Map()
 
@@ -43,7 +46,11 @@ export const MusicDetail = forwardRef(({
     const [playProgress, setPlayProgress] = useState({name: null, prevTime: 0, currentTime: 0, nextTime: 0})
 
     useImperativeHandle(ref, () => ({
-        setMusicDetail: (info, prevTime, currentTime, nextTime, timeList) => {
+        setMusicDetail: (info, prevTime, currentTime, nextTime, timeList, researchCallback) => {
+
+            if (callback == null) {
+                callback = researchCallback;
+            }
 
             if (timeList.length > 0) {
                 latest = {prevTime: 0, currentTime: currentTime, nextTime: timeList[0]}
@@ -189,6 +196,12 @@ export const MusicDetail = forwardRef(({
         setLrcPosition(lrcPosition === 'center' ? 'left' : 'center')
     }
 
+    const researchLyric = () => {
+        callback && callback(currentPlayId)
+
+        // LyricHelper.insertOrUpdateLyric(1)
+    }
+
     const changeLanguage = () => {
         if (lrcLanguageCallback) {
             if (lrcLanguage === 'jp') {
@@ -258,6 +271,11 @@ export const MusicDetail = forwardRef(({
                                 style={{width: '30px', height: '30px'}}
                                 src={lrcPosition === 'center' ? Images.ICON_POSITION_CENTER : Images.ICON_POSITION_LEFT}
                                 onClick={changeLrcPosition}
+                            />
+                            <img
+                                style={{width: '26px', height: '26px', paddingTop: '2px'}}
+                                src={Images.ICON_SEARCH}
+                                onClick={researchLyric}
                             />
                         </div>
                     </div>

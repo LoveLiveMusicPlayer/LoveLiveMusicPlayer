@@ -107,6 +107,18 @@ class AudioPlayer extends React.PureComponent {
         this.audioInstance?.togglePlay()
     }
 
+    researchLyric = async (_id) => {
+        const obj = this.state.params.audioLists.find((audio) => audio._id === _id)
+        if (AppUtils.isNull(obj)) {
+            return
+        }
+        obj._id = _id
+        lrc.jpLrc = await this.requestLrc(obj.lyric)
+        lrc.zhLrc = await this.requestLrc(obj.trans)
+        lrc.romaLrc = await this.requestLrc(obj.roma)
+        await LyricHelper.insertOrUpdateLyric(lrc)
+    }
+
     // 上一首
     onPrevPlay = () => {
         if (currentPlayList.length > 1) {

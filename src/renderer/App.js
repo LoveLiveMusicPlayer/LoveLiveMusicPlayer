@@ -282,7 +282,7 @@ function App({dispatch, appVersion}) {
             }
         }
         // 将各种各样的信息发送到歌词页中，等待进一步的逻辑判断
-        musicDetailRef.current?.setMusicDetail(info, prevTime, currentTime, nextTime, timeList)
+        musicDetailRef.current?.setMusicDetail(info, prevTime, currentTime, nextTime, timeList, researchCallback)
 
         // 获取桌面歌词要显示的歌词
         // 当为单行歌词时，要显示的是 singleLrc
@@ -297,6 +297,10 @@ function App({dispatch, appVersion}) {
             // 将歌词信息发送到桌面歌词窗口
             ipcRenderer.send('desktop-lrc-text', {prevLrc: prevLrc, nextLrc: nextLrc, singleLrc: singleLrc})
         }
+    }
+
+    const researchCallback = (_id) => {
+        playerRef.current?.researchLyric(_id)
     }
 
     const renderBtnBack = () => {

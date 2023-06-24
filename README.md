@@ -121,6 +121,7 @@ B站空间：<https://space.bilibili.com/4367965>
 ## 开发 (Develop)
 
 - 所需环境：cmake
+- 配置electron_mirror镜像源：npm config set electron_mirror=https://npm.taobao.org/mirrors/electron/
 - 备注不要提前安装flac库
 - 依赖安装：yarn install
 - windows运行：yarn run win-start
