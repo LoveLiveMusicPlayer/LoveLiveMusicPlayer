@@ -112,7 +112,7 @@ class AudioPlayer extends React.PureComponent {
         if (AppUtils.isNull(obj)) {
             return
         }
-        obj._id = _id
+        lrc._id = _id
         lrc.jpLrc = await this.requestLrc(obj.lyric)
         lrc.zhLrc = await this.requestLrc(obj.trans)
         lrc.romaLrc = await this.requestLrc(obj.roma)
