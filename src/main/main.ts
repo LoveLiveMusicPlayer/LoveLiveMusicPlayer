@@ -38,32 +38,34 @@ app.on('ready', async () => {
         global.mainWindow?.webContents.send('playMusic')
     })
     createFuncBtn()
+    const log = []
+    let needGlasstron = Store.get('glasstron')
+    log.push("needGlasstron: " + needGlasstron)
+    log.push("argv: " + process.argv)
     if (process.argv.includes("noBlur")) {
-        const log = []
-        let needGlasstron = Store.get('glasstron')
-        log.push("needGlasstron: " + needGlasstron)
-        log.push("argv: " + process.argv)
         log.push("noBlur: true")
         needGlasstron = false
-        setTimeout(() => {
-            if (isWin) {
-                global.winVersion = judgeWinVersion()
-                log.push("winVersion: " + global.winVersion)
-            }
-            if (needGlasstron) {
-                log.push("into: 111")
-                global.mainWindow = createMainWindow((!isWin || global.winVersion > 0) ? null : BrowserWindow)
-            } else {
-                log.push("into: 222")
-                global.mainWindow = createMainWindow(BrowserWindow)
-            }
-            fs.writeFileSync("log.txt", JSON.stringify(log))
-            if (isWin) {
-                // 设置底部任务栏按钮和缩略图
-                global.mainWindow.setThumbarButtons(thumbarButtons);
-            }
-        }, 200)
     }
+    setTimeout(() => {
+        if (isWin) {
+            global.winVersion = judgeWinVersion()
+            log.push("winVersion: " + global.winVersion)
+        }
+        if (needGlasstron) {
+            log.push("into: 111")
+            global.mainWindow = createMainWindow((!isWin || global.winVersion > 0) ? null : BrowserWindow)
+        } else {
+            log.push("into: 222")
+            global.mainWindow = createMainWindow(BrowserWindow)
+        }
+        if (process.argv.includes("noBlur")) {
+            fs.writeFileSync("log.txt", JSON.stringify(log))
+        }
+        if (isWin) {
+            // 设置底部任务栏按钮和缩略图
+            global.mainWindow.setThumbarButtons(thumbarButtons);
+        }
+    }, 200)
     global.lyricWindow = createLyricWindow(BrowserWindow)
     if (process.platform === 'darwin') {
         await app.dock.show()
