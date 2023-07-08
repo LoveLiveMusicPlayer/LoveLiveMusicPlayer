@@ -7,6 +7,7 @@ import icon_niji from '../../../assets/image/menu_nijigasaki.jpg'
 import icon_liella from '../../../assets/image/menu_liella.jpg'
 import menu_combine from '../../../assets/image/menu_combine.jpg'
 import menu_hasunosora from '../../../assets/image/menu_hasunosora.jpg'
+import menu_yohane from '../../../assets/image/menu_yohane.jpg'
 import icon_loading from '../../../assets/image/loading.gif'
 import icon_setting from '../../../assets/image/icon_setting.png'
 import icon_empty from '../../../assets/image/icon_empty.png'
@@ -75,6 +76,7 @@ export const MENU_NIJI = icon_niji
 export const MENU_LIELLA = icon_liella
 export const MENU_COMBINE = menu_combine
 export const MENU_HASUNOSORA = menu_hasunosora
+export const MENU_YOHANE = menu_yohane
 export const LOADING = icon_loading
 export const ICON_EMPTY = icon_empty
 export const ICON_CHINESE = icon_chinese

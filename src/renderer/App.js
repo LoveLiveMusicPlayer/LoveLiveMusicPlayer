@@ -256,6 +256,10 @@ function App({dispatch, appVersion}) {
         // 根据日文歌词解析出来的歌词列表
         let jpList = null
 
+
+
+
+
         if (info.jpLrc) {
             // 将日文字符串歌词转化为可被处理的歌词数组
             jpList = parseLrc(info.jpLrc)
