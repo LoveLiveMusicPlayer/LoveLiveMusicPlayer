@@ -40,6 +40,7 @@ import icon_menu_add_select from '../../../assets/image/icon_menu_add_select.png
 import icon_menu_add_unselect from '../../../assets/image/icon_menu_add_unselect.png'
 import icon_menu_phone from '../../../assets/image/icon_menu_phone.png'
 import icon_menu_computer from '../../../assets/image/icon_menu_computer.png'
+import icon_down_arrow from '../../../assets/image/icon_arrow_down.png'
 
 import lrc_close_touch from '../../../assets/image/lrc_close_touch.png'
 import lrc_close_untouch from '../../../assets/image/lrc_close_untouch.png'
@@ -108,6 +109,7 @@ export const ICON_MENU_ADD_SELECT = icon_menu_add_select
 export const ICON_MENU_ADD_UNSELECT = icon_menu_add_unselect
 export const ICON_MENU_PHONE = icon_menu_phone
 export const ICON_MENU_COMPUTER = icon_menu_computer
+export const ICON_DOWN_ARROW = icon_down_arrow
 
 export const LRC_CLOSE_TOUCH = lrc_close_touch
 export const LRC_CLOSE_UNTOUCH = lrc_close_untouch

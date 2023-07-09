@@ -188,7 +188,7 @@ class AudioPlayer extends React.PureComponent {
                         src={Images.ICON_MORE}
                         width={25}
                         height={25}
-                        style={{opacity: this.state.onHover ? 0.9 : 1}}
+                        style={{opacity: this.state.onHover ? 0.9 : 1, cursor: 'pointer'}}
                         onMouseOver={() => this.setState({onHover: true})}
                         onMouseOut={() => this.setState({onHover: false})}
                     />
@@ -201,6 +201,7 @@ class AudioPlayer extends React.PureComponent {
                     onClick={() => {
                         this.r.props.onClickLyric(!this.state.lyricShow)
                     }}
+                    style={{cursor: 'pointer'}}
                 />
             </>
         )

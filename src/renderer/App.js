@@ -21,7 +21,6 @@ import {MusicDetail} from "./component/MusicDetail";
 import Store from '../../src/renderer/utils/Store'
 import Menu from "./pages/Menu";
 import {WorkUtils} from "./utils/WorkUtils";
-import {WindowButton} from "./component/WindowButton";
 import {appAction} from "./actions/app";
 import {parse as parseLrc} from 'clrc';
 import Transfer from "./pages/Transfer";
@@ -29,9 +28,9 @@ import {VersionUtils} from "./utils/VersionUtils";
 import TransferMusic from "./pages/Transfer/TransferMusic";
 import TransferData from "./pages/Transfer/TransferData";
 import History from "./pages/History";
+import { ColorfulLight } from './component/ColorfulLight';
 
 const {ipcRenderer} = require('electron')
-const os = require("os").platform();
 
 // 全局通知弹窗
 const openNotification = (message) => {
@@ -236,6 +235,10 @@ function App({dispatch, appVersion}) {
                 setIsDialogOpen(false)
             }, 300)
         }
+    }
+
+    const onCloseMusicDetailCallback = () => {
+        onClickCover(true)
     }
 
     // 切换桌面歌词开关状态
@@ -508,6 +511,12 @@ function App({dispatch, appVersion}) {
         return () => removeEventListener("openMusicDetail", onClickCoverCallback)
     }, [musicDetailVisible])
 
+    useEffect(() => {
+        // 实现点击封面收回时延迟动效的监听器
+        Bus.addListener("closeMusicDetail", onCloseMusicDetailCallback)
+        return () => removeEventListener("closeMusicDetail", onCloseMusicDetailCallback)
+    }, [])
+
     return (
         <div className={"outer_container"} onClick={() => Bus.emit('onClickBody')}>
             <div className="header">
@@ -518,13 +527,7 @@ function App({dispatch, appVersion}) {
                     <div className={'logo'}>
                         <img src={Images.ICON_HEAD}/>
                     </div>
-                    <div className={'headerFunc'}
-                         style={{visibility: onShowFunc && os !== 'darwin' ? 'visible' : 'hidden'}}
-                    >
-                        <WindowButton type={'close'}/>
-                        <WindowButton type={'min'}/>
-                        <WindowButton type={'max'}/>
-                    </div>
+                    <ColorfulLight visible={onShowFunc}/>
                 </div>
                 {/*{renderBtnBack()}*/}
                 <MyTypeWriter/>

@@ -79,6 +79,7 @@ const Index = ({
     return (
         <>
             <Container
+                style={{cursor: 'pointer'}}
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
                 // 是否具有缩放效果
@@ -100,7 +101,7 @@ const Index = ({
                                     style={{
                                         width: imgSide,
                                         height: imgSide,
-                                        borderRadius: 5,
+                                        borderRadius: 12,
                                         borderWidth: 10
                                     }}
                                     onError={(e: { target: { onerror: null; src: string; }; }) => {

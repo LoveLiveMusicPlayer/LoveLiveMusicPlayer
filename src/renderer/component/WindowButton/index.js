@@ -12,21 +12,24 @@ export const WindowButton = ({type}) => {
             height: 13,
             marginLeft: 7,
             backgroundColor: '#FF565B',
-            borderRadius: '50%'
+            borderRadius: '50%',
+            cursor: 'pointer'
         },
         min: {
             width: 13,
             height: 13,
             marginLeft: 7,
             backgroundColor: '#FFB943',
-            borderRadius: '50%'
+            borderRadius: '50%',
+            cursor: 'pointer'
         },
         max: {
             width: 13,
             height: 13,
             marginLeft: 7,
             backgroundColor: '#1BC94D',
-            borderRadius: '50%'
+            borderRadius: '50%',
+            cursor: 'pointer'
         }
     };
 
