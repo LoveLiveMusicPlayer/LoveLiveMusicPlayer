@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Button, Divider, Input, InputNumber, Space} from "antd";
+import React, { useRef, useState } from 'react';
+import { Button, Divider, Input, InputNumber, Select, Space, Switch } from 'antd';
 import Modal from "react-modal";
 import Store from "../../utils/Store";
 import Bus from '../../utils/Event'
@@ -8,6 +8,8 @@ export const HttpUrlDialog = ({isShow, close}) => {
 
     const [ip, setIp] = useState('')
     const [port, setPort] = useState(10000)
+
+    const [numAble, setNumAble] = useState(true)
 
     const httpPortStyles = {
         overlay: {
@@ -20,7 +22,7 @@ export const HttpUrlDialog = ({isShow, close}) => {
         },
         content: {
             width: 500,
-            height: 150,
+            height: 160,
             top: '50%',
             left: '50%',
             right: 'auto',
@@ -40,6 +42,10 @@ export const HttpUrlDialog = ({isShow, close}) => {
         return reg.test(str)
     }
 
+    const onChange = (checked) => {
+        setNumAble(checked)
+    };
+
     return (
         <Modal
             appElement={document.body}
@@ -55,21 +61,25 @@ export const HttpUrlDialog = ({isShow, close}) => {
                     onChange={(e) => setIp(e.target.value)}
                 />
                 <Divider/>
-                <InputNumber
-                    min={10000}
-                    max={65535}
-                    value={port}
-                    onChange={setPort}
-                />
+                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 32}}>
+                    <InputNumber
+                        min={10000}
+                        max={65535}
+                        value={port}
+                        disabled={!numAble}
+                        onChange={setPort}
+                    />
+                    <Switch defaultChecked onChange={onChange} style={{marginTop: 10}}/>
+                </div>
                 <Button
                     type="primary"
                     disabled={ip.length === 0}
                     onClick={() => {
-                        if (!checkRegExp(ip)) {
-                            Bus.emit('onNotification', 'IP输入不正确')
-                            return
+                        if (numAble) {
+                            Store.set('url', `http://${ip}:${port}/`)
+                        } else {
+                            Store.set('url', `http://${ip}/`)
                         }
-                        Store.set('url', `http://${ip}:${port}/`)
                         close()
                     }}
                 >
