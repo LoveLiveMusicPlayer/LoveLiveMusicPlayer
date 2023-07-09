@@ -116,6 +116,9 @@ export const WhiteCover = styled.div`
 
 export const Img = styled.img`
   vertical-align: middle;
+  border-radius: 12px;
+  border-width: 10px;
+  object-fit: contain;
 `;
 
 export const Play = styled.img`
