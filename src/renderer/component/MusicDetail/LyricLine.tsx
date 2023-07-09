@@ -13,7 +13,9 @@ const Single = styled.div<{
         color: ${active ? 'lightgreen' : '#999'};
         text-align: ${position == "center" ? 'center' : 'left'};
         lang: ${lang};
-        font-size: ${scale}px;
+        font-size: ${active ? (scale + 2) + 'px' : (scale - 2) + 'px'};
+        font-family: "Microsoft YaHei UI";
+        font-weight: ${active ? 'bold' : 'normal'};
     `}
 `;
 
@@ -27,7 +29,9 @@ const Double = styled.div<{
         color: ${active ? 'lightgreen' : '#999'};
         text-align: ${position == "center" ? 'center' : 'left'};
         lang: ${lang};
-        font-size: ${scale}px;
+        font-size: ${active ? (scale + 2) + 'px' : (scale - 2) + 'px'};
+        font-family: "Microsoft YaHei UI";
+        font-weight: ${active ? 'bold' : 'normal'};
     `}
 `;
 

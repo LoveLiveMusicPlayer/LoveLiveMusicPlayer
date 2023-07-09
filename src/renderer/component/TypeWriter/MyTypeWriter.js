@@ -5,7 +5,7 @@ export const MyTypeWriter = () => {
     return (
         <TypeWriterEffect
             textStyle={{
-                fontFamily: 'serif',
+                fontFamily: "Microsoft YaHei UI",
                 color: '#F87911',
                 fontWeight: 800,
                 fontSize: '2em',
