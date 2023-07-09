@@ -1224,6 +1224,10 @@ export default class ReactJkMusicPlayer extends PureComponent {
         }
     }
 
+    seek = (seconds) => {
+        this.onProgressChange(this.audio.currentTime + seconds)
+    }
+
     onTogglePlay = () => {
         this.setState({isAudioSeeking: false})
         if (this.state.audioLists.length >= 1) {
@@ -2167,6 +2171,10 @@ export default class ReactJkMusicPlayer extends PureComponent {
             {
                 name: 'playPrev',
                 value: this.onPlayPrevAudio,
+            },
+            {
+                name: 'seek',
+                value: this.seek,
             },
             {
                 name: 'togglePlay',

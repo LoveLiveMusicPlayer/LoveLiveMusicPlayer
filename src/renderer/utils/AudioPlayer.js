@@ -102,6 +102,10 @@ class AudioPlayer extends React.PureComponent {
         })
     }
 
+    seek = (seconds) => {
+        this.audioInstance.seek(seconds)
+    }
+
     // 切换播放/暂停
     onTogglePlay = () => {
         this.audioInstance?.togglePlay()
@@ -135,7 +139,7 @@ class AudioPlayer extends React.PureComponent {
 
     // 设置播放器是否全屏
     setFull = (isFullScreen) => {
-        this.audioInstance.setFullScreen(isFullScreen)
+        this.audioInstance?.setFullScreen(isFullScreen)
     }
 
     content = () => {

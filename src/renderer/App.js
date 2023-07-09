@@ -395,6 +395,16 @@ function App({dispatch, appVersion}) {
     }
 
     useEffect(() => {
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowLeft') {
+                playerRef.current?.seek(-5)
+            } else if (event.key === 'ArrowRight') {
+                playerRef.current?.seek(5)
+            }
+        });
+    }, [])
+
+    useEffect(() => {
         const finish = () => {
             Bus.emit("onNotification", "应用准备强制恢复，即将重启")
             setTimeout(() => {

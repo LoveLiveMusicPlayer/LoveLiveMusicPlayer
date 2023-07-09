@@ -81,12 +81,6 @@ export default class MenuBuilder {
         const subMenuEdit: DarwinMenuItemConstructorOptions = {
             label: '编辑',
             submenu: [
-                {label: '撤销', accelerator: 'Command+Z', selector: 'undo:'},
-                {label: '恢复', accelerator: 'Shift+Command+Z', selector: 'redo:'},
-                {type: 'separator'},
-                {label: '剪切', accelerator: 'Command+X', selector: 'cut:'},
-                {label: '拷贝', accelerator: 'Command+C', selector: 'copy:'},
-                {label: '粘贴', accelerator: 'Command+V', selector: 'paste:'},
                 {
                     label: '全部选中',
                     accelerator: 'Command+A',
@@ -118,7 +112,7 @@ export default class MenuBuilder {
             submenu: [
                 {
                     label: this.mainWindow.isFullScreen() ? '窗口化' : '全屏',
-                    accelerator: 'Ctrl+Command+F',
+                    accelerator: 'F11',
                     click: () => {
                         this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
                     },
@@ -128,7 +122,7 @@ export default class MenuBuilder {
                     accelerator: 'Command+M',
                     selector: 'performMiniaturize:',
                 },
-                {label: '关闭', accelerator: 'Command+W', selector: 'performClose:'},
+                {label: '关闭', accelerator: 'Command+W', click: () => this.mainWindow.close()},
                 {type: 'separator'},
                 {label: 'Bring All to Front', selector: 'arrangeInFront:'},
             ],
@@ -165,7 +159,7 @@ export default class MenuBuilder {
                 submenu: [
                     {
                         label: '&退出',
-                        accelerator: 'Ctrl+W',
+                        accelerator: 'Ctrl+Q',
                         click: () => {
                             this.mainWindow?.close();
                         },
@@ -187,7 +181,7 @@ export default class MenuBuilder {
                             },
                             {
                                 label: '调试工具',
-                                accelerator: 'Alt+Ctrl+I',
+                                accelerator: 'Ctrl+D',
                                 click: () => {
                                     this.mainWindow.webContents.toggleDevTools();
                                 },
@@ -204,6 +198,16 @@ export default class MenuBuilder {
                         click: () => {
                             this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
                         },
+                    },
+                    {
+                        label: '&最小化',
+                        accelerator: 'Ctrl+M',
+                        click: () => this.mainWindow.minimize()
+                    },
+                    {
+                        label: '&关闭',
+                        accelerator: 'Ctrl+W',
+                        click: () => this.mainWindow.close()
                     }
                 ]
             },
