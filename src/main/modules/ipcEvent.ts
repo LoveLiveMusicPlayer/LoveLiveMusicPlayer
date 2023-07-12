@@ -1,12 +1,11 @@
 // @ts-nocheck
-import {app, dialog, ipcMain, nativeImage} from "electron";
-import {doTask, portIsOccupied, stopTask, upReportPlaySong} from "../util";
-import update from "./update";
-import {thumbarButtons} from "./dockAndTray";
-import path from "path";
-import {RESOURCES_PATH} from "./inital";
-import Dialog from "./dialog";
-import {VersionUtils} from "../../renderer/utils/VersionUtils";
+import { app, dialog, ipcMain, nativeImage } from 'electron';
+import { doTask, portIsOccupied, stopTask, upReportPlaySong } from '../util';
+import update from './update';
+import { thumbarButtons } from './dockAndTray';
+import path from 'path';
+import { RESOURCES_PATH } from './inital';
+import Dialog from './dialog';
 
 const httpserver = require('http-server');
 const autoUpdater = new update()
@@ -144,14 +143,8 @@ export default function () {
     ipcMain.on('toggle-desktop-lyric', (event, args) => {
         if (args) {
             global?.lyricWindow?.showInactive()
-            if (VersionUtils.getIsPreEnv()) {
-                global?.mainWindow.webContents.openDevTools({mode: 'right'})
-            }
         } else {
             global?.lyricWindow?.hide()
-            if (VersionUtils.getIsPreEnv()) {
-                global?.mainWindow.webContents.closeDevTools()
-            }
         }
         global?.mainWindow?.webContents.send('toggle-desktop-lyric-reply')
     })
