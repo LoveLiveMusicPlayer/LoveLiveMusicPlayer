@@ -198,8 +198,6 @@ export const MusicDetail = forwardRef(({
 
     const researchLyric = () => {
         callback && callback(currentPlayId)
-
-        // LyricHelper.insertOrUpdateLyric(1)
     }
 
     const changeLanguage = () => {

@@ -121,6 +121,11 @@ class AudioPlayer extends React.PureComponent {
         lrc.zhLrc = await this.requestLrc(obj.trans)
         lrc.romaLrc = await this.requestLrc(obj.roma)
         await LyricHelper.insertOrUpdateLyric(lrc)
+        if (lrc.jpLrc == null || lrc.zhLrc == null || lrc.romaLrc == null) {
+            Bus.emit('onNotification', '歌词获取部分或失败')
+        } else {
+            Bus.emit('onNotification', '歌词获取成功')
+        }
     }
 
     // 上一首
