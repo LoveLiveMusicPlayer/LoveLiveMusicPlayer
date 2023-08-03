@@ -1,7 +1,4 @@
-import {
-    DATA_OSS_URL_HEAD,
-    ROOT_OSS_URL_HEAD,
-} from "./URLHelper";
+import { DATA_OSS_URL_HEAD, ROOT_OSS_URL_HEAD } from './URLHelper';
 
 // 是否是预发环境
 const isPre = true
@@ -13,11 +10,6 @@ const isExportExcel = false
 const transVer = 1
 
 export const VersionUtils = {
-    // 获取是否是预发环境
-    getIsPreEnv() {
-        return isPre
-    },
-
     getIsExportExcel() {
         return isExportExcel
     },

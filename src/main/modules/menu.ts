@@ -1,4 +1,4 @@
-import {app, BrowserWindow, Menu, MenuItemConstructorOptions, shell,} from 'electron';
+import { app, BrowserWindow, Menu, MenuItemConstructorOptions, shell } from 'electron';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
     selector?: string;
@@ -100,11 +100,16 @@ export default class MenuBuilder {
                 },
                 {
                     label: '调试工具',
-                    accelerator: 'Alt+Command+I',
+                    accelerator: 'Command+Shift+D',
                     click: () => {
-                        this.mainWindow.webContents.toggleDevTools();
-                    },
-                },
+                        const web = this.mainWindow.webContents;
+                        if (web.isDevToolsOpened()) {
+                            web.closeDevTools();
+                        } else {
+                            web.openDevTools({ mode: 'right' });
+                        }
+                    }
+                }
             ],
         };
         const subMenuWindow: DarwinMenuItemConstructorOptions = {
@@ -181,11 +186,16 @@ export default class MenuBuilder {
                             },
                             {
                                 label: '调试工具',
-                                accelerator: 'Ctrl+D',
+                                accelerator: 'Ctrl+Shift+D',
                                 click: () => {
-                                    this.mainWindow.webContents.toggleDevTools();
-                                },
-                            },
+                                    const web = this.mainWindow.webContents;
+                                    if (web.isDevToolsOpened()) {
+                                        web.closeDevTools();
+                                    } else {
+                                        web.openDevTools({ mode: 'right' });
+                                    }
+                                }
+                            }
                         ]
                         : [],
             },
