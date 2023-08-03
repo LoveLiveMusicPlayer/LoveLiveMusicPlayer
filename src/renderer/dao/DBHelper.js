@@ -4,6 +4,7 @@ import {AlbumHelper} from "./AlbumHelper";
 import {LoveHelper} from "./LoveHelper";
 import {MusicHelper} from "./MusicHelper";
 import {SongMenuHelper} from "./SongMenuHelper";
+import { LyricHelper } from './LyricHelper';
 
 export const DBHelper = {
     // 设置 http-server 信息
@@ -62,6 +63,7 @@ export const DBHelper = {
         promiseArr.push(LoveHelper.removeAllILove())
         promiseArr.push(MusicHelper.removeAllMusic())
         promiseArr.push(SongMenuHelper.removeAllMenu())
+        promiseArr.push(LyricHelper.removeAllLyric())
         return Promise.allSettled(promiseArr)
     },
 

@@ -116,6 +116,9 @@ export const WhiteCover = styled.div`
 
 export const Img = styled.img`
   vertical-align: middle;
+  border-radius: 12px;
+  border-width: 10px;
+  object-fit: contain;
 `;
 
 export const Play = styled.img`
@@ -156,6 +159,7 @@ export const PrevNext = styled.a`
 export const Text = styled.div`
   color: #f2f2f2;
   font-size: 13px;
+  font-family: "Microsoft YaHei UI";
   width: 100%;
   height: 40px;
   margin-bottom: 5px;

@@ -20,6 +20,7 @@
     position: absolute;
     bottom: 185px;
     right: 30px;
+    cursor: pointer;
 }
 
 .version {

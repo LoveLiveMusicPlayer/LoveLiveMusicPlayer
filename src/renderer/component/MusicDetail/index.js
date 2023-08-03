@@ -7,9 +7,12 @@ import Modal from "react-modal";
 import Store from '../../utils/Store'
 import {parse as parseLrc} from "clrc";
 import {AppUtils} from "../../utils/AppUtils";
+import { ColorfulLight } from '../ColorfulLight';
+import Bus from '../../utils/Event';
 
 let currentPlayId = 0
 let latest = {prevTime: 0, currentTime: 0, nextTime: 0}
+let callback
 
 let map = new Map()
 
@@ -43,7 +46,11 @@ export const MusicDetail = forwardRef(({
     const [playProgress, setPlayProgress] = useState({name: null, prevTime: 0, currentTime: 0, nextTime: 0})
 
     useImperativeHandle(ref, () => ({
-        setMusicDetail: (info, prevTime, currentTime, nextTime, timeList) => {
+        setMusicDetail: (info, prevTime, currentTime, nextTime, timeList, researchCallback) => {
+
+            if (callback == null) {
+                callback = researchCallback;
+            }
 
             if (timeList.length > 0) {
                 latest = {prevTime: 0, currentTime: currentTime, nextTime: timeList[0]}
@@ -189,6 +196,10 @@ export const MusicDetail = forwardRef(({
         setLrcPosition(lrcPosition === 'center' ? 'left' : 'center')
     }
 
+    const researchLyric = () => {
+        callback && callback(currentPlayId)
+    }
+
     const changeLanguage = () => {
         if (lrcLanguageCallback) {
             if (lrcLanguage === 'jp') {
@@ -244,20 +255,25 @@ export const MusicDetail = forwardRef(({
             <img className={"gauss"} src={mCover}
                  style={{top: isFullScreen ? '0%' : '5%', height: isFullScreen ? '100%' : '90%'}}/>
 
-            <div>
+            <div style={{display: 'flex', flexDirection: 'column', height: '100%', width: '100%', position: 'absolute'}}>
                 <div className={'musicDetailContainer'}>
                     <div className={'lrcLeftContainer'}>
                         <img className={"cover"} src={mCover}/>
                         <div className={'tools'}>
                             <img
-                                style={{width: '30px', height: '30px'}}
+                                style={{width: '30px', height: '30px', cursor: 'pointer'}}
                                 src={lrcIcon()}
                                 onClick={changeLanguage}
                             />
                             <img
-                                style={{width: '30px', height: '30px'}}
+                                style={{width: '30px', height: '30px', cursor: 'pointer'}}
                                 src={lrcPosition === 'center' ? Images.ICON_POSITION_CENTER : Images.ICON_POSITION_LEFT}
                                 onClick={changeLrcPosition}
+                            />
+                            <img
+                                style={{width: '26px', height: '26px', paddingTop: '2px', cursor: 'pointer'}}
+                                src={Images.ICON_SEARCH}
+                                onClick={researchLyric}
                             />
                         </div>
                     </div>
@@ -275,6 +291,10 @@ export const MusicDetail = forwardRef(({
                             />
                         </div>
                     </div>
+                </div>
+                <div className={'topContainer'}>
+                    <ColorfulLight/>
+                    <img className={'top_arrow'} src={Images.ICON_DOWN_ARROW} onClick={() => Bus.emit("closeMusicDetail")}/>
                 </div>
             </div>
         </Modal>

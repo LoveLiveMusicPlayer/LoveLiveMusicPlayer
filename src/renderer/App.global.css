@@ -1,7 +1,7 @@
 body {
     position: relative;
     height: 100vh;
-    font-family: sans-serif;
+    font-family: "Microsoft YaHei UI";
     overflow-x: hidden;
     overflow-y: hidden;
     display: flex;
@@ -18,6 +18,7 @@ button {
     border: none;
     appearance: none;
     font-size: 1.3rem;
+    font-family: "Microsoft YaHei UI";
     box-shadow: 0px 8px 28px -6px rgba(24, 39, 75, 0.12),
     0px 18px 88px -4px rgba(24, 39, 75, 0.14);
     transition: transform ease-in 0.1s;
@@ -87,7 +88,6 @@ a:hover {
     display: flex;
     flex-direction: row;
     top: 7px;
-    left: 0
 }
 
 .outer_container {
@@ -135,4 +135,8 @@ a:hover {
     top: 0;
     width: calc(100% - 250px);
     height: 100%;
+}
+
+.p {
+    font-family: "Microsoft YaHei UI";
 }

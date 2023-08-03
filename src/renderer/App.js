@@ -21,7 +21,6 @@ import {MusicDetail} from "./component/MusicDetail";
 import Store from '../../src/renderer/utils/Store'
 import Menu from "./pages/Menu";
 import {WorkUtils} from "./utils/WorkUtils";
-import {WindowButton} from "./component/WindowButton";
 import {appAction} from "./actions/app";
 import {parse as parseLrc} from 'clrc';
 import Transfer from "./pages/Transfer";
@@ -29,9 +28,9 @@ import {VersionUtils} from "./utils/VersionUtils";
 import TransferMusic from "./pages/Transfer/TransferMusic";
 import TransferData from "./pages/Transfer/TransferData";
 import History from "./pages/History";
+import { ColorfulLight } from './component/ColorfulLight';
 
 const {ipcRenderer} = require('electron')
-const os = require("os").platform();
 
 // 全局通知弹窗
 const openNotification = (message) => {
@@ -238,6 +237,10 @@ function App({dispatch, appVersion}) {
         }
     }
 
+    const onCloseMusicDetailCallback = () => {
+        onClickCover(true)
+    }
+
     // 切换桌面歌词开关状态
     const onClickLyric = (status) => {
         ipcRenderer.send('toggle-desktop-lyric', status)
@@ -282,7 +285,7 @@ function App({dispatch, appVersion}) {
             }
         }
         // 将各种各样的信息发送到歌词页中，等待进一步的逻辑判断
-        musicDetailRef.current?.setMusicDetail(info, prevTime, currentTime, nextTime, timeList)
+        musicDetailRef.current?.setMusicDetail(info, prevTime, currentTime, nextTime, timeList, researchCallback)
 
         // 获取桌面歌词要显示的歌词
         // 当为单行歌词时，要显示的是 singleLrc
@@ -297,6 +300,10 @@ function App({dispatch, appVersion}) {
             // 将歌词信息发送到桌面歌词窗口
             ipcRenderer.send('desktop-lrc-text', {prevLrc: prevLrc, nextLrc: nextLrc, singleLrc: singleLrc})
         }
+    }
+
+    const researchCallback = (_id) => {
+        playerRef.current?.researchLyric(_id)
     }
 
     const renderBtnBack = () => {
@@ -385,6 +392,16 @@ function App({dispatch, appVersion}) {
             }
         })
     }
+
+    useEffect(() => {
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowLeft') {
+                playerRef.current?.seek(-5)
+            } else if (event.key === 'ArrowRight') {
+                playerRef.current?.seek(5)
+            }
+        });
+    }, [])
 
     useEffect(() => {
         const finish = () => {
@@ -494,6 +511,12 @@ function App({dispatch, appVersion}) {
         return () => removeEventListener("openMusicDetail", onClickCoverCallback)
     }, [musicDetailVisible])
 
+    useEffect(() => {
+        // 实现点击封面收回时延迟动效的监听器
+        Bus.addListener("closeMusicDetail", onCloseMusicDetailCallback)
+        return () => removeEventListener("closeMusicDetail", onCloseMusicDetailCallback)
+    }, [])
+
     return (
         <div className={"outer_container"} onClick={() => Bus.emit('onClickBody')}>
             <div className="header">
@@ -504,13 +527,7 @@ function App({dispatch, appVersion}) {
                     <div className={'logo'}>
                         <img src={Images.ICON_HEAD}/>
                     </div>
-                    <div className={'headerFunc'}
-                         style={{visibility: onShowFunc && os !== 'darwin' ? 'visible' : 'hidden'}}
-                    >
-                        <WindowButton type={'close'}/>
-                        <WindowButton type={'min'}/>
-                        <WindowButton type={'max'}/>
-                    </div>
+                    <ColorfulLight visible={onShowFunc}/>
                 </div>
                 {/*{renderBtnBack()}*/}
                 <MyTypeWriter/>

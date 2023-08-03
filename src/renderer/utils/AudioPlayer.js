@@ -102,9 +102,30 @@ class AudioPlayer extends React.PureComponent {
         })
     }
 
+    seek = (seconds) => {
+        this.audioInstance.seek(seconds)
+    }
+
     // 切换播放/暂停
     onTogglePlay = () => {
         this.audioInstance?.togglePlay()
+    }
+
+    researchLyric = async (_id) => {
+        const obj = this.state.params.audioLists.find((audio) => audio._id === _id)
+        if (AppUtils.isNull(obj)) {
+            return
+        }
+        lrc._id = _id
+        lrc.jpLrc = await this.requestLrc(obj.lyric)
+        lrc.zhLrc = await this.requestLrc(obj.trans)
+        lrc.romaLrc = await this.requestLrc(obj.roma)
+        await LyricHelper.insertOrUpdateLyric(lrc)
+        if (lrc.jpLrc == null || lrc.zhLrc == null || lrc.romaLrc == null) {
+            Bus.emit('onNotification', '歌词获取部分或失败')
+        } else {
+            Bus.emit('onNotification', '歌词获取成功')
+        }
     }
 
     // 上一首
@@ -123,7 +144,7 @@ class AudioPlayer extends React.PureComponent {
 
     // 设置播放器是否全屏
     setFull = (isFullScreen) => {
-        this.audioInstance.setFullScreen(isFullScreen)
+        this.audioInstance?.setFullScreen(isFullScreen)
     }
 
     content = () => {
@@ -172,7 +193,7 @@ class AudioPlayer extends React.PureComponent {
                         src={Images.ICON_MORE}
                         width={25}
                         height={25}
-                        style={{opacity: this.state.onHover ? 0.9 : 1}}
+                        style={{opacity: this.state.onHover ? 0.9 : 1, cursor: 'pointer'}}
                         onMouseOver={() => this.setState({onHover: true})}
                         onMouseOut={() => this.setState({onHover: false})}
                     />
@@ -185,6 +206,7 @@ class AudioPlayer extends React.PureComponent {
                     onClick={() => {
                         this.r.props.onClickLyric(!this.state.lyricShow)
                     }}
+                    style={{cursor: 'pointer'}}
                 />
             </>
         )

@@ -7,6 +7,7 @@ import icon_niji from '../../../assets/image/menu_nijigasaki.jpg'
 import icon_liella from '../../../assets/image/menu_liella.jpg'
 import menu_combine from '../../../assets/image/menu_combine.jpg'
 import menu_hasunosora from '../../../assets/image/menu_hasunosora.jpg'
+import menu_yohane from '../../../assets/image/menu_yohane.jpg'
 import icon_loading from '../../../assets/image/loading.gif'
 import icon_setting from '../../../assets/image/icon_setting.png'
 import icon_empty from '../../../assets/image/icon_empty.png'
@@ -15,6 +16,7 @@ import icon_japanese from '../../../assets/image/icon_japanese.png'
 import icon_roma from '../../../assets/image/icon_roma.png'
 import icon_position_left from '../../../assets/image/icon_position_left.png'
 import icon_position_center from '../../../assets/image/icon_position_center.png'
+import icon_search from '../../../assets/image/icon_search.png'
 import icon_back from '../../../assets/image/icon_back.png'
 import icon_more from '../../../assets/image/icon_more.png'
 
@@ -38,6 +40,7 @@ import icon_menu_add_select from '../../../assets/image/icon_menu_add_select.png
 import icon_menu_add_unselect from '../../../assets/image/icon_menu_add_unselect.png'
 import icon_menu_phone from '../../../assets/image/icon_menu_phone.png'
 import icon_menu_computer from '../../../assets/image/icon_menu_computer.png'
+import icon_down_arrow from '../../../assets/image/icon_arrow_down.png'
 
 import lrc_close_touch from '../../../assets/image/lrc_close_touch.png'
 import lrc_close_untouch from '../../../assets/image/lrc_close_untouch.png'
@@ -74,6 +77,7 @@ export const MENU_NIJI = icon_niji
 export const MENU_LIELLA = icon_liella
 export const MENU_COMBINE = menu_combine
 export const MENU_HASUNOSORA = menu_hasunosora
+export const MENU_YOHANE = menu_yohane
 export const LOADING = icon_loading
 export const ICON_EMPTY = icon_empty
 export const ICON_CHINESE = icon_chinese
@@ -81,6 +85,7 @@ export const ICON_JAPANESE = icon_japanese
 export const ICON_ROMA = icon_roma
 export const ICON_POSITION_LEFT = icon_position_left
 export const ICON_POSITION_CENTER = icon_position_center
+export const ICON_SEARCH = icon_search
 export const ICON_BACK = icon_back
 export const ICON_MORE = icon_more
 
@@ -104,6 +109,7 @@ export const ICON_MENU_ADD_SELECT = icon_menu_add_select
 export const ICON_MENU_ADD_UNSELECT = icon_menu_add_unselect
 export const ICON_MENU_PHONE = icon_menu_phone
 export const ICON_MENU_COMPUTER = icon_menu_computer
+export const ICON_DOWN_ARROW = icon_down_arrow
 
 export const LRC_CLOSE_TOUCH = lrc_close_touch
 export const LRC_CLOSE_UNTOUCH = lrc_close_untouch

@@ -296,6 +296,8 @@ export const WorkUtils = {
     parseGroupName(name) {
         if (name === Const.saki.key) {
             return Const.saki.value
+        } else if (name === Const.yohane.key) {
+            return Const.yohane.value
         } else return name
     },
 

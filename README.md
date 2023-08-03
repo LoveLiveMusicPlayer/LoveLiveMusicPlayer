@@ -17,6 +17,17 @@
 4. 本项目为开源项目，不接受任何的催单和索取行为
 5. 本人技术能力有限，职业是Android开发工程师，本项目旨在学习Electron开发
 
+使用快捷键：
+
+| 功能\平台 | Windows/Linux | MacOS |
+|-------|--------|------|
+| 全屏    | F11    | F11  |
+| 最小化   | Ctrl+M | Command+M |
+| 关闭窗口  | Ctrl+W | Command+W |
+| 退出    | Ctrl+Q | Command+Q |
+| 快进快退  | 左右箭头   | 左右箭头 |
+| 播放暂停  | Ctrl+P | Command+P |
+
 计划目录 ：（√代表已完成，x代表正在施工...）
 
 - [HTTP端口设置] √
@@ -31,7 +42,7 @@
 - [win系统托盘 + mac dock功能项] √
 - [播放数据上报] √
 - [歌曲快传 + 数据同步] √
-- [本地歌库 + HTTP远端歌库] √
+- [本地歌库 + HTTP远端歌库(IPv4 / 支持SSL证书的域名)] √
 - [模糊窗口效果] √
 - [专辑与歌曲分类] x
 - [歌曲与艺术家索引] x
@@ -121,6 +132,7 @@ B站空间：<https://space.bilibili.com/4367965>
 ## 开发 (Develop)
 
 - 所需环境：cmake
+- 配置electron_mirror镜像源：npm config set electron_mirror=https://npm.taobao.org/mirrors/electron/
 - 备注不要提前安装flac库
 - 依赖安装：yarn install
 - windows运行：yarn run win-start

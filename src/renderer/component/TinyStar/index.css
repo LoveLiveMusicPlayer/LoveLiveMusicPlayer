@@ -3,6 +3,7 @@
     bottom: 60vh;
     width: 140vh;
     height: 1px;
+    cursor: pointer;
     -webkit-transform: rotate(153deg);
     transform: rotate(153deg);
 }

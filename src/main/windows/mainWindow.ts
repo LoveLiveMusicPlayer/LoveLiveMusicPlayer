@@ -1,12 +1,11 @@
 // @ts-nocheck
-import initIpcEvent from "../modules/ipcEvent";
-import MenuBuilder from "../modules/menu";
-import path from "path";
-import {RESOURCES_PATH} from "../modules/inital";
-import {clearTimeout} from "timers";
-import {globalShortcut} from "electron";
-import {upReportOpenTime} from "../util";
-import {VersionUtils} from "../../renderer/utils/VersionUtils";
+import initIpcEvent from '../modules/ipcEvent';
+import MenuBuilder from '../modules/menu';
+import path from 'path';
+import { RESOURCES_PATH } from '../modules/inital';
+import { clearTimeout } from 'timers';
+import { app, globalShortcut } from 'electron';
+import { upReportOpenTime } from '../util';
 
 const {resolveHtmlPath} = require("../util");
 const {shell} = require("electron");
@@ -23,7 +22,7 @@ const createMainWindow = function (BrowserWindow: any) {
         transparent: global.winVersion == 0,
         maximizable: process.platform === 'darwin',
         frame: false,
-        minWidth: 1025,
+        minWidth: 1250,
         minHeight: 728,
         blur: true,
         icon: path.join(RESOURCES_PATH, 'icon.png'),
@@ -35,7 +34,7 @@ const createMainWindow = function (BrowserWindow: any) {
             enableRemoteModule: true,
             contextIsolation: false,
             webSecurity: false,
-            devTools: VersionUtils.getIsPreEnv()
+            devTools: !app.isPackaged
         }
     }
 

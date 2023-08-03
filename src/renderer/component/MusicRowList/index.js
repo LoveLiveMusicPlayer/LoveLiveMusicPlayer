@@ -6,6 +6,7 @@ import {SongMenuHelper} from "../../dao/SongMenuHelper";
 import Bus from "../../utils/Event";
 import {SelectDialog} from "../SelectDialog";
 import {LoveHelper} from "../../dao/LoveHelper";
+import './index.css'
 
 export const MusicRowList = forwardRef(({playId, onRefreshData, onDisLove, onDelSong}, ref) => {
 

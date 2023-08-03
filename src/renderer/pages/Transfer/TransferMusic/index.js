@@ -1,21 +1,21 @@
-import React, {useEffect, useRef, useState} from "react";
-import {connect} from "react-redux";
-import {MusicHelper} from "../../../dao/MusicHelper";
-import {AlbumHelper} from "../../../dao/AlbumHelper";
-import {WS_Music} from "../../../utils/WsMusic";
-import {DBHelper} from "../../../dao/DBHelper";
-import {TransferChoose} from "../../../component/TransferChoose";
-import {QRDialog} from "../../../component/QRDialog";
-import Store from "../../../utils/Store";
-import {DownloadDialog} from "../../../component/DownloadDialog";
-import {ipcRenderer} from "electron";
-import fs from "fs";
-import path from 'path'
-import {AppUtils} from "../../../utils/AppUtils";
-import checkDiskSpace from 'check-disk-space'
-import {notification} from 'antd';
-import {WorkUtils} from "../../../utils/WorkUtils";
-import {copyFile} from "fs/promises";
+import React, { useEffect, useRef, useState } from 'react';
+import { connect } from 'react-redux';
+import { MusicHelper } from '../../../dao/MusicHelper';
+import { AlbumHelper } from '../../../dao/AlbumHelper';
+import { WS_Music } from '../../../utils/WsMusic';
+import { DBHelper } from '../../../dao/DBHelper';
+import { TransferChoose } from '../../../component/TransferChoose';
+import { QRDialog } from '../../../component/QRDialog';
+import Store from '../../../utils/Store';
+import { DownloadDialog } from '../../../component/DownloadDialog';
+import { ipcRenderer } from 'electron';
+import fs from 'fs';
+import path from 'path';
+import { AppUtils } from '../../../utils/AppUtils';
+import checkDiskSpace from 'check-disk-space';
+import { notification } from 'antd';
+import { WorkUtils } from '../../../utils/WorkUtils';
+import { copyFile } from 'fs/promises';
 
 let musicIds = []
 let musicList = []
@@ -23,7 +23,6 @@ let startTime = 0
 let runningTag = 0;
 let needAllTrans = false;
 let choosePlatform = null;
-let useLocalMusic = false;
 
 let directoryListener;
 let convertListener;
@@ -104,10 +103,6 @@ const TransferMusic = () => {
             })
             console.log("musicList created")
             setQrShow(false)
-            if (useLocalMusic) {
-                onlyTransJsonData()
-                return;
-            }
             if (choosePlatform == null) {
                 prepareTask()
                 return;
@@ -285,7 +280,6 @@ const TransferMusic = () => {
                 }}
                 disable={qrShow || downloadShow}
                 changeSwitch={(checked) => needAllTrans = checked}
-                // useLocalMusic={(checked) => useLocalMusic = checked}
                 btnUSB={(uIdList, platform) => {
                     musicIds.length = 0
                     musicIds = [...uIdList]

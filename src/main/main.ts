@@ -58,7 +58,9 @@ app.on('ready', async () => {
             log.push("into: 222")
             global.mainWindow = createMainWindow(BrowserWindow)
         }
-        fs.writeFileSync("log.txt", JSON.stringify(log))
+        if (process.argv.includes("noBlur")) {
+            fs.writeFileSync("log.txt", JSON.stringify(log))
+        }
         if (isWin) {
             // 设置底部任务栏按钮和缩略图
             global.mainWindow.setThumbarButtons(thumbarButtons);

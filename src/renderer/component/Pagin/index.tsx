@@ -79,6 +79,7 @@ const Index = ({
     return (
         <>
             <Container
+                style={{cursor: 'pointer'}}
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
                 // 是否具有缩放效果
@@ -97,12 +98,7 @@ const Index = ({
                                 {whiteCover ? <WhiteCover/> : null}
                                 <Img
                                     src={decodeURI(img.src)}
-                                    style={{
-                                        width: imgSide,
-                                        height: imgSide,
-                                        borderRadius: 5,
-                                        borderWidth: 10
-                                    }}
+                                    style={{ width: imgSide, height: imgSide }}
                                     onError={(e: { target: { onerror: null; src: string; }; }) => {
                                         e.target.onerror = null
                                         e.target.src = Images.ICON_EMPTY

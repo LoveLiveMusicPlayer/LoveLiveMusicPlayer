@@ -8,6 +8,7 @@
     transition-duration: 0.3s;
     -webkit-transition-property: transform;
     transition-property: transform;
+    cursor: pointer;
 }
 
 .hvr-grow:hover, .hvr-grow:focus, .hvr-grow:active {
@@ -18,7 +19,7 @@
 .move_category {
     -webkit-animation: move_category 1s;
     position: absolute;
-    width: 600px;
+    width: 750px;
     right: 200px;
     top: 30px;
     display: flex;
@@ -33,12 +34,12 @@
 }
 
 .menu_category {
-    width: 33%;
+    width: 25%;
     display: flex;
     justify-content: center;
     flex-direction: column;
     font-size: 20px;
-    font-family: serif;
+    font-family: "Microsoft YaHei UI";
 }
 
 .menu_category_span {
