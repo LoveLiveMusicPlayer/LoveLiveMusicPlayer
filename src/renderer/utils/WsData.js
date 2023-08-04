@@ -1,6 +1,7 @@
 import React, {useEffect} from "react";
 import {VersionUtils} from "./VersionUtils";
 import Bus from "./Event";
+import Logger from "./Logger";
 
 let ws = null
 
@@ -29,6 +30,7 @@ export const WS_Data = React.forwardRef(({connected, phone2pc, pc2phone, finish,
                     let command = JSON.parse(event.data)
                     switch (command["cmd"]) {
                         case "version":
+                            Logger("into version");
                             const transVer = VersionUtils.getTransVersion()
                             // 此处为数字和字符串比较，不要用全等
                             const versionNotSame = command["body"] != transVer
@@ -48,6 +50,7 @@ export const WS_Data = React.forwardRef(({connected, phone2pc, pc2phone, finish,
                             }
                             break
                         case "connected":
+                            Logger("into connected");
                             if (!verified) {
                                 Bus.emit("onNotification", "PC与APP版本不匹配，请前往博客查看")
                                 return
@@ -55,17 +58,21 @@ export const WS_Data = React.forwardRef(({connected, phone2pc, pc2phone, finish,
                             connected()
                             break
                         case "phone2pc":
+                            Logger("into phone2pc");
                             const json1 = JSON.parse(command["body"])
                             phone2pc(json1["love"], json1["menu"], json1["isCover"])
                             break
                         case "pc2phone":
+                            Logger("into pc2phone");
                             const json2 = JSON.parse(command["body"])
                             pc2phone(json2["love"], json2["isCover"])
                             break
                         case "finish":
+                            Logger("into finish");
                             finish()
                             break
                         case "stop":
+                            Logger("into stop");
                             stop()
                             break;
                     }

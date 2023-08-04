@@ -40,9 +40,10 @@ export const WS_Music = React.forwardRef(({
                     let command = JSON.parse(event.data)
                     switch (command["cmd"]) {
                         case "version":
+                            Logger("into version");
                             const transVer = VersionUtils.getTransVersion()
                             // 此处为数字和字符串比较，不要用全等
-                            const versionNotSame = command["body"] != transVer
+                            const versionNotSame = command["body"] !== transVer
                             if (versionNotSame) {
                                 Bus.emit("onNotification", "PC与APP版本不匹配，请前往博客查看")
                             }
@@ -59,6 +60,7 @@ export const WS_Music = React.forwardRef(({
                             }
                             break
                         case "system":
+                            Logger("into system");
                             if (!verified) {
                                 Bus.emit("onNotification", "PC与APP版本不匹配，请前往博客查看")
                                 return
@@ -73,21 +75,27 @@ export const WS_Music = React.forwardRef(({
                             ws?.send(JSON.stringify(portMsg))
                             break
                         case "musicList":
+                            Logger("into musicList");
                             ready(JSON.parse(command["body"]))
                             break
                         case "downloading":
+                            Logger("into downloading");
                             downloading(command["body"])
                             break
                         case "download success":
+                            Logger("into download success");
                             downloadSuccess(command["body"])
                             break
                         case "download fail":
+                            Logger("into download fail");
                             downloadFail(command["body"])
                             break
                         case "finish":
+                            Logger("into finish");
                             finish()
                             break
                         case "stop":
+                            Logger("into stop");
                             stop()
                             break;
                     }
