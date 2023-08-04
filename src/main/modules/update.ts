@@ -65,7 +65,7 @@ export default class update {
                 const localVersion = app.getVersion().split('.').join('')
                 const remoteVersion = json.version.split('.').join('')
                 myApp.mylog.debug(`云端APP版本号：${remoteVersion} 本地APP版本号：${localVersion}`)
-                if (localVersion <= remoteVersion) {
+                if (localVersion >= remoteVersion) {
                     Dialog({type: 'info', message: '已经是最新版本了'})
                 } else {
                     Dialog({

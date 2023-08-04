@@ -20,8 +20,8 @@ const updateStartCallback = () => {
     global?.updateWindow?.webContents.send("update_start");
 }
 
-const updateProgressCallback = (number: string) => {
-    global?.updateWindow?.webContents.send("update_progress", number);
+const updateProgressCallback = (info: string) => {
+    global?.updateWindow?.webContents.send("update_progress", info);
 }
 
 const updateEndCallback = () => {

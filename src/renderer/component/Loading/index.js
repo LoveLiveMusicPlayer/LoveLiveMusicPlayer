@@ -2,6 +2,8 @@ import React, {forwardRef, useImperativeHandle, useState} from "react";
 import * as Images from "../../public/Images";
 import Modal from 'react-modal';
 import {AppUtils} from "../../utils/AppUtils";
+import {Progress} from "antd";
+import {hidden} from "chalk";
 
 export const Loading = forwardRef((props, ref) => {
 
@@ -32,6 +34,7 @@ export const Loading = forwardRef((props, ref) => {
             flexDirection: 'column',
             alignItems: 'center',
             transform: 'translate(-50%, -50%)',
+            overflow: hidden
         },
     };
 
@@ -57,6 +60,22 @@ export const Loading = forwardRef((props, ref) => {
         }
     }))
 
+    const renderProgress = (progress) => {
+        if (progress == null || progress === 0) {
+            return <></>
+        }
+        return <Progress
+            style={{width: 276, paddingTop: 20}}
+            strokeColor={{from: '#108ee9', to: '#87d068'}}
+            percent={progress}
+            strokeWidth={15}
+            showInfo={false}
+            trailColor={'#eeeeee'}
+            strokeLinecap={'round'}
+            status="active"
+        />
+    }
+
     return (
         <Modal
             appElement={document.body}
@@ -66,7 +85,7 @@ export const Loading = forwardRef((props, ref) => {
             style={customStyles}>
             <img src={Images.LOADING} style={{width: 150, height: 150}} alt={''} draggable={false}/>
             <p style={{color: 'black'}}>{title}</p>
-            {progress <= 0 ? null : <p style={{color: 'black'}}>进度：{progress}%</p>}
+            {renderProgress(progress)}
         </Modal>
     )
 })
