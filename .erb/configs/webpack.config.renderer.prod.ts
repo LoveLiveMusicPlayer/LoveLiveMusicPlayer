@@ -166,7 +166,7 @@ export default merge(baseConfig, {
             },
             isBrowser: false,
             isDevelopment: process.env.NODE_ENV !== 'production',
-            excludeChunks: ['lrc']
+            excludeChunks: ['lrc', 'update']
         }),
         new HtmlWebpackPlugin({
             filename: 'desktop-lyric.html',
@@ -178,7 +178,19 @@ export default merge(baseConfig, {
             },
             isBrowser: false,
             isDevelopment: process.env.NODE_ENV !== 'production',
-            excludeChunks: ['index']
+            excludeChunks: ['index', 'update']
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'update.html',
+            template: path.join(webpackPaths.srcRendererPath, 'pages/Update/index.html'),
+            minify: {
+                collapseWhitespace: true,
+                removeAttributeQuotes: true,
+                removeComments: true,
+            },
+            isBrowser: false,
+            isDevelopment: process.env.NODE_ENV !== 'production',
+            excludeChunks: ['index', 'lrc']
         }),
     ],
 });

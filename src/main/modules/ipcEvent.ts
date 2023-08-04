@@ -16,11 +16,19 @@ let mServer
 // 当前HTTP服务是否开启
 let isHttpServerOpen = false
 
-let updateCallback = (progressObj) => {
+let updateStartCallback = () => {
+    global?.updateWindow?.webContents.send("update_start");
+}
+
+let updateProgressCallback = (progressObj) => {
     const obj = JSON.parse(progressObj)
-    if (obj.percent > 0) {
-        global?.mainWindow?.setProgressBar(obj.percent)
+    if (obj.percent >= 0) {
+        global?.updateWindow?.webContents.send("update_progress", obj.percent);
     }
+}
+
+let updateEndCallback = () => {
+    global?.updateWindow?.webContents.send("update_end");
 }
 
 let openDirectory = (event, channel) => {
@@ -141,7 +149,7 @@ export default function () {
 
     // 检查更新
     ipcMain.handle("checkUpdate", (_event, _args) => {
-        autoUpdater?.checkUpdate(updateCallback)
+        autoUpdater?.checkUpdate([updateStartCallback, updateProgressCallback, updateEndCallback])
     })
 
     ipcMain.on('toggle-desktop-lyric', (event, args) => {

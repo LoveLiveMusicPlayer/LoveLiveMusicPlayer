@@ -5,15 +5,15 @@ import {VersionUtils} from "../../renderer/utils/VersionUtils";
 import {Dialog} from "./dialog";
 import createUpdateWindow from '../windows/updateWindow';
 
-const logger = (global as any).mylog
+const myApp = global as any
 
 export default class update {
-    private callback: Function | undefined;
+    private callback: Function[] | undefined;
     private isSuccess = false
 
     constructor() {
         autoUpdater.autoDownload = false
-        autoUpdater.logger = logger
+        autoUpdater.logger = myApp.mylog
         this.initListener()
     }
 
@@ -21,6 +21,9 @@ export default class update {
         // https://www.electron.build/auto-update#events
         // https://electronjs.org/docs/api/auto-updater#autoupdaterquitandinstall
         autoUpdater.on('update-downloaded', _info => {
+            this.callback && this.callback.length == 3 && this.callback[2].call(this);
+            myApp.updateWindow.hide()
+            myApp.mainWindow.show()
             Dialog({
                 type: 'info',
                 message: "已更新完成，请重启应用",
@@ -33,20 +36,23 @@ export default class update {
 
         autoUpdater.on('error', _info => {
             if (!this.isSuccess) {
+                this.callback && this.callback.length == 3 && this.callback[2].call(this);
+                myApp.updateWindow.hide()
+                myApp.mainWindow.show()
                 Dialog({type: 'error', message: "更新失败，请稍后重试"})
             }
         })
 
         autoUpdater.on('download-progress', progressObj => {
-            this.callback?.call(this, JSON.stringify(progressObj))
+            this.callback && this.callback.length == 3 && this.callback[1].call(this, JSON.stringify(progressObj))
         })
     }
 
-    checkUpdate(callback: Function) {
-        this.callback = callback
+    checkUpdate(callbacks: Function[]) {
+        this.callback = callbacks
         // 这里先拉取更新信息，在对话框中显示版本的更新内容
         const checkUpdateUrl = VersionUtils.getVersionInfo()
-        logger.debug("Req url: " + checkUpdateUrl)
+        myApp.logger.debug("Req url: " + checkUpdateUrl)
         const req = https.request(checkUpdateUrl, req => {
             let message = ''
             req.setEncoding('utf-8')
@@ -54,11 +60,11 @@ export default class update {
                 message += chunk.toString()
             })
             req.on('end', () => {
-                logger.debug(message)
+                myApp.logger.debug(message)
                 const json = JSON.parse(message)
                 const localVersion = app.getVersion().split('.').join('')
                 const remoteVersion = json.version.split('.').join('')
-                logger.debug(`云端APP版本号：${remoteVersion} 本地APP版本号：${localVersion}`)
+                myApp.logger.debug(`云端APP版本号：${remoteVersion} 本地APP版本号：${localVersion}`)
                 if (localVersion <= remoteVersion) {
                     Dialog({type: 'info', message: '已经是最新版本了'})
                 } else {
@@ -69,13 +75,13 @@ export default class update {
                         detail: json.message
                     }).then(rtn => {
                         if (rtn.response === 1) {
-                            const app = global as any;
-                            app.updateWindow = createUpdateWindow(BrowserWindow)
-                            app.lyricWindow.hide()
-                            app.mainWindow.hide()
+                            myApp.updateWindow = createUpdateWindow(BrowserWindow)
+                            myApp.lyricWindow.hide()
+                            myApp.mainWindow.hide()
+                            this.callback && this.callback.length == 3 && this.callback[0].call(this);
                             autoUpdater.autoDownload = true
                             const updateUrl = json.url + "/" + process.platform + "-" + process.arch;
-                            logger.debug(`Req url: ${updateUrl}`)
+                            myApp.logger.debug(`Req url: ${updateUrl}`)
                             autoUpdater.setFeedURL(updateUrl)
                             autoUpdater.checkForUpdates()
                         }

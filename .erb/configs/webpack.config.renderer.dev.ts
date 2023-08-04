@@ -43,17 +43,7 @@ export default merge(baseConfig, {
 
     mode: 'development',
 
-    // target: ['web', 'electron-renderer'],
     target: 'electron-renderer',
-
-    // entry: [
-    //     `webpack-dev-server/client?http://localhost:${port}/dist`,
-    //     'webpack/hot/only-dev-server',
-    //     'core-js',
-    //     'regenerator-runtime/runtime',
-    //     path.join(webpackPaths.srcRendererPath, 'index.tsx'),
-    //     path.join(webpackPaths.srcRendererPath, 'pages/DesktopLyric/index.tsx')
-    // ],
 
     entry: {
         dist: `webpack-dev-server/client?http://localhost:${port}/dist`,
@@ -61,7 +51,8 @@ export default merge(baseConfig, {
         coreJs: 'core-js',
         runtime: 'regenerator-runtime/runtime',
         index: path.join(webpackPaths.srcRendererPath, 'index.tsx'),
-        lrc: path.join(webpackPaths.srcRendererPath, 'pages/DesktopLyric/index.tsx')
+        lrc: path.join(webpackPaths.srcRendererPath, 'pages/DesktopLyric/index.tsx'),
+        update: path.join(webpackPaths.srcRendererPath, 'pages/Update/index.tsx')
     },
 
     output: {
@@ -69,9 +60,6 @@ export default merge(baseConfig, {
         // @ts-ignore
         publicPath: '/',
         filename: '[name].dev.js'
-        // library: {
-        //   type: 'umd',
-        // },
     },
 
     module: {
@@ -196,7 +184,7 @@ export default merge(baseConfig, {
             env: process.env.NODE_ENV,
             isDevelopment: process.env.NODE_ENV !== 'production',
             nodeModules: webpackPaths.appNodeModulesPath,
-            excludeChunks: ['lrc']
+            excludeChunks: ['lrc', 'update']
         }),
         // @ts-ignore
         new HtmlWebpackPlugin({
@@ -211,7 +199,22 @@ export default merge(baseConfig, {
             env: process.env.NODE_ENV,
             isDevelopment: process.env.NODE_ENV !== 'production',
             nodeModules: webpackPaths.appNodeModulesPath,
-            excludeChunks: ['index']
+            excludeChunks: ['index', 'update']
+        }),
+        // @ts-ignore
+        new HtmlWebpackPlugin({
+            filename: path.join('update.html'),
+            template: path.join(webpackPaths.srcRendererPath, 'pages/Update/index.html'),
+            minify: {
+                collapseWhitespace: true,
+                removeAttributeQuotes: true,
+                removeComments: true,
+            },
+            isBrowser: false,
+            env: process.env.NODE_ENV,
+            isDevelopment: process.env.NODE_ENV !== 'production',
+            nodeModules: webpackPaths.appNodeModulesPath,
+            excludeChunks: ['index', 'lrc']
         }),
     ],
 

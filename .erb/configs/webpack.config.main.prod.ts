@@ -23,9 +23,9 @@ const devtoolsConfig =
         }
         : {};
 
-const os = require('os');
+import os from 'os';
 (function () {
-    let target = os.platform();
+    let target: string = os.platform();
     for (let i = 0; i < process.argv.length; i++) {
         if (process.argv[i].includes('--target_platform=')) {
             target = process.argv[i].replace('--target_platform=', '');

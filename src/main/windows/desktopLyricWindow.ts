@@ -1,7 +1,7 @@
 import {resolveHtmlPath} from "../util";
 import {ipcMain} from "electron";
 
-const {screen} = require("electron");
+import { screen } from 'electron';
 
 let clickX: number
 let clickY: number
