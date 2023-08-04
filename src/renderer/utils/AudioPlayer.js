@@ -15,6 +15,7 @@ import {AlbumHelper} from "../dao/AlbumHelper";
 import {WorkUtils} from "./WorkUtils";
 import {LYRIC_URL_HEAD} from "./URLHelper";
 import {LyricHelper} from "../dao/LyricHelper";
+import Logger from './Logger';
 
 const {ipcRenderer} = require('electron')
 const {connect} = require('react-redux')
@@ -330,7 +331,7 @@ class AudioPlayer extends React.PureComponent {
                             ipcRenderer.send('setPlaying', true)
                             currentMusicName = audioInfo.name
                         } catch (e) {
-                            console.log(e)
+                            Logger(e)
                         }
                         const lyric = await LyricHelper.findLyric(audioInfo._id)
                         let count = 0

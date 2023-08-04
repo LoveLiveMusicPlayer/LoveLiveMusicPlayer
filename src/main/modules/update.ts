@@ -1,8 +1,11 @@
-import {app} from 'electron'
+import { app, BrowserWindow } from 'electron';
 import {autoUpdater} from 'electron-updater'
 import https from 'https'
 import {VersionUtils} from "../../renderer/utils/VersionUtils";
 import {Dialog} from "./dialog";
+import createUpdateWindow from '../windows/updateWindow';
+
+const logger = (global as any).mylog
 
 export default class update {
     private callback: Function | undefined;
@@ -10,6 +13,7 @@ export default class update {
 
     constructor() {
         autoUpdater.autoDownload = false
+        autoUpdater.logger = logger
         this.initListener()
     }
 
@@ -41,17 +45,21 @@ export default class update {
     checkUpdate(callback: Function) {
         this.callback = callback
         // 这里先拉取更新信息，在对话框中显示版本的更新内容
-        const req = https.request(VersionUtils.getVersionInfo(), req => {
+        const checkUpdateUrl = VersionUtils.getVersionInfo()
+        logger.debug("Req url: " + checkUpdateUrl)
+        const req = https.request(checkUpdateUrl, req => {
             let message = ''
             req.setEncoding('utf-8')
             req.on('data', chunk => {
                 message += chunk.toString()
             })
             req.on('end', () => {
+                logger.debug(message)
                 const json = JSON.parse(message)
                 const localVersion = app.getVersion().split('.').join('')
                 const remoteVersion = json.version.split('.').join('')
-                if (localVersion >= remoteVersion) {
+                logger.debug(`云端APP版本号：${remoteVersion} 本地APP版本号：${localVersion}`)
+                if (localVersion <= remoteVersion) {
                     Dialog({type: 'info', message: '已经是最新版本了'})
                 } else {
                     Dialog({
@@ -61,8 +69,14 @@ export default class update {
                         detail: json.message
                     }).then(rtn => {
                         if (rtn.response === 1) {
+                            const app = global as any;
+                            app.updateWindow = createUpdateWindow(BrowserWindow)
+                            app.lyricWindow.hide()
+                            app.mainWindow.hide()
                             autoUpdater.autoDownload = true
-                            autoUpdater.setFeedURL(json.url)
+                            const updateUrl = json.url + "/" + process.platform + "-" + process.arch;
+                            logger.debug(`Req url: ${updateUrl}`)
+                            autoUpdater.setFeedURL(updateUrl)
                             autoUpdater.checkForUpdates()
                         }
                     })

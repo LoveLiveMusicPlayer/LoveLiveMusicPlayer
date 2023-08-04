@@ -16,6 +16,7 @@ import checkDiskSpace from 'check-disk-space';
 import { notification } from 'antd';
 import { WorkUtils } from '../../../utils/WorkUtils';
 import { copyFile } from 'fs/promises';
+import Logger from '../../../utils/Logger';
 
 let musicIds = []
 let musicList = []
@@ -101,7 +102,7 @@ const TransferMusic = () => {
                     musicList.push(item.value)
                 }
             })
-            console.log("musicList created")
+            Logger("musicList created")
             setQrShow(false)
             if (choosePlatform == null) {
                 prepareTask()
@@ -254,7 +255,7 @@ const TransferMusic = () => {
         }
         const pathDir = DBHelper.getHttpServer().path + path.sep;
         startTime = Date.now()
-        console.log('queue start');
+        Logger('queue start');
         const message = {pathDir, musicList, phoneSystem, runningTag}
         ipcRenderer.send('doConvert', JSON.stringify(message))
     }
@@ -368,7 +369,7 @@ const TransferMusic = () => {
                         musicId: musicId,
                         progress: "下载失败"
                     })
-                    console.log("下载失败: " + musicId)
+                    Logger(`下载失败: ${musicId}`)
                 }}
                 finish={() => {
                     stopTask()

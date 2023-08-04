@@ -73,7 +73,6 @@ export const WS_Data = React.forwardRef(({connected, phone2pc, pc2phone, finish,
 
                 ws?.on('close', function (event) {
                     console.log('close', event.code, event.reason);
-                    // ws = null;
                 });
             }
         });

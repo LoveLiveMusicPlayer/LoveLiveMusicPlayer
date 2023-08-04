@@ -9,6 +9,7 @@ import createMainWindow from "./windows/mainWindow";
 import {judgeWinVersion, upReportOpenTime} from "./util";
 import Store from "../renderer/utils/Store";
 import fs from "fs";
+import log from 'electron-log';
 
 // 阻止应用多开
 const isAppInstance = app.requestSingleInstanceLock()
@@ -27,6 +28,7 @@ if (!isAppInstance) {
 global.isInit = true
 global.startTime = new Date().getTime()
 global.willQuitApp = false
+global.mylog;
 
 const isWin = process.platform === "win32"
 global.winVersion = 0
@@ -38,10 +40,7 @@ app.on('ready', async () => {
         global.mainWindow?.webContents.send('playMusic')
     })
     createFuncBtn()
-    const log = []
     let needGlasstron = Store.get('glasstron')
-    log.push("needGlasstron: " + needGlasstron)
-    log.push("argv: " + process.argv)
     if (process.argv.includes("noBlur")) {
         log.push("noBlur: true")
         needGlasstron = false
@@ -49,18 +48,19 @@ app.on('ready', async () => {
     setTimeout(() => {
         if (isWin) {
             global.winVersion = judgeWinVersion()
-            log.push("winVersion: " + global.winVersion)
         }
-        if (needGlasstron) {
-            log.push("into: 111")
+        const isDebug = process.argv.includes("--debug")
+        if (needGlasstron && !isDebug) {
             global.mainWindow = createMainWindow((!isWin || global.winVersion > 0) ? null : BrowserWindow)
         } else {
-            log.push("into: 222")
             global.mainWindow = createMainWindow(BrowserWindow)
         }
-        if (process.argv.includes("noBlur")) {
-            fs.writeFileSync("log.txt", JSON.stringify(log))
-        }
+        // if (isDebug) {
+            global.mylog = require('electron-log');
+            global.mylog.transports.console.level = 'debug';
+            global.mylog.transports.file.level = 'debug';
+            global.mylog.debug("##################### app init #####################");
+        // }
         if (isWin) {
             // 设置底部任务栏按钮和缩略图
             global.mainWindow.setThumbarButtons(thumbarButtons);

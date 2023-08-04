@@ -7,9 +7,9 @@ import { clearTimeout } from 'timers';
 import { app, globalShortcut } from 'electron';
 import { upReportOpenTime } from '../util';
 
-const {resolveHtmlPath} = require("../util");
-const {shell} = require("electron");
-const framelessPlugin = require('../modules/framelessPlugin')
+import { resolveHtmlPath } from '../util';
+import { shell } from 'electron';
+import framelessPlugin from '../modules/framelessPlugin';
 
 let timer = null
 

@@ -29,6 +29,7 @@ import TransferMusic from "./pages/Transfer/TransferMusic";
 import TransferData from "./pages/Transfer/TransferData";
 import History from "./pages/History";
 import { ColorfulLight } from './component/ColorfulLight';
+import Logger from './utils/Logger';
 
 const {ipcRenderer} = require('electron')
 
@@ -416,6 +417,7 @@ function App({dispatch, appVersion}) {
             dispatch(appAction.appVersion(version))
             if (AppUtils.isNull(forceRemoveVersion) || version !== forceRemoveVersion) {
                 if (VersionUtils.getIsNeedInit()) {
+                    Logger("clear database...")
                     DBHelper.removeAllDB(version).then(finish)
                 }
             }

@@ -60,6 +60,10 @@ export default function () {
         app.quit()
     })
 
+    ipcMain.on('log', (event, message) => {
+        global?.mylog.debug(message);
+    });
+
     /**
      * 创建多态弹窗
      * @param args[0] "none", "info", "error", "question", "warning"

@@ -2,6 +2,7 @@ import React, {useEffect} from "react";
 import {DBHelper} from "../dao/DBHelper";
 import {VersionUtils} from "./VersionUtils";
 import Bus from "./Event";
+import Logger from './Logger';
 
 let ws = null
 
@@ -63,7 +64,7 @@ export const WS_Music = React.forwardRef(({
                                 return
                             }
                             phoneSystem(command["body"])
-                            console.log("mobile system: " + command["body"])
+                            Logger(`mobile system: ${command["body"]}`)
                             const httpServer = DBHelper.getHttpServer()
                             const portMsg = {
                                 cmd: "port",
@@ -94,7 +95,6 @@ export const WS_Music = React.forwardRef(({
 
                 ws?.on('close', function (event) {
                     console.log('close', event.code, event.reason);
-                    // ws = null;
                 });
             }
         });

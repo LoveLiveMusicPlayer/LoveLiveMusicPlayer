@@ -19,6 +19,7 @@ import * as Images from '../../public/Images'
 import {CustomDialog} from "../../component/CustomDialog";
 import {HttpUrlDialog} from "../../component/HttpUrlDialog";
 import {VersionUtils} from "../../utils/VersionUtils";
+import Logger from '../../utils/Logger';
 
 const {ipcRenderer} = require("electron")
 const {connect} = require('react-redux')
@@ -91,7 +92,7 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
                 if (dir.endsWith(path.sep + "LoveLive")) {
                     const rootDir = dir.substring(0, dir.length - 9)
 
-                    console.log(rootDir)
+                    Logger(`选中的LoveLive文件夹根目录：${rootDir}`)
                     if (VersionUtils.getIsExportExcel()) {
                         WorkUtils.exportToExcel(rootDir)
                     } else {

@@ -13,6 +13,7 @@ import {SongMenuHelper} from "../dao/SongMenuHelper";
 import {LoveHelper} from "../dao/LoveHelper";
 import * as _ from 'lodash'
 import {Const} from "../public/Const";
+import Logger from './Logger';
 
 const {promisify} = require('util');
 const stat = promisify(fs.stat)
@@ -274,6 +275,7 @@ export const WorkUtils = {
             return
         }
         const version = Store.get("dataVersion")
+        Logger(`云端数据版本号：${data.version} 本地数据版本号：${version}`)
         if (version && version >= data.version) {
             onError && onError()
             AppUtils.openMsgDialog("info", "已是最新数据，无需更新")
