@@ -10,6 +10,7 @@ import {judgeWinVersion, upReportOpenTime} from "./util";
 import Store from "../renderer/utils/Store";
 import fs from "fs";
 import log from 'electron-log';
+import createUpdateWindow from './windows/updateWindow';
 
 // 阻止应用多开
 const isAppInstance = app.requestSingleInstanceLock()
@@ -67,6 +68,7 @@ app.on('ready', async () => {
         }
     }, 200)
     global.lyricWindow = createLyricWindow(BrowserWindow)
+    global.updateWindow = createUpdateWindow(BrowserWindow)
     if (process.platform === 'darwin') {
         await app.dock.show()
     }

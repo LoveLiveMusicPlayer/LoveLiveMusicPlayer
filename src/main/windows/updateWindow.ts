@@ -4,18 +4,17 @@ import { screen } from 'electron';
 
 const createUpdateWindow = function (BrowserWindow: any) {
     const {width, height} = screen.getPrimaryDisplay().workAreaSize;
-    const trulyWidth = Math.floor(width / 2) > 800 ? 800 : Math.floor(width / 2)
     const obj = {
-        width: 150,
-        height: 150,
-        maxWidth: 150,
-        maxHeight: 150,
-        minWidth: 150,
-        minHeight: 150,
+        width: 325,
+        height: 325,
+        maxWidth: 325,
+        maxHeight: 325,
+        minWidth: 325,
+        minHeight: 325,
         show: false,
         frame: false,
-        x: Math.floor(width / 2) - trulyWidth / 2,
-        y: Math.floor(height / 2),
+        x: Math.floor(width / 2) - 325 / 2,
+        y: Math.floor(height / 2) - 325 / 2,
         minimizable: false,
         maximizable: false,
         transparent: true,
@@ -35,6 +34,7 @@ const createUpdateWindow = function (BrowserWindow: any) {
 
     updateWindow.setVisibleOnAllWorkspaces(true, {visibleOnFullScreen: true})
     updateWindow.setAlwaysOnTop(true, "screen-saver")
+    updateWindow.setIgnoreMouseEvents(true, { forward: true });
 
     updateWindow.loadURL(resolveHtmlPath("update.html"));
 

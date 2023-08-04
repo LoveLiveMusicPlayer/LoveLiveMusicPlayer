@@ -1,9 +1,8 @@
-import { app, BrowserWindow } from 'electron';
+import { app } from 'electron';
 import {autoUpdater} from 'electron-updater'
 import https from 'https'
 import {VersionUtils} from "../../renderer/utils/VersionUtils";
 import {Dialog} from "./dialog";
-import createUpdateWindow from '../windows/updateWindow';
 
 const myApp = global as any
 
@@ -13,7 +12,6 @@ export default class update {
 
     constructor() {
         autoUpdater.autoDownload = false
-        autoUpdater.logger = myApp.mylog
         this.initListener()
     }
 
@@ -21,7 +19,8 @@ export default class update {
         // https://www.electron.build/auto-update#events
         // https://electronjs.org/docs/api/auto-updater#autoupdaterquitandinstall
         autoUpdater.on('update-downloaded', _info => {
-            this.callback && this.callback.length == 3 && this.callback[2].call(this);
+            myApp.mylog.debug("update-downloaded")
+            this.callback && this.callback.length > 0 && this.callback[2].call(this);
             myApp.updateWindow.hide()
             myApp.mainWindow.show()
             Dialog({
@@ -35,16 +34,17 @@ export default class update {
         })
 
         autoUpdater.on('error', _info => {
+            myApp.mylog.debug("update-error")
             if (!this.isSuccess) {
-                this.callback && this.callback.length == 3 && this.callback[2].call(this);
+                this.callback && this.callback.length > 0 && this.callback[2].call(this);
                 myApp.updateWindow.hide()
                 myApp.mainWindow.show()
                 Dialog({type: 'error', message: "更新失败，请稍后重试"})
             }
         })
 
-        autoUpdater.on('download-progress', progressObj => {
-            this.callback && this.callback.length == 3 && this.callback[1].call(this, JSON.stringify(progressObj))
+        autoUpdater.on('download-progress', _progressObj => {
+            this.callback && this.callback.length > 0 && this.callback[1].call(this, JSON.stringify(_progressObj))
         })
     }
 
@@ -65,13 +65,9 @@ export default class update {
                 const localVersion = app.getVersion().split('.').join('')
                 const remoteVersion = json.version.split('.').join('')
                 myApp.mylog.debug(`云端APP版本号：${remoteVersion} 本地APP版本号：${localVersion}`)
-                if (localVersion >= remoteVersion) {
+                if (localVersion <= remoteVersion) {
                     Dialog({type: 'info', message: '已经是最新版本了'})
                 } else {
-                    if (myApp.updateWindow == null) {
-                        myApp.updateWindow = createUpdateWindow(BrowserWindow)
-                    }
-
                     Dialog({
                         type: 'info',
                         message: `检测到新版本（${json.version}）是否更新`,
@@ -80,9 +76,9 @@ export default class update {
                     }).then(rtn => {
                         if (rtn.response === 1) {
                             myApp.lyricWindow.hide()
-                            myApp.mainWindow.minimize()
+                            myApp.mainWindow.hide()
                             myApp.updateWindow.show()
-                            this.callback && this.callback.length == 3 && this.callback[0].call(this);
+                            this.callback && this.callback.length > 0 && this.callback[0].call(this);
                             autoUpdater.autoDownload = true
                             const updateUrl = json.url + "/" + process.platform + "-" + process.arch;
                             myApp.mylog.debug(`Req url: ${updateUrl}`)

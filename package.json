@@ -264,7 +264,7 @@
         "electron-debug": "^3.2.0",
         "electron-log": "^4.4.8",
         "electron-store": "^8.0.1",
-        "electron-updater": "^4.6.1",
+        "electron-updater": "^6.1.1",
         "faye-websocket": "^0.11.4",
         "flac-bindings": "^2.7.2",
         "http-server": "^14.0.0",

@@ -64,7 +64,7 @@ export const Loading = forwardRef((props, ref) => {
             onAfterOpen={null}
             onRequestClose={null}
             style={customStyles}>
-            <img src={Images.LOADING} style={{width: 150, height: 150}} alt={''}/>
+            <img src={Images.LOADING} style={{width: 150, height: 150}} alt={''} draggable={false}/>
             <p style={{color: 'black'}}>{title}</p>
             {progress <= 0 ? null : <p style={{color: 'black'}}>进度：{progress}%</p>}
         </Modal>

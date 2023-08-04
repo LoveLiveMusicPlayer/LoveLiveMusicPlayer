@@ -9,20 +9,21 @@ export default function () {
 
     const startListener = () => {
       Logger(`start download...`)
-      loadingRef.current?.show()
-      loadingRef.current?.setTitle("下载中...")
       loadingRef.current?.setProgress(0)
+      loadingRef.current?.setTitle("下载中...")
+      loadingRef.current?.show()
     }
 
     const progressListener = (progress) => {
       Logger(`download progress: ${progress}`)
-      loadingRef.current?.setProgress(progress)
+      const obj = JSON.parse(progress)
+      loadingRef.current?.setProgress(obj.progress)
     }
 
     const endListener = () => {
       Logger(`end download...`)
-      loadingRef.current?.setProgress(0)
       loadingRef.current?.hide()
+      loadingRef.current?.setProgress(0)
     }
 
     useEffect(() => {

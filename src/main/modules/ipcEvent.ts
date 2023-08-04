@@ -7,7 +7,7 @@ import path from 'path';
 import { RESOURCES_PATH } from './inital';
 import Dialog from './dialog';
 
-const httpserver = require('http-server');
+import httpserver from 'http-server';
 const autoUpdater = new update()
 
 // http-server实例
@@ -16,22 +16,19 @@ let mServer
 // 当前HTTP服务是否开启
 let isHttpServerOpen = false
 
-let updateStartCallback = () => {
+const updateStartCallback = () => {
     global?.updateWindow?.webContents.send("update_start");
 }
 
-let updateProgressCallback = (progressObj) => {
-    const obj = JSON.parse(progressObj)
-    if (obj.percent >= 0) {
-        global?.updateWindow?.webContents.send("update_progress", obj.percent);
-    }
+const updateProgressCallback = (number: string) => {
+    global?.updateWindow?.webContents.send("update_progress", number);
 }
 
-let updateEndCallback = () => {
+const updateEndCallback = () => {
     global?.updateWindow?.webContents.send("update_end");
 }
 
-let openDirectory = (event, channel) => {
+const openDirectory = (event, channel) => {
     let path = dialog.showOpenDialogSync(global?.mainWindow, {
         title: "请选择文件夹",
         // filters: [{name: 'flac', extensions: ['flac']}],

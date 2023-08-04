@@ -32,7 +32,6 @@ export default merge(baseConfig, {
 
     mode: 'production',
 
-    // target: ['web', 'electron-renderer'],
     target: 'electron-renderer',
 
     entry: {
@@ -40,6 +39,7 @@ export default merge(baseConfig, {
         runtime: 'regenerator-runtime/runtime',
         index: path.join(webpackPaths.srcRendererPath, 'index.tsx'),
         lrc: path.join(webpackPaths.srcRendererPath, 'pages/DesktopLyric/index.tsx'),
+        update: path.join(webpackPaths.srcRendererPath, 'pages/Update/index.tsx')
     },
 
     output: {
@@ -47,9 +47,6 @@ export default merge(baseConfig, {
         // @ts-ignore
         publicPath: './',
         filename: '[name].prod.js',
-        // library: {
-        //   type: 'umd',
-        // },
     },
 
     module: {
