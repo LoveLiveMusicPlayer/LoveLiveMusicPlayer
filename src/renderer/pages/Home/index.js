@@ -60,7 +60,7 @@ const Home = ({dispatch, chooseGroup, appVersion, showAlbum, isRoot}) => {
     const listener = function () {
         let width = window.innerWidth - 250
         const height = window.innerHeight
-        const radio = 1250 / 648
+        const radio = 1250 / 728
         // 防止在横向变宽时，图片变大
         if (width / height > radio) {
             width = height * radio

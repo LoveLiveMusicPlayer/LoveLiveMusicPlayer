@@ -147,16 +147,21 @@ export const MusicDetail = forwardRef(({
     }, [musicInfo])
 
     const [scaleFontSize, setScaleFontSize] = useState(16)
+    const [scaleImageSize, setScaleImageSize] = useState(300)
+    const [scaleIconSize, setScaleIconSize] = useState(30)
 
     const listener = function () {
-        const ratio = window.innerWidth / 1250
-        if (ratio > 1.3) {
-            setScaleFontSize(ratio * 12)
-        } else if (ratio < 1) {
+        const widthRatio = window.innerWidth / 1250
+        const heightRatio = window.innerHeight / 728
+        if (widthRatio > 1.3) {
+            setScaleFontSize(widthRatio * 12)
+        } else if (widthRatio < 1) {
             setScaleFontSize(16)
         } else {
-            setScaleFontSize(ratio * 16)
+            setScaleFontSize(widthRatio * 16)
         }
+        setScaleImageSize(heightRatio * 300)
+        setScaleIconSize(heightRatio * 30)
     }
 
     useEffect(() => {
@@ -258,37 +263,47 @@ export const MusicDetail = forwardRef(({
             <div style={{display: 'flex', flexDirection: 'column', height: '100%', width: '100%', position: 'absolute'}}>
                 <div className={'musicDetailContainer'}>
                     <div className={'lrcLeftContainer'}>
-                        <img className={"cover"} src={mCover}/>
-                        <div className={'tools'}>
+                        <img className={"cover"} src={mCover} style={{width: scaleImageSize, height: scaleImageSize}}/>
+                        <div className={'tools'} style={{marginTop: scaleFontSize * 2}}>
                             <img
-                                style={{width: '30px', height: '30px', cursor: 'pointer'}}
+                                style={{width: scaleIconSize, height: scaleIconSize, cursor: 'pointer'}}
                                 src={lrcIcon()}
                                 onClick={changeLanguage}
                             />
                             <img
-                                style={{width: '30px', height: '30px', cursor: 'pointer'}}
+                                style={{width: scaleIconSize, height: scaleIconSize, cursor: 'pointer'}}
                                 src={lrcPosition === 'center' ? Images.ICON_POSITION_CENTER : Images.ICON_POSITION_LEFT}
                                 onClick={changeLrcPosition}
                             />
                             <img
-                                style={{width: '26px', height: '26px', paddingTop: '2px', cursor: 'pointer'}}
+                                style={{width: scaleIconSize, height: scaleIconSize - 2, paddingTop: '2px', cursor: 'pointer'}}
                                 src={Images.ICON_SEARCH}
                                 onClick={researchLyric}
                             />
                         </div>
                     </div>
                     <div className={'lrcRightContainer'}>
-                        <p className={'title'}>{mName}</p>
+                        <p className={'title'} style={{fontSize: scaleFontSize * 1.25}}>{mName}</p>
                         <p className={'artist'}>{mSinger}</p>
                         <div className={'lrcContainer'}>
-                            <Lrc
-                                key={resetLrc}
-                                className="lrc"
-                                lrc={lrc.jpLrc}
-                                verticalSpace
-                                lineRenderer={renderItem}
-                                currentMillisecond={currentLrcTime}
-                            />
+                            {
+                                lrc.jpLrc == null || lrc.jpLrc === '' || lrc.jpLrc === undefined ?
+                                    <LyricLine
+                                        content={'暂无歌词'}
+                                        active={true}
+                                        position={'center'}
+                                        lang={'jp'}
+                                        scale={scaleFontSize * 1.25}
+                                    /> :
+                                    <Lrc
+                                        key={resetLrc}
+                                        className="lrc"
+                                        lrc={lrc.jpLrc}
+                                        verticalSpace
+                                        lineRenderer={renderItem}
+                                        currentMillisecond={currentLrcTime}
+                                    />
+                            }
                         </div>
                     </div>
                 </div>
