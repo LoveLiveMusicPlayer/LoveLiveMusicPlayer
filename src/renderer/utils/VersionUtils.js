@@ -1,7 +1,7 @@
 import { DATA_OSS_URL_HEAD, ROOT_OSS_URL_HEAD } from './URLHelper';
 
 // 是否是预发环境
-const isPre = true;
+const isPre = false;
 // 是否需要清空歌曲库
 const isNeedInit = false
 // 是否是要导出excel
