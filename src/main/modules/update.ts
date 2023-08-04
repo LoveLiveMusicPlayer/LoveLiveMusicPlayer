@@ -52,7 +52,7 @@ export default class update {
         this.callback = callbacks
         // 这里先拉取更新信息，在对话框中显示版本的更新内容
         const checkUpdateUrl = VersionUtils.getVersionInfo()
-        myApp.logger.debug("Req url: " + checkUpdateUrl)
+        myApp.mylog.debug("Req url: " + checkUpdateUrl)
         const req = https.request(checkUpdateUrl, req => {
             let message = ''
             req.setEncoding('utf-8')
@@ -60,14 +60,18 @@ export default class update {
                 message += chunk.toString()
             })
             req.on('end', () => {
-                myApp.logger.debug(message)
+                myApp.mylog.debug(message)
                 const json = JSON.parse(message)
                 const localVersion = app.getVersion().split('.').join('')
                 const remoteVersion = json.version.split('.').join('')
-                myApp.logger.debug(`云端APP版本号：${remoteVersion} 本地APP版本号：${localVersion}`)
-                if (localVersion <= remoteVersion) {
+                myApp.mylog.debug(`云端APP版本号：${remoteVersion} 本地APP版本号：${localVersion}`)
+                if (localVersion >= remoteVersion) {
                     Dialog({type: 'info', message: '已经是最新版本了'})
                 } else {
+                    if (myApp.updateWindow == null) {
+                        myApp.updateWindow = createUpdateWindow(BrowserWindow)
+                    }
+
                     Dialog({
                         type: 'info',
                         message: `检测到新版本（${json.version}）是否更新`,
@@ -75,13 +79,13 @@ export default class update {
                         detail: json.message
                     }).then(rtn => {
                         if (rtn.response === 1) {
-                            myApp.updateWindow = createUpdateWindow(BrowserWindow)
                             myApp.lyricWindow.hide()
-                            myApp.mainWindow.hide()
+                            myApp.mainWindow.minimize()
+                            myApp.updateWindow.show()
                             this.callback && this.callback.length == 3 && this.callback[0].call(this);
                             autoUpdater.autoDownload = true
                             const updateUrl = json.url + "/" + process.platform + "-" + process.arch;
-                            myApp.logger.debug(`Req url: ${updateUrl}`)
+                            myApp.mylog.debug(`Req url: ${updateUrl}`)
                             autoUpdater.setFeedURL(updateUrl)
                             autoUpdater.checkForUpdates()
                         }
