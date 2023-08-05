@@ -43,7 +43,6 @@ app.on('ready', async () => {
     createFuncBtn()
     let needGlasstron = Store.get('glasstron')
     if (process.argv.includes("noBlur")) {
-        log.push("noBlur: true")
         needGlasstron = false
     }
     setTimeout(() => {
@@ -56,12 +55,12 @@ app.on('ready', async () => {
         } else {
             global.mainWindow = createMainWindow(BrowserWindow)
         }
-        // if (isDebug) {
+        if (isDebug) {
             global.mylog = require('electron-log');
             global.mylog.transports.console.level = 'debug';
             global.mylog.transports.file.level = 'debug';
             global.mylog.debug("##################### app init #####################");
-        // }
+        }
         if (isWin) {
             // 设置底部任务栏按钮和缩略图
             global.mainWindow.setThumbarButtons(thumbarButtons);
