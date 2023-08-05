@@ -13,6 +13,7 @@ const createUpdateWindow = function (BrowserWindow: any) {
         minHeight: 325,
         show: false,
         frame: false,
+        backgroundColor: "#00000000",
         x: Math.floor(width / 2) - 325 / 2,
         y: Math.floor(height / 2) - 325 / 2,
         minimizable: false,

@@ -25,6 +25,7 @@ const createMainWindow = function (BrowserWindow: any) {
         minWidth: 1250,
         minHeight: 728,
         blur: true,
+        backgroundColor: "#00000000",
         icon: path.join(RESOURCES_PATH, 'icon.png'),
         vibrancy: 'fullscreen-ui',
         paintWhenInitiallyHidden: false,

@@ -66,7 +66,7 @@ export default function () {
     })
 
     ipcMain.on('log', (event, message) => {
-        global?.mylog.debug(message);
+        global?.mylog?.debug(message);
     });
 
     /**
