@@ -1,7 +1,7 @@
-import React, {useEffect} from "react";
-import {DBHelper} from "../dao/DBHelper";
-import {VersionUtils} from "./VersionUtils";
-import Bus from "./Event";
+import React, { useEffect } from 'react';
+import { DBHelper } from '../dao/DBHelper';
+import { VersionUtils } from './VersionUtils';
+import Bus from './Event';
 import Logger from './Logger';
 
 let ws = null
@@ -43,7 +43,7 @@ export const WS_Music = React.forwardRef(({
                             Logger("into version");
                             const transVer = VersionUtils.getTransVersion()
                             // 此处为数字和字符串比较，不要用全等
-                            const versionNotSame = command["body"] !== transVer
+                            const versionNotSame = command['body'] != transVer;
                             if (versionNotSame) {
                                 Bus.emit("onNotification", "PC与APP版本不匹配，请前往博客查看")
                             }
