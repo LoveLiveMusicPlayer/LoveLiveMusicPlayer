@@ -70,13 +70,12 @@ class AudioPlayer extends React.PureComponent {
     }
 
     // 切换专辑
-    onChangeAudioList = (arr, init) => {
-        const index = arr && arr.length > 0 && arr[0].playIndex ? arr[0].playIndex : 0
-        this.setState({playIndex: index})
+    onChangeAudioList = (arr, playIndex, init) => {
+        this.setState({playIndex: playIndex})
         this.updateParams({
             clearPriorAudioLists: true,
             audioLists: arr,
-            playIndex: index
+            playIndex: playIndex
         })
         if (init && init === true) {
             setTimeout(() => {

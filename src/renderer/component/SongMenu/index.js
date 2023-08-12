@@ -134,7 +134,9 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
                 group: item.group
             })
         })
-        const result = WorkUtils.playMenuByMusicIds(musicList, 0)
+        const mode = Store.get('playMode') || 'orderLoop';
+        const playIndex = mode == "shufflePlay" ? Math.floor(Math.random() * music.length) : 0
+        const result = WorkUtils.playMenuByMusicIds(musicList, playIndex)
         if (!AppUtils.isNull(result?.message)) {
             Bus.emit('onNotification', result.message)
         }

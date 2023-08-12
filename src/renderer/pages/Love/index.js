@@ -39,7 +39,7 @@ const Love = ({playId}) => {
                         shape="round"
                         style={{width: '110px', marginTop: '10px'}}
                         icon={<img src={Images.ICON_DIS_PLAY} style={{marginRight: '6px', marginBottom: '3px'}}/>}
-                        onClick={() => musicRowListRef.current?.playFirst()}
+                        onClick={() => musicRowListRef.current?.play()}
                     >
                         播放全部
                     </Button>

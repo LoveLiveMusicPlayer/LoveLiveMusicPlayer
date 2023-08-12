@@ -92,7 +92,7 @@ const Menu = ({playId}) => {
                         shape="round"
                         style={{width: 110, marginTop: 10}}
                         icon={<img src={Images.ICON_DIS_PLAY} style={{marginRight: '6px', marginBottom: '3px'}}/>}
-                        onClick={() => musicRowListRef.current?.playFirst()}
+                        onClick={() => musicRowListRef.current?.play()}
                     >
                         播放全部
                     </Button>

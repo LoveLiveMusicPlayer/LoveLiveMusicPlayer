@@ -7,6 +7,7 @@ import Bus from "../../utils/Event";
 import {SelectDialog} from "../SelectDialog";
 import {LoveHelper} from "../../dao/LoveHelper";
 import './index.css'
+import Store from '../../utils/Store';
 
 export const MusicRowList = forwardRef(({playId, onRefreshData, onDisLove, onDelSong}, ref) => {
 
@@ -31,8 +32,10 @@ export const MusicRowList = forwardRef(({playId, onRefreshData, onDisLove, onDel
             onRefreshData()
         },
 
-        playFirst: () => {
-            playMusic(0)
+        play: () => {
+            const mode = Store.get('playMode') || 'orderLoop'
+            const playIndex = mode == "shufflePlay" ? Math.floor(Math.random() * tableData.length) : 0
+            playMusic(playIndex)
         },
 
         setData: (musicList) => {

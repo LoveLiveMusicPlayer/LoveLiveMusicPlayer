@@ -190,7 +190,6 @@ export const WorkUtils = {
                         lyric: "JP/" + lyricPath,
                         trans: "ZH/" + lyricPath,
                         roma: "ROMA/" + lyricPath,
-                        playIndex: playIndex ? playIndex : 0,
                         cover: AppUtils.encodeURL(URL + baseUrl + item.value["cover_path"]),
                         musicSrc: AppUtils.encodeURL(URL + baseUrl + item.value["music_path"]),
                     })
@@ -199,7 +198,10 @@ export const WorkUtils = {
                 }
             })
             if (isLoaded) {
-                Bus.emit("onChangeAudioList", audioList)
+                Bus.emit("onChangeAudioList", {
+                    audioList: audioList,
+                    playIndex: playIndex
+                })
             } else {
                 AppUtils.openMsgDialog("error", "存在损坏的数据，请重新更新数据")
             }
@@ -213,7 +215,9 @@ export const WorkUtils = {
             res.music.map(id => {
                 promiseArr.push(MusicHelper.findOneMusic(id, res.group))
             })
-            this.putArrToPlayer(promiseArr)
+            const mode = Store.get('playMode') || 'orderLoop'
+            const playIndex = mode == "shufflePlay" ? Math.floor(Math.random() * promiseArr.length) : 0
+            this.putArrToPlayer(promiseArr, playIndex)
         })
     },
 
@@ -224,6 +228,8 @@ export const WorkUtils = {
             res.music.map(id => {
                 promiseArr.push(MusicHelper.findOneMusic(id, res.group))
             })
+            const mode = Store.get('playMode') || 'orderLoop'
+            const playIndex = mode == "shufflePlay" ? Math.floor(Math.random() * promiseArr.length) : 0
             this.putArrToPlayer(promiseArr, playIndex)
         })
     },
@@ -237,7 +243,9 @@ export const WorkUtils = {
                     promiseArr.push(MusicHelper.findOneMusic(id, item.group))
                 })
             })
-            this.putArrToPlayer(promiseArr)
+            const mode = Store.get('playMode') || 'orderLoop'
+            const playIndex = mode == "shufflePlay" ? Math.floor(Math.random() * promiseArr.length) : 0
+            this.putArrToPlayer(promiseArr, playIndex)
         })
     },
 
@@ -250,7 +258,9 @@ export const WorkUtils = {
                     promiseArr.push(MusicHelper.findOneMusic(id, item.group))
                 })
             })
-            this.putArrToPlayer(promiseArr)
+            const mode = Store.get('playMode') || 'orderLoop'
+            const playIndex = mode == "shufflePlay" ? Math.floor(Math.random() * promiseArr.length) : 0
+            this.putArrToPlayer(promiseArr, playIndex)
         })
     },
 

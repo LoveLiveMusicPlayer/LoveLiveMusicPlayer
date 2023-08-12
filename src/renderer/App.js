@@ -371,8 +371,7 @@ function App({dispatch, appVersion}) {
                     playIndex = index
                 }
             })
-            playList[0].playIndex = playIndex
-            playerRef.current?.onChangeAudioList(playList, true)
+            playerRef.current?.onChangeAudioList(playList, playIndex, true)
         }
     }
 
@@ -477,8 +476,8 @@ function App({dispatch, appVersion}) {
         Bus.addListener("onNotification", msg => openNotification(msg))
 
         // 添加切换专辑的监听器
-        Bus.addListener("onChangeAudioList", msg => {
-            playerRef.current?.onChangeAudioList(msg)
+        Bus.addListener("onChangeAudioList", obj => {
+            playerRef.current?.onChangeAudioList(obj.audioList, obj.playIndex)
         })
 
         // 修改主题
