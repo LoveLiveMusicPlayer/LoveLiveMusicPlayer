@@ -69,43 +69,44 @@ B站空间：<https://space.bilibili.com/4367965>
 
 ## 校对歌词 (Proofread the lyrics)
 
-| 昵称         | 链接                              | 参与项             |
-| -------------- | ----------------------------------- | --------------------- |
-| 日文↓↓   |                                     |                       |
-| Forever_       | QQ:<a>1537013852</a>                     | μ's 单曲+BiBi      |
-| 骑着蜗牛上大树 | QQ:<a>619205705</a>                        | μ's 动画(除BD)+其他 |
-| 桜の吹雪   | <https://github.com/stevewang00>      | μ's 独唱           |
-| 灯塔         | QQ:<a>59608329</a>                         | μ's 精选集        |
-| 朱神无敌   | QQ:<a>404288461</a>                        | μ's BD+小组曲(除BiBi) |
-| 萝莉碳      | QQ:<a>3257024815</a>                       | Aqours 单曲+其他  |
-| Starfarer      | <https://github.com/EndingEra>        | Aqours 动画(除BD)  |
-| 淡霖翼KAYA  | <https://space.bilibili.com/8344201>  | Aqours BD+小组曲   |
-| 蓝雨风萧萧 | QQ:<a>1040299724</a>                       | Aqours 独唱+精选集 |
-| 中须霞保护协会 | <https://github.com/KasuminDESU>      | 虹咲学园 全部   |
-| 太好听了吧 | QQ:<a>783341822</a>                        | Liella! 全部        |
-|     <br>      |                                     |                       |
-| 中文↓↓   |                                     |                       |
-| Tsd丶恩熙   | <https://space.bilibili.com/34508756> | μ's 单曲           |
-| 骑着蜗牛上大树 | QQ:<a>619205705</a>                        | μ's 动画(除BD)    |
-| hello！world  | QQ:<a>1337048478</a>                       | μ's BD               |
-| 桜の吹雪   | <https://github.com/stevewang00>      | μ's 独唱           |
-| Forever_       | QQ:<a>1537013852</a>                       | μ's 精选集        |
-| 樱之诚      | QQ:<a>1483055329</a>                       | μ's 小组曲        |
-| 萝莉碳      | QQ:<a>3257024815</a>                       | Aqours 单曲+其他  |
-| OceanFace      | QQ:<a>2624657658</a>                       | Aqours 动画(除BD)  |
-| 蓝雨风萧萧 | QQ:<a>1040299724</a>                       | Aqours 独唱+精选集 |
-| 中须霞保护协会 | <https://github.com/KasuminDESU>      | Aqours BD+小组曲   |
-| 中须霞保护协会 | <https://github.com/KasuminDESU>      | 虹咲学园 全部   |
-| Starfarer      | <https://github.com/EndingEra>        | Liella! 全部        |
-|     <br>      |                                     |                       |
-| 罗马音↓↓   |                                     |                       |
-| Overlord灬冰翼丶 | <https://space.bilibili.com/232694650>      |  μ's  |
-| 中须霞保护协会 | <https://github.com/KasuminDESU>      | Aqours + 虹咲学园 + Liella!   |
-|     <br>      |                                     |                       |
-| 二次校对↓↓   |                                     |                       |
-| 桜の吹雪   | <https://github.com/stevewang00>      | 1/3 μ's            |
-| 朱神无敌   | QQ:<a>404288461</a>                        | 1/6 μ's  |
-| 中须霞保护协会 | <https://github.com/KasuminDESU>      | 1/2 μ's + Aqours + 虹咲学园 + Liella!  |
+| 昵称           | 链接                                     | 参与项                               |
+|--------------|----------------------------------------|-----------------------------------|
+| 日文↓↓         |                                        |                                   |
+| Forever_     | QQ:<a>1537013852</a>                   | μ's 单曲+BiBi                       |
+| 骑着蜗牛上大树      | QQ:<a>619205705</a>                    | μ's 动画(除BD)+其他                    |
+| 桜の吹雪         | <https://github.com/stevewang00>       | μ's 独唱                            |
+| 灯塔           | QQ:<a>59608329</a>                     | μ's 精选集                           |
+| 朱神无敌         | QQ:<a>404288461</a>                    | μ's BD+小组曲(除BiBi)                 |
+| 萝莉碳          | QQ:<a>3257024815</a>                   | Aqours 单曲+其他                      |
+| Starfarer    | <https://github.com/EndingEra>         | Aqours 动画(除BD)                    |
+| 淡霖翼KAYA      | <https://space.bilibili.com/8344201>   | Aqours BD+小组曲                     |
+| 蓝雨风萧萧        | QQ:<a>1040299724</a>                   | Aqours 独唱+精选集                     |
+| 中须霞保护协会      | <https://github.com/KasuminDESU>       | 虹咲学园 全部                           |
+| 太好听了吧        | QQ:<a>783341822</a>                    | Liella! 全部                        |
+| <br>         |                                        |                                   |
+| 中文↓↓         |                                        |                                   |
+| Tsd丶恩熙       | <https://space.bilibili.com/34508756>  | μ's 单曲                            |
+| 骑着蜗牛上大树      | QQ:<a>619205705</a>                    | μ's 动画(除BD)                       |
+| hello！world  | QQ:<a>1337048478</a>                   | μ's BD                            |
+| 桜の吹雪         | <https://github.com/stevewang00>       | μ's 独唱                            |
+| Forever_     | QQ:<a>1537013852</a>                   | μ's 精选集                           |
+| 樱之诚          | QQ:<a>1483055329</a>                   | μ's 小组曲                           |
+| 萝莉碳          | QQ:<a>3257024815</a>                   | Aqours 单曲+其他                      |
+| OceanFace    | QQ:<a>2624657658</a>                   | Aqours 动画(除BD)                    |
+| 蓝雨风萧萧        | QQ:<a>1040299724</a>                   | Aqours 独唱+精选集                     |
+| 中须霞保护协会      | <https://github.com/KasuminDESU>       | Aqours BD+小组曲                     |
+| 中须霞保护协会      | <https://github.com/KasuminDESU>       | 虹咲学园 全部                           |
+| Starfarer    | <https://github.com/EndingEra>         | Liella! 全部                        |
+| <br>         |                                        |                                   |
+| 罗马音↓↓        |                                        |                                   |
+| Overlord灬冰翼丶 | <https://space.bilibili.com/232694650> | μ's                               |
+| 中须霞保护协会      | <https://github.com/KasuminDESU>       | Aqours + 虹咲学园 + Liella!           |
+| <br>         |                                        |                                   |
+| 二次校对↓↓       |                                        |                                   |
+| 桜の吹雪         | <https://github.com/stevewang00>       | 1/3 μ's                           |
+| 朱神无敌         | QQ:<a>404288461</a>                    | 1/6 μ's                           |
+| 中须霞保护协会      | <https://github.com/KasuminDESU>       | 1/2 μ's + Aqours + 虹咲学园 + Liella! |
+| Ran AronX    | QQ:1520442570                          | Aqours(riko、ruby 2nd solo)        |
 
 ## 特别鸣谢 (Special Thanks)
 
