@@ -166,10 +166,9 @@ const TransferData = () => {
                 phone2pc={phone2pc}
                 pc2phone={pc2phone}
                 finish={() => {
+                    setScanSuccess(false)
                     loadingRef.current?.hide()
-                }}
-                stop={() => {
-                    loadingRef.current?.hide()
+                    setQrShow(false)
                 }}
                 closeQR={closeQR}
             />
