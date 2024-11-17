@@ -117,6 +117,38 @@ LoveLive
 |--|--|--|--01. BANZAI! digital trippers.flac
 |--|--|--|--02. KA-GA-YA-KI-RA-RI-RA.flac
 |--|--|--|--Cover_1.jpg
+|--|--|--[2022.11.09] Aqours - わーいわいわい わいわいわい！
+|--|--|--|--01. わーいわいわい わいわいわい！.flac
+|--|--|--|--02. ファボタージュ.flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2023.02.15] Aqours Rock 'n' Roll リアレンジアルバム - The Blue Swell
+|--|--|--|--01. 君のこころは輝いてるかい？ (Hard Rock Ver.).flac
+|--|--|--|--02. 恋になりたいAQUARIUM (Unplugged Rock Ver.).flac
+|--|--|--|--03. 青空Jumping Heart (Heavy Metal Ver.).flac
+|--|--|--|--04. ユメ語るよりユメ歌おう (Cute Rock Ver.).flac
+|--|--|--|--05. HAPPY PARTY TRAIN (Mixture Rock Ver.).flac
+|--|--|--|--06. 未来の僕らは知ってるよ (Melodious Hardcore Ver.).flac
+|--|--|--|--07. 勇気はどこに？君の胸に！ (Surf Rock Ver.).flac
+|--|--|--|--08. 未体験HORIZON (Punk Rock Ver.).flac
+|--|--|--|--09. KOKORO Magic A to Z (Digital Rock Ver.).flac
+|--|--|--|--10. KU-RU-KU-RU Cruller! (Rockabilly Ver.).flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2023.06.30] Aqours - SORA, FUJI, SUNSHINE!
+|--|--|--|--01. SORA, FUJI, SUNSHINE!.flac
+|--|--|--|--03. SORA, FUJI, SUNSHINE! (高海千歌 Solo Ver.).flac
+|--|--|--|--04. SORA, FUJI, SUNSHINE! (桜内梨子 Solo Ver.).flac
+|--|--|--|--05. SORA, FUJI, SUNSHINE! (松浦果南 Solo Ver.).flac
+|--|--|--|--06. SORA, FUJI, SUNSHINE! (黒澤ダイヤ Solo Ver.).flac
+|--|--|--|--07. SORA, FUJI, SUNSHINE! (渡辺 曜 Solo Ver.).flac
+|--|--|--|--08. SORA, FUJI, SUNSHINE! (津島善子 Solo Ver.).flac
+|--|--|--|--09. SORA, FUJI, SUNSHINE! (国木田花丸 Solo Ver.).flac
+|--|--|--|--10. SORA, FUJI, SUNSHINE! (小原鞠莉 Solo Ver.).flac
+|--|--|--|--11. SORA, FUJI, SUNSHINE! (黒澤ルビィ Solo Ver.).flac
+|--|--|--|--album.nfo
+|--|--|--|--Cover_1.jpg
+|--|--|--[2024.06.30] Aqours - 僕らの海でまた会おう
+|--|--|--|--01. 僕らの海でまた会おう.flac
+|--|--|--|--Cover_1.jpg
 |--|--动画
 |--|--|--Blu-ray
 |--|--|--|--[2016.09.27] Aqours - Pops heartで踊るんだもん！
@@ -437,6 +469,11 @@ LoveLive
 |--|--|--|--|--01. Dazzling White Town.flac
 |--|--|--|--|--02. Lonely Snow Planet.flac
 |--|--|--|--|--03. After The Rain.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--わいわいわい
+|--|--|--|--[2024.05.08] わいわいわい - peace piece pizza
+|--|--|--|--|--01. peace piece pizza.flac
+|--|--|--|--|--02. U-CYU.flac
 |--|--|--|--|--Cover_1.jpg
 |--|--独唱
 |--|--|--[2020.08.01] LoveLive! Sunshine!! Takami Chika First Solo Concert Album ~One More Sunshine Story~
@@ -841,6 +878,206 @@ LoveLive
 |--|--|--|--|--06. Next SPARKLING!! (黒澤ルビィ Solo Ver.).flac
 |--|--|--|--|--07. i-n-g, I TRY!! (黒澤ルビィ Solo Ver.).flac
 |--|--|--|--|--08. アイコトバ.flac
+|--|--|--[2023.01.01] Love Live! Sunshine!! Third Solo Concert Album ～THE STORY OF “OVER THE RAINBOW”～ starring Kurosawa Dia
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Disc 1
+|--|--|--|--|--01. Pops heartで踊るんだもん！ (黒澤ダイヤ Solo Ver.).flac
+|--|--|--|--|--02. 空も心も晴れるから (黒澤ダイヤ Solo Ver.).flac
+|--|--|--|--|--03. Daydream Warrior (黒澤ダイヤ Solo Ver.).flac
+|--|--|--|--|--04. G線上のシンデレラ (黒澤ダイヤ Solo Ver.).flac
+|--|--|--|--|--05. スリリング・ワンウェイ (黒澤ダイヤ Solo Ver.).flac
+|--|--|--|--|--06. 太陽を追いかけろ！ (黒澤ダイヤ Solo Ver.).flac
+|--|--|--|--|--07. ジングルベルがとまらない (黒澤ダイヤ Solo Ver.).flac
+|--|--|--|--|--08. 聖なる日の祈り (黒澤ダイヤ Solo Ver.).flac
+|--|--|--|--Disc 2
+|--|--|--|--|--01. 予測不可能Driving! (黒澤ダイヤ Solo Ver.).flac
+|--|--|--|--|--02. 僕らの走ってきた道は… (黒澤ダイヤ Solo Ver.).flac
+|--|--|--|--|--03. 逃走迷走メビウスループ (黒澤ダイヤ Solo Ver.).flac
+|--|--|--|--|--04. Hop？ Stop？ Nonstop! (黒澤ダイヤ Solo Ver.).flac
+|--|--|--|--|--05. Brightest Melody (黒澤ダイヤ Solo Ver.).flac
+|--|--|--|--|--06. キセキヒカル (黒澤ダイヤ Solo Ver.).flac
+|--|--|--|--|--07. Next SPARKLING!! (黒澤ダイヤ Solo Ver.).flac
+|--|--|--|--|--08. i-n-g, I TRY!! (黒澤ダイヤ Solo Ver.).flac
+|--|--|--|--|--09. Pure heart Pure wish.flac
+|--|--|--[2023.02.10] LoveLive! Sunshine!! Third Solo Concert Album ～THE STORY OF OVER THE RAINBOW～ starring Matsuura Kanan
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Disc 1
+|--|--|--|--|--01. Pops heartで踊るんだもん！ (松浦果南 Solo Ver.).flac
+|--|--|--|--|--02. 空も心も晴れるから (松浦果南 Solo Ver.).flac
+|--|--|--|--|--03. Daydream Warrior (松浦果南 Solo Ver.).flac
+|--|--|--|--|--04. G線上のシンデレラ (松浦果南 Solo Ver.).flac
+|--|--|--|--|--05. スリリング・ワンウェイ (松浦果南 Solo Ver.).flac
+|--|--|--|--|--06. 太陽を追いかけろ！ (松浦果南 Solo Ver.).flac
+|--|--|--|--|--07. ジングルベルがとまらない (松浦果南 Solo Ver.).flac
+|--|--|--|--|--08. 聖なる日の祈り (松浦果南 Solo Ver.).flac
+|--|--|--|--Disc 2
+|--|--|--|--|--01. 予測不可能Driving! (松浦果南 Solo Ver.).flac
+|--|--|--|--|--02. 僕らの走ってきた道は… (松浦果南 Solo Ver.).flac
+|--|--|--|--|--03. 逃走迷走メビウスループ (松浦果南 Solo Ver.).flac
+|--|--|--|--|--04. Hop Stop Nonstop! (松浦果南 Solo Ver.).flac
+|--|--|--|--|--05. Brightest Melody (松浦果南 Solo Ver.).flac
+|--|--|--|--|--06. キセキヒカル (松浦果南 Solo Ver.).flac
+|--|--|--|--|--07. Next SPARKLING!! (松浦果南 Solo Ver.).flac
+|--|--|--|--|--08. i-n-g, I TRY!! (松浦果南 Solo Ver.).flac
+|--|--|--|--|--09. センチメンタルレモネード.flac
+|--|--|--[2023.03.04] Love Live! Sunshine!! Third Solo Concert Album ～THE STORY OF “OVER THE RAINBOW”～ starring Kunikida Hanamaru
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Disc 1
+|--|--|--|--|--01. Pops heartで踊るんだもん！ (国木田花丸 Solo Ver.).flac
+|--|--|--|--|--02. 空も心も晴れるから (国木田花丸 Solo Ver.).flac
+|--|--|--|--|--03. Waku-Waku-Week! (国木田花丸 Solo Ver.).flac
+|--|--|--|--|--04. Daydream Warrior (国木田花丸 Solo Ver.).flac
+|--|--|--|--|--05. スリリング・ワンウェイ (国木田花丸 Solo Ver.).flac
+|--|--|--|--|--06. 太陽を追いかけろ！ (国木田花丸 Solo Ver.).flac
+|--|--|--|--|--07. ジングルベルがとまらない (国木田花丸 Solo Ver.).flac
+|--|--|--|--|--08. 聖なる日の祈り (国木田花丸 Solo Ver.).flac
+|--|--|--|--Disc 2
+|--|--|--|--|--01. ハジマリロード (国木田花丸 Solo Ver.).flac
+|--|--|--|--|--02. 僕らの走ってきた道は… (国木田花丸 Solo Ver.).flac
+|--|--|--|--|--03. Hop？ Stop？ Nonstop! (国木田花丸 Solo Ver.).flac
+|--|--|--|--|--04. Brightest Melody (国木田花丸 Solo Ver.).flac
+|--|--|--|--|--05. キセキヒカル (国木田花丸 Solo Ver.).flac
+|--|--|--|--|--06. Next SPARKLING!! (国木田花丸 Solo Ver.).flac
+|--|--|--|--|--07. i-n-g, I TRY!! (国木田花丸 Solo Ver.).flac
+|--|--|--|--|--08. TSUBOMI SEASON.flac
+|--|--|--[2023.04.17] Love Live! Sunshine!! Third Solo Concert Album ～THE STORY OF “OVER THE RAINBOW”～ starring Watanabe You
+|--|--|--|--album.nfo
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Disc 1
+|--|--|--|--|--01. Pops heartで踊るんだもん！ (渡辺曜 Solo Ver.).flac
+|--|--|--|--|--02. 空も心も晴れるから (渡辺曜 Solo Ver.).flac
+|--|--|--|--|--03. Daydream Warrior (渡辺曜 Solo Ver.).flac
+|--|--|--|--|--04. スリリング・ワンウェイ (渡辺曜 Solo Ver.).flac
+|--|--|--|--|--05. 太陽を追いかけろ！ (渡辺曜 Solo Ver.).flac
+|--|--|--|--|--06. ジングルベルがとまらない (渡辺曜 Solo Ver.).flac
+|--|--|--|--|--07. 聖なる日の祈り (渡辺曜 Solo Ver.).flac
+|--|--|--|--Disc 2
+|--|--|--|--|--01. Marine Border Parasol (渡辺曜 Solo Ver.).flac
+|--|--|--|--|--02. 僕らの走ってきた道は… (渡辺曜 Solo Ver.).flac
+|--|--|--|--|--03. Hop？ Stop？ Nonstop! (渡辺曜 Solo Ver.).flac
+|--|--|--|--|--04. Brightest Melody (渡辺曜 Solo Ver.).flac
+|--|--|--|--|--05. キセキヒカル (渡辺曜 Solo Ver.).flac
+|--|--|--|--|--06. Next SPARKLING!! (渡辺曜 Solo Ver.).flac
+|--|--|--|--|--07. i-n-g, I TRY!! (渡辺曜 Solo Ver.).flac
+|--|--|--|--|--08. 海空のオーロラ.flac
+|--|--|--[2023.06.13] Love Live! Sunshine!! Third Solo Concert Album ～THE STORY OF “OVER THE RAINBOW”～ starring Ohara Mari
+|--|--|--|--album.nfo
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Disc 1
+|--|--|--|--|--01. Pops heartで踊るんだもん！ (小原鞠莉 Solo Ver.).flac
+|--|--|--|--|--02. 空も心も晴れるから (小原鞠莉 Solo Ver.).flac
+|--|--|--|--|--03. Daydream Warrior (小原鞠莉 Solo Ver.).flac
+|--|--|--|--|--04. G線上のシンデレラ (小原鞠莉 Solo Ver.).flac
+|--|--|--|--|--05. スリリング・ワンウェイ (小原鞠莉 Solo Ver.).flac
+|--|--|--|--|--06. 太陽を追いかけろ！ (小原鞠莉 Solo Ver.).flac
+|--|--|--|--|--07. ジングルベルがとまらない (小原鞠莉 Solo Ver.).flac
+|--|--|--|--|--08. 聖なる日の祈り (小原鞠莉 Solo Ver.).flac
+|--|--|--|--Disc 2
+|--|--|--|--|--01. 予測不可能Driving! (小原鞠莉 Solo Ver.).flac
+|--|--|--|--|--02. 僕らの走ってきた道は… (小原鞠莉 Solo Ver.).flac
+|--|--|--|--|--03. 逃走迷走メビウスループ (小原鞠莉 Solo Ver.).flac
+|--|--|--|--|--04. Hop？ Stop？ Nonstop! (小原鞠莉 Solo Ver.).flac
+|--|--|--|--|--05. Brightest Melody (小原鞠莉 Solo Ver.).flac
+|--|--|--|--|--06. キセキヒカル (小原鞠莉 Solo Ver.).flac
+|--|--|--|--|--07. Next SPARKLING!! (小原鞠莉 Solo Ver.).flac
+|--|--|--|--|--08. i-n-g, I TRY!! (小原鞠莉 Solo Ver.).flac
+|--|--|--|--|--09. また君に会うんだ.flac
+|--|--|--[2023.07.13] Love Live! Sunshine!! Third Solo Concert Album ～THE STORY OF “OVER THE RAINBOW”～ starring Tsushima Yoshiko
+|--|--|--|--album.nfo
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Disc 1
+|--|--|--|--|--01. Pops heartで踊るんだもん！ (津島善子 Solo Ver.).flac
+|--|--|--|--|--02. 空も心も晴れるから (津島善子 Solo Ver.).flac
+|--|--|--|--|--03. Waku-Waku-Week! (津島善子 Solo Ver.).flac
+|--|--|--|--|--04. Daydream Warrior (津島善子 Solo Ver.).flac
+|--|--|--|--|--05. スリリング・ワンウェイ (津島善子 Solo Ver.).flac
+|--|--|--|--|--06. 太陽を追いかけろ！ (津島善子 Solo Ver.).flac
+|--|--|--|--|--07. ジングルベルがとまらない (津島善子 Solo Ver.).flac
+|--|--|--|--|--08. 聖なる日の祈り (津島善子 Solo Ver.).flac
+|--|--|--|--Disc 2
+|--|--|--|--|--01. ハジマリロード (津島善子 Solo Ver.).flac
+|--|--|--|--|--02. 僕らの走ってきた道は… (津島善子 Solo Ver.).flac
+|--|--|--|--|--03. Hop？ Stop？ Nonstop! (津島善子 Solo Ver.).flac
+|--|--|--|--|--04. Brightest Melody (津島善子 Solo Ver.).flac
+|--|--|--|--|--05. キセキヒカル (津島善子 Solo Ver.).flac
+|--|--|--|--|--06. Next SPARKLING!! (津島善子 Solo Ver.).flac
+|--|--|--|--|--07. i-n-g, I TRY!! (津島善子 Solo Ver.).flac
+|--|--|--|--|--08. MABOROSHI wing.flac
+|--|--|--[2024.08.01] Love Live! Sunshine!! Fourth Solo Concert Album ～THE STORY OF SUNSHINE!!～ starring Takami Chika
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Disc 1
+|--|--|--|--|--01. Thank you, FRIENDS!! (高海千歌 Solo Ver.).flac
+|--|--|--|--|--02. No.10 (高海千歌 Solo Ver.).flac
+|--|--|--|--|--03. 冒険Type A, B, C!! (高海千歌 Solo Ver.).flac
+|--|--|--|--|--04. Fantastic Departure! (高海千歌 Solo Ver.).flac
+|--|--|--|--|--05. Aqours Pirates Desire (高海千歌 Solo Ver.).flac
+|--|--|--|--|--06. Future flight (高海千歌 Solo Ver.).flac
+|--|--|--|--|--07. smile smile ship Start! (高海千歌 Solo Ver.).flac
+|--|--|--|--|--08. 心の羽よ君へ飛んでけ！ (高海千歌 Solo Ver.).flac
+|--|--|--|--|--09. KU-RU-KU-RU Cruller! (高海千歌 Solo Ver.).flac
+|--|--|--|--|--10. SUKI for you, DREAM for you! (高海千歌 Solo Ver.).flac
+|--|--|--|--|--11. 涙× (高海千歌 Solo Ver.).flac
+|--|--|--|--Disc 2
+|--|--|--|--|--01. LIVE with a smile! (高海千歌 Solo Ver.).flac
+|--|--|--|--|--02. not ALONE not HITORI (高海千歌 Solo Ver.).flac
+|--|--|--|--|--03. GEMSTONE DE-A-I (高海千歌 Solo Ver.).flac
+|--|--|--|--|--04. BANZAI! digital trippers (高海千歌 Solo Ver.).flac
+|--|--|--|--|--05. KA-GA-YA-KI-RA-RI-RA (高海千歌 Solo Ver.).flac
+|--|--|--|--|--06. 幻日ミステリウム (高海千歌 Solo Ver.).flac
+|--|--|--|--|--07. GAME ON！ (高海千歌 Solo Ver.).flac
+|--|--|--|--|--08. キミノタメボクノタメ (高海千歌 Solo Ver.).flac
+|--|--|--|--|--09. SILENT PAIN (高海千歌 Solo Ver.).flac
+|--|--|--|--|--10. 僕らの海でまた会おう (高海千歌 Solo Ver.).flac
+|--|--|--[2024.09.19] Love Live! Sunshine!! Fourth Solo Concert Album ～THE STORY OF SUNSHINE!!～ starring Sakurauchi Riko
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Disc 1
+|--|--|--|--|--01. Thank you, FRIENDS!! (桜内梨子 Solo Ver.).flac
+|--|--|--|--|--02. No.10 (桜内梨子 Solo Ver.).flac
+|--|--|--|--|--03. 冒険Type A, B, C!! (桜内梨子 Solo Ver.).flac
+|--|--|--|--|--04. Fantastic Departure! (桜内梨子 Solo Ver.).flac
+|--|--|--|--|--05. Aqours Pirates Desire (桜内梨子 Solo Ver.).flac
+|--|--|--|--|--06. Future flight (桜内梨子 Solo Ver.).flac
+|--|--|--|--|--07. smile smile ship Start! (桜内梨子 Solo Ver.).flac
+|--|--|--|--|--08. 心の羽よ君へ飛んでけ！ (桜内梨子 Solo Ver.).flac
+|--|--|--|--|--09. KU-RU-KU-RU Cruller! (桜内梨子 Solo Ver.).flac
+|--|--|--|--|--10. SUKI for you, DREAM for you! (桜内梨子 Solo Ver.).flac
+|--|--|--|--|--11. 涙× (桜内梨子 Solo Ver.).flac
+|--|--|--|--Disc 2
+|--|--|--|--|--01. LIVE with a smile! (桜内梨子 Solo Ver.).flac
+|--|--|--|--|--02. not ALONE not HITORI (桜内梨子 Solo Ver.).flac
+|--|--|--|--|--03. GEMSTONE “DE‐A‐I” (桜内梨子 Solo Ver.).flac
+|--|--|--|--|--04. BANZAI! digital trippers (桜内梨子 Solo Ver.).flac
+|--|--|--|--|--05. KA-GA-YA-KI-RA-RI-RA (桜内梨子 Solo Ver.).flac
+|--|--|--|--|--06. 幻日ミステリウム (桜内梨子 Solo Ver.).flac
+|--|--|--|--|--07. GAME ON! (桜内梨子 Solo Ver.).flac
+|--|--|--|--|--08. キミノタメボクノタメ (桜内梨子 Solo Ver.).flac
+|--|--|--|--|--09. SILENT PAIN (桜内梨子 Solo Ver.).flac
+|--|--|--|--|--10. 僕らの海でまた会おう (桜内梨子 Solo Ver.).flac
+|--|--|--[2024.09.21] Love Live! Sunshine!! Fourth Solo Concert Album ～THE STORY OF SUNSHINE!!～ starring Kurosawa Ruby
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Disc 1
+|--|--|--|--|--01. Thank you, FRIENDS!! (黒澤ルビィ Solo Ver.).flac
+|--|--|--|--|--02. No.10 (黒澤ルビィ Solo Ver.).flac
+|--|--|--|--|--03. 冒険Type A, B, C!! (黒澤ルビィ Solo Ver.).flac
+|--|--|--|--|--04. Fantastic Departure! (黒澤ルビィ Solo Ver.).flac
+|--|--|--|--|--05. Aqours Pirates Desire (黒澤ルビィ Solo Ver.).flac
+|--|--|--|--|--06. Future flight (黒澤ルビィ Solo Ver.).flac
+|--|--|--|--|--07. smile smile ship Start! (黒澤ルビィ Solo Ver.).flac
+|--|--|--|--|--08. 心の羽よ君へ飛んでけ！ (黒澤ルビィ Solo Ver.).flac
+|--|--|--|--|--09. KU-RU-KU-RU Cruller! (黒澤ルビィ Solo Ver.).flac
+|--|--|--|--|--10. SUKI for you, DREAM for you! (黒澤ルビィ Solo Ver.).flac
+|--|--|--|--|--11. 涙× (黒澤ルビィ Solo Ver.).flac
+|--|--|--|--Disc 2
+|--|--|--|--|--01. LIVE with a smile! (黒澤ルビィ Solo Ver.).flac
+|--|--|--|--|--02. not ALONE not HITORI (黒澤ルビィ Solo Ver.).flac
+|--|--|--|--|--03. GEMSTONE “DE‐A‐I” (黒澤ルビィ Solo Ver.).flac
+|--|--|--|--|--04. BANZAI! digital trippers (黒澤ルビィ Solo Ver.).flac
+|--|--|--|--|--05. KA-GA-YA-KI-RA-RI-RA (黒澤ルビィ Solo Ver.).flac
+|--|--|--|--|--06. 幻日ミステリウム (黒澤ルビィ Solo Ver.).flac
+|--|--|--|--|--07. GAME ON! (黒澤ルビィ Solo Ver.).flac
+|--|--|--|--|--08. キミノタメボクノタメ (黒澤ルビィ Solo Ver.).flac
+|--|--|--|--|--09. SILENT PAIN (黒澤ルビィ Solo Ver.).flac
+|--|--|--|--|--10. 僕らの海でまた会おう (黒澤ルビィ Solo Ver.).flac
 |--|--精选集
 |--|--|--[2020.10.07] ラブライブ！サンシャイン!! Aqours CHRONICLE（2015～2017）
 |--|--|--|--Cover_1.jpg
@@ -942,6 +1179,44 @@ LoveLive
 |--|--|--|--03. LIVE with a smile! (虹ヶ咲学園スクールアイドル同好会 Ver.).flac
 |--|--|--|--04. LIVE with a smile! (Liella! Ver.).flac
 |--|--|--|--Cover_1.jpg
+|--|--|--[2023.05.17] Liella! - MIRACLE NEW STORY
+|--|--|--|--01. MIRACLE NEW STORY.flac
+|--|--|--|--02. キラーキューン☆.flac
+|--|--|--|--album.nfo
+|--|--|--|--Cover_1.jpg
+|--|--|--[2023.07.05] Liella! - UNIVERSE!!
+|--|--|--|--01. UNIVERSE!!.flac
+|--|--|--|--03. UNIVERSE!! (澁谷かのん Solo Ver.).flac
+|--|--|--|--04. UNIVERSE!! (唐 可可 Solo Ver.).flac
+|--|--|--|--05. UNIVERSE!! (嵐 千砂都 Solo Ver.).flac
+|--|--|--|--06. UNIVERSE!! (平安名すみれ Solo Ver.).flac
+|--|--|--|--07. UNIVERSE!! (葉月 恋 Solo Ver.).flac
+|--|--|--|--08. UNIVERSE!! (桜小路きな子 Solo Ver.).flac
+|--|--|--|--09. UNIVERSE!! (米女メイ Solo Ver.).flac
+|--|--|--|--10. UNIVERSE!! (若菜四季 Solo Ver.).flac
+|--|--|--|--11. UNIVERSE!! (鬼塚夏美 Solo Ver.).flac
+|--|--|--|--album.nfo
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Thumbs.db
+|--|--|--[2024.01.10] Liella! - シェキラ☆☆☆
+|--|--|--|--01. シェキラ☆☆☆.flac
+|--|--|--|--02. FANTASTiC.flac
+|--|--|--|--03. 私のSymphony ～2023 Ver.～.flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2024.08.01] Liella! - アイコトバ！
+|--|--|--|--01. アイコトバ！.flac
+|--|--|--|--03. アイコトバ!(澁谷 かのんver.).flac
+|--|--|--|--04. アイコトバ!(唐 可可ver.).flac
+|--|--|--|--05. アイコトバ!(嵐 千砂都ver.).flac
+|--|--|--|--06. アイコトバ!(平安名 すみれver.).flac
+|--|--|--|--07. アイコトバ!(葉月 恋ver.).flac
+|--|--|--|--08. アイコトバ!(桜小路 きなこver.).flac
+|--|--|--|--09. アイコトバ!(米女 メイver.).flac
+|--|--|--|--10. アイコトバ!(若菜 四季ver.).flac
+|--|--|--|--11. アイコトバ!(鬼塚 夏美ver.).flac
+|--|--|--|--12. アイコトバ!(ウィーン？マルガレーテver.).flac
+|--|--|--|--13. アイコトバ!(鬼塚 冬毬ver.).flac
+|--|--|--|--Cover_1.jpg
 |--|--动画
 |--|--|--blu-ray
 |--|--|--|--[2021.09.28] 涩谷香音 - 心キラララ
@@ -977,6 +1252,16 @@ LoveLive
 |--|--|--|--[2022.02.25] 涩谷香音,岚千砂都,平安名堇 - Stella!
 |--|--|--|--|--Cover_1.jpg
 |--|--|--|--|--Stella!.flac
+|--|--|--|--[2022.12.23] Liella! - Hoshizora Monologue
+|--|--|--|--|--01. Hoshizora Monologue.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--[2023.01.27] 樱小路希奈子,米女芽衣,若菜四季,鬼冢夏美 - Blooming Dance！Dance！
+|--|--|--|--|--01. Blooming Dance！Dance！.flac
+|--|--|--|--|--02. Blooming Dance！Dance！(Off Vocal).flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--[2023.02.24] Liella! - Including you
+|--|--|--|--|--01. Including you.flac
+|--|--|--|--|--Cover_1.jpg
 |--|--|--[2021.07.21] Liella! - START!! True dreams
 |--|--|--|--01. START!! True dreams.flac
 |--|--|--|--02. だから僕らは鳴らすんだ！.flac
@@ -997,8 +1282,6 @@ LoveLive
 |--|--|--|--02. Wish Song.flac
 |--|--|--|--03. バイバイしちゃえば！？.flac
 |--|--|--|--03. 瞬きの先へ.flac
-|--|--|--|--Cover_01.jpg
-|--|--|--|--Cover_02.jpg
 |--|--|--|--Cover_1.jpg
 |--|--|--|--Cover_2.jpg
 |--|--|--[2021.10.19] Liella! - Nonfiction!! ／ Starlight Prologue
@@ -1123,6 +1406,25 @@ LoveLive
 |--|--|--|--11. 駆けるメリーゴーランド.flac
 |--|--|--|--12. Time to go.flac
 |--|--|--|--Cover_1.jpg
+|--|--|--[2022.11.30] ウィーン・マルガレーテ - Butterfly Wing／エーデルシュタイン
+|--|--|--|--01. Butterfly Wing.flac
+|--|--|--|--02. エーデルシュタイン.flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2024.10.23] Liella! - DAISUKI FULL POWER
+|--|--|--|--01. DAISUKI FULL POWER.flac
+|--|--|--|--02. Within a Dream.flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2024.10.23] Liella! - Let's be ONE
+|--|--|--|--01. Let's be ONE.flac
+|--|--|--|--02. 青春HOPPERS.flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2024.11.13] Liella! - Bubble Rise／Special Color
+|--|--|--|--01. Bubble Rise.flac
+|--|--|--|--02. Special Color.flac
+|--|--|--|--03. いつものピースサイン.flac
+|--|--|--|--04. ファイティングコール.flac
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Cover_2.jpg
 |--|--单曲
 |--|--|--[2021.04.07] Liella! - 始まりは君の空
 |--|--|--|--CD
@@ -1160,7 +1462,52 @@ LoveLive
 |--|--|--|--10. ユニゾン.flac
 |--|--|--|--Cover_1.jpg
 |--|--|--|--Cover_2.jpg
+|--|--|--[2023.03.15] Liella! - Second Sparkle
+|--|--|--|--01. WE WILL!!.flac
+|--|--|--|--02. Second Sparkle.flac
+|--|--|--|--03. ビギナーズRock!!.flac
+|--|--|--|--04. ミッドナイトラプソディ.flac
+|--|--|--|--05. 星屑クルージング.flac
+|--|--|--|--06. 君を想う花になる.flac
+|--|--|--|--07. 茜心.flac
+|--|--|--|--08. ガラスボールリジェクション.flac
+|--|--|--|--09. Eyeをちょうだい.flac
+|--|--|--|--10. Starry Prayer.flac
+|--|--|--|--11. Free Flight.flac
+|--|--|--|--12. 私のSymphony ～2022 Ver.～.flac
+|--|--|--|--13. 追いかける夢の先で.flac
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Cover_2.jpg
+|--|--|--[2023.08.02] Liella! - Jump Into the New World
+|--|--|--|--01. Jump Into the New World.flac
+|--|--|--|--02. オルタネイト.flac
+|--|--|--|--03. 影遊び.flac
+|--|--|--|--04. ベロア.flac
+|--|--|--|--05. 不可視なブルー.flac
+|--|--|--|--06. Dancing Raspberry.flac
+|--|--|--|--07. A Little Love.flac
+|--|--|--|--album.nfo
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Thumbs.db
 |--|--小组曲
+|--|--|--5yncri5e!
+|--|--|--|--[2024.04.24] 5yncri5e! - Jellyfish
+|--|--|--|--|--01. Jellyfish.flac
+|--|--|--|--|--02. Thank you Good morning.flac
+|--|--|--|--|--03. What a Wonderful Dream!! ～5yncri5e! Ver.～.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--CatChu!
+|--|--|--|--[2024.04.24] CatChu! - ディストーション
+|--|--|--|--|--01. ディストーション.flac
+|--|--|--|--|--02. 全力ライオット.flac
+|--|--|--|--|--03. What a Wonderful Dream!! ～CatChu! Ver.～.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--KALEIDOSCORE
+|--|--|--|--[2024.04.24] KALEIDOSCORE - ニュートラル
+|--|--|--|--|--01. ニュートラル.flac
+|--|--|--|--|--02. カメリアの囁き.flac
+|--|--|--|--|--03. What a Wonderful Dream!! ～KALEIDOSCORE Ver.～.flac
+|--|--|--|--|--Cover_1.jpg
 |--|--独唱
 |--|--精选集
 |--μ's
@@ -2313,6 +2660,7 @@ LoveLive
 |--|--|--|--|--01. タカラモノズ.flac
 |--|--|--|--|--02. Paradise Live.flac
 |--|--|--|--|--03. Shangri-La Shower.flac
+|--|--|--|--|--04. るてしキスキしてる(1).flac
 |--|--|--|--|--04. るてしキスキしてる.flac
 |--|--|--|--|--05. ミはμ'sicのミ.flac
 |--|--|--|--|--06. Super LOVE=Super LIVE!.flac
@@ -2393,6 +2741,97 @@ LoveLive
 |--|--|--|--|--09. MOMENT RING.flac
 |--|--|--|--|--10. さようならへさよなら!.flac
 |--|--|--|--|--Cover_1.jpg
+|--学园偶像音乐剧
+|--|--[2022.12.10] 学园偶像音乐剧 - 未完成ドリーム！
+|--|--|--01. 未完成ドリーム！.flac
+|--|--|--02. 未完成ドリーム！ (椿咲花女子高等学校 Ver.).flac
+|--|--|--03. 未完成ドリーム！ (滝桜女学院高等学校 Ver.).flac
+|--|--|--Cover_1.jpg
+|--幻日夜羽
+|--|--其他
+|--|--|--[2024.05.29] Aqours - Deep Blue
+|--|--|--|--01. Deep Blue.flac
+|--|--|--|--02. SAKURA-saku KOKORO-saku.flac
+|--|--|--|--Cover_1.jpg
+|--|--动画
+|--|--|--blu-ray
+|--|--|--|--[2023.09.27] 津岛善子 - テ・キ・ナ ミュージック
+|--|--|--|--|--02. テ・キ・ナ ミュージック.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--|--Cover_2.jpg
+|--|--|--|--[2023.10.27] 津岛善子,国木田花丸 - Tick-Tack, Tick-Tack
+|--|--|--|--|--02. Tick-Tack, Tick-Tack.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--|--Cover_2.jpg
+|--|--|--|--[2023.11.22] 黑泽黛雅,小原鞠莉 - Best wishes
+|--|--|--|--|--02. Best wishes.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--|--Cover_2.jpg
+|--|--|--|--[2023.12.22] 高海千歌,渡边曜,松浦果南 - Special Holidays
+|--|--|--|--|--02. Special Holidays.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--|--Cover_2.jpg
+|--|--|--|--[2024.01.26] 黑泽露比,樱内梨子 - 好奇心ジャーニー
+|--|--|--|--|--02. 好奇心ジャーニー.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--|--Cover_2.jpg
+|--|--|--|--[2024.02.28] Aqours - ヌマヅやっさよいさ唄
+|--|--|--|--|--02. ヌマヅやっさよいさ唄.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--|--Cover_2.jpg
+|--|--|--|--[2024.03.27] Aqours,莱拉普斯 - BLOOM OF COLORS
+|--|--|--|--|--02. BLOOM OF COLORS.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--|--Cover_2.jpg
+|--|--|--[2023.07.26] Aqours - 幻日ミステリウム
+|--|--|--|--01. 幻日ミステリウム.flac
+|--|--|--|--02. GAME ON!.flac
+|--|--|--|--album.nfo
+|--|--|--|--Cover_1.jpg
+|--|--|--[2023.08.02] Aqours - キミノタメボクノタメ
+|--|--|--|--01. キミノタメボクノタメ.flac
+|--|--|--|--02. SILENT PAIN.flac
+|--|--|--|--album.nfo
+|--|--|--|--Cover_1.jpg
+|--|--|--[2023.08.23] 津岛善子,黑泽黛雅,黑泽露比,高海千歌 - Far far away／Be as one!!!
+|--|--|--|--01. Far far away.flac
+|--|--|--|--02. Be as one!!!.flac
+|--|--|--|--album.nfo
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Cover_2.jpg
+|--|--|--[2023.09.06] 国木田花丸,渡边曜,松浦果南,津岛善子,樱内梨子,小原鞠莉 - R・E・P／Hey, dear my friends
+|--|--|--|--01. R・E・P.flac
+|--|--|--|--02. Hey, dear my friends.flac
+|--|--|--|--album.nfo
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Cover_2.jpg
+|--|--|--[2023.09.27] Aqours - GIRLS!!／Wonder sea breeze
+|--|--|--|--01. GIRLS!!.flac
+|--|--|--|--02. Wonder sea breeze.flac
+|--|--|--|--album.nfo
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Cover_2.jpg
+|--|--|--[2023.10.11] Aqours - Forever U & I／La la 勇気のうた
+|--|--|--|--01. Forever U & I.flac
+|--|--|--|--02. La la 勇気のうた.flac
+|--|--|--|--album.nfo
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Cover_2.jpg
+|--|--|--[2023.10.25] OST - みんなの音
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Disc 1
+|--|--|--|--|--01. 幻日ミステリウム (TVサイズ).flac
+|--|--|--|--|--03. Far far away (Audition Ver.).flac
+|--|--|--|--|--13. Far far away (TVサイズ).flac
+|--|--|--|--|--29. Be as one!!! (TVサイズ).flac
+|--|--|--|--Disc 2
+|--|--|--|--|--08. R・E・P (TVサイズ).flac
+|--|--|--|--|--09. Hey, dear my friends (TVサイズ).flac
+|--|--|--|--|--10. GIRLS!! (TVサイズ).flac
+|--|--|--|--|--12. Wonder sea breeze (TVサイズ).flac
+|--|--|--|--|--19. Forever U & I (TVサイズ).flac
+|--|--|--|--|--21. La la 勇気のうた (TVサイズ).flac
+|--|--|--|--|--24. キミノタメボクノタメ (TVサイズ).flac
 |--组合
 |--|--[2021.11.24] ANL - not ALONE not HITORI／ミラクル STAY TUNE!／Shooting Voice!!
 |--|--|--01. not ALONE not HITORI.flac
@@ -2401,6 +2840,134 @@ LoveLive
 |--|--|--Cover_1.jpg
 |--|--|--Cover_2.jpg
 |--|--|--Cover_3.jpg
+|--|--[2023.12.06] 高海千歌,上原步梦,涩谷香音,日野下花帆 - 異次元★♥BIGBANG
+|--|--|--01. 異次元★♥BIGBANG.flac
+|--|--|--Cover_1.jpg
+|--|--[2024.09.20] 高坂穂乃果,渡边曜,上原步梦,涩谷香音,日野下花帆 - Bring the LOVE!
+|--|--|--01. Bring the LOVE!.flac
+|--|--|--Cover_1.jpg
+|--莲之空女学院学园偶像俱乐部
+|--|--单曲
+|--|--|--[2023.03.29] 莲之空女学院学园偶像俱乐部 - Dream Believers
+|--|--|--|--01. Dream Believers.flac
+|--|--|--|--02. On your mark.flac
+|--|--|--|--03. 水彩世界.flac
+|--|--|--|--04. AWOKE.flac
+|--|--|--|--05. ド！ド！ド！.flac
+|--|--|--|--06. 永遠のEuphoria.flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2023.06.14] スリーズブーケ&DOLLCHESTRA - Holiday∞Holiday／Tragic Drops
+|--|--|--|--01. 謳歌爛漫.flac
+|--|--|--|--02. スケイプゴート.flac
+|--|--|--|--03. Holiday∞Holiday.flac
+|--|--|--|--04. Tragic Drops.flac
+|--|--|--|--album.nfo
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Cover_2.jpg
+|--|--|--[2023.09.20] 莲之空女学院学园偶像俱乐部 - 夏めきペイン
+|--|--|--|--01. 夏めきペイン.flac
+|--|--|--|--02. Yup! Yup! Yup!.flac
+|--|--|--|--03. ココン東西.flac
+|--|--|--|--04. 残陽.flac
+|--|--|--|--05. 青春の輪郭.flac
+|--|--|--|--06. ハクチューアラモード.flac
+|--|--|--|--07. Dear my future.flac
+|--|--|--|--08. パラレルダンサー.flac
+|--|--|--|--09. 明日の空の僕たちへ.flac
+|--|--|--|--10. Legato.flac
+|--|--|--|--album.nfo
+|--|--|--|--Cover_1.jpg
+|--|--|--[2024.01.17] 莲之空女学院学园偶像俱乐部 - Link to the FUTURE
+|--|--|--|--01. Trick & Cute.flac
+|--|--|--|--02. ツバサ・ラ・リベルテ.flac
+|--|--|--|--03. Link to the FUTURE.flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2024.02.14] スリーズブーケ&DOLLCHESTRA&みらくらぱーく！ - Special Thanks／青とシャボン／ミルク
+|--|--|--|--01. Special Thanks.flac
+|--|--|--|--02. 青とシャボン.flac
+|--|--|--|--03. ミルク.flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2024.03.20] るりのとゆかいなつづりたち&かほめぐ♡じぇらーと&蓮ノ休日 - Colorfulness／ハッピー至上主義！／Pleasure Feather
+|--|--|--|--01. Colorfulness.flac
+|--|--|--|--02. ハッピー至上主義！.flac
+|--|--|--|--03. Pleasure Feather.flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2024.04.03] 莲之空女学院学园偶像俱乐部 - 抱きしめる花びら
+|--|--|--|--01. 抱きしめる花びら.flac
+|--|--|--|--02. STEP UP !.flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2024.04.17] 莲之空女学院学园偶像俱乐部 - Dream Believers (104期 Ver.)
+|--|--|--|--01. Dream Believers (104期 Ver.).flac
+|--|--|--|--02. On your mark (104期 Ver.).flac
+|--|--|--|--03. アオクハルカ.flac
+|--|--|--|--04. レディバグ.flac
+|--|--|--|--05. みらくりえーしょん.flac
+|--|--|--|--06. 永遠のEuphoria (104期 Ver.).flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2024.07.17] 莲之空女学院学园偶像俱乐部 - Bloom the smile, Bloom the dream!
+|--|--|--|--01. Bloom the smile, Bloom the dream!.flac
+|--|--|--|--02. 365 Days.flac
+|--|--|--|--Cover_1.jpg
+|--|--小组曲
+|--|--|--DOLLCHESTRA
+|--|--|--|--[2023.04.26] DOLLCHESTRA - Sparkly Spot
+|--|--|--|--|--01. Sparkly Spot.flac
+|--|--|--|--|--02. ツキマカセ.flac
+|--|--|--|--|--03. 希望的プリズム.flac
+|--|--|--|--|--album.nfo
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--|--Thumbs.db
+|--|--|--|--[2023.08.09] DOLLCHESTRA - Mirage Voyage
+|--|--|--|--|--02. ジブンダイアリー.flac
+|--|--|--|--|--03. Mirage Voyage.flac
+|--|--|--|--|--album.nfo
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--[2023.11.22] DOLLCHESTRA - Take It Over
+|--|--|--|--|--01. Take It Over.flac
+|--|--|--|--|--02. 飴色.flac
+|--|--|--|--|--03. KNOT.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--[2024.09.11] DOLLCHESTRA - Proof
+|--|--|--|--|--01. Proof.flac
+|--|--|--|--|--02. Sparkly Spot (104期NEW Ver.).flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--みらくらぱーく！
+|--|--|--|--[2023.11.29] みらくらぱーく！ - アイデンティティ
+|--|--|--|--|--01. アイデンティティ.flac
+|--|--|--|--|--02. 天才なのかもしれない.flac
+|--|--|--|--|--03. ノンフィクションヒーローショー.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--[2024.03.27] みらくらぱーく！ - 以心☆電信
+|--|--|--|--|--01. 以心☆電信.flac
+|--|--|--|--|--02. BANG YOU グラビティ.flac
+|--|--|--|--|--03. マハラジャンボリー.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--[2024.10.02] みらくらぱーく！ - ファンファーレ!!!
+|--|--|--|--|--01. ファンファーレ!!!.flac
+|--|--|--|--|--02. アイデンティティ (104期NEW Ver.).flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--スリーズブーケ
+|--|--|--|--[2023.04.26] スリーズブーケ - Reflection in the mirror
+|--|--|--|--|--01. Reflection in the mirror.flac
+|--|--|--|--|--02. フォーチュンムービー.flac
+|--|--|--|--|--03. Mix shake!!.flac
+|--|--|--|--|--album.nfo
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--[2023.08.09] スリーズブーケ - 眩耀夜行
+|--|--|--|--|--01. DEEPNESS.flac
+|--|--|--|--|--02. Kawaii no susume.flac
+|--|--|--|--|--03. 眩耀夜行.flac
+|--|--|--|--|--album.nfo
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--[2023.11.15] スリーズブーケ - 素顔のピクセル
+|--|--|--|--|--01. 素顔のピクセル.flac
+|--|--|--|--|--02. シュガーメルト.flac
+|--|--|--|--|--03. 千変万華.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--[2024.09.04] スリーズブーケ - 月夜見海月
+|--|--|--|--|--01. 月夜見海月.flac
+|--|--|--|--|--02. Reflection in the mirror (104期NEW Ver.).flac
+|--|--|--|--|--Cover_1.jpg
 |--虹咲学园学园偶像同好会
 |--|--其他
 |--|--|--[2021.11.03] 虹咲学园学园偶像同好会 - 校内シャッフルフェスティバル
@@ -2415,6 +2982,10 @@ LoveLive
 |--|--|--|--09. 夢への一歩.flac
 |--|--|--|--10. ドキピポ☆エモーション.flac
 |--|--|--|--Cover_1.jpg
+|--|--|--[2024.01.24] 虹咲学园学园偶像同好会 - New Year's March!
+|--|--|--|--01. New Year's March!.flac
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Cover_2.jpg
 |--|--动画
 |--|--|--blu-ray
 |--|--|--|--[2021.06.25]  虹咲学园学园偶像同好会 - Hurray Hurray
@@ -2425,6 +2996,20 @@ LoveLive
 |--|--|--|--|--01. TOKIMEKI Runners (12人 Ver.).flac
 |--|--|--|--|--Cover_1.jpg
 |--|--|--|--|--Cover_2.jpg
+|--|--|--|--[2022.11.25] 虹咲学园学园偶像同好会 - Love U my friends (12人 Ver.)
+|--|--|--|--|--01. Love U my friends (12人 Ver.).flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--|--Cover_2.jpg
+|--|--|--|--[2022.12.23] 虹咲学园学园偶像同好会 - Just Believe!!! (12人 Ver.)
+|--|--|--|--|--01. Just Believe!!! (12人 Ver.).flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--|--Cover_2.jpg
+|--|--|--|--[2023.08.30] 中須かすみ、桜坂しずく、天王寺璃奈、三船栞子 - Waku Waku! Monday Morning
+|--|--|--|--|--01. Waku Waku! Monday Morning.flac
+|--|--|--|--|--album.nfo
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--|--Cover_2.jpg
+|--|--|--|--|--Thumbs.db
 |--|--|--[2020.10.21] 虹咲学园学园偶像同好会 - 虹色Passions！
 |--|--|--|--01. 虹色Passions!.flac
 |--|--|--|--02. Sweet Eyes.flac
@@ -2513,6 +3098,41 @@ LoveLive
 |--|--|--|--01. Future Parade.flac
 |--|--|--|--02. Level Oops! Adventures.flac
 |--|--|--|--Cover_1.jpg
+|--|--|--[2023.02.01] 虹咲学园学园偶像同好会 - わちゅごなどぅー
+|--|--|--|--01.わちゅごなどぅー.flac
+|--|--|--|--02.わちゅごなどぅー(１年生＋侑 Ver.).flac
+|--|--|--|--03.わちゅごなどぅー(２年生＋侑 Ver.).flac
+|--|--|--|--04.わちゅごなどぅー(３年生＋侑 Ver.).flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2023.06.28] 虹咲学园学园偶像同好会 - Feel Alive／Go Our Way!
+|--|--|--|--01. Feel Alive.flac
+|--|--|--|--02. Go Our Way!.flac
+|--|--|--|--album.nfo
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Cover_2.jpg
+|--|--|--|--Thumbs.db
+|--|--|--[2023.07.05] 虹咲学园学园偶像同好会 - SINGING, DREAMING, NOW!
+|--|--|--|--01. SINGING, DREAMING, NOW!.flac
+|--|--|--|--02. Wawawa☆What's up!.flac
+|--|--|--|--album.nfo
+|--|--|--|--Cover_1.jpg
+|--|--|--[2024.04.10] 虹咲学园学园偶像同好会 - 虹ヶ咲学園校歌
+|--|--|--|--01. 虹ヶ咲学園校歌 (Rock Ver.).flac
+|--|--|--|--02. 虹ヶ咲学園校歌 (Piano Ver.).flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2024.09.25] 虹咲学园学园偶像同好会 - どこにいても君は君
+|--|--|--|--01. Rise Up High!.flac
+|--|--|--|--02. Daydream Mermaid.flac
+|--|--|--|--03. Cara Tesoro.flac
+|--|--|--|--04. PHOENIX.flac
+|--|--|--|--05. Stellar Stream.flac
+|--|--|--|--06. どこにいても君は君.flac
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Cover_2.jpg
+|--|--|--|--Cover_3.jpg
+|--|--|--|--Cover_4.jpg
+|--|--|--|--Cover_5.jpg
+|--|--|--|--Cover_6.jpg
 |--|--单曲
 |--|--|--[2018.11.21] 虹咲学园学园偶像同好会-TOKIMEKI Runners
 |--|--|--|--01. 虹ヶ咲学園スクールアイドル同好会 - TOKIMEKI Runners.flac
@@ -2576,6 +3196,29 @@ LoveLive
 |--|--|--|--02. OUR P13CES!!!.flac
 |--|--|--|--03. Hurray Hurray (12人 Ver.).flac
 |--|--|--|--Cover_1.jpg
+|--|--|--[2023.06.07] 虹咲学园学园偶像同好会 - KAGAYAKI Don't forget!
+|--|--|--|--01. KAGAYAKI Don't forget!.flac
+|--|--|--|--02. Sugar Sugar Yummy Yummy Parfait.flac
+|--|--|--|--album.nfo
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Thumbs.db
+|--|--|--[2023.10.04] 虹咲学园学园偶像同好会 - Fly with You!!
+|--|--|--|--01. Walking Dream.flac
+|--|--|--|--02. 背伸びしたって.flac
+|--|--|--|--03. 小悪魔LOVE♡.flac
+|--|--|--|--04. My Shadow.flac
+|--|--|--|--05. Request for U.flac
+|--|--|--|--06. Cooking with Love.flac
+|--|--|--|--07. チェリーボム.flac
+|--|--|--|--08. 恋するSunflower.flac
+|--|--|--|--09. 私はマグネット.flac
+|--|--|--|--10. 咬福論.flac
+|--|--|--|--11. Lemonade.flac
+|--|--|--|--12. 5201314.flac
+|--|--|--|--13. Fly with You!!.flac
+|--|--|--|--album.nfo
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Thumbs.db
 |--|--小组曲
 |--|--|--A・ZU・NA
 |--|--|--|--[2020.02.12] A・ZU・NA - Dream Land！Dream World！
@@ -2602,6 +3245,10 @@ LoveLive
 |--|--|--|--|--01. ロマンスの中で.flac
 |--|--|--|--|--Cover_1.jpg
 |--|--|--|--|--Cover_2.jpg
+|--|--|--|--[2022.11.02] A・ZU・NA - Blue!
+|--|--|--|--|--01. Blue!.flac
+|--|--|--|--|--02. Dancing in the Light.flac
+|--|--|--|--|--Cover_1.jpg
 |--|--|--DiverDiva
 |--|--|--|--[2020.12.24] DiverDiva - POWER SPOT!!
 |--|--|--|--|--01. POWER SPOT!!.flac
@@ -2654,6 +3301,10 @@ LoveLive
 |--|--|--|--|--01. Fuwa Fuwaアワー！.flac
 |--|--|--|--|--Cover_1.jpg
 |--|--|--|--|--Cover_2.jpg
+|--|--|--|--[2022.11.23] QU4RTZ - PASTEL
+|--|--|--|--|--01. PASTEL.flac
+|--|--|--|--|--02. ミチノサキ.flac
+|--|--|--|--|--Cover_1.jpg
 |--|--|--R3BIRTH
 |--|--|--|--[2021.10.06] R3BIRTH - MONSTER GIRLS
 |--|--|--|--|--01.MONSTER GIRLS.flac
