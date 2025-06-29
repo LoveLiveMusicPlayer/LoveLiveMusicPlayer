@@ -39,17 +39,7 @@ const createMainWindow = function (BrowserWindow: any) {
         }
     }
 
-    let mainWindow = null
-
-    if (BrowserWindow == null) {
-        console.log("glasstron")
-        const glasstron = require('glasstron-clarity')
-        mainWindow = new glasstron.BrowserWindow(option)
-        mainWindow.blurType = "blurbehind"
-    } else {
-        console.log("not glasstron")
-        mainWindow = new BrowserWindow(option)
-    }
+    let mainWindow = new BrowserWindow(option)
 
     // 修复透明窗口缩放窗口异常
     framelessPlugin.plugin({

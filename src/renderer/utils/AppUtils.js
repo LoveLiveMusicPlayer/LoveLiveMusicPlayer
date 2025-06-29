@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import * as mm from "music-metadata";
+import { parseFile } from 'music-metadata';
 import moment from "moment";
 import wav from "wav";
 
@@ -83,16 +83,15 @@ export const AppUtils = {
         for (let i = 0; i < filesList.length; i++) {
             const obj = {}
             const filePath = filesList[i]
-            await mm.parseFile(filePath).then(res => {
-                const dir = filePath.substring(0, filePath.lastIndexOf(path.sep) + 1)
-                obj.pic = this.savePic(dir, res.common.picture[0].data).replace(splitPath, '').replaceAll(path.sep, '/')
-                obj.title = res.common.title
-                obj.album = res.common.album
-                obj.artist = res.common.artist
-                obj.date = filePath.match(/\[(\S*)]/)[1]
-                obj.path = filePath.replace(splitPath, '').replaceAll(path.sep, '/')
-                obj.time = this.parseDurationToTime(Math.floor(res.format.duration))
-            })
+            const metadata = await parseFile(filePath)
+            const dir = filePath.substring(0, filePath.lastIndexOf(path.sep) + 1)
+            obj.pic = this.savePic(dir, metadata.common.picture[0].data).replace(splitPath, '').replaceAll(path.sep, '/')
+            obj.title = metadata.common.title
+            obj.album = metadata.common.album
+            obj.artist = metadata.common.artist
+            obj.date = filePath.match(/\[(\S*)]/)[1]
+            obj.path = filePath.replace(splitPath, '').replaceAll(path.sep, '/')
+            obj.time = this.parseDurationToTime(Math.floor(metadata.format.duration))
             infoList.push(obj)
         }
         return infoList
