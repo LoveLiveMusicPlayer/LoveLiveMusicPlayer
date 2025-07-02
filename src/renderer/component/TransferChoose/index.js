@@ -20,6 +20,7 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
     const [data, setData] = useState([])
     const [indeterminate, setIndeterminate] = useState(false)
     const [checkAll, setCheckAll] = useState(false)
+    const [checkPhoneOk, setCheckPhoneOk] = useState(false)
     const [disableNext, setDisableNext] = useState(true)
     const [chooseCount, setChooseCount] = useState(0)
 
@@ -48,8 +49,25 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
         setData((data) => [...data])
         setIndeterminate(false)
         setCheckAll(e.target.checked)
+        setCheckPhoneOk(e.target.checked)
         setDisableNext(!e.target.checked)
     };
+
+    const onCheckPhoneOk = (e) => {
+        data.forEach(album => {
+            album.music.forEach(music => {
+                if (music.export) {
+                    music.choose = e.target.checked;
+                }
+            })
+        })
+        let status = WorkUtils.checkBoxStatus(data)
+        setIndeterminate(status === 0)
+        setCheckAll(status === 1);
+        setDisableNext(status === -1)
+        setCheckPhoneOk(e.target.checked)
+        setData((data) => [...data])
+    }
 
     useEffect(() => {
         let count = 0
@@ -88,7 +106,7 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
                 musicList.forEach(music => {
                     const musicPath = DBHelper.getHttpServer().path + path.sep + music["base_url"] + music["music_path"]
                     const isExist = fs.existsSync(musicPath)
-                    if (isExist && music.export) {
+                    if (isExist) {
                         music.choose = AppUtils.isStrInArray(music._id, chooseMusicList)
                         tempMusicList.push(music)
                     }
@@ -238,6 +256,13 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
                             checked={checkAll}
                             style={{color: 'white'}}>
                             {checkAll ? "反选" : "全选"}
+                        </Checkbox>
+                        <Checkbox
+                            disabled={disable}
+                            onChange={onCheckPhoneOk}
+                            checked={checkPhoneOk}
+                            style={{color: 'white'}}>
+                            {checkPhoneOk ? "反选推荐" : "仅推荐（手机存储友好）"}
                         </Checkbox>
                         <p style={{color: 'white'}}>(已选:{chooseCount})</p>
                         <div style={{marginLeft: 12, display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
