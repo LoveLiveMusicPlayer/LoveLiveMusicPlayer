@@ -110,6 +110,13 @@ function App({dispatch, appVersion}) {
         dispatch(musicAction.chooseGroup(gp))
     }
 
+    const closeModel = () => {
+        setShowMenu(false)
+        setShowCategory(false)
+        // 清除定时器
+        honokaTimer && clearTimeout(honokaTimer)
+    }
+
     // 播放器参数配置
     const options = {
         // 播放列表
@@ -566,6 +573,7 @@ function App({dispatch, appVersion}) {
                 showMenu={showMenu}
                 showCategory={showCategory}
                 chooseGroup={chooseGroup}
+                closeModel={closeModel}
             />
 
             <MusicDetail

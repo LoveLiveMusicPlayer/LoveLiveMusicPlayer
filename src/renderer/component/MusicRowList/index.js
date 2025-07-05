@@ -161,17 +161,13 @@ export const MusicRowList = forwardRef(({playId, onRefreshData, onDisLove, onDel
     }
 
     const playMusic = (playIndex) => {
-        const musicList = []
+        const uidList = []
         tableData.map(item => {
-            musicList.push({
-                id: item.music.id,
-                group: item.music.group
+            uidList.push({
+                _id: item.music._id
             })
         })
-        if (tableData.length <= playIndex) {
-            return
-        }
-        WorkUtils.playMenuByMusicIds(musicList, playIndex)
+        WorkUtils.playMenuByMusicUids(uidList, playIndex)
     }
 
     const addList = (music) => {
@@ -195,7 +191,7 @@ export const MusicRowList = forwardRef(({playId, onRefreshData, onDisLove, onDel
     const onToggleLove = (record) => {
         if (record.music.isLove === false) {
             // 插入我喜欢列表
-            LoveHelper.insertSongToLove(record.music).then(_ => {
+            LoveHelper.insertSongToLove(record.music._id).then(_ => {
                 onRefreshData()
                 Bus.emit('onNotification', '已添加到我喜欢')
             })

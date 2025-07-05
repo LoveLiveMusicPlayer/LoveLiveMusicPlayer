@@ -67,7 +67,7 @@ const Love = ({playId}) => {
                 hint={'取消喜欢歌曲？'}
                 result={(isDel) => {
                     if (isDel) {
-                        LoveHelper.deleteSong(showDialogAndHandleMusic.music).then(_ => {
+                        LoveHelper.deleteSong(showDialogAndHandleMusic.music._id).then(_ => {
                             musicRowListRef.current?.refresh()
                         }).catch(err => {
                             Bus.emit('onNotification', err)

@@ -14,6 +14,7 @@ import {LoveHelper} from "../dao/LoveHelper";
 import * as _ from 'lodash'
 import {Const} from "../public/Const";
 import Logger from './Logger';
+import {DBHelper} from "../dao/DBHelper";
 
 const {promisify} = require('util');
 const stat = promisify(fs.stat)
@@ -265,10 +266,10 @@ export const WorkUtils = {
     },
 
     // 播放歌单歌曲
-    playMenuByMusicIds(jsonArr, playIndex) {
+    playMenuByMusicUids(jsonArr, playIndex) {
         const promiseArr = []
         jsonArr.map(item => {
-            promiseArr.push(MusicHelper.findOneMusic(item.id, item.group))
+            promiseArr.push(MusicHelper.findOneMusicByUniqueId(item._id))
         })
         if (promiseArr.length > 0) {
             this.putArrToPlayer(promiseArr, playIndex)
@@ -291,6 +292,17 @@ export const WorkUtils = {
             AppUtils.openMsgDialog("info", "已是最新数据，无需更新")
             return
         }
+        if (data.version === 101) {
+            await DBHelper.update103DBStep1()
+            await this.updateJsonDataStart(data, onStart, onProgress, onAlbumEnd, onMusicEnd)
+            await DBHelper.update103DBStep2()
+        } else {
+            await this.updateJsonDataStart(data, onStart, onProgress, onAlbumEnd, onMusicEnd)
+        }
+        Store.set("dataVersion", data.version)
+    },
+
+    async updateJsonDataStart(data, onStart, onProgress, onAlbumEnd, onMusicEnd) {
         onStart && onStart()
         await AlbumHelper.removeAllAlbum()
         await AlbumHelper.insertOrUpdateAlbum(JSON.stringify(data.album), function (progress) {
@@ -301,7 +313,6 @@ export const WorkUtils = {
         await MusicHelper.insertOrUpdateMusic(JSON.stringify(data.music), function (progress) {
             onProgress && onProgress(progress)
         })
-        Store.set("dataVersion", data.version)
         onMusicEnd && onMusicEnd()
     },
 
@@ -420,42 +431,29 @@ export const WorkUtils = {
     },
 
     // 获取 歌单id 的 歌曲列表
-    async findMySongList(menuId, setInfo, setTableData, setGroup, setCategory) {
+    async findMySongList(menuId, setInfo, setTableData) {
         const info = await SongMenuHelper.findMenuById(menuId)
         setInfo && setInfo(info)
-        const music = []
-        const albumList = []
+        const musicList = []
         const loveList = await LoveHelper.findAllLove()
-        info.music.map((item, index) => {
+        for (let index = 0; index < info.music.length; index++) {
+            const item = info.music[index]
             let isLove = false
             loveList && loveList.map(love => {
                 if (item._id === love._id) {
                     isLove = true
                 }
             })
-            albumList.push(AlbumHelper.findOneAlbumByAlbumId(item.group, item.album))
-            item.isLove = isLove
-            music.push({
+            const music = await MusicHelper.findOneMusicByUniqueId(item._id)
+            musicList.push({
                 key: index,
-                song: item.name,
-                artist: item.artist,
-                time: item.time,
-                music: item
+                song: music.name,
+                artist: music.artist,
+                time: music.time,
+                music: music
             })
-        })
-        setTableData && setTableData(music)
-        const categoryList = new Set()
-        const groupList = new Set()
-        Promise.allSettled(albumList).then(res => {
-            if (categoryList.size < 4) {
-                res.map(item => {
-                    groupList.add(item.value.group)
-                    categoryList.add(item.value.category)
-                })
-            }
-            setGroup && setGroup(groupList)
-            setCategory && setCategory(categoryList)
-        })
+        }
+        setTableData && setTableData(musicList)
     },
 
     // 获取 专辑id 的 歌曲列表
@@ -488,16 +486,20 @@ export const WorkUtils = {
     async findLoveList(setTableData) {
         const loveList = await LoveHelper.findAllLove()
         const tableData = []
-        loveList.map((music, index) => {
-            music.isLove = true
-            tableData.push({
-                key: index,
-                song: music.name,
-                artist: music.artist,
-                time: music.time,
-                music: music
-            })
-        })
+        for (let index = 0; index < loveList.length; index++) {
+            const love = loveList[index]
+            const music = await MusicHelper.findOneMusicByUniqueId(love._id)
+            if (music) {
+                music.isLove = true
+                tableData.push({
+                    key: index,
+                    song: music.name,
+                    artist: music.artist,
+                    time: music.time,
+                    music: music
+                })
+            }
+        }
         setTableData && setTableData(tableData)
     },
 

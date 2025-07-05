@@ -173,7 +173,7 @@ class AudioPlayer extends React.PureComponent {
                     <a onClick={async () => {
                         if (!AppUtils.isEmpty(currentMusicUniqueId)) {
                             const music = await MusicHelper.findOneMusicByUniqueId(currentMusicUniqueId)
-                            LoveHelper.insertSongToLove(music).then(_ => {
+                            LoveHelper.insertSongToLove(music._id).then(_ => {
                                 Bus.emit('onNotification', '已添加到我喜欢')
                             })
                         } else {

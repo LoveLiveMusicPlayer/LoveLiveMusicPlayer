@@ -12,6 +12,7 @@ import {LoveHelper} from "../../dao/LoveHelper";
 import {useLocation, useParams} from "react-router-dom";
 import {MusicRowList} from "../../component/MusicRowList";
 import {SongMenuHelper} from "../../dao/SongMenuHelper";
+import {MusicHelper} from "../../dao/MusicHelper";
 
 const {connect} = require('react-redux');
 let currentMenuName = null
@@ -23,8 +24,6 @@ const Menu = ({playId}) => {
 
     const [showCovers, setShowCovers] = useState([])
 
-    const [group, setGroup] = useState([])
-    const [category, setCategory] = useState([])
     const [chooseSong, setChooseSong] = useState()
 
     const [showDialogAndHandleMusic, setShowDialogAndHandleMusic] = useState({
@@ -40,53 +39,51 @@ const Menu = ({playId}) => {
         currentMenuName = null
     }, [])
 
-    const renderCover = () => {
-        if (info && info.music.length > 0) {
-            if (currentMenuName !== info.name) {
-                const coverList = []
-                const url = Store.get('url')
-                const set = new Set()
-                info.music.map((item, index) => {
-                    const path = url + item['base_url'] + item['cover_path']
-                    set.add(path)
-                })
-                Array.from(set).map((item, index) => {
-                    if (coverList.length < 10) {
-                        coverList.push({
-                            src: item,
-                            id: index
-                        })
-                    }
-                })
-                setShowCovers(coverList)
-                currentMenuName = info.name
-            }
-            return (
-                <ImagePagination
-                    key={info.name}
-                    pages={showCovers}
-                    playButton={false}
-                    whiteCover={false}
-                    effect={false}
-                    imgSide={200}
-                />
-            )
-        } else return null
-    }
-
     useEffect(() => {
         musicRowListRef.current?.refresh()
     }, [location.state, params])
 
+    useEffect(async () => {
+        if (info && info.music.length > 0) {
+            const coverList = []
+            const url = Store.get('url')
+            const set = new Set()
+            for (let item of info.music) {
+                const music = await MusicHelper.findOneMusicByUniqueId(item._id)
+                set.add(url + music.base_url + music.cover_path)
+            }
+
+            Array.from(set).map((item, index) => {
+                if (coverList.length < 10) {
+                    coverList.push({
+                        src: item,
+                        id: index
+                    })
+                }
+            })
+            setShowCovers(coverList)
+        }
+    }, [info])
+
     return (
         <div className={'albumContainer'} onClick={() => musicRowListRef.current?.closeNode()}>
             <div className={'albumTopContainer'}>
-                {renderCover(info)}
+                {
+                    showCovers.length > 0 ?
+                        <ImagePagination
+                            key={info.name}
+                            pages={showCovers}
+                            playButton={false}
+                            whiteCover={false}
+                            effect={false}
+                            imgSide={200}
+                        /> : null
+                }
                 <div className={'albumTopRightContainer'}>
                     <p className={'albumName'}>{info && info.name ? info.name : ''}</p>
                     <p className={'albumText'}>{info && "创建日期: " + AppUtils.showValue(info.date)}</p>
-                    <p className={'albumText'}>{info && "歌曲标签: " + WorkUtils.arrToString(category)}</p>
-                    <p className={'albumText'}>{info && "所属团组: " + WorkUtils.arrToString(group)}</p>
+                    <br/>
+                    <br/>
                     <Button
                         type="primary"
                         shape="round"
@@ -101,13 +98,12 @@ const Menu = ({playId}) => {
             <MusicRowList
                 ref={musicRowListRef}
                 playId={playId}
-                onRefreshData={() =>
-                    WorkUtils.findMySongList(Number(params.id),
-                        (info) => setInfo(info),
-                        (table) => musicRowListRef.current?.setData(table),
-                        (gp) => setGroup(gp),
-                        (cate) => setCategory(cate)
-                    )
+                onRefreshData={() => {
+                        WorkUtils.findMySongList(Number(params.id),
+                            (info) => setInfo(info),
+                            (table) => musicRowListRef.current?.setData(table)
+                        )
+                    }
                 }
                 onDisLove={(music) => {
                     showDialogAndHandleMusic.show = true

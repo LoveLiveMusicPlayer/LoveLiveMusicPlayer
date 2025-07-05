@@ -64,7 +64,7 @@ const History = ({playId}) => {
                                 musicRowListRef.current?.refresh()
                             })
                         } else {
-                            LoveHelper.deleteSong(showDialogAndHandleMusic.music).then(_ => {
+                            LoveHelper.deleteSong(showDialogAndHandleMusic.music._id).then(_ => {
                                 musicRowListRef.current?.refresh()
                             }).catch(err => {
                                 Bus.emit('onNotification', err)
