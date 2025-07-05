@@ -293,9 +293,9 @@ export const WorkUtils = {
             return
         }
         if (data.version === 101) {
-            await DBHelper.update103DBStep1()
+            await DBHelper.update101DBStep1()
             await this.updateJsonDataStart(data, onStart, onProgress, onAlbumEnd, onMusicEnd)
-            await DBHelper.update103DBStep2()
+            await DBHelper.update101DBStep2()
         } else {
             await this.updateJsonDataStart(data, onStart, onProgress, onAlbumEnd, onMusicEnd)
         }

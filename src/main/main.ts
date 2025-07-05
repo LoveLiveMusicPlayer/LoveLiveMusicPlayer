@@ -41,20 +41,12 @@ app.on('ready', async () => {
         global.mainWindow?.webContents.send('playMusic')
     })
     createFuncBtn()
-    let needGlasstron = Store.get('glasstron')
-    if (process.argv.includes("noBlur")) {
-        needGlasstron = false
-    }
     setTimeout(() => {
         if (isWin) {
             global.winVersion = judgeWinVersion()
         }
         const isDebug = process.argv.includes("--debug")
-        if (needGlasstron && !isDebug) {
-            global.mainWindow = createMainWindow((!isWin || global.winVersion > 0) ? null : BrowserWindow)
-        } else {
-            global.mainWindow = createMainWindow(BrowserWindow)
-        }
+        global.mainWindow = createMainWindow(BrowserWindow)
         if (isDebug) {
             global.mylog = require('electron-log');
             global.mylog.transports.console.level = 'debug';

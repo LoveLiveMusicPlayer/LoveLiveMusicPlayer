@@ -107,17 +107,6 @@ export const ColorPicker = forwardRef((props, ref) => {
                 justifyContent: 'space-between',
                 alignItems: 'end'
             }}>
-                <div style={{display: 'flex', flexDirection: 'row'}}>
-                    <Switch
-                        onChange={(checked) => {
-                            Store.set("glasstron", checked)
-                            Bus.emit('onNotification', '设置将在重启后生效')
-                        }}
-                        defaultChecked={Store.get("glasstron")}
-                    />
-                    <p style={{marginLeft: '12px'}}>启用窗口模糊？</p>
-                </div>
-
                 <Button
                     type="primary"
                     onClick={onChooseColorFinish}
