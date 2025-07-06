@@ -1,17 +1,17 @@
-import {Button, Checkbox, List, Switch} from 'antd';
-import React, {useEffect, useState} from 'react';
-import {AlbumHelper} from "../../dao/AlbumHelper";
-import Store from "../../utils/Store";
-import './index.css'
-import {MusicHelper} from "../../dao/MusicHelper";
-import {AppUtils} from "../../utils/AppUtils";
-import {WorkUtils} from "../../utils/WorkUtils";
-import * as Images from "../../public/Images";
-import {Img} from "../Pagin/styled-components/index";
-import {Const} from "../../public/Const";
-import fs from "fs";
-import {DBHelper} from "../../dao/DBHelper";
-import path from "path";
+import { Button, Checkbox, List, Switch } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { AlbumHelper } from '../../dao/AlbumHelper';
+import Store from '../../utils/Store';
+import './index.css';
+import { MusicHelper } from '../../dao/MusicHelper';
+import { AppUtils } from '../../utils/AppUtils';
+import { WorkUtils } from '../../utils/WorkUtils';
+import * as Images from '../../public/Images';
+import { Img } from '../Pagin/styled-components/index';
+import { Const } from '../../public/Const';
+import fs from 'fs';
+import { DBHelper } from '../../dao/DBHelper';
+import path from 'path';
 
 const CheckboxGroup = Checkbox.Group;
 
@@ -100,6 +100,8 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
             albumList = albumList.concat(await AlbumHelper.findAllAlbumsByGroup(Const.combine.key))
             albumList = albumList.concat(await AlbumHelper.findAllAlbumsByGroup(Const.hasunosora.key))
             albumList = albumList.concat(await AlbumHelper.findAllAlbumsByGroup(Const.yohane.key))
+            albumList = albumList.concat(await AlbumHelper.findAllAlbumsByGroup(Const.musical.key));
+            albumList = albumList.concat(await AlbumHelper.findAllAlbumsByGroup(Const.bluebird.key));
             for (const album of albumList) {
                 tempMusicList.length = 0
                 const musicList = await MusicHelper.findAllMusicByAlbumId(album.group, album.id)

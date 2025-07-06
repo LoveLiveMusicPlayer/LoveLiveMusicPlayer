@@ -1,20 +1,20 @@
-import {AppUtils} from "./AppUtils";
-import EXCEL from "js-export-xlsx";
-import * as mm from "music-metadata";
-import fs from "fs";
-import Network from "./Network";
-import {AlbumHelper} from "../dao/AlbumHelper";
-import Bus from "./Event";
-import {MusicHelper} from "../dao/MusicHelper";
-import Store from "./Store";
-import {VersionUtils} from "./VersionUtils";
-import {parse as parseLrc} from "clrc";
-import {SongMenuHelper} from "../dao/SongMenuHelper";
-import {LoveHelper} from "../dao/LoveHelper";
-import * as _ from 'lodash'
-import {Const} from "../public/Const";
+import { AppUtils } from './AppUtils';
+import EXCEL from 'js-export-xlsx';
+import * as mm from 'music-metadata';
+import fs from 'fs';
+import Network from './Network';
+import { AlbumHelper } from '../dao/AlbumHelper';
+import Bus from './Event';
+import { MusicHelper } from '../dao/MusicHelper';
+import Store from './Store';
+import { VersionUtils } from './VersionUtils';
+import { parse as parseLrc } from 'clrc';
+import { SongMenuHelper } from '../dao/SongMenuHelper';
+import { LoveHelper } from '../dao/LoveHelper';
+import * as _ from 'lodash';
+import { Const } from '../public/Const';
 import Logger from './Logger';
-import {DBHelper} from "../dao/DBHelper";
+import { DBHelper } from '../dao/DBHelper';
 
 const {promisify} = require('util');
 const stat = promisify(fs.stat)
@@ -292,10 +292,10 @@ export const WorkUtils = {
             AppUtils.openMsgDialog("info", "已是最新数据，无需更新")
             return
         }
-        if (data.version === 101) {
-            await DBHelper.update101DBStep1()
+        if (data.version === 102) {
+            await DBHelper.update102DBStep1();
             await this.updateJsonDataStart(data, onStart, onProgress, onAlbumEnd, onMusicEnd)
-            await DBHelper.update101DBStep2()
+            await DBHelper.update102DBStep2();
         } else {
             await this.updateJsonDataStart(data, onStart, onProgress, onAlbumEnd, onMusicEnd)
         }
@@ -317,11 +317,28 @@ export const WorkUtils = {
     },
 
     parseGroupName(name) {
-        if (name === Const.saki.key) {
-            return Const.saki.value
-        } else if (name === Const.yohane.key) {
-            return Const.yohane.value
-        } else return name
+        switch (name) {
+            case Const.us.key:
+                return Const.us.value;
+            case Const.aqours.key:
+                return Const.aqours.value;
+            case Const.saki.key:
+                return Const.saki.key;
+            case Const.liella.key:
+                return Const.liella.value;
+            case Const.hasunosora.key:
+                return Const.hasunosora.value;
+            case Const.yohane.key:
+                return Const.yohane.value;
+            case Const.musical.key:
+                return Const.musical.value;
+            case Const.bluebird.key:
+                return Const.bluebird.value;
+            case Const.combine.key:
+                return Const.combine.value;
+            default:
+                return '';
+        }
     },
 
     /**

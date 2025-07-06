@@ -16,13 +16,13 @@
         "prebuild": "ts-node .erb/scripts/prebuild.js",
         "win-start": "chcp 65001 && ts-node ./.erb/scripts/check-port-in-use.js && ts-node ./.erb/scripts/prebuild.js && npm run start:renderer",
         "start": "ts-node-esm ./.erb/scripts/check-port-in-use.js && ts-node ./.erb/scripts/prebuild.js && npm run start:renderer",
-        "win-x32": "ts-node .erb/scripts/prepack.js platfrom=win arch=x86 && yarn package -w --ia32",
-        "win-x64": "ts-node .erb/scripts/prepack.js platfrom=win arch=x64 && yarn package -w --x64",
-        "win-arm64": "chcp 65001 && ts-node .erb/scripts/prepack.js platfrom=win arch=x64 && yarn package -w --arm64",
+        "win32-ia32": "ts-node .erb/scripts/prepack.js platfrom=win arch=x86 && yarn package -w --ia32",
+        "win32-x64": "ts-node .erb/scripts/prepack.js platfrom=win arch=x64 && yarn package -w --x64",
+        "win32-arm64": "ts-node .erb/scripts/prepack.js platfrom=win arch=x64 && yarn package -w --arm64",
         "linux-arm64": "ts-node .erb/scripts/prepack.js platfrom=linux arch=arm64 && yarn package -l --arm64",
         "linux-x64": "ts-node .erb/scripts/prepack.js platfrom=linux arch=x64 && yarn package -l --x64",
-        "mac-arm64": "ts-node .erb/scripts/prepack.js platfrom=darwin arch=arm64 && yarn package -m --arm64",
-        "mac-x64": "ts-node .erb/scripts/prepack.js platfrom=darwin arch=x64 && yarn package -m --x64"
+        "darwin-arm64": "ts-node .erb/scripts/prepack.js platfrom=darwin arch=arm64 && yarn package -m --arm64",
+        "darwin-x64": "ts-node .erb/scripts/prepack.js platfrom=darwin arch=x64 && yarn package -m --x64"
     },
     "lint-staged": {
         "*.{js,jsx,ts,tsx}": [

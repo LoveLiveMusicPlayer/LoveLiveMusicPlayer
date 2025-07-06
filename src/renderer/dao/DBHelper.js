@@ -1,9 +1,9 @@
-import {AppUtils} from "../utils/AppUtils";
-import Store from "../utils/Store"
-import {AlbumHelper} from "./AlbumHelper";
-import {LoveHelper} from "./LoveHelper";
-import {MusicHelper} from "./MusicHelper";
-import {SongMenuHelper} from "./SongMenuHelper";
+import { AppUtils } from '../utils/AppUtils';
+import Store from '../utils/Store';
+import { AlbumHelper } from './AlbumHelper';
+import { LoveHelper } from './LoveHelper';
+import { MusicHelper } from './MusicHelper';
+import { SongMenuHelper } from './SongMenuHelper';
 import { LyricHelper } from './LyricHelper';
 
 let oldLoveList = []
@@ -70,7 +70,7 @@ export const DBHelper = {
         return Promise.allSettled(promiseArr)
     },
 
-    async update101DBStep1() {
+    async update102DBStep1() {
         const loveList = await LoveHelper.findAllLove()
         const menuList = await SongMenuHelper.findAllMenu()
         loveList.forEach(item => {
@@ -98,7 +98,7 @@ export const DBHelper = {
         await SongMenuHelper.removeAllMenu()
     },
 
-    async update101DBStep2() {
+    async update102DBStep2() {
         for (let love of oldLoveList) {
             await LoveHelper.insertSongToLove(love._id, love.timestamp)
         }
