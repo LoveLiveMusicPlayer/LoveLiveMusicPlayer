@@ -32,7 +32,7 @@ export const Const = {
         value: "学园偶像音乐剧"
     },
     bluebird: {
-        key: "Bluebird",
+        key: "BlueBird",
         value: "BlueBird"
     }
 }

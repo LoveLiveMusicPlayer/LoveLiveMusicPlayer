@@ -31,8 +31,9 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
                     data[i].music[j].choose = AppUtils.isStrInArray(data[i].music[j]._id, musicUidList)
                 }
                 let status = WorkUtils.checkBoxStatus(data)
-                setIndeterminate(status === 0)
+                setIndeterminate(status === 0 || status === 2)
                 setCheckAll(status === 1);
+                setCheckPhoneOk(status === 1 || status === 2)
                 setDisableNext(status === -1)
                 setData((data) => [...data])
                 break;
@@ -62,7 +63,7 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
             })
         })
         let status = WorkUtils.checkBoxStatus(data)
-        setIndeterminate(status === 0)
+        setIndeterminate(status === 0 || status === 2)
         setCheckAll(status === 1);
         setDisableNext(status === -1)
         setCheckPhoneOk(e.target.checked)
@@ -119,8 +120,9 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
                 }
             }
             let status = WorkUtils.checkBoxStatus(tempAlbumList)
-            setIndeterminate(status === 0)
+            setIndeterminate(status === 0 || status === 2)
             setCheckAll(status === 1);
+            setCheckPhoneOk(status === 1 || status === 2)
             setDisableNext(status === -1)
             setData([...tempAlbumList])
             setLoading(false)

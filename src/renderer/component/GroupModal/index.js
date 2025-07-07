@@ -2,7 +2,6 @@ import React from 'react';
 import * as Images from "../../public/Images";
 import './index.css'
 import {Const} from "../../public/Const";
-import { MENU_BLUEBIRD, MENU_MUSICAL } from '../../public/Images';
 
 export const GroupModal = ({showCategory, showMenu, chooseGroup, closeModel}) => {
 

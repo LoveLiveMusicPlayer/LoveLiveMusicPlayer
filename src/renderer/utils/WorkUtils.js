@@ -627,19 +627,29 @@ export const WorkUtils = {
         let cycleNum = 0
         // 已选中的个数
         let checkNum = 0
+        // 已选中是推荐导出的个数
+        let exportNum = 0
         data.forEach(album => {
             album.music.forEach(music => {
                 cycleNum++
                 if (music.choose) {
                     checkNum++
                 }
+                if (music.export) {
+                    exportNum++
+                }
             })
         })
         if (checkNum === 0) {
-            return -1
-        } else if (cycleNum === checkNum) {
-            return 1
-        } else return 0
+            return -1 // 没有选中
+        }
+        if (cycleNum === checkNum) {
+            return 1 // 全部选中
+        }
+        if (exportNum === checkNum) {
+            return 2 // 选中的都是推荐导出的
+        }
+        return 0 // 部分选中
     },
 
     // 将 set 集合打印成 str

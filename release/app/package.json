@@ -1,7 +1,7 @@
 {
     "name": "lovelive-music-player",
     "productName": "LoveLiveMusicPlayer",
-    "version": "1.6.0",
+    "version": "1.6.1",
     "description": "一款LLer专属的播放器",
     "main": "./dist/main/main.js",
     "author": {
