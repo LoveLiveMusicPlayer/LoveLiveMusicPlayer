@@ -30,6 +30,7 @@ global.isInit = true
 global.startTime = new Date().getTime()
 global.willQuitApp = false
 global.mylog;
+global.isDebug = false;
 
 const isWin = process.platform === "win32"
 global.winVersion = 0
@@ -45,9 +46,9 @@ app.on('ready', async () => {
         if (isWin) {
             global.winVersion = judgeWinVersion()
         }
-        const isDebug = process.argv.includes("--debug")
+        global.isDebug = process.argv.includes("--debug")
         global.mainWindow = createMainWindow(BrowserWindow)
-        if (isDebug) {
+        if (global.isDebug) {
             global.mylog = require('electron-log');
             global.mylog.transports.console.level = 'debug';
             global.mylog.transports.file.level = 'debug';

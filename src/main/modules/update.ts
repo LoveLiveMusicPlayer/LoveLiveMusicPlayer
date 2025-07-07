@@ -15,11 +15,19 @@ export default class update {
         this.initListener()
     }
 
+    printLog(message: string) {
+        if (myApp.isDebug) {
+            myApp.mylog.debug(message);
+        } else {
+            console.log(message);
+        }
+    }
+
     initListener() {
         // https://www.electron.build/auto-update#events
         // https://electronjs.org/docs/api/auto-updater#autoupdaterquitandinstall
         autoUpdater.on('update-downloaded', _info => {
-            myApp.mylog.debug("update-downloaded")
+            this.printLog("update-downloaded")
             this.callback && this.callback.length > 0 && this.callback[2].call(this);
             myApp.updateWindow.hide()
             myApp.mainWindow.show()
@@ -34,7 +42,7 @@ export default class update {
         })
 
         autoUpdater.on('error', _info => {
-            myApp.mylog.debug("update-error")
+            this.printLog("update-error")
             if (!this.isSuccess) {
                 this.callback && this.callback.length > 0 && this.callback[2].call(this);
                 myApp.updateWindow.hide()
@@ -52,7 +60,7 @@ export default class update {
         this.callback = callbacks
         // 这里先拉取更新信息，在对话框中显示版本的更新内容
         const checkUpdateUrl = VersionUtils.getVersionInfo()
-        myApp.mylog.debug("Req url: " + checkUpdateUrl)
+        this.printLog("Req url: " + checkUpdateUrl)
         const req = https.request(checkUpdateUrl, req => {
             let message = ''
             req.setEncoding('utf-8')
@@ -60,11 +68,11 @@ export default class update {
                 message += chunk.toString()
             })
             req.on('end', () => {
-                myApp.mylog.debug(message)
+                this.printLog(message)
                 const json = JSON.parse(message)
                 const localVersion = app.getVersion().split('.').join('')
                 const remoteVersion = json.version.split('.').join('')
-                myApp.mylog.debug(`云端APP版本号：${remoteVersion} 本地APP版本号：${localVersion}`)
+                this.printLog(`云端APP版本号：${remoteVersion} 本地APP版本号：${localVersion}`)
                 if (localVersion >= remoteVersion) {
                     Dialog({type: 'info', message: '已经是最新版本了'})
                 } else {
@@ -81,7 +89,7 @@ export default class update {
                             this.callback && this.callback.length > 0 && this.callback[0].call(this);
                             autoUpdater.autoDownload = true
                             const updateUrl = json.url + "/" + process.platform + "-" + process.arch;
-                            myApp.mylog.debug(`Req url: ${updateUrl}`)
+                            this.printLog(`Req url: ${updateUrl}`)
                             autoUpdater.setFeedURL(updateUrl)
                             autoUpdater.checkForUpdates()
                         }
