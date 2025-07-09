@@ -292,13 +292,9 @@ export const WorkUtils = {
             AppUtils.openMsgDialog("info", "已是最新数据，无需更新")
             return
         }
-        if (data.version === 102) {
-            await DBHelper.update102DBStep1();
-            await this.updateJsonDataStart(data, onStart, onProgress, onAlbumEnd, onMusicEnd)
-            await DBHelper.update102DBStep2();
-        } else {
-            await this.updateJsonDataStart(data, onStart, onProgress, onAlbumEnd, onMusicEnd)
-        }
+        await DBHelper.backupLoveAndMenu();
+        await this.updateJsonDataStart(data, onStart, onProgress, onAlbumEnd, onMusicEnd)
+        await DBHelper.recoveryLoveAndMenu();
         Store.set("dataVersion", data.version)
     },
 

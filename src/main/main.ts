@@ -7,10 +7,8 @@ import init from "./modules/inital";
 import createLyricWindow from "./windows/desktopLyricWindow";
 import createMainWindow from "./windows/mainWindow";
 import {judgeWinVersion, upReportOpenTime} from "./util";
-import Store from "../renderer/utils/Store";
-import fs from "fs";
-import log from 'electron-log';
 import createUpdateWindow from './windows/updateWindow';
+import { Config } from '../common/config';
 
 // 阻止应用多开
 const isAppInstance = app.requestSingleInstanceLock()
@@ -30,7 +28,7 @@ global.isInit = true
 global.startTime = new Date().getTime()
 global.willQuitApp = false
 global.mylog;
-global.isDebug = false;
+global.isDebug;
 
 const isWin = process.platform === "win32"
 global.winVersion = 0
@@ -46,7 +44,7 @@ app.on('ready', async () => {
         if (isWin) {
             global.winVersion = judgeWinVersion()
         }
-        global.isDebug = process.argv.includes("--debug")
+        global.isDebug = Config.isDebug || process.argv.includes("--debug")
         global.mainWindow = createMainWindow(BrowserWindow)
         if (global.isDebug) {
             global.mylog = require('electron-log');

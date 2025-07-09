@@ -70,7 +70,7 @@ export const DBHelper = {
         return Promise.allSettled(promiseArr)
     },
 
-    async update102DBStep1() {
+    async backupLoveAndMenu() {
         const loveList = await LoveHelper.findAllLove()
         const menuList = await SongMenuHelper.findAllMenu()
         loveList.forEach(item => {
@@ -98,7 +98,7 @@ export const DBHelper = {
         await SongMenuHelper.removeAllMenu()
     },
 
-    async update102DBStep2() {
+    async recoveryLoveAndMenu() {
         for (let love of oldLoveList) {
             await LoveHelper.insertSongToLove(love._id, love.timestamp)
         }
