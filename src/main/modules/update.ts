@@ -79,7 +79,7 @@ export default class update {
                 } else {
                     Dialog({
                         type: 'info',
-                        message: `检测到新版本（${remoteVersion}）是否更新`,
+                        message: `检测到新版本（${Config.isPre ? json.pre.version : json.prod.version}）是否更新`,
                         buttons: ['取消', '确定'],
                         detail: Config.isPre ? json.pre.message : json.prod.message
                     }).then(rtn => {
