@@ -10,12 +10,12 @@ for (const item of process.argv) {
         if (platform == 'win') {
             architectures = [
                 {
-                    platform: 'win',
+                    platform: 'win32',
                     arch: 'ia32',
                     command: 'ts-node .erb/scripts/prepack.js platform=win arch=x86 && yarn package -w --ia32'
                 },
                 {
-                    platform: 'win',
+                    platform: 'win32',
                     arch: 'x64',
                     command: 'ts-node .erb/scripts/prepack.js platform=win arch=x64 && yarn package -w --x64'
                 }
@@ -23,7 +23,7 @@ for (const item of process.argv) {
         } else if (platform == 'mac') {
             architectures = [
                 {
-                    platform: 'win',
+                    platform: 'win32',
                     arch: 'arm64',
                     command: 'ts-node .erb/scripts/prepack.js platform=win arch=x64 && yarn package -w --arm64'
                 },
