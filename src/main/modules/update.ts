@@ -81,7 +81,7 @@ export default class update {
                         type: 'info',
                         message: `检测到新版本（${remoteVersion}）是否更新`,
                         buttons: ['取消', '确定'],
-                        detail: json.message
+                        detail: Config.isPre ? json.pre.message : json.prod.message
                     }).then(rtn => {
                         if (rtn.response === 1) {
                             myApp.lyricWindow.hide();
@@ -89,7 +89,7 @@ export default class update {
                             myApp.updateWindow.show();
                             this.callback && this.callback.length > 0 && this.callback[0].call(this);
                             autoUpdater.autoDownload = true;
-                            const updateUrl = json.url + '/' + process.platform + '-' + process.arch;
+                            const updateUrl = (Config.isPre ? json.pre.url : json.prod.url) + '/' + process.platform + '-' + process.arch;
                             this.printLog(`Req url: ${updateUrl}`);
                             autoUpdater.setFeedURL(updateUrl);
                             autoUpdater.checkForUpdates();
