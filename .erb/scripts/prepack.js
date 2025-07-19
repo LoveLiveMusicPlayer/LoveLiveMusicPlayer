@@ -1,4 +1,4 @@
-import {execSync} from 'child_process';
+import { execSync } from 'child_process';
 import fs from 'fs';
 
 const flac_binding_version = "2.7.2"
@@ -13,8 +13,8 @@ let platform = undefined
 let arch = undefined
 
 for (const item of process.argv) {
-    if (platform === undefined && item.startsWith("platfrom")) {
-        platform = item.replace("platfrom=", "")
+    if (platform === undefined && item.startsWith('platform')) {
+        platform = item.replace('platform=', '');
     } else if (arch === undefined && item.startsWith("arch")) {
         arch = item.replace("arch=", "")
     }
