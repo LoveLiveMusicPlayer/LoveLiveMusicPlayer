@@ -12,7 +12,7 @@ for (const item of process.argv) {
                 {
                     platform: 'win',
                     arch: 'ia32',
-                    command: 'ts-node .erb/scripts/prepack.js platform=win arch=ia32 && yarn package -w --ia32'
+                    command: 'ts-node .erb/scripts/prepack.js platform=win arch=x86 && yarn package -w --ia32'
                 },
                 {
                     platform: 'win',
