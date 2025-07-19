@@ -1,8 +1,9 @@
-import {app, crashReporter} from "electron";
-import path from "path";
-import * as Sentry from "@sentry/electron";
-import {SENTRY_URL} from "../../renderer/utils/URLHelper";
-import {machineId, machineIdSync} from "node-machine-id";
+import { app, crashReporter } from 'electron';
+import path from 'path';
+import * as Sentry from '@sentry/electron';
+// @ts-ignore
+import { SENTRY_MINI_DUMP_URL, SENTRY_URL } from '../../renderer/utils/URLHelper';
+import { machineId, machineIdSync } from 'node-machine-id';
 
 const Store = require('electron-store');
 
@@ -37,7 +38,7 @@ export default function () {
     crashReporter.start({
         productName: "LoveLiveMusicPlayer",
         companyName: "zhushenwudi",
-        submitURL: "http://139.224.116.225:9000/api/6/minidump/?sentry_key=1d2d5d17044544e8b37e78182a2f1c77",
+        submitURL: SENTRY_MINI_DUMP_URL,
         extra: {
             "isDev": isDevelopment ? 'yes' : 'no',
             "version": app.getVersion()

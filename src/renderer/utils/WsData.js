@@ -5,7 +5,7 @@ import Logger from "./Logger";
 
 let ws = null
 
-export const WS_Data = React.forwardRef(({connected, phone2pc, pc2phone, finish, stop, closeQR}, ref) => {
+export const WS_Data = React.forwardRef(({connected, phone2pc, pc2phone, finish, closeQR}, ref) => {
 
     React.useImperativeHandle(
         ref,
@@ -68,13 +68,10 @@ export const WS_Data = React.forwardRef(({connected, phone2pc, pc2phone, finish,
                             pc2phone(json2["love"], json2["isCover"])
                             break
                         case "finish":
+                        case "stop":
                             Logger("into finish");
                             finish()
                             break
-                        case "stop":
-                            Logger("into stop");
-                            stop()
-                            break;
                     }
                 });
 

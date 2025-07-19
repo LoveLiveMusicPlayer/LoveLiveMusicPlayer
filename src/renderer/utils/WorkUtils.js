@@ -1,19 +1,20 @@
-import {AppUtils} from "./AppUtils";
-import EXCEL from "js-export-xlsx";
-import * as mm from "music-metadata";
-import fs from "fs";
-import Network from "./Network";
-import {AlbumHelper} from "../dao/AlbumHelper";
-import Bus from "./Event";
-import {MusicHelper} from "../dao/MusicHelper";
-import Store from "./Store";
-import {VersionUtils} from "./VersionUtils";
-import {parse as parseLrc} from "clrc";
-import {SongMenuHelper} from "../dao/SongMenuHelper";
-import {LoveHelper} from "../dao/LoveHelper";
-import * as _ from 'lodash'
-import {Const} from "../public/Const";
+import { AppUtils } from './AppUtils';
+import EXCEL from 'js-export-xlsx';
+import * as mm from 'music-metadata';
+import fs from 'fs';
+import Network from './Network';
+import { AlbumHelper } from '../dao/AlbumHelper';
+import Bus from './Event';
+import { MusicHelper } from '../dao/MusicHelper';
+import Store from './Store';
+import { VersionUtils } from './VersionUtils';
+import { parse as parseLrc } from 'clrc';
+import { SongMenuHelper } from '../dao/SongMenuHelper';
+import { LoveHelper } from '../dao/LoveHelper';
+import * as _ from 'lodash';
+import { Const } from '../public/Const';
 import Logger from './Logger';
+import { DBHelper } from '../dao/DBHelper';
 
 const {promisify} = require('util');
 const stat = promisify(fs.stat)
@@ -190,7 +191,6 @@ export const WorkUtils = {
                         lyric: "JP/" + lyricPath,
                         trans: "ZH/" + lyricPath,
                         roma: "ROMA/" + lyricPath,
-                        playIndex: playIndex ? playIndex : 0,
                         cover: AppUtils.encodeURL(URL + baseUrl + item.value["cover_path"]),
                         musicSrc: AppUtils.encodeURL(URL + baseUrl + item.value["music_path"]),
                     })
@@ -199,7 +199,10 @@ export const WorkUtils = {
                 }
             })
             if (isLoaded) {
-                Bus.emit("onChangeAudioList", audioList)
+                Bus.emit("onChangeAudioList", {
+                    audioList: audioList,
+                    playIndex: playIndex
+                })
             } else {
                 AppUtils.openMsgDialog("error", "存在损坏的数据，请重新更新数据")
             }
@@ -213,7 +216,9 @@ export const WorkUtils = {
             res.music.map(id => {
                 promiseArr.push(MusicHelper.findOneMusic(id, res.group))
             })
-            this.putArrToPlayer(promiseArr)
+            const mode = Store.get('playMode') || 'orderLoop'
+            const playIndex = mode == "shufflePlay" ? Math.floor(Math.random() * promiseArr.length) : 0
+            this.putArrToPlayer(promiseArr, playIndex)
         })
     },
 
@@ -224,6 +229,8 @@ export const WorkUtils = {
             res.music.map(id => {
                 promiseArr.push(MusicHelper.findOneMusic(id, res.group))
             })
+            const mode = Store.get('playMode') || 'orderLoop'
+            const playIndex = mode == "shufflePlay" ? Math.floor(Math.random() * promiseArr.length) : 0
             this.putArrToPlayer(promiseArr, playIndex)
         })
     },
@@ -237,7 +244,9 @@ export const WorkUtils = {
                     promiseArr.push(MusicHelper.findOneMusic(id, item.group))
                 })
             })
-            this.putArrToPlayer(promiseArr)
+            const mode = Store.get('playMode') || 'orderLoop'
+            const playIndex = mode == "shufflePlay" ? Math.floor(Math.random() * promiseArr.length) : 0
+            this.putArrToPlayer(promiseArr, playIndex)
         })
     },
 
@@ -250,15 +259,17 @@ export const WorkUtils = {
                     promiseArr.push(MusicHelper.findOneMusic(id, item.group))
                 })
             })
-            this.putArrToPlayer(promiseArr)
+            const mode = Store.get('playMode') || 'orderLoop'
+            const playIndex = mode == "shufflePlay" ? Math.floor(Math.random() * promiseArr.length) : 0
+            this.putArrToPlayer(promiseArr, playIndex)
         })
     },
 
     // 播放歌单歌曲
-    playMenuByMusicIds(jsonArr, playIndex) {
+    playMenuByMusicUids(jsonArr, playIndex) {
         const promiseArr = []
         jsonArr.map(item => {
-            promiseArr.push(MusicHelper.findOneMusic(item.id, item.group))
+            promiseArr.push(MusicHelper.findOneMusicByUniqueId(item._id))
         })
         if (promiseArr.length > 0) {
             this.putArrToPlayer(promiseArr, playIndex)
@@ -281,6 +292,13 @@ export const WorkUtils = {
             AppUtils.openMsgDialog("info", "已是最新数据，无需更新")
             return
         }
+        await DBHelper.backupLoveAndMenu();
+        await this.updateJsonDataStart(data, onStart, onProgress, onAlbumEnd, onMusicEnd)
+        await DBHelper.recoveryLoveAndMenu();
+        Store.set("dataVersion", data.version)
+    },
+
+    async updateJsonDataStart(data, onStart, onProgress, onAlbumEnd, onMusicEnd) {
         onStart && onStart()
         await AlbumHelper.removeAllAlbum()
         await AlbumHelper.insertOrUpdateAlbum(JSON.stringify(data.album), function (progress) {
@@ -291,16 +309,32 @@ export const WorkUtils = {
         await MusicHelper.insertOrUpdateMusic(JSON.stringify(data.music), function (progress) {
             onProgress && onProgress(progress)
         })
-        Store.set("dataVersion", data.version)
         onMusicEnd && onMusicEnd()
     },
 
     parseGroupName(name) {
-        if (name === Const.saki.key) {
-            return Const.saki.value
-        } else if (name === Const.yohane.key) {
-            return Const.yohane.value
-        } else return name
+        switch (name) {
+            case Const.us.key:
+                return Const.us.value;
+            case Const.aqours.key:
+                return Const.aqours.value;
+            case Const.saki.key:
+                return Const.saki.key;
+            case Const.liella.key:
+                return Const.liella.value;
+            case Const.hasunosora.key:
+                return Const.hasunosora.value;
+            case Const.yohane.key:
+                return Const.yohane.value;
+            case Const.musical.key:
+                return Const.musical.value;
+            case Const.bluebird.key:
+                return Const.bluebird.value;
+            case Const.combine.key:
+                return Const.combine.value;
+            default:
+                return '';
+        }
     },
 
     /**
@@ -410,42 +444,29 @@ export const WorkUtils = {
     },
 
     // 获取 歌单id 的 歌曲列表
-    async findMySongList(menuId, setInfo, setTableData, setGroup, setCategory) {
+    async findMySongList(menuId, setInfo, setTableData) {
         const info = await SongMenuHelper.findMenuById(menuId)
         setInfo && setInfo(info)
-        const music = []
-        const albumList = []
+        const musicList = []
         const loveList = await LoveHelper.findAllLove()
-        info.music.map((item, index) => {
+        for (let index = 0; index < info.music.length; index++) {
+            const item = info.music[index]
             let isLove = false
             loveList && loveList.map(love => {
                 if (item._id === love._id) {
                     isLove = true
                 }
             })
-            albumList.push(AlbumHelper.findOneAlbumByAlbumId(item.group, item.album))
-            item.isLove = isLove
-            music.push({
+            const music = await MusicHelper.findOneMusicByUniqueId(item._id)
+            musicList.push({
                 key: index,
-                song: item.name,
-                artist: item.artist,
-                time: item.time,
-                music: item
+                song: music.name,
+                artist: music.artist,
+                time: music.time,
+                music: music
             })
-        })
-        setTableData && setTableData(music)
-        const categoryList = new Set()
-        const groupList = new Set()
-        Promise.allSettled(albumList).then(res => {
-            if (categoryList.size < 4) {
-                res.map(item => {
-                    groupList.add(item.value.group)
-                    categoryList.add(item.value.category)
-                })
-            }
-            setGroup && setGroup(groupList)
-            setCategory && setCategory(categoryList)
-        })
+        }
+        setTableData && setTableData(musicList)
     },
 
     // 获取 专辑id 的 歌曲列表
@@ -478,16 +499,20 @@ export const WorkUtils = {
     async findLoveList(setTableData) {
         const loveList = await LoveHelper.findAllLove()
         const tableData = []
-        loveList.map((music, index) => {
-            music.isLove = true
-            tableData.push({
-                key: index,
-                song: music.name,
-                artist: music.artist,
-                time: music.time,
-                music: music
-            })
-        })
+        for (let index = 0; index < loveList.length; index++) {
+            const love = loveList[index]
+            const music = await MusicHelper.findOneMusicByUniqueId(love._id)
+            if (music) {
+                music.isLove = true
+                tableData.push({
+                    key: index,
+                    song: music.name,
+                    artist: music.artist,
+                    time: music.time,
+                    music: music
+                })
+            }
+        }
         setTableData && setTableData(tableData)
     },
 
@@ -598,19 +623,29 @@ export const WorkUtils = {
         let cycleNum = 0
         // 已选中的个数
         let checkNum = 0
+        // 已选中是推荐导出的个数
+        let exportNum = 0
         data.forEach(album => {
             album.music.forEach(music => {
                 cycleNum++
                 if (music.choose) {
                     checkNum++
                 }
+                if (music.export) {
+                    exportNum++
+                }
             })
         })
         if (checkNum === 0) {
-            return -1
-        } else if (cycleNum === checkNum) {
-            return 1
-        } else return 0
+            return -1 // 没有选中
+        }
+        if (cycleNum === checkNum) {
+            return 1 // 全部选中
+        }
+        if (exportNum === checkNum) {
+            return 2 // 选中的都是推荐导出的
+        }
+        return 0 // 部分选中
     },
 
     // 将 set 集合打印成 str

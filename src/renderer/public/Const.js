@@ -26,5 +26,13 @@ export const Const = {
     yohane: {
         key: "Yohane",
         value: "幻日夜羽"
+    },
+    musical: {
+        key: "Musical",
+        value: "学园偶像音乐剧"
+    },
+    bluebird: {
+        key: "BlueBird",
+        value: "BlueBird"
     }
 }

@@ -13,7 +13,6 @@ export const WS_Music = React.forwardRef(({
                                               downloadSuccess,
                                               downloadFail,
                                               finish,
-                                              stop,
                                               closeQR
                                           }, ref) => {
 
@@ -91,13 +90,10 @@ export const WS_Music = React.forwardRef(({
                             downloadFail(command["body"])
                             break
                         case "finish":
+                        case "stop":
                             Logger("into finish");
                             finish()
                             break
-                        case "stop":
-                            Logger("into stop");
-                            stop()
-                            break;
                     }
                 });
 

@@ -8,13 +8,24 @@ export const SongMenuHelper = {
 
     // 创建歌单
     async insertMenu(json) {
-        // 获取当前数据库条数
-        const menuList = await db.findAll()
-        const arr = []
-        menuList.map(item => {
-            arr.push(item.id)
-        })
-        const number = AppUtils.calcSmallAtIntArr(arr)
+        if (json._id) {
+            return db.insert(json)
+        } else {
+            // 获取当前数据库条数
+            const menuList = await db.findAll()
+            const arr = []
+            menuList.map(item => {
+                arr.push(item.id)
+            })
+            const number = AppUtils.calcSmallAtIntArr(arr)
+            if (number !== -1) {
+                json.id = number
+                json.date = moment().format('YYYY-MM-DD')
+                return db.insert(json)
+            }
+        }
+
+
         if (number !== -1) {
             json.id = number
             json.date = moment().format('YYYY-MM-DD')

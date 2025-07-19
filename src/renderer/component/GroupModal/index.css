@@ -19,7 +19,7 @@
 .move_category {
     -webkit-animation: move_category 1s;
     position: absolute;
-    width: 750px;
+    width: 950px;
     right: 200px;
     top: 30px;
     display: flex;
@@ -34,7 +34,7 @@
 }
 
 .menu_category {
-    width: 25%;
+    width: 20%;
     display: flex;
     justify-content: center;
     flex-direction: column;

@@ -110,6 +110,13 @@ function App({dispatch, appVersion}) {
         dispatch(musicAction.chooseGroup(gp))
     }
 
+    const closeModel = () => {
+        setShowMenu(false)
+        setShowCategory(false)
+        // 清除定时器
+        honokaTimer && clearTimeout(honokaTimer)
+    }
+
     // 播放器参数配置
     const options = {
         // 播放列表
@@ -371,8 +378,7 @@ function App({dispatch, appVersion}) {
                     playIndex = index
                 }
             })
-            playList[0].playIndex = playIndex
-            playerRef.current?.onChangeAudioList(playList, true)
+            playerRef.current?.onChangeAudioList(playList, playIndex, true)
         }
     }
 
@@ -477,8 +483,8 @@ function App({dispatch, appVersion}) {
         Bus.addListener("onNotification", msg => openNotification(msg))
 
         // 添加切换专辑的监听器
-        Bus.addListener("onChangeAudioList", msg => {
-            playerRef.current?.onChangeAudioList(msg)
+        Bus.addListener("onChangeAudioList", obj => {
+            playerRef.current?.onChangeAudioList(obj.audioList, obj.playIndex)
         })
 
         // 修改主题
@@ -567,6 +573,7 @@ function App({dispatch, appVersion}) {
                 showMenu={showMenu}
                 showCategory={showCategory}
                 chooseGroup={chooseGroup}
+                closeModel={closeModel}
             />
 
             <MusicDetail

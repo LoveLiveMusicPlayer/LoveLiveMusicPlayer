@@ -374,10 +374,7 @@ const TransferMusic = () => {
                 finish={() => {
                     stopTask()
                     setDownloadShow(false)
-                }}
-                stop={() => {
-                    stopTask(false)
-                    setDownloadShow(false)
+                    setQrShow(false)
                 }}
                 closeQR={closeQR}
             />

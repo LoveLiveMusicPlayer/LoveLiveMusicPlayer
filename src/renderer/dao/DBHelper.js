@@ -1,10 +1,13 @@
-import {AppUtils} from "../utils/AppUtils";
-import Store from "../utils/Store"
-import {AlbumHelper} from "./AlbumHelper";
-import {LoveHelper} from "./LoveHelper";
-import {MusicHelper} from "./MusicHelper";
-import {SongMenuHelper} from "./SongMenuHelper";
+import { AppUtils } from '../utils/AppUtils';
+import Store from '../utils/Store';
+import { AlbumHelper } from './AlbumHelper';
+import { LoveHelper } from './LoveHelper';
+import { MusicHelper } from './MusicHelper';
+import { SongMenuHelper } from './SongMenuHelper';
 import { LyricHelper } from './LyricHelper';
+
+let oldLoveList = []
+let oldMenuList = []
 
 export const DBHelper = {
     // 设置 http-server 信息
@@ -65,6 +68,43 @@ export const DBHelper = {
         promiseArr.push(SongMenuHelper.removeAllMenu())
         promiseArr.push(LyricHelper.removeAllLyric())
         return Promise.allSettled(promiseArr)
+    },
+
+    async backupLoveAndMenu() {
+        const loveList = await LoveHelper.findAllLove()
+        const menuList = await SongMenuHelper.findAllMenu()
+        loveList.forEach(item => {
+            oldLoveList.push({
+                _id: item._id,
+                timestamp: item.timestamp
+            })
+        })
+        menuList.forEach(item => {
+            const music = []
+            item.music.forEach(m => {
+                music.push({
+                    _id: m._id
+                })
+            })
+            oldMenuList.push({
+                _id: item._id,
+                id: item.id,
+                date: item.date,
+                name: item.name,
+                music: music,
+            })
+        })
+        await LoveHelper.removeAllILove()
+        await SongMenuHelper.removeAllMenu()
+    },
+
+    async recoveryLoveAndMenu() {
+        for (let love of oldLoveList) {
+            await LoveHelper.insertSongToLove(love._id, love.timestamp)
+        }
+        for (let menu of oldMenuList) {
+            await SongMenuHelper.insertMenu(menu)
+        }
     },
 
     // 删除音乐数据

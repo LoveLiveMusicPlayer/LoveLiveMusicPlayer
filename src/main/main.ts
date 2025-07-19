@@ -7,10 +7,8 @@ import init from "./modules/inital";
 import createLyricWindow from "./windows/desktopLyricWindow";
 import createMainWindow from "./windows/mainWindow";
 import {judgeWinVersion, upReportOpenTime} from "./util";
-import Store from "../renderer/utils/Store";
-import fs from "fs";
-import log from 'electron-log';
 import createUpdateWindow from './windows/updateWindow';
+import { Config } from '../common/config';
 
 // 阻止应用多开
 const isAppInstance = app.requestSingleInstanceLock()
@@ -30,6 +28,7 @@ global.isInit = true
 global.startTime = new Date().getTime()
 global.willQuitApp = false
 global.mylog;
+global.isDebug;
 
 const isWin = process.platform === "win32"
 global.winVersion = 0
@@ -41,27 +40,18 @@ app.on('ready', async () => {
         global.mainWindow?.webContents.send('playMusic')
     })
     createFuncBtn()
-    let needGlasstron = Store.get('glasstron')
-    if (process.argv.includes("noBlur")) {
-        log.push("noBlur: true")
-        needGlasstron = false
-    }
     setTimeout(() => {
         if (isWin) {
             global.winVersion = judgeWinVersion()
         }
-        const isDebug = process.argv.includes("--debug")
-        if (needGlasstron && !isDebug) {
-            global.mainWindow = createMainWindow((!isWin || global.winVersion > 0) ? null : BrowserWindow)
-        } else {
-            global.mainWindow = createMainWindow(BrowserWindow)
-        }
-        // if (isDebug) {
+        global.isDebug = Config.isDebug || process.argv.includes("--debug")
+        global.mainWindow = createMainWindow(BrowserWindow)
+        if (global.isDebug) {
             global.mylog = require('electron-log');
             global.mylog.transports.console.level = 'debug';
             global.mylog.transports.file.level = 'debug';
             global.mylog.debug("##################### app init #####################");
-        // }
+        }
         if (isWin) {
             // 设置底部任务栏按钮和缩略图
             global.mainWindow.setThumbarButtons(thumbarButtons);

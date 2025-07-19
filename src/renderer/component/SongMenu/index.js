@@ -54,14 +54,7 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
             container.push(
                 <div
                     className={chooseItem === item.id ? 'selectContainer' : 'unselectContainer'}
-                    onClick={() => {
-                        const chooseIndex = index + 1;
-                        if (chooseIndex > 0) {
-                            onChooseItem(item.id)
-                        } else {
-                            onChooseItem(chooseIndex)
-                        }
-                    }}
+                    onClick={() => onChooseItem(item.id)}
                     key={index}
                     onContextMenu={event => onRightClick(event, item)}
                 >
@@ -134,7 +127,9 @@ export const SongMenu = ({chooseItem, onChooseItem}) => {
                 group: item.group
             })
         })
-        const result = WorkUtils.playMenuByMusicIds(musicList, 0)
+        const mode = Store.get('playMode') || 'orderLoop';
+        const playIndex = mode == "shufflePlay" ? Math.floor(Math.random() * music.length) : 0
+        const result = WorkUtils.playMenuByMusicUids(musicList, playIndex)
         if (!AppUtils.isNull(result?.message)) {
             Bus.emit('onNotification', result.message)
         }

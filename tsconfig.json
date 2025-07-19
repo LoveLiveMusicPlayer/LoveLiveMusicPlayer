@@ -1,31 +1,40 @@
 {
-  "compilerOptions": {
-    "experimentalDecorators": true,
-    "target": "ES2018",
-    "module": "CommonJS",
-    "lib": [
-      "dom",
-      "esnext"
-    ],
-    "declaration": true,
-    "declarationMap": true,
-    "noEmit": false,
-    "jsx": "react",
-    "strict": true,
-    "pretty": true,
-    "sourceMap": true,
-    "baseUrl": "./src",
-    /* Additional Checks */
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    /* Module Resolution Options */
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
-    "allowJs": true
-  },
-  "exclude": ["test", "build/release", "build/app/dist", ".erb/dll"]
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "target": "ES2018",
+        "module": "CommonJS",
+        "lib": [
+            "dom",
+            "esnext"
+        ],
+        "declaration": true,
+        "declarationMap": true,
+        "noEmit": false,
+        "jsx": "react",
+        "strict": true,
+        "pretty": true,
+        "sourceMap": true,
+        "baseUrl": "./src",
+        /* Additional Checks */
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        /* Module Resolution Options */
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+        "allowJs": true,
+        "types": [
+            "node",
+            "minimatch"
+        ]
+    },
+    "exclude": [
+        "test",
+        "build/release",
+        "build/app/dist",
+        ".erb/dll"
+    ]
 }

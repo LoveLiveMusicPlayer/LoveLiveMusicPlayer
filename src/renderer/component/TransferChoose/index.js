@@ -1,17 +1,17 @@
-import {Button, Checkbox, List, Switch} from 'antd';
-import React, {useEffect, useState} from 'react';
-import {AlbumHelper} from "../../dao/AlbumHelper";
-import Store from "../../utils/Store";
-import './index.css'
-import {MusicHelper} from "../../dao/MusicHelper";
-import {AppUtils} from "../../utils/AppUtils";
-import {WorkUtils} from "../../utils/WorkUtils";
-import * as Images from "../../public/Images";
-import {Img} from "../Pagin/styled-components/index";
-import {Const} from "../../public/Const";
-import fs from "fs";
-import {DBHelper} from "../../dao/DBHelper";
-import path from "path";
+import { Button, Checkbox, List, Switch } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { AlbumHelper } from '../../dao/AlbumHelper';
+import Store from '../../utils/Store';
+import './index.css';
+import { MusicHelper } from '../../dao/MusicHelper';
+import { AppUtils } from '../../utils/AppUtils';
+import { WorkUtils } from '../../utils/WorkUtils';
+import * as Images from '../../public/Images';
+import { Img } from '../Pagin/styled-components/index';
+import { Const } from '../../public/Const';
+import fs from 'fs';
+import { DBHelper } from '../../dao/DBHelper';
+import path from 'path';
 
 const CheckboxGroup = Checkbox.Group;
 
@@ -20,6 +20,7 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
     const [data, setData] = useState([])
     const [indeterminate, setIndeterminate] = useState(false)
     const [checkAll, setCheckAll] = useState(false)
+    const [checkPhoneOk, setCheckPhoneOk] = useState(false)
     const [disableNext, setDisableNext] = useState(true)
     const [chooseCount, setChooseCount] = useState(0)
 
@@ -30,8 +31,9 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
                     data[i].music[j].choose = AppUtils.isStrInArray(data[i].music[j]._id, musicUidList)
                 }
                 let status = WorkUtils.checkBoxStatus(data)
-                setIndeterminate(status === 0)
+                setIndeterminate(status === 0 || status === 2)
                 setCheckAll(status === 1);
+                setCheckPhoneOk(status === 1 || status === 2)
                 setDisableNext(status === -1)
                 setData((data) => [...data])
                 break;
@@ -48,8 +50,25 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
         setData((data) => [...data])
         setIndeterminate(false)
         setCheckAll(e.target.checked)
+        setCheckPhoneOk(e.target.checked)
         setDisableNext(!e.target.checked)
     };
+
+    const onCheckPhoneOk = (e) => {
+        data.forEach(album => {
+            album.music.forEach(music => {
+                if (music.export) {
+                    music.choose = e.target.checked;
+                }
+            })
+        })
+        let status = WorkUtils.checkBoxStatus(data)
+        setIndeterminate(status === 0 || status === 2)
+        setCheckAll(status === 1);
+        setDisableNext(status === -1)
+        setCheckPhoneOk(e.target.checked)
+        setData((data) => [...data])
+    }
 
     useEffect(() => {
         let count = 0
@@ -82,13 +101,15 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
             albumList = albumList.concat(await AlbumHelper.findAllAlbumsByGroup(Const.combine.key))
             albumList = albumList.concat(await AlbumHelper.findAllAlbumsByGroup(Const.hasunosora.key))
             albumList = albumList.concat(await AlbumHelper.findAllAlbumsByGroup(Const.yohane.key))
+            albumList = albumList.concat(await AlbumHelper.findAllAlbumsByGroup(Const.musical.key));
+            albumList = albumList.concat(await AlbumHelper.findAllAlbumsByGroup(Const.bluebird.key));
             for (const album of albumList) {
                 tempMusicList.length = 0
                 const musicList = await MusicHelper.findAllMusicByAlbumId(album.group, album.id)
                 musicList.forEach(music => {
                     const musicPath = DBHelper.getHttpServer().path + path.sep + music["base_url"] + music["music_path"]
                     const isExist = fs.existsSync(musicPath)
-                    if (isExist && music.export) {
+                    if (isExist) {
                         music.choose = AppUtils.isStrInArray(music._id, chooseMusicList)
                         tempMusicList.push(music)
                     }
@@ -99,8 +120,9 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
                 }
             }
             let status = WorkUtils.checkBoxStatus(tempAlbumList)
-            setIndeterminate(status === 0)
+            setIndeterminate(status === 0 || status === 2)
             setCheckAll(status === 1);
+            setCheckPhoneOk(status === 1 || status === 2)
             setDisableNext(status === -1)
             setData([...tempAlbumList])
             setLoading(false)
@@ -238,6 +260,13 @@ export const TransferChoose = ({btnWIFI, changeSwitch, disable, btnUSB}) => {
                             checked={checkAll}
                             style={{color: 'white'}}>
                             {checkAll ? "反选" : "全选"}
+                        </Checkbox>
+                        <Checkbox
+                            disabled={disable}
+                            onChange={onCheckPhoneOk}
+                            checked={checkPhoneOk}
+                            style={{color: 'white'}}>
+                            {checkPhoneOk ? "反选推荐" : "仅推荐（手机存储友好）"}
                         </Checkbox>
                         <p style={{color: 'white'}}>(已选:{chooseCount})</p>
                         <div style={{marginLeft: 12, display: 'flex', flexDirection: 'row', alignItems: 'center'}}>

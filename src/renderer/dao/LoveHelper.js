@@ -3,15 +3,17 @@ import Bus from '../utils/Event'
 
 export const LoveHelper = {
     // 加入我喜欢
-    async insertSongToLove(music) {
-        const loveMusic = await db.findOne({_id: music._id})
+    async insertSongToLove(musicUid, timestamp = new Date().getTime()) {
+        const loveMusic = await db.findOne({_id: musicUid})
         let isHasCurrentMusic = false
         if (loveMusic) {
             isHasCurrentMusic = true
         }
         if (!isHasCurrentMusic) {
-            music.timestamp = new Date().getTime()
-            return db.insert(music)
+            return db.insert({
+                _id: musicUid,
+                timestamp: timestamp
+            })
         } else return new Promise(function (resolve, reject) {
             Bus.emit('onNotification', '歌曲已经存在')
             reject("添加失败")
@@ -29,10 +31,10 @@ export const LoveHelper = {
     },
 
     // 删除歌曲
-    async deleteSong(music) {
-        const love = await db.findOne({_id: music._id})
+    async deleteSong(musicUid) {
+        const love = await db.findOne({_id: musicUid})
         if (love) {
-            return db.remove({_id: music._id})
+            return db.remove({_id: musicUid})
         } else return new Promise(function (resolve, reject) {
             reject('删除失败')
         })

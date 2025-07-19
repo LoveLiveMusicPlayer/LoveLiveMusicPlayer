@@ -20,6 +20,7 @@ const createLyricWindow = function (BrowserWindow: any) {
         minHeight: 100,
         show: false,
         frame: false,
+        backgroundColor: "#00000000",
         x: Math.floor(width / 2) - trulyWidth / 2,
         y: Math.floor(height) - 150,
         minimizable: false,

@@ -3,14 +3,14 @@ import * as Images from "../../public/Images";
 import './index.css'
 import {Const} from "../../public/Const";
 
-export const GroupModal = ({showCategory, showMenu, chooseGroup}) => {
+export const GroupModal = ({showCategory, showMenu, chooseGroup, closeModel}) => {
 
     return (
         <>
             {
                 showMenu ?
                     <div className={["move_tile"].join(' ')}>
-                        <img src={Images.ICON_TILE} height={'550px'}/>
+                        <img src={Images.ICON_TILE} height={'550px'} onClick={closeModel}/>
                     </div> : null
             }
             {
@@ -20,6 +20,11 @@ export const GroupModal = ({showCategory, showMenu, chooseGroup}) => {
                             <img src={Images.MENU_COMBINE} width={'170px'} height={'250px'}
                                  onClick={() => chooseGroup(Const.combine.key)}/>
                             <span className={"menu_category_span"}>{Const.combine.value}</span>
+                        </div>
+                        <div className={["hvr-grow", "menu_category"].join(' ')}>
+                            <img src={Images.MENU_MUSICAL} width={'170px'} height={'250px'}
+                                 onClick={() => chooseGroup(Const.musical.key)}/>
+                            <span className={"menu_category_span"}>{Const.musical.value}</span>
                         </div>
                         <div className={["hvr-grow", "menu_category"].join(' ')}>
                             <img src={Images.MENU_HASUNOSORA} width={'170px'} height={'250px'}
@@ -41,6 +46,11 @@ export const GroupModal = ({showCategory, showMenu, chooseGroup}) => {
                             <img src={Images.MENU_YOHANE} width={'170px'} height={'250px'}
                                  onClick={() => chooseGroup(Const.yohane.key)}/>
                             <span className={"menu_category_span"}>{Const.yohane.value}</span>
+                        </div>
+                        <div className={["hvr-grow", "menu_category"].join(' ')}>
+                            <img src={Images.MENU_BLUEBIRD} width={'170px'} height={'250px'}
+                                 onClick={() => chooseGroup(Const.bluebird.key)}/>
+                            <span className={"menu_category_span"}>{Const.bluebird.value}</span>
                         </div>
                         <div className={["hvr-grow", "menu_category"].join(' ')}>
                             <img src={Images.MENU_YOHANE} width={'170px'} height={'250px'}
