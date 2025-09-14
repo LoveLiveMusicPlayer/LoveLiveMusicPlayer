@@ -1,5 +1,4 @@
 import { AppUtils } from './AppUtils';
-import EXCEL from 'js-export-xlsx';
 import * as mm from 'music-metadata';
 import fs from 'fs';
 import Network from './Network';
@@ -15,6 +14,7 @@ import * as _ from 'lodash';
 import { Const } from '../public/Const';
 import Logger from './Logger';
 import { DBHelper } from '../dao/DBHelper';
+import EXCEL from './export2excel';
 
 const {promisify} = require('util');
 const stat = promisify(fs.stat)
@@ -62,30 +62,42 @@ export const WorkUtils = {
         const filesList = [];
         await AppUtils.readFileList(mPath, filesList, rootDir)
         const infoList = await AppUtils.parseMusicInfo(filesList, rootDir)
-
-        const arr = []
         if (infoList) {
+            const arr1 = []
+            const arr2 = []
+            let albumList = new Set()
+
             for (let i = 0; i < infoList.length; i++) {
                 const music = infoList[i]
                 const baseUrl = music.pic.split("Cover")[0]
                 const coverName = music.pic.replace(baseUrl, "")
                 const fileName = music.path.replace(baseUrl, "")
                 const obj = [
-                    i + 1,
                     music.title,
                     music.album,
                     music.artist,
+                    "",
                     music.date,
                     fileName,
                     coverName,
                     music.time,
-                    baseUrl.replace("/LoveLive/", "LoveLive/")
+                    baseUrl.replace("/LoveLive/", "LoveLive/"),
+                    false
                 ]
-                arr.push(obj)
+                arr1.push(obj)
+                const originSize = albumList.size
+                albumList.add(music.album)
+                if (albumList.size > originSize) {
+                    arr2.push([music.album, "", "", ""])
+                }
             }
+
             EXCEL.outPut({
-                data: arr,
-                name: 'music'
+                header1: ["歌曲名", "专辑", "歌手", "歌手32进制", "发行时间", "音乐名", "封面名", "时长", "基础路径", "是否导出"],
+                data1: arr1,
+                header2: ["专辑", "专辑序号", "歌曲序号", "类型"],
+                data2: arr2,
+                excelName: 'music'
             });
         }
     },
