@@ -1,3 +1,4 @@
+E:\python\walkdir\.venv\Scripts\python.exe E:\python\walkdir\main.py E:\\LoveLive
 LoveLive
 |--Aqours
 |--|--其他
@@ -1203,6 +1204,31 @@ LoveLive
 |--|--|--|--|--08. キミノタメボクノタメ (小原鞠莉 Solo Ver.).flac
 |--|--|--|--|--09. SILENT PAIN (小原鞠莉 Solo Ver.).flac
 |--|--|--|--|--10. 僕らの海でまた会おう (小原鞠莉 Solo Ver.).flac
+|--|--|--[2025.07.13] Love Live! Sunshine!! Fourth Solo Concert Album ～THE STORY OF SUNSHINE!!～ starring Tsushima Yoshiko
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Disc 1
+|--|--|--|--|--01. Thank you, FRIENDS!! (津島善子 Solo Ver.).flac
+|--|--|--|--|--02. No.10 (津島善子 Solo Ver.).flac
+|--|--|--|--|--03. 冒険Type A, B, C!! (津島善子 Solo Ver.).flac
+|--|--|--|--|--04. Fantastic Departure! (津島善子 Solo Ver.).flac
+|--|--|--|--|--05. Aqours Pirates Desire (津島善子 Solo Ver.).flac
+|--|--|--|--|--06. Future flight (津島善子 Solo Ver.).flac
+|--|--|--|--|--07. smile smile ship Start! (津島善子 Solo Ver.).flac
+|--|--|--|--|--08. 心の羽よ君へ飛んでけ！ (津島善子 Solo Ver.).flac
+|--|--|--|--|--09. KU-RU-KU-RU Cruller! (津島善子 Solo Ver.).flac
+|--|--|--|--|--10. SUKI for you, DREAM for you! (津島善子 Solo Ver.).flac
+|--|--|--|--|--11. 涙× (津島善子 Solo Ver.).flac
+|--|--|--|--Disc 2
+|--|--|--|--|--01. LIVE with a smile! (津島善子 Solo Ver.).flac
+|--|--|--|--|--02. not ALONE not HITORI (津島善子 Solo Ver.).flac
+|--|--|--|--|--03. GEMSTONE “DE‐A‐I” (津島善子 Solo Ver.).flac
+|--|--|--|--|--04. BANZAI! digital trippers (津島善子 Solo Ver.).flac
+|--|--|--|--|--05. KA-GA-YA-KI-RA-RI-RA (津島善子 Solo Ver.).flac
+|--|--|--|--|--06. 幻日ミステリウム (津島善子 Solo Ver.).flac
+|--|--|--|--|--07. GAME ON! (津島善子 Solo Ver.).flac
+|--|--|--|--|--08. キミノタメボクノタメ (津島善子 Solo Ver.).flac
+|--|--|--|--|--09. SILENT PAIN (津島善子 Solo Ver.).flac
+|--|--|--|--|--10. 僕らの海でまた会おう (津島善子 Solo Ver.).flac
 |--|--精选集
 |--|--|--[2020.10.07] ラブライブ！サンシャイン!! Aqours CHRONICLE（2015～2017）
 |--|--|--|--Cover_1.jpg
@@ -1296,10 +1322,87 @@ LoveLive
 |--|--|--[2022.03.29] ラブライブ! サンシャイン!! Blu-ray BOX Special CD3
 |--|--|--|--Cover_1.jpg
 |--|--|--|--GEMSTONE ”DE-A-I“.flac
+|--|--|--[2025.11.12] ラブライブ！サンシャイン!! Aqours CHRONICLE（2021~2024）
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Disc 1
+|--|--|--|--|--01. smile smile ship Start!.flac
+|--|--|--|--|--02. 心の羽よ君へ飛んでけ！.flac
+|--|--|--|--|--03. DREAMY COLOR.flac
+|--|--|--|--|--04. KU-RU-KU-RU Cruller!.flac
+|--|--|--|--|--05. SUKI for you, DREAM for you!.flac
+|--|--|--|--|--06. not ALONE not HITORI.flac
+|--|--|--|--|--07. GEMSTONE “DE-A-I”.flac
+|--|--|--|--|--08. なんどだって約束！.flac
+|--|--|--|--|--09. ユメ+ミライ=無限大.flac
+|--|--|--|--|--10. BANZAI! digital trippers.flac
+|--|--|--|--|--11. KA-GA-YA-KI-RA-RI-RA.flac
+|--|--|--|--Disc 2
+|--|--|--|--|--01. SORA, FUJI, SUNSHINE!.flac
+|--|--|--|--|--02. 幻日ミステリウム.flac
+|--|--|--|--|--03. GAME ON!.flac
+|--|--|--|--|--04. キミノタメボクノタメ.flac
+|--|--|--|--|--05. SILENT PAIN.flac
+|--|--|--|--|--06. Deep Blue.flac
+|--|--|--|--|--07. SAKURA-saku KOKORO-saku.flac
+|--|--|--|--|--08. 僕らの海でまた会おう.flac
+|--|--|--|--|--09. 永久hours.flac
+|--|--|--|--|--10. 僕らの旅は終わらない.flac
 |--BlueBird
 |--|--单曲
-|--|--|--[2025.05.19] いきづらい部！ - What is my LIFE？
+|--|--|--[2025.07.30] いきづらい部！ - What is my LIFE？
 |--|--|--|--01. What is my LIFE？.flac
+|--|--|--|--02. ヒミツミチ.flac
+|--|--|--|--Cover_1.jpg
+|--|--独唱
+|--|--|--[2025.08.27] 高橋ポル - 浅草Guilty Girlの歌
+|--|--|--|--01. 浅草Guilty Girlの歌.flac
+|--|--|--|--02. オドルポルカ.flac
+|--|--|--|--03. What is my LIFE？ (高橋ポルカ Solo Ver.).flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2025.08.27] 麻布麻衣 - Public Style
+|--|--|--|--01. Public Style.flac
+|--|--|--|--02. ひっさつマイマイモード.flac
+|--|--|--|--03. What is my LIFE？ (麻布麻衣 Solo Ver.).flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2025.09.10] 五桐玲 - いつか碧
+|--|--|--|--01. いつか碧.flac
+|--|--|--|--02. ジェットスターター.flac
+|--|--|--|--03. What is my LIFE？ (五桐玲 Solo Ver.).flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2025.09.10] 駒形花火 - HIBANA―火花
+|--|--|--|--01. HIBANA―火花―.flac
+|--|--|--|--02. First Ride.flac
+|--|--|--|--03. What is my LIFE？ (駒形花火 Solo Ver.).flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2025.09.24] 调布乃理子 - 恋のワンタイムパスワード
+|--|--|--|--01. 恋のワンタイムパスワード.flac
+|--|--|--|--02. センチメートル・ランデヴー.flac
+|--|--|--|--03. What is my LIFE？ (調布のりこ Solo Ver.).flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2025.09.24] 金泽奇迹 - HomeRun Queen!!
+|--|--|--|--01. HomeRun Queen!!.flac
+|--|--|--|--02. マジカル♡レシピ・シルブプレ！.flac
+|--|--|--|--03. What is my LIFE？ (金澤奇跡 Solo Ver.).flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2025.10.08] 春宫悠可里 - Pray for love
+|--|--|--|--01. Pray for love.flac
+|--|--|--|--02. 二人はいつでもHappy End.flac
+|--|--|--|--03. What is my LIFE？ (春宮ゆくり Solo Ver.).flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2025.10.08] 此花辉夜 - キミは夜のポラリス
+|--|--|--|--01. キミは夜のポラリス.flac
+|--|--|--|--02. クラリトブライト.flac
+|--|--|--|--03. What is my LIFE？ (此花輝夜 Solo Ver.).flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2025.10.29] 佐佐木翔音 - イキタクナイevery day
+|--|--|--|--01. イキタクナイevery day.flac
+|--|--|--|--02. Trick or Toxic.flac
+|--|--|--|--03. What is my LIFE？ (佐々木翔音 Solo Ver.).flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2025.10.29] 山田真绿 - Little Green委員会
+|--|--|--|--01. Little Green委員会.flac
+|--|--|--|--02. LOVE♡YOU♡Save the EARTH!!.flac
+|--|--|--|--03. What is my LIFE？ (山田真緑 Solo Ver.).flac
 |--|--|--|--Cover_1.jpg
 |--Liella!
 |--|--其他
@@ -1344,6 +1447,25 @@ LoveLive
 |--|--|--|--12. アイコトバ!(ウィーン？マルガレーテver.).flac
 |--|--|--|--13. アイコトバ!(鬼塚 冬毬ver.).flac
 |--|--|--|--Cover_1.jpg
+|--|--|--[2025.08.07] Liella! - オレンジのままで
+|--|--|--|--01. オレンジのままで.flac
+|--|--|--|--03. オレンジのままで (澁谷かのん Solo Ver.).flac
+|--|--|--|--04. オレンジのままで (唐可可 Solo Ver.).flac
+|--|--|--|--05. オレンジのままで (嵐千砂都 Solo Ver.).flac
+|--|--|--|--06. オレンジのままで (平安名すみれ Solo Ver.).flac
+|--|--|--|--07. オレンジのままで (葉月恋 Solo Ver.).flac
+|--|--|--|--08. オレンジのままで (桜小路きな子 Solo Ver.).flac
+|--|--|--|--09. オレンジのままで (米女メイ Solo Ver.).flac
+|--|--|--|--10. オレンジのままで (若菜四季 Solo Ver.).flac
+|--|--|--|--11. オレンジのままで (鬼塚夏美 Solo Ver.).flac
+|--|--|--|--12. オレンジのままで(ウィーン？マルガレーテ Solo Ver.).flac
+|--|--|--|--13. オレンジのままで(鬼塚 冬毬 Solo Ver.).flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2025.11.05] Liella! - OPEN THE G☆TE!!!
+|--|--|--|--01. OPEN THE G☆TE!!!.flac
+|--|--|--|--02. High! モチベーション.flac
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Cover_2.jpg
 |--|--动画
 |--|--|--blu-ray
 |--|--|--|--[2021.09.28] 涩谷香音 - 心キラララ
@@ -3076,6 +3198,10 @@ LoveLive
 |--|--|--02. ICE LIMIT.flac
 |--|--|--Cover_1.jpg
 |--莲之空女学院学园偶像俱乐部
+|--|--其他
+|--|--|--[2025.10.06] 莲之空女学院学园偶像俱乐部 - 一生に夢が咲くように
+|--|--|--|--01. 一生に夢が咲くように.flac
+|--|--|--|--Cover_1.jpg
 |--|--单曲
 |--|--|--[2023.03.29] 莲之空女学院学园偶像俱乐部 - Dream Believers
 |--|--|--|--01. Dream Believers.flac
@@ -3208,6 +3334,16 @@ LoveLive
 |--|--|--|--03. BLAST!!.flac
 |--|--|--|--04. 十六夜セレーネ.flac
 |--|--|--|--Cover_1.jpg
+|--|--|--[2025.07.09] 莲之空女学院学园偶像俱乐部 - アイドゥーミー！
+|--|--|--|--01. アイドゥーミー！.flac
+|--|--|--|--02. とーひょー☆スター！.flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2025.09.03] 莲之空女学院学园偶像俱乐部 - 可惜夜花火／ブルウモーメント／Very! Very! COCO夏っ／フュージョンクラスト
+|--|--|--|--01. 可惜夜花火.flac
+|--|--|--|--02. ブルウモーメント.flac
+|--|--|--|--03. Very! Very! COCO夏っ.flac
+|--|--|--|--04. フュージョンクラスト.flac
+|--|--|--|--Cover_1.jpg
 |--|--小组曲
 |--|--|--DOLLCHESTRA
 |--|--|--|--[2023.04.26] DOLLCHESTRA - Sparkly Spot
@@ -3232,11 +3368,19 @@ LoveLive
 |--|--|--|--|--01. COMPASS.flac
 |--|--|--|--|--02. レム.flac
 |--|--|--|--|--Cover_1.jpg
+|--|--|--|--[2025.08.20] DOLLCHESTRA - 太陽であれ！
+|--|--|--|--|--01. 太陽であれ！.flac
+|--|--|--|--|--02. diamondz.flac
+|--|--|--|--|--Cover_1.jpg
 |--|--|--Edel Note
 |--|--|--|--[2025.05.21] Edel Note - Retrofuture
 |--|--|--|--|--01. Retrofuture.flac
 |--|--|--|--|--02. 天地黎明.flac
 |--|--|--|--|--03. チリコンカン.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--[2025.10.01] Edel Note - 片翼のトリバガ
+|--|--|--|--|--01. 片翼のトリバガ.flac
+|--|--|--|--|--02. ドライブ・スペード・クレイジー.flac
 |--|--|--|--|--Cover_1.jpg
 |--|--|--みらくらぱーく！
 |--|--|--|--[2023.11.29] みらくらぱーく！ - アイデンティティ
@@ -3256,6 +3400,10 @@ LoveLive
 |--|--|--|--[2025.03.19] みらくらぱーく！ - 全方位キュン♡
 |--|--|--|--|--01. 全方位キュン♡.flac
 |--|--|--|--|--02. かくれんぼしよう.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--[2025.10.01] みらくらぱーく！ - ニャオシグニャル
+|--|--|--|--|--01. ニャオシグニャル.flac
+|--|--|--|--|--02. ハートにQ.flac
 |--|--|--|--|--Cover_1.jpg
 |--|--|--スリーズブーケ
 |--|--|--|--[2023.04.26] スリーズブーケ - Reflection in the mirror
@@ -3280,6 +3428,10 @@ LoveLive
 |--|--|--|--[2025.03.19] スリーズブーケ - ユメワズライ
 |--|--|--|--|--01. ユメワズライ.flac
 |--|--|--|--|--02. Chu! Chocolate.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--[2025.08.20] スリーズブーケ - フルーツパンチ
+|--|--|--|--|--01. フルーツパンチ.flac
+|--|--|--|--|--02. My Lucky Clover.flac
 |--|--|--|--|--Cover_1.jpg
 |--|--独唱
 |--|--|--[2025.06.04] 102nd Graduation Album ～Star Sign Memories～ Fujishima Megumi
@@ -3540,6 +3692,23 @@ LoveLive
 |--|--|--|--|--10. どこにいても君は君 (天王寺璃奈 Ver.).flac
 |--|--|--|--|--11. どこにいても君は君 (三船栞子 Ver.).flac
 |--|--|--|--|--12. どこにいても君は君 (ミア・テイラー Ver.).flac
+|--|--|--[2025.08.27] A.L.A.N - Cheer Mode
+|--|--|--|--01. Cheer Mode.flac
+|--|--|--|--Cover_1.jpg
+|--|--|--[2025.11.08] 虹咲学园学园偶像同好会 - 約束になれ僕らの歌
+|--|--|--|--01. いとしき夢よ いざないて.flac
+|--|--|--|--02. Cheer Mode.flac
+|--|--|--|--03. Like a Treasure.flac
+|--|--|--|--04. Stay.flac
+|--|--|--|--05. Burn!!.flac
+|--|--|--|--06. Circle of Love.flac
+|--|--|--|--07. 約束になれ僕らの歌.flac
+|--|--|--|--Cover_1.jpg
+|--|--|--|--Cover_2.jpg
+|--|--|--|--Cover_3.jpg
+|--|--|--|--Cover_4.jpg
+|--|--|--|--Cover_5.jpg
+|--|--|--|--Cover_6.jpg
 |--|--单曲
 |--|--|--NIJIGAKU Monthly Songs♪
 |--|--|--|--[2025.01.29] ミア・テイラー - White Delight
@@ -3565,6 +3734,22 @@ LoveLive
 |--|--|--|--[2025.06.11] 樱坂雫 - ピチチャプティントンタントン
 |--|--|--|--|--01. ピチチャプティントンタントン.flac
 |--|--|--|--|--02. My Untold Diary.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--[2025.07.16] 宫下爱 - Ride the wave!
+|--|--|--|--|--01. Ride the wave!.flac
+|--|--|--|--|--02. まんまるお月さま.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--[2025.08.06] 天王寺璃奈 - SUMMER WARNING
+|--|--|--|--|--01. SUMMER WARNING.flac
+|--|--|--|--|--02. まみむめMotor Girl.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--[2025.09.17] 三船栞子 - 酸欠
+|--|--|--|--|--01. 酸欠.flac
+|--|--|--|--|--02. 余韻.flac
+|--|--|--|--|--Cover_1.jpg
+|--|--|--|--[2025.10.15] 朝香果林 - Dress Code
+|--|--|--|--|--01. Dress Code.flac
+|--|--|--|--|--02. Wake Up!!.flac
 |--|--|--|--|--Cover_1.jpg
 |--|--|--[2018.11.21] 虹咲学园学园偶像同好会-TOKIMEKI Runners
 |--|--|--|--01. 虹ヶ咲学園スクールアイドル同好会 - TOKIMEKI Runners.flac
